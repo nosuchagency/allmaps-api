@@ -16,6 +16,8 @@ class CreateMapLocationsTable extends Migration
         Schema::create('map_locations', function (Blueprint $table) {
             $table->increments('id');
 
+            $table->string('name')->nullable();
+
             $table->unsignedInteger('floor_id');
             $table->foreign('floor_id')
                 ->references('id')
@@ -34,10 +36,13 @@ class CreateMapLocationsTable extends Migration
                 ->on('findables')
                 ->onDelete('cascade');
 
-            $table->string('lat')->nullable();
-            $table->string('lng')->nullable();
+            $table->unsignedInteger('beacon_id')->nullable();
+            $table->foreign('beacon_id')
+                ->references('id')
+                ->on('beacons')
+                ->onDelete('cascade');
 
-            $table->text('area')->nullable();
+            $table->longText('coordinates')->nullable();
 
             $table->createdBy();
             $table->timestamps();

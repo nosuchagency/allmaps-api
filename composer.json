@@ -20,7 +20,8 @@
         "spatie/laravel-permission": "^2.12",
         "spatie/laravel-tags": "^2.0",
         "tymon/jwt-auth": "^1.0",
-        "ybr-nx/laravel-mariadb": "^1.0"
+        "ybr-nx/laravel-mariadb": "^1.0",
+        "ext-json": "*"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.5",

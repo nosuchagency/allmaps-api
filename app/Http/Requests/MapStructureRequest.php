@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class PoiLocationRequest extends FormRequest
+class MapStructureRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,11 +24,10 @@ class PoiLocationRequest extends FormRequest
     public function rules()
     {
         return [
-            'poi_id' => 'required|exists:pois,id',
-            'lat' => 'required_without:area',
-            'lng' => 'required_without:area',
-            'area' => 'required_without_all:lat,lng',
-            'leaflet_id' => 'required'
+            'name' => '',
+            'coordinates' => 'array',
+            'radius' => 'nullable|numeric|min:0',
+            'map_component_id' => 'nullable|exists:map_components,id,deleted_at,NULL'
         ];
     }
 }

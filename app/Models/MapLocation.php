@@ -17,12 +17,13 @@ class MapLocation extends Model
      * @var array
      */
     protected $fillable = [
+        'name',
         'poi_id',
         'findable_id',
+        'beacon_id',
         'floor_id',
         'type',
-        'lat',
-        'lng',
+        'coordinates',
         'area',
         'created_by'
     ];
@@ -37,27 +38,22 @@ class MapLocation extends Model
     ];
 
     /**
-     * Set the location's area
+     * The attributes that should be cast to native types.
      *
-     * @param  string $area
+     * @var array
+     */
+    protected $casts = [
+        'coordinates' => 'array',
+    ];
+
+    /**.
+     * @param  $value
      *
      * @return void
      */
-    public function setAreaAttribute($area)
+    public function setCoordinatesAttribute($value)
     {
-        $this->attributes['area'] = json_encode($area);
-    }
-
-    /**
-     * Get the area
-     *
-     * @param  string $area
-     *
-     * @return string
-     */
-    public function getAreaAttribute($area)
-    {
-        return json_decode($area);
+        $this->attributes['coordinates'] = json_encode($value);
     }
 
     /**
@@ -82,6 +78,27 @@ class MapLocation extends Model
     public function findable()
     {
         return $this->belongsTo(Findable::class);
+    }
+
+    /**
+     * Get the beacon that owns the Location.
+     */
+    public function beacon()
+    {
+        return $this->belongsTo(Beacon::class);
+    }
+
+    public function getType()
+    {
+        if ($this->poi_id) {
+            return 'poi';
+        } else if ($this->findable_id) {
+            return 'findable';
+        } else if ($this->beacon_id) {
+            return 'beacon';
+        }
+
+        return null;
     }
 
 }

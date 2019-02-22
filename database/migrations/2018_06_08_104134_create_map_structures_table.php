@@ -16,7 +16,10 @@ class CreateMapStructuresTable extends Migration
         Schema::create('map_structures', function (Blueprint $table) {
             $table->increments('id');
 
-            $table->longText('geojson')->nullable();
+            $table->string('name')->nullable();
+
+            $table->longText('coordinates')->nullable();
+            $table->decimal('radius', 8, 2)->nullable();
 
             $table->unsignedInteger('floor_id');
             $table->foreign('floor_id')

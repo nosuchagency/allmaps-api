@@ -114,24 +114,23 @@ Route::group(['middleware' => 'auth'], function () {
                             Route::put('/', ['as' => 'floor.update', 'uses' => 'FloorsController@update']);
                             Route::delete('/', ['as' => 'floor.destroy', 'uses' => 'FloorsController@destroy']);
 
-                            Route::group(['prefix' => 'plan'], function () {
-                                Route::get('/', ['as' => 'plan.show', 'uses' => 'FloorPlansController@show']);
-                                Route::put('/', ['as' => 'plan.update', 'uses' => 'FloorPlansController@update']);
+                            Route::group(['prefix' => 'structures'], function () {
+                                Route::get('/', ['as' => 'structure.index', 'uses' => 'MapStructuresController@index']);
+                                Route::get('/', ['as' => 'structure.paginated', 'uses' => 'MapStructuresController@paginated']);
+                                Route::post('/', ['as' => 'structure.store', 'uses' => 'MapStructuresController@store']);
+
+                                Route::group(['prefix' => '{structure}'], function () {
+                                    Route::get('/', ['as' => 'structure.show', 'uses' => 'MapStructuresController@show']);
+                                    Route::put('/', ['as' => 'structure.update', 'uses' => 'MapStructuresController@update']);
+                                    Route::delete('/', ['as' => 'structure.destroy', 'uses' => 'MapStructuresController@destroy']);
+                                });
                             });
 
                             Route::group(['prefix' => 'locations'], function () {
-                                Route::get('/', ['as' => 'location.index', 'uses' => 'FloorLocationsController@index'])->middleware('permission:floors.read');
-                                Route::post('/poi', ['as' => 'location.store', 'uses' => 'FloorLocationsController@storePoi'])->middleware('permission:floors.update');
-                                Route::post('/findable', ['as' => 'location.store', 'uses' => 'FloorLocationsController@storeFindable'])->middleware('permission:floors.update');
-                                Route::post('/beacon', ['as' => 'location.store', 'uses' => 'FloorLocationsController@storeBeacon'])->middleware('permission:floors.update');
-
-                                Route::put('/poi/{location}', ['as' => 'location.store', 'uses' => 'FloorLocationsController@updatePoi'])->middleware('permission:floors.update');
-                                Route::put('/findable/{location}', ['as' => 'location.store', 'uses' => 'FloorLocationsController@updateFindable'])->middleware('permission:floors.update');
-                                Route::put('/beacon/{beacon}', ['as' => 'location.store', 'uses' => 'FloorLocationsController@updateBeacon'])->middleware('permission:floors.update');
-
-                                Route::delete('/poi/{location}', ['as' => 'location.destroy', 'uses' => 'FloorLocationsController@deletePoi'])->middleware('permission:floors.update');
-                                Route::delete('/findable/{location}', ['as' => 'location.destroy', 'uses' => 'FloorLocationsController@deleteFindable'])->middleware('permission:floors.update');
-                                Route::delete('/beacon/{beacon}', ['as' => 'location.destroy', 'uses' => 'FloorLocationsController@deleteBeacon'])->middleware('permission:floors.update');
+                                Route::get('/', ['as' => 'location.index', 'uses' => 'MapLocationsController@index']);
+                                Route::post('/', ['as' => 'location.store', 'uses' => 'MapLocationsController@store']);
+                                Route::put('/{location}', ['as' => 'location.update', 'uses' => 'MapLocationsController@update']);
+                                Route::delete('/{location}', ['as' => 'location.destroy', 'uses' => 'MapLocationsController@delete']);
                             });
                         });
                     });

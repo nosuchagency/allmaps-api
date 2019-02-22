@@ -65,9 +65,7 @@ class Place extends Model
         'tags',
         'buildings',
         'buildings.floors',
-        'buildings.floors.pois',
-        'buildings.floors.beacons',
-        'buildings.floors.findables',
+        'buildings.floors.locations'
     ];
 
     /**

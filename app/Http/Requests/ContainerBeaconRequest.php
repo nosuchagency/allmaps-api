@@ -25,7 +25,7 @@ class ContainerBeaconRequest extends FormRequest
     {
         return [
             'beacon' => 'required',
-            'beacon.id' => 'required|exists:beacons,id'
+            'beacon.id' => 'required|exists:beacons,id,deleted_at,NULL'
         ];
     }
 }

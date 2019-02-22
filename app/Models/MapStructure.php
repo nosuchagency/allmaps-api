@@ -17,9 +17,11 @@ class MapStructure extends Model
      * @var array
      */
     protected $fillable = [
+        'name',
+        'coordinates',
+        'radius',
         'map_component_id',
         'floor_id',
-        'geojson',
         'created_by'
     ];
 
@@ -31,6 +33,25 @@ class MapStructure extends Model
     protected $dates = [
         'deleted_at'
     ];
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'coordinates' => 'array',
+    ];
+
+    /**.
+     * @param  $value
+     *
+     * @return void
+     */
+    public function setCoordinatesAttribute($value)
+    {
+        $this->attributes['coordinates'] = json_encode($value);
+    }
 
     /**
      * Get the floor that owns the Location.

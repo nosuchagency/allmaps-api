@@ -42,9 +42,7 @@ class Building extends Model
      */
     public $relations = [
         'floors',
-        'floors.pois',
-        'floors.beacons',
-        'floors.findables'
+        'floors.locations'
     ];
 
     /**

@@ -34,7 +34,7 @@ class BuildingsController extends Controller
      */
     public function index(Request $request, Place $place)
     {
-        $buildings = Building::withRelations($request)->get();
+        $buildings = $place->buildings()->withRelations($request)->get();
 
         return response()->json(BuildingResource::collection($buildings), Response::HTTP_OK);
     }
@@ -47,7 +47,7 @@ class BuildingsController extends Controller
      */
     public function paginated(Request $request, Place $place)
     {
-        $buildings = Building::withRelations($request)->filter($request)->paginate($this->paginationNumber());
+        $buildings = $place->buildings()->withRelations($request)->filter($request)->paginate($this->paginationNumber());
 
         return BuildingResource::collection($buildings);
     }

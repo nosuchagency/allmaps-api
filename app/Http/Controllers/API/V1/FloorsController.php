@@ -35,7 +35,7 @@ class FloorsController extends Controller
      */
     public function index(Request $request, Place $place, Building $building)
     {
-        $floors = Floor::withRelations($request)->get();
+        $floors = $building->floors()->withRelations($request)->get();
 
         return response()->json(FloorResource::collection($floors), Response::HTTP_OK);
     }
@@ -49,7 +49,7 @@ class FloorsController extends Controller
      */
     public function paginated(Request $request, Place $place, Building $building)
     {
-        $floors = Floor::withRelations($request)->filter($request)->paginate($this->paginationNumber());
+        $floors = $building->floors()->withRelations($request)->filter($request)->paginate($this->paginationNumber());
 
         return FloorResource::collection($floors);
     }

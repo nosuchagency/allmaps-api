@@ -76,6 +76,14 @@ class Beacon extends Model
     }
 
     /**
+     * Get the locations for the Beacon.
+     */
+    public function locations()
+    {
+        return $this->hasMany(MapLocation::class);
+    }
+
+    /**
      * The tags that belong to the beacon
      */
     public function tags()
