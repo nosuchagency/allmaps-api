@@ -22,10 +22,13 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/profile', ['as' => 'profile', 'uses' => 'ProfileController@show']);
     Route::put('/profile', ['as' => 'profile.update', 'uses' => 'ProfileController@update']);
 
+    Route::get('/search', ['as' => 'search', 'uses' => 'SearchController']);
+    Route::get('/plugins', ['as' => 'plugins.index', 'uses' => 'PluginsController']);
+
     Route::get('/beacons/paginated', ['as' => 'beacons.paginated', 'uses' => 'BeaconsController@paginated']);
     Route::get('/categories/paginated', ['as' => 'categories.paginated', 'uses' => 'CategoriesController@paginated']);
     Route::get('/containers/paginated', ['as' => 'containers.paginated', 'uses' => 'ContainersController@paginated']);
-    Route::get('/findables/paginated', ['as' => 'findables.paginated', 'uses' => 'FindablesController@paginated']);
+    Route::get('/fixtures/paginated', ['as' => 'fixtures.paginated', 'uses' => 'FixturesController@paginated']);
     Route::get('/map-components/paginated', ['as' => 'map-components.paginated', 'uses' => 'MapComponentsController@paginated']);
     Route::get('/layouts/paginated', ['as' => 'layouts.paginated', 'uses' => 'LayoutsController@paginated']);
     Route::get('/pois/paginated', ['as' => 'pois.paginated', 'uses' => 'PoisController@paginated']);
@@ -37,19 +40,20 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::apiResource('beacons', 'BeaconsController');
     Route::apiResource('categories', 'CategoriesController');
-    Route::apiResource('findables', 'FindablesController');
+    Route::apiResource('fixtures', 'FixturesController');
     Route::apiResource('map-components', 'MapComponentsController');
     Route::apiResource('layouts', 'LayoutsController');
     Route::apiResource('pois', 'PoisController')->parameters(['pois' => 'poi']);
     Route::apiResource('tokens', 'TokensController');
     Route::apiResource('users', 'UsersController');
     Route::apiResource('roles', 'RolesController');
+    Route::apiResource('searchables', 'SearchablesController');
     Route::apiResource('tags', 'TagsController');
     Route::apiResource('templates', 'TemplatesController');
 
     Route::post('/beacons/bulk-destroy', ['as' => 'beacons.bulk-destroy', 'uses' => 'BeaconsController@bulkDestroy']);
     Route::post('/categories/bulk-destroy', ['as' => 'categories.bulk-destroy', 'uses' => 'CategoriesController@bulkDestroy']);
-    Route::post('/findables/bulk-destroy', ['as' => 'findable.bulk-destroy', 'uses' => 'FindablesController@bulkDestroy']);
+    Route::post('/fixtures/bulk-destroy', ['as' => 'fixtures.bulk-destroy', 'uses' => 'FixturesController@bulkDestroy']);
     Route::post('/map-components/bulk-destroy', ['as' => 'map-components.bulk-destroy', 'uses' => 'MapComponentsController@bulkDestroy']);
     Route::post('/layouts/bulk-destroy', ['as' => 'layouts.bulk-destroy', 'uses' => 'LayoutsController@bulkDestroy']);
     Route::post('/pois/bulk-destroy', ['as' => 'pois.bulk-destroy', 'uses' => 'PoisController@bulkDestroy']);
@@ -94,6 +98,8 @@ Route::group(['middleware' => 'auth'], function () {
             Route::put('/', ['as' => 'place.update', 'uses' => 'PlacesController@update']);
             Route::delete('/', ['as' => 'place.destroy', 'uses' => 'PlacesController@destroy']);
 
+            Route::get('/search', ['as' => 'place.search', 'uses' => 'PlacesController@search']);
+
             Route::group(['prefix' => 'buildings'], function () {
                 Route::get('/', ['as' => 'building.index', 'uses' => 'BuildingsController@index']);
                 Route::get('/', ['as' => 'building.paginated', 'uses' => 'BuildingsController@paginated']);
@@ -104,6 +110,8 @@ Route::group(['middleware' => 'auth'], function () {
                     Route::put('/', ['as' => 'building.update', 'uses' => 'BuildingsController@update']);
                     Route::delete('/', ['as' => 'building.destroy', 'uses' => 'BuildingsController@destroy']);
 
+                    Route::get('/search', ['as' => 'building.search', 'uses' => 'BuildingsController@search']);
+
                     Route::group(['prefix' => 'floors'], function () {
                         Route::get('/', ['as' => 'floor.index', 'uses' => 'FloorsController@index']);
                         Route::get('/', ['as' => 'floor.paginated', 'uses' => 'FloorsController@paginated']);
@@ -113,6 +121,8 @@ Route::group(['middleware' => 'auth'], function () {
                             Route::get('/', ['as' => 'floor.show', 'uses' => 'FloorsController@show']);
                             Route::put('/', ['as' => 'floor.update', 'uses' => 'FloorsController@update']);
                             Route::delete('/', ['as' => 'floor.destroy', 'uses' => 'FloorsController@destroy']);
+
+                            Route::get('/search', ['as' => 'floor.search', 'uses' => 'FloorsController@search']);
 
                             Route::group(['prefix' => 'structures'], function () {
                                 Route::get('/', ['as' => 'structure.index', 'uses' => 'MapStructuresController@index']);

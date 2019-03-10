@@ -23,8 +23,8 @@ class MapLocationObserver
                 case 'poi' :
                     $mapLocation->name = $mapLocation->poi->name;
                     break;
-                case 'findable' :
-                    $mapLocation->name = $mapLocation->findable->name;
+                case 'searchable' :
+                    $mapLocation->name = $mapLocation->searchable->name;
                     break;
             }
         }

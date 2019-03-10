@@ -18,13 +18,22 @@ class MapLocation extends Model
      */
     protected $fillable = [
         'name',
+        'coordinates',
+        'zoom_level_from',
+        'zoom_level_to',
+        'title',
+        'subtitle',
+        'description',
+        'company',
+        'address',
+        'city',
+        'postal_code',
+        'phone',
+        'email',
         'poi_id',
-        'findable_id',
+        'fixture_id',
         'beacon_id',
         'floor_id',
-        'type',
-        'coordinates',
-        'area',
         'created_by'
     ];
 
@@ -73,11 +82,11 @@ class MapLocation extends Model
     }
 
     /**
-     * Get the findable that owns the Location.
+     * Get the fixture that owns the Location.
      */
-    public function findable()
+    public function fixture()
     {
-        return $this->belongsTo(Findable::class);
+        return $this->belongsTo(Fixture::class);
     }
 
     /**
@@ -92,8 +101,8 @@ class MapLocation extends Model
     {
         if ($this->poi_id) {
             return 'poi';
-        } else if ($this->findable_id) {
-            return 'findable';
+        } else if ($this->fixture_id) {
+            return 'fixture';
         } else if ($this->beacon_id) {
             return 'beacon';
         }

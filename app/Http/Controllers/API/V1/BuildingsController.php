@@ -2,16 +2,18 @@
 
 namespace App\Http\Controllers\API\V1;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\BaseController;
 use App\Http\Requests\BuildingRequest;
 use App\Http\Requests\BulkDeleteRequest;
+use App\Http\Requests\SearchRequest;
 use App\Http\Resources\BuildingResource;
+use App\Http\Resources\MapLocationResource;
 use App\Models\Building;
 use App\Models\Place;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
-class BuildingsController extends Controller
+class BuildingsController extends BaseController
 {
 
     /**
@@ -126,5 +128,19 @@ class BuildingsController extends Controller
         });
 
         return response()->json(null, Response::HTTP_OK);
+    }
+
+    /**
+     * @param Place $place
+     * @param Building $building
+     * @param SearchRequest $request
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function search(Place $place, Building $building, SearchRequest $request)
+    {
+        $locations = $this->searchForLocations($request->all(), $building->locations()->getQuery());
+
+        return response()->json(MapLocationResource::collection($locations), Response::HTTP_OK);
     }
 }

@@ -19,6 +19,7 @@ class CreateMapStructuresTable extends Migration
             $table->string('name')->nullable();
 
             $table->longText('coordinates')->nullable();
+            $table->longText('markers')->nullable();
             $table->decimal('radius', 8, 2)->nullable();
 
             $table->unsignedInteger('floor_id');

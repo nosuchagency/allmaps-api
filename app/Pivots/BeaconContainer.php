@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Models;
+namespace App\Pivots;
 
+use App\Models\Rule;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
 class BeaconContainer extends Pivot

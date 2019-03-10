@@ -17,12 +17,10 @@ class PoiResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'location_type' => 'poi',
             'name' => $this->name,
-            'internal_name' => $this->internal_name,
             'type' => $this->type,
             'color' => $this->color,
-            'icon' => $this->getImageUrl(),
+            'image' => $this->getImageUrl(),
             'creator' => $this->creator,
             'category' => new CategoryResource($this->category),
             'tags' => TagResource::collection($this->whenLoaded('tags'))

@@ -5,15 +5,18 @@ namespace App\Models;
 use App\Filters\IndexFilter;
 use App\Traits\HasCategory;
 use App\Traits\HasCreatedBy;
+use App\Traits\HasImage;
 use App\Traits\HasRelations;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\Traits\LogsActivity;
 
-class Findable extends Model
+class Fixture extends Model
 {
-    use HasRelations, HasCategory, SoftDeletes, HasCreatedBy, LogsActivity;
+    use HasRelations, HasCategory, SoftDeletes, HasCreatedBy, HasImage, LogsActivity;
+
+    const IMAGE_DIRECTORY_PATH = '/uploads/fixtures';
 
     /**
      * The attributes that are mass assignable.
@@ -22,8 +25,12 @@ class Findable extends Model
      */
     protected $fillable = [
         'name',
-        'created_by',
+        'description',
+        'image',
+        'width',
+        'height',
         'category_id',
+        'created_by',
         'category'
     ];
 
@@ -47,15 +54,15 @@ class Findable extends Model
     ];
 
     /**
-     * The tags that belong to the findable
+     * The tags that belong to the Fixture
      */
     public function tags()
     {
-        return $this->belongsToMany(Tag::class, 'tag_findable');
+        return $this->belongsToMany(Tag::class, 'tag_fixture');
     }
 
     /**
-     * Get the locations for the Findable.
+     * Get the locations for the Fixture.
      */
     public function locations()
     {
@@ -79,13 +86,14 @@ class Findable extends Model
     {
         parent::boot();
 
-        static::deleting(function ($findable) {
-            $findable->locations->each(function ($location) {
+        static::deleting(function ($fixture) {
+            $fixture->locations->each(function ($location) {
                 $location->delete();
             });
         });
-        static::restoring(function ($findable) {
-            $findable->locations->each(function ($location) {
+
+        static::restoring(function ($fixture) {
+            $fixture->locations->each(function ($location) {
                 $location->restore();
             });
         });

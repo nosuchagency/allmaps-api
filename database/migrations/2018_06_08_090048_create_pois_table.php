@@ -16,7 +16,8 @@ class CreatePoisTable extends Migration
         Schema::create('pois', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->string('internal_name')->nullable();
+            $table->text('description')->nullable();
+
             $table->string('image')->nullable();
 
             $table->string('type')->nullable();

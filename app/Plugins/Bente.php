@@ -1,0 +1,43 @@
+<?php
+
+namespace App\Plugins;
+
+use App\Plugins\Assets\FieldCollection;
+use App\Plugins\Contracts\BasePlugin;
+use App\Plugins\Search\SearchResults;
+
+class Bente extends BasePlugin
+{
+    /**
+     * @var string
+     */
+    protected $pluginName = 'Bente';
+
+    /**
+     * @return FieldCollection
+     */
+    public function fields(): FieldCollection
+    {
+        return new FieldCollection([
+            // new Field('ID', 'id', 'text'),
+        ]);
+    }
+
+    /**
+     * @param $payload
+     *
+     * @return SearchResults
+     */
+    public function search($payload): SearchResults
+    {
+        return $this->getLocations([]);
+    }
+
+    /**
+     * @return string
+     */
+    public function getName(): string
+    {
+        return $this->pluginName;
+    }
+}

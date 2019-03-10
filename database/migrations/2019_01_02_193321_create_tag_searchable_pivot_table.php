@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTagFindablePivotTable extends Migration
+class CreateTagSearchablePivotTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,13 @@ class CreateTagFindablePivotTable extends Migration
      */
     public function up()
     {
-        Schema::create('tag_findable', function (Blueprint $table) {
+        Schema::create('tag_searchable', function (Blueprint $table) {
             $table->tag();
 
-            $table->unsignedInteger('findable_id');
-            $table->foreign('findable_id')
+            $table->unsignedInteger('searchable_id');
+            $table->foreign('searchable_id')
                 ->references('id')
-                ->on('findables')
+                ->on('searchables')
                 ->onDelete('cascade');
         });
     }
@@ -31,6 +31,6 @@ class CreateTagFindablePivotTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tag_findable');
+        Schema::dropIfExists('tag_searchable');
     }
 }

@@ -25,10 +25,22 @@ class MapLocationRequest extends FormRequest
     {
         return [
             'name' => '',
+            'zoom_level_from' => '',
+            'zoom_level_to' => '',
+            'title' => '',
+            'subtitle' => '',
+            'description' => '',
+            'company' => '',
+            'address' => '',
+            'city' => '',
+            'postal_code' => '',
+            'phone' => '',
+            'email' => '',
             'coordinates' => '',
+            'fields' => 'array',
             'poi_id' => 'nullable|exists:pois,id,deleted_at,NULL',
             'beacon_id' => 'nullable|exists:beacons,id,deleted_at,NULL',
-            'findable_id' => 'nullable|exists:findables,id,deleted_at,NULL'
+            'fixture_id' => 'nullable|exists:fixtures,id,deleted_at,NULL'
         ];
     }
 }

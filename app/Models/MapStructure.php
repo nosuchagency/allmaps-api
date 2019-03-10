@@ -19,6 +19,7 @@ class MapStructure extends Model
     protected $fillable = [
         'name',
         'coordinates',
+        'markers',
         'radius',
         'map_component_id',
         'floor_id',
@@ -41,6 +42,7 @@ class MapStructure extends Model
      */
     protected $casts = [
         'coordinates' => 'array',
+        'markers' => 'array',
     ];
 
     /**.
@@ -51,6 +53,16 @@ class MapStructure extends Model
     public function setCoordinatesAttribute($value)
     {
         $this->attributes['coordinates'] = json_encode($value);
+    }
+
+    /**.
+     * @param  $value
+     *
+     * @return void
+     */
+    public function setMarkersAttribute($value)
+    {
+        $this->attributes['markers'] = json_encode($value);
     }
 
     /**

@@ -2,9 +2,10 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\PluginExists;
 use Illuminate\Foundation\Http\FormRequest;
 
-class FindableRequest extends FormRequest
+class SearchableRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,11 +24,18 @@ class FindableRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            'name' => 'required',
-            'category' => '',
-            'tags' => 'present|array',
-            'tags.*.id' => 'required|exists:tags,id'
+        $rules = [
+            'name' => [
+                'unique:searchables',
+                new PluginExists
+            ],
+            'activated' => 'boolean'
         ];
+
+        if ($this->method() === 'POST') {
+            $rules['name'][] = 'required';
+        }
+
+        return $rules;
     }
 }

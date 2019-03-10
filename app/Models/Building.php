@@ -62,6 +62,14 @@ class Building extends Model
             ->orderBy('level');
     }
 
+    /**
+     * Get all of the locations for the building
+     */
+    public function locations()
+    {
+        return $this->hasManyThrough(MapLocation::class, Floor::class);
+    }
+
     protected static function boot()
     {
         parent::boot();

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Filters\IndexFilter;
+use App\Pivots\BeaconContainer;
 use App\Traits\HasCategory;
 use App\Traits\HasCreatedBy;
 use App\Traits\HasRelations;

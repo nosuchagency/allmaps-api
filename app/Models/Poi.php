@@ -25,7 +25,7 @@ class Poi extends Model
      */
     protected $fillable = [
         'name',
-        'internal_name',
+        'description',
         'image',
         'type',
         'color',

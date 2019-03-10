@@ -4,7 +4,7 @@ namespace App\Http\Controllers\API\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\BulkDeleteRequest;
-use App\Http\Requests\PoisRequest;
+use App\Http\Requests\PoiRequest;
 use App\Http\Resources\PoiResource;
 use App\Models\Poi;
 use App\Models\Tag;
@@ -50,14 +50,14 @@ class PoisController extends Controller
     }
 
     /**
-     * @param PoisRequest $request
+     * @param PoiRequest $request
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(PoisRequest $request)
+    public function store(PoiRequest $request)
     {
-        $poi = Poi::create($request->except('icon'));
-        $poi->addAndSaveImage($request->get('icon'));
+        $poi = Poi::create($request->except('image'));
+        $poi->addAndSaveImage($request->get('image'));
 
         foreach ($request->get('tags') as $tag) {
             $poi->tags()->attach(Tag::find($tag['id']));
@@ -82,14 +82,14 @@ class PoisController extends Controller
 
     /**
      * @param Poi $poi
-     * @param PoisRequest $request
+     * @param PoiRequest $request
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Poi $poi, PoisRequest $request)
+    public function update(Poi $poi, PoiRequest $request)
     {
-        $poi->fill($request->except('icon'))->save();
-        $poi->addAndSaveImage($request->get('icon'));
+        $poi->fill($request->except('image'))->save();
+        $poi->addAndSaveImage($request->get('image'));
 
         $poi->tags()->sync([]);
 

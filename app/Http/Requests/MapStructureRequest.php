@@ -26,6 +26,7 @@ class MapStructureRequest extends FormRequest
         return [
             'name' => '',
             'coordinates' => 'array',
+            'markers' => 'array',
             'radius' => 'nullable|numeric|min:0',
             'map_component_id' => 'nullable|exists:map_components,id,deleted_at,NULL'
         ];

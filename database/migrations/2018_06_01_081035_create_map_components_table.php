@@ -26,6 +26,9 @@ class CreateMapComponentsTable extends Migration
             $table->integer('opacity')->default(0);
             $table->integer('weight')->default(2);
             $table->boolean('curved')->default(false);
+            $table->string('image')->nullable();
+            $table->unsignedInteger('width')->nullable();
+            $table->unsignedInteger('height')->nullable();
 
             $table->category();
             $table->createdBy();

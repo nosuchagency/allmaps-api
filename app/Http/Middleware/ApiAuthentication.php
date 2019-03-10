@@ -19,7 +19,7 @@ class ApiAuthentication
     {
         $key = $request->header('Api-Key');
 
-        if ($key !== config('beacon-bacon.api.key')) {
+        if ($key !== config('bb.api.key')) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 

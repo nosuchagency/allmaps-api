@@ -2,11 +2,9 @@
 
 namespace App\Http\Requests;
 
-use App\Rules\Imageable;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
-class PoisRequest extends FormRequest
+class FixtureRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,13 +25,10 @@ class PoisRequest extends FormRequest
     {
         return [
             'name' => 'required',
-            'internal_name' => '',
-            'type' => [
-                'required',
-                Rule::in(['icon', 'area']),
-            ],
-            'color' => '',
-            'icon' => '',
+            'description' => '',
+            'image' => '',
+            'width' => 'integer|nullable',
+            'height' => 'integer|nullable',
             'category' => '',
             'tags' => 'present|array',
             'tags.*.id' => 'required|exists:tags,id'

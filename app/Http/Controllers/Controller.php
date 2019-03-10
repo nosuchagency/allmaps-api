@@ -16,6 +16,6 @@ class Controller extends BaseController
      */
     protected function paginationNumber()
     {
-        return intval(config('beacon-bacon.pagination.number'));
+        return intval(config('bb.pagination.number'));
     }
 }

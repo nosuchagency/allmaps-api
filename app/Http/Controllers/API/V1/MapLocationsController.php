@@ -83,6 +83,4 @@ class MapLocationsController extends Controller
 
         return response()->json(null, Response::HTTP_OK);
     }
-
-
 }
