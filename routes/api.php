@@ -139,6 +139,7 @@ Route::group(['middleware' => 'auth'], function () {
                             Route::group(['prefix' => 'locations'], function () {
                                 Route::get('/', ['as' => 'location.index', 'uses' => 'MapLocationsController@index']);
                                 Route::post('/', ['as' => 'location.store', 'uses' => 'MapLocationsController@store']);
+                                Route::get('/{location}', ['as' => 'location.show', 'uses' => 'MapLocationsController@show']);
                                 Route::put('/{location}', ['as' => 'location.update', 'uses' => 'MapLocationsController@update']);
                                 Route::delete('/{location}', ['as' => 'location.destroy', 'uses' => 'MapLocationsController@delete']);
                             });

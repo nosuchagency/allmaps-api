@@ -3,13 +3,17 @@
 namespace App\Models;
 
 use App\Traits\HasCreatedBy;
+use App\Traits\HasImage;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 class MapLocation extends Model
 {
-    use SoftDeletes, HasCreatedBy, LogsActivity;
+    use SoftDeletes, HasCreatedBy, HasImage, LogsActivity;
+
+    const IMAGE_DIRECTORY_PATH = '/uploads/locations';
 
     /**
      * The attributes that are mass assignable.
@@ -18,18 +22,25 @@ class MapLocation extends Model
      */
     protected $fillable = [
         'name',
-        'coordinates',
-        'zoom_level_from',
-        'zoom_level_to',
+        'zoom_from',
+        'zoom_to',
         'title',
         'subtitle',
+        'image',
         'description',
+        'contact_name',
         'company',
         'address',
         'city',
-        'postal_code',
+        'postcode',
         'phone',
         'email',
+        'search_activated',
+        'search_text',
+        'activated_at',
+        'publish_at',
+        'unpublish_at',
+        'coordinates',
         'poi_id',
         'fixture_id',
         'beacon_id',
@@ -53,6 +64,7 @@ class MapLocation extends Model
      */
     protected $casts = [
         'coordinates' => 'array',
+        'search_activated' => 'boolean'
     ];
 
     /**.
@@ -63,6 +75,38 @@ class MapLocation extends Model
     public function setCoordinatesAttribute($value)
     {
         $this->attributes['coordinates'] = json_encode($value);
+    }
+
+    /**
+     * Set the date from
+     *
+     * @param  string $value
+     *
+     * @return void
+     */
+    public function setPublishAtAttribute($value)
+    {
+        if ($value) {
+            $this->attributes['publish_at'] = Carbon::parse($value)->format('Y-m-d');
+        } else {
+            $this->attributes['publish_at'] = null;
+        }
+    }
+
+    /**
+     * Set the date to
+     *
+     * @param  string $value
+     *
+     * @return void
+     */
+    public function setUnpublishAtAttribute($value)
+    {
+        if ($value) {
+            $this->attributes['unpublish_at'] = Carbon::parse($value)->format('Y-m-d');
+        } else {
+            $this->attributes['unpublish_at'] = null;
+        }
     }
 
     /**
@@ -97,6 +141,9 @@ class MapLocation extends Model
         return $this->belongsTo(Beacon::class);
     }
 
+    /**
+     * @return string|null
+     */
     public function getType()
     {
         if ($this->poi_id) {

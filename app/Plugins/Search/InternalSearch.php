@@ -29,7 +29,7 @@ class InternalSearch implements Search
         'company',
         'address',
         'city',
-        'postal_code',
+        'postcode',
         'phone',
         'email'
     ];

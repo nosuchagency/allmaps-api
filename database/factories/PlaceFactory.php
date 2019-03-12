@@ -17,7 +17,7 @@ $factory->define(App\Models\Place::class, function (Faker $faker) {
     return [
         'name' => $faker->company,
         'address' => $faker->address,
-        'zipcode' => $faker->postcode,
+        'postcode' => $faker->postcode,
         'city' => $faker->city
     ];
 });

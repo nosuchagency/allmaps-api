@@ -19,7 +19,7 @@ class PlaceResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'address' => $this->address,
-            'zipcode' => $this->zipcode,
+            'postcode' => $this->postcode,
             'city' => $this->city,
             'image' => $this->getImageUrl(),
             'lat' => $this->lat,

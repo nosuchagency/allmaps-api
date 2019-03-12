@@ -38,6 +38,19 @@ class MapLocationsController extends Controller
     }
 
     /**
+     * @param Place $place
+     * @param Building $building
+     * @param Floor $floor
+     * @param MapLocation $location
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function show(Place $place, Building $building, Floor $floor, MapLocation $location)
+    {
+        return response()->json(new MapLocationResource($location), Response::HTTP_OK);
+    }
+
+    /**
      * @param MapLocationRequest $request
      * @param Place $place
      * @param Building $building
@@ -47,9 +60,10 @@ class MapLocationsController extends Controller
      */
     public function store(MapLocationRequest $request, Place $place, Building $building, Floor $floor)
     {
-        $location = $floor->locations()->create($request->validated());
+        $location = $floor->locations()->create($request->except('image'));
+        $location->addAndSaveImage($request->get('image'));
 
-        return response()->json(new MapLocationResource($location), Response::HTTP_CREATED);
+        return response()->json(new MapLocationResource($location->refresh()), Response::HTTP_CREATED);
     }
 
     /**
@@ -63,7 +77,8 @@ class MapLocationsController extends Controller
      */
     public function update(MapLocationRequest $request, Place $place, Building $building, Floor $floor, MapLocation $location)
     {
-        $location->fill($request->validated())->save();
+        $location->fill($request->except('image'))->save();
+        $location->addAndSaveImage($request->get('image'));
 
         return response()->json(new MapLocationResource($location), Response::HTTP_OK);
     }

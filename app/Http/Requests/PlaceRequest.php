@@ -26,7 +26,7 @@ class PlaceRequest extends FormRequest
         return [
             'name' => 'required',
             'address' => '',
-            'zipcode' => 'numeric|nullable',
+            'postcode' => 'numeric|nullable',
             'city' => '',
             'image' => '',
             'lat' => 'required',

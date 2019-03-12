@@ -17,19 +17,24 @@ class CreateMapLocationsTable extends Migration
             $table->increments('id');
 
             $table->string('name')->nullable();
-            $table->unsignedInteger('zoom_level_from')->default(0);
-            $table->unsignedInteger('zoom_level_to')->default(30);
+            $table->unsignedInteger('zoom_from')->default(0);
+            $table->unsignedInteger('zoom_to')->default(30);
             $table->string('title')->nullable();
             $table->string('subtitle')->nullable();
+            $table->string('image')->nullable();
             $table->text('description')->nullable();
+            $table->string('contact_name')->nullable();
             $table->string('company')->nullable();
             $table->string('address')->nullable();
             $table->string('city')->nullable();
-            $table->string('postal_code')->nullable();
+            $table->string('postcode')->nullable();
             $table->string('phone')->nullable();
             $table->string('email')->nullable();
-
+            $table->boolean('search_activated')->default(true);
             $table->string('search_text')->nullable();
+            $table->dateTime('activated_at')->nullable();
+            $table->dateTime('publish_at')->nullable();
+            $table->dateTime('unpublish_at')->nullable();
 
             $table->unsignedInteger('floor_id');
             $table->foreign('floor_id')
