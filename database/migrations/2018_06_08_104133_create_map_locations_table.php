@@ -32,6 +32,22 @@ class CreateMapLocationsTable extends Migration
             $table->string('email')->nullable();
             $table->boolean('search_activated')->default(true);
             $table->string('search_text')->nullable();
+
+            $table->time('monday_from')->nullable();
+            $table->time('monday_to')->nullable();
+            $table->time('tuesday_from')->nullable();
+            $table->time('tuesday_to')->nullable();
+            $table->time('wednesday_from')->nullable();
+            $table->time('wednesday_to')->nullable();
+            $table->time('thursday_from')->nullable();
+            $table->time('thursday_to')->nullable();
+            $table->time('friday_from')->nullable();
+            $table->time('friday_to')->nullable();
+            $table->time('saturday_from')->nullable();
+            $table->time('saturday_to')->nullable();
+            $table->time('sunday_from')->nullable();
+            $table->time('sunday_to')->nullable();
+
             $table->dateTime('activated_at')->nullable();
             $table->dateTime('publish_at')->nullable();
             $table->dateTime('unpublish_at')->nullable();
