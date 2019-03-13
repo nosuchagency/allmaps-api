@@ -67,7 +67,7 @@ class FloorsController extends BaseController
     {
         $floor = $building->floors()->create($request->validated());
 
-        $floor->load($floor->relations);
+        $floor->load($floor->relationships);
 
         return response()->json(new FloorResource($floor), Response::HTTP_CREATED);
     }
@@ -81,7 +81,7 @@ class FloorsController extends BaseController
      */
     public function show(Place $place, Building $building, Floor $floor)
     {
-        $floor->load($floor->relations);
+        $floor->load($floor->relationships);
 
         return response()->json(new FloorResource($floor), Response::HTTP_OK);
     }
@@ -98,7 +98,7 @@ class FloorsController extends BaseController
     {
         $floor->fill($request->validated())->save();
 
-        $floor->load($floor->relations);
+        $floor->load($floor->relationships);
 
         return response()->json(new FloorResource($floor), Response::HTTP_OK);
     }
@@ -135,14 +135,14 @@ class FloorsController extends BaseController
     }
 
     /**
+     * @param SearchRequest $request
      * @param Place $place
      * @param Building $building
      * @param Floor $floor
-     * @param SearchRequest $request
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function search(Place $place, Building $building, Floor $floor, SearchRequest $request)
+    public function search(SearchRequest $request, Place $place, Building $building, Floor $floor)
     {
         $locations = $this->searchForLocations($request->all(), $floor->locations()->getQuery());
 

@@ -9,7 +9,7 @@ use App\Http\Requests\SearchRequest;
 use App\Http\Resources\MapLocationResource;
 use App\Http\Resources\PlaceResource;
 use App\Models\Place;
-use App\Models\Tag;
+use App\Services\PlaceService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -17,14 +17,23 @@ class PlacesController extends BaseController
 {
 
     /**
-     * PlacesController constructor.
+     * @var PlaceService
      */
-    public function __construct()
+    protected $placeService;
+
+    /**
+     * PlacesController constructor.
+     *
+     * @param PlaceService $placeService
+     */
+    public function __construct(PlaceService $placeService)
     {
         $this->middleware('permission:places.create')->only(['store']);
         $this->middleware('permission:places.read')->only(['index', 'show', 'paginated']);
         $this->middleware('permission:places.update')->only(['update']);
         $this->middleware('permission:places.delete')->only(['destroy', 'bulkDestroy']);
+
+        $this->placeService = $placeService;
     }
 
     /**
@@ -58,14 +67,9 @@ class PlacesController extends BaseController
      */
     public function store(PlaceRequest $request)
     {
-        $place = Place::create($request->validated());
-        $place->addAndSaveImage($request->get('image'));
+        $place = $this->placeService->create($request);
 
-        foreach ($request->get('tags') as $tag) {
-            $place->tags()->attach(Tag::find($tag['id']));
-        }
-
-        $place->load($place->relations);
+        $place->load($place->relationships);
 
         return response()->json(new PlaceResource($place), Response::HTTP_CREATED);
     }
@@ -77,7 +81,7 @@ class PlacesController extends BaseController
      */
     public function show(Place $place)
     {
-        $place->load($place->relations);
+        $place->load($place->relationships);
 
         return response()->json(new PlaceResource($place), Response::HTTP_OK);
     }
@@ -90,16 +94,9 @@ class PlacesController extends BaseController
      */
     public function update(Place $place, PlaceRequest $request)
     {
-        $place->fill($request->validated())->save();
-        $place->addAndSaveImage($request->get('image'));
+        $place = $this->placeService->update($request, $place);
 
-        $place->tags()->sync([]);
-
-        foreach ($request->get('tags') as $tag) {
-            $place->tags()->attach(Tag::find($tag['id']));
-        }
-
-        $place->load($place->relations);
+        $place->load($place->relationships);
 
         return response()->json(new PlaceResource($place), Response::HTTP_OK);
     }
@@ -134,12 +131,12 @@ class PlacesController extends BaseController
     }
 
     /**
-     * @param Place $place
      * @param SearchRequest $request
+     * @param Place $place
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function search(Place $place, SearchRequest $request)
+    public function search(SearchRequest $request, Place $place)
     {
         $locations = $this->searchForLocations($request->all(), $place->locations()->getQuery());
 

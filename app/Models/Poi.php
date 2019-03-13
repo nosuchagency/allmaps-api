@@ -48,7 +48,7 @@ class Poi extends Model
      *
      * @var array
      */
-    public $relations = [
+    public $relationships = [
         'tags',
         'locations'
     ];

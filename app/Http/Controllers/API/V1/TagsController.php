@@ -69,12 +69,12 @@ class TagsController extends Controller
     }
 
     /**
-     * @param Tag $tag
      * @param TagRequest $request
+     * @param Tag $tag
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Tag $tag, TagRequest $request)
+    public function update(TagRequest $request, Tag $tag)
     {
         $tag->fill($request->validated())->save();
 

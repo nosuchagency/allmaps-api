@@ -40,7 +40,7 @@ class Building extends Model
      *
      * @var array
      */
-    public $relations = [
+    public $relationships = [
         'floors',
         'floors.locations'
     ];

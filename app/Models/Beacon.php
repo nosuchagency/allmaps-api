@@ -33,7 +33,6 @@ class Beacon extends Model
         'eddystone_eid',
         'lat',
         'lng',
-        'floor_id',
         'category_id',
         'category',
         'created_by'
@@ -63,18 +62,10 @@ class Beacon extends Model
      *
      * @var array
      */
-    public $relations = [
+    public $relationships = [
         'tags',
         'containers'
     ];
-
-    /**
-     * Get the floor that owns the beacon
-     */
-    public function floor()
-    {
-        return $this->belongsTo(Floor::class);
-    }
 
     /**
      * Get the locations for the Beacon.

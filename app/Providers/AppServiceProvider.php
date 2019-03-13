@@ -25,7 +25,7 @@ class AppServiceProvider extends ServiceProvider
     {
         User::observe(UserObserver::class);
         MapStructure::observe(MapStructureObserver::class);
-        MapLocation::observe(MapLocationObserver::class);
+//        MapLocation::observe(MapLocationObserver::class);
         Container::observe(ContainerObserver::class);
         Resource::withoutWrapping();
     }

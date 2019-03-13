@@ -25,18 +25,19 @@ class ImageContentsController extends Controller
     }
 
     /**
+     * @param ImageContentRequest $request
      * @param Container $container
      * @param Folder $folder
-     * @param ImageContentRequest $request
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(Container $container, Folder $folder, ImageContentRequest $request)
+    public function store(ImageContentRequest $request, Container $container, Folder $folder)
     {
         $image = new ImageContent($request->except('image'));
         $image->container()->associate($container);
         $image = $folder->images()->save($image);
-        $image->addAndSaveImage($request->get('image'));
+        $image->setImage($request->get('image'));
+        $image->save();
 
         foreach ($request->get('tags') as $tag) {
             $image->tags()->attach(Tag::find($tag['id']));
@@ -46,17 +47,18 @@ class ImageContentsController extends Controller
     }
 
     /**
+     * @param ImageContentRequest $request
      * @param Container $container
      * @param Folder $folder
      * @param ImageContent $image
-     * @param ImageContentRequest $request
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Container $container, Folder $folder, ImageContent $image, ImageContentRequest $request)
+    public function update(ImageContentRequest $request, Container $container, Folder $folder, ImageContent $image)
     {
         $image->fill($request->except('image'))->save();
-        $image->addAndSaveImage($request->get('image'));
+        $image->setImage($request->get('image'));
+        $image->save();
 
         $image->tags()->sync([]);
 

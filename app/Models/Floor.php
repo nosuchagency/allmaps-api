@@ -38,7 +38,7 @@ class Floor extends Model
      *
      * @var array
      */
-    public $relations = [
+    public $relationships = [
         'structures',
         'locations'
     ];

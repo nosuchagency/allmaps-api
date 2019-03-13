@@ -48,7 +48,7 @@ class Fixture extends Model
      *
      * @var array
      */
-    public $relations = [
+    public $relationships = [
         'tags',
         'locations'
     ];

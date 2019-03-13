@@ -76,12 +76,12 @@ class TokensController extends Controller
     }
 
     /**
-     * @param Token $token
      * @param TokenRequest $request
+     * @param Token $token
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Token $token, TokenRequest $request)
+    public function update(TokenRequest $request, Token $token)
     {
         $token->fill($request->only('name'))->save();
 

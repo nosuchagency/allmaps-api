@@ -7,7 +7,7 @@ use App\Http\Requests\BulkDeleteRequest;
 use App\Http\Requests\PoiRequest;
 use App\Http\Resources\PoiResource;
 use App\Models\Poi;
-use App\Models\Tag;
+use App\Services\PoiService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -15,14 +15,23 @@ class PoisController extends Controller
 {
 
     /**
-     * PoisController constructor.
+     * @var PoiService
      */
-    public function __construct()
+    protected $poiService;
+
+    /**
+     * PoisController constructor.
+     *
+     * @param PoiService $poiService
+     */
+    public function __construct(PoiService $poiService)
     {
         $this->middleware('permission:pois.create')->only(['store']);
         $this->middleware('permission:pois.read')->only(['index', 'show', 'paginated']);
         $this->middleware('permission:pois.update')->only(['update']);
         $this->middleware('permission:pois.delete')->only(['destroy', 'bulkDestroy']);
+
+        $this->poiService = $poiService;
     }
 
     /**
@@ -56,14 +65,9 @@ class PoisController extends Controller
      */
     public function store(PoiRequest $request)
     {
-        $poi = Poi::create($request->except('image'));
-        $poi->addAndSaveImage($request->get('image'));
+        $poi = $this->poiService->create($request);
 
-        foreach ($request->get('tags') as $tag) {
-            $poi->tags()->attach(Tag::find($tag['id']));
-        }
-
-        $poi->load($poi->relations);
+        $poi->load($poi->relationships);
 
         return response()->json(new PoiResource($poi), Response::HTTP_CREATED);
     }
@@ -75,29 +79,22 @@ class PoisController extends Controller
      */
     public function show(Poi $poi)
     {
-        $poi->load($poi->relations);
+        $poi->load($poi->relationships);
 
         return response()->json(new PoiResource($poi), Response::HTTP_OK);
     }
 
     /**
-     * @param Poi $poi
      * @param PoiRequest $request
+     * @param Poi $poi
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Poi $poi, PoiRequest $request)
+    public function update(PoiRequest $request, Poi $poi)
     {
-        $poi->fill($request->except('image'))->save();
-        $poi->addAndSaveImage($request->get('image'));
+        $poi = $this->poiService->update($request, $poi);
 
-        $poi->tags()->sync([]);
-
-        foreach ($request->get('tags') as $tag) {
-            $poi->tags()->attach(Tag::find($tag['id']));
-        }
-
-        $poi->load($poi->relations);
+        $poi->load($poi->relationships);
 
         return response()->json(new PoiResource($poi), Response::HTTP_OK);
     }

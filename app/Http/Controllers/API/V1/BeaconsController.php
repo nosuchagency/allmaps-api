@@ -63,7 +63,7 @@ class BeaconsController extends Controller
             $beacon->tags()->attach(Tag::find($tag['id']));
         }
 
-        $beacon->load($beacon->relations);
+        $beacon->load($beacon->relationships);
 
         return response()->json(new BeaconResource($beacon), Response::HTTP_CREATED);
     }
@@ -75,7 +75,7 @@ class BeaconsController extends Controller
      */
     public function show(Beacon $beacon)
     {
-        $beacon->load($beacon->relations);
+        $beacon->load($beacon->relationships);
 
         return response()->json(new BeaconResource($beacon), Response::HTTP_OK);
     }
@@ -96,7 +96,7 @@ class BeaconsController extends Controller
             $beacon->tags()->attach(Tag::find($tag['id']));
         }
 
-        $beacon->load($beacon->relations);
+        $beacon->load($beacon->relationships);
 
         return response()->json(new BeaconResource($beacon), Response::HTTP_OK);
     }

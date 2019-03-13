@@ -26,7 +26,6 @@ class MapLocation extends Model
         'zoom_to',
         'title',
         'subtitle',
-        'image',
         'description',
         'contact_name',
         'company',
@@ -56,9 +55,6 @@ class MapLocation extends Model
         'unpublish_at',
         'coordinates',
         'poi_id',
-        'fixture_id',
-        'beacon_id',
-        'floor_id',
         'created_by'
     ];
 

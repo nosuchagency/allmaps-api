@@ -7,22 +7,28 @@ use App\Http\Requests\BulkDeleteRequest;
 use App\Http\Requests\FixtureRequest;
 use App\Http\Resources\FixtureResource;
 use App\Models\Fixture;
-use App\Models\Tag;
+use App\Services\FixtureService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class FixturesController extends Controller
 {
 
+    protected $fixtureService;
+
     /**
      * FixturesController constructor.
+     *
+     * @param FixtureService $fixtureService
      */
-    public function __construct()
+    public function __construct(FixtureService $fixtureService)
     {
         $this->middleware('permission:fixtures.create')->only(['store']);
         $this->middleware('permission:fixtures.read')->only(['index', 'show', 'paginated']);
         $this->middleware('permission:fixtures.update')->only(['update']);
         $this->middleware('permission:fixtures.delete')->only(['destroy', 'bulkDestroy']);
+
+        $this->fixtureService = $fixtureService;
     }
 
     /**
@@ -56,14 +62,9 @@ class FixturesController extends Controller
      */
     public function store(FixtureRequest $request)
     {
-        $fixture = Fixture::create($request->except('image'));
-        $fixture->addAndSaveImage($request->get('image'));
+        $fixture = $this->fixtureService->create($request);
 
-        foreach ($request->get('tags') as $tag) {
-            $fixture->tags()->attach(Tag::find($tag['id']));
-        }
-
-        $fixture->load($fixture->relations);
+        $fixture->load($fixture->relationships);
 
         return response()->json(new FixtureResource($fixture), Response::HTTP_CREATED);
     }
@@ -75,29 +76,22 @@ class FixturesController extends Controller
      */
     public function show(Fixture $fixture)
     {
-        $fixture->load($fixture->relations);
+        $fixture->load($fixture->relationships);
 
         return response()->json(new FixtureResource($fixture), Response::HTTP_OK);
     }
 
     /**
-     * @param Fixture $fixture
      * @param FixtureRequest $request
+     * @param Fixture $fixture
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Fixture $fixture, FixtureRequest $request)
+    public function update(FixtureRequest $request, Fixture $fixture)
     {
-        $fixture->fill($request->except('image'))->save();
-        $fixture->addAndSaveImage($request->get('image'));
+        $fixture = $this->fixtureService->update($request, $fixture);
 
-        $fixture->tags()->sync([]);
-
-        foreach ($request->get('tags') as $tag) {
-            $fixture->tags()->attach(Tag::find($tag['id']));
-        }
-
-        $fixture->load($fixture->relations);
+        $fixture->load($fixture->relationships);
 
         return response()->json(new FixtureResource($fixture), Response::HTTP_OK);
     }

@@ -54,12 +54,12 @@ class FoldersController extends Controller
     }
 
     /**
-     * @param Container $container
      * @param FolderRequest $request
+     * @param Container $container
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(Container $container, FolderRequest $request)
+    public function store(FolderRequest $request, Container $container)
     {
         $folder = $container->folders()->create($request->validated());
 
@@ -67,33 +67,32 @@ class FoldersController extends Controller
             $folder->tags()->attach(Tag::find($tag['id']));
         }
 
-        $folder->load($folder->relations);
+        $folder->load($folder->relationships);
 
         return response()->json(new FolderResource($folder), Response::HTTP_CREATED);
     }
 
     /**
-     * @param Request $request
      * @param Container $container
      * @param Folder $folder
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function show(Request $request, Container $container, Folder $folder)
+    public function show(Container $container, Folder $folder)
     {
-        $folder->load($folder->relations);
+        $folder->load($folder->relationships);
 
         return response()->json(new FolderResource($folder), Response::HTTP_OK);
     }
 
     /**
+     * @param FolderRequest $request
      * @param Container $container
      * @param Folder $folder
-     * @param FolderRequest $request
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Container $container, Folder $folder, FolderRequest $request)
+    public function update(FolderRequest $request, Container $container, Folder $folder)
     {
         $folder->fill($request->validated())->save();
 
@@ -103,7 +102,7 @@ class FoldersController extends Controller
             $folder->tags()->attach(Tag::find($tag['id']));
         }
 
-        $folder->load($folder->relations);
+        $folder->load($folder->relationships);
 
         return response()->json(new FolderResource($folder), Response::HTTP_OK);
     }

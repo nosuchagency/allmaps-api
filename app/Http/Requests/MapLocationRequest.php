@@ -23,7 +23,7 @@ class MapLocationRequest extends FormRequest
      */
     public function rules()
     {
-        return [
+        $rules = [
             'name' => '',
             'zoom_from' => 'integer|min:0',
             'zoom_to' => 'integer|min:0',
@@ -39,7 +39,7 @@ class MapLocationRequest extends FormRequest
             'phone' => '',
             'email' => 'email|nullable',
             'search_activated' => 'boolean',
-            'search_text' => 'date_format:H:i|nullable',
+            'search_text' => '',
             'monday_from' => 'date_format:H:i|nullable',
             'monday_to' => 'date_format:H:i|nullable',
             'tuesday_from' => 'date_format:H:i|nullable',
@@ -58,10 +58,15 @@ class MapLocationRequest extends FormRequest
             'publish_at' => 'date|nullable',
             'unpublish_at' => 'date|nullable',
             'coordinates' => 'array|nullable',
-            'fields' => 'array',
-            'poi_id' => 'nullable|exists:pois,id,deleted_at,NULL',
-            'beacon_id' => 'nullable|exists:beacons,id,deleted_at,NULL',
-            'fixture_id' => 'nullable|exists:fixtures,id,deleted_at,NULL'
+            'fields' => 'array'
         ];
+
+        if ($this->method() === 'POST') {
+            $rules['poi_id'] = 'nullable|exists:pois,id,deleted_at,NULL|required_without_all:beacon_id,fixture_id';
+            $rules['beacon_id'] = 'nullable|exists:beacons,id,deleted_at,NULL|required_without_all:poi_id,fixture_id';
+            $rules['fixture_id'] = 'nullable|exists:fixtures,id,deleted_at,NULL|required_without_all:poi_id,beacon_id';
+        }
+
+        return $rules;
     }
 }

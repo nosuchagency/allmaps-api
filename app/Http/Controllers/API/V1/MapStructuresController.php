@@ -84,8 +84,6 @@ class MapStructuresController extends Controller
      */
     public function show(Place $place, Building $building, Floor $floor, MapStructure $structure)
     {
-        $structure->load($structure->relations);
-
         return response()->json(new MapStructureResource($structure), Response::HTTP_OK);
     }
 
