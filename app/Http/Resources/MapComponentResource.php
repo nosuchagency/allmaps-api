@@ -22,7 +22,7 @@ class MapComponentResource extends JsonResource
             'description' => $this->description,
             'shape' => $this->shape,
             'color' => $this->color,
-            'opacity' => $this->opacity > 0 ? ($this->opacity / 100) : $this->opacity,
+            'opacity' => $this->opacity,
             'weight' => $this->weight,
             'curved' => $this->curved,
             'width' => $this->width,
