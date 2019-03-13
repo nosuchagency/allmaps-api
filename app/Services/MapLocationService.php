@@ -30,14 +30,10 @@ class MapLocationService
         if ($request->has('poi_id')) {
             $associated = Poi::find($request->get('poi_id'));
             $location->poi()->associate($associated);
-        }
-
-        if ($request->has('fixture_id')) {
+        } else if ($request->has('fixture_id')) {
             $associated = Fixture::find($request->get('fixture_id'));
             $location->fixture()->associate($associated);
-        }
-
-        if ($request->has('beacon_id')) {
+        } else if ($request->has('beacon_id')) {
             $associated = Beacon::find($request->get('beacon_id'));
             $location->beacon()->associate($associated);
         }

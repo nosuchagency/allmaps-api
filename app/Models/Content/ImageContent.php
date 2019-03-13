@@ -9,9 +9,12 @@ class ImageContent extends Content
 {
     use HasImage;
 
+    /**
+     * @var string
+     */
     protected static $type = 'image';
 
-    const IMAGE_DIRECTORY_PATH = '/uploads/images';
+    const IMAGE_DIRECTORY_PATH = '/uploads/contents';
 
     /**
      * The "booting" method of the model.
@@ -26,7 +29,7 @@ class ImageContent extends Content
             $builder->where('type', self::$type);
         });
 
-        static::creating(function(ImageContent $image) {
+        static::creating(function (ImageContent $image) {
             $image->type = self::$type;
         });
     }

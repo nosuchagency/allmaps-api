@@ -23,7 +23,7 @@ class CreateMapComponentsTable extends Migration
 
             $table->string('shape')->default('polyline');
             $table->string('color')->default('#000000');
-            $table->integer('opacity')->default(0);
+            $table->integer('opacity')->default(100);
             $table->integer('weight')->default(2);
             $table->boolean('curved')->default(false);
             $table->string('image')->nullable();
