@@ -8,35 +8,29 @@ use App\Plugins\Contracts\BasePlugin;
 use App\Plugins\Contracts\Search;
 use Illuminate\Database\Eloquent\Builder;
 
-class SearchResolver
+class SearchableResolver
 {
     /**
      * @param string $variant
-     * @param $query
      *
      * @return Search
      */
-    public function resolve(string $variant, $query = null): ?Search
+    public function resolve(string $variant): ?Search
     {
-        if (!$query) {
-            $query = MapLocation::query();
-        }
-
         switch ($variant) {
             case 'internal' :
-                return new InternalSearch($query);
+                return new InternalSearch();
             default :
-                return $this->instantiatePlugin($variant, $query);
+                return $this->instantiatePlugin($variant);
         }
     }
 
     /**
      * @param string $variant
-     * @param Builder $query
      *
      * @return Search
      */
-    private function instantiatePlugin(string $variant, Builder $query): ?Search
+    private function instantiatePlugin(string $variant): ?Search
     {
         $class = config('bb.plugins.namespace') . $variant;
 
@@ -48,10 +42,6 @@ class SearchResolver
             return null;
         }
 
-        if (!Searchable::whereName($variant)->exists()) {
-            return null;
-        }
-
-        return new $class($query);
+        return new $class();
     }
 }

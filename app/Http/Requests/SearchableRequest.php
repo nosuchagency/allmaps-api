@@ -25,7 +25,7 @@ class SearchableRequest extends FormRequest
     public function rules()
     {
         $rules = [
-            'name' => [
+            'identifier' => [
                 'unique:searchables',
                 new PluginExists
             ],
@@ -33,7 +33,8 @@ class SearchableRequest extends FormRequest
         ];
 
         if ($this->method() === 'POST') {
-            $rules['name'][] = 'required';
+            $rules['identifier'][] = 'required';
+            $rules['name'] = 'required';
         }
 
         return $rules;

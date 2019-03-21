@@ -2,16 +2,18 @@
 
 namespace App\Plugins;
 
+use App\Plugins\Assets\Field;
 use App\Plugins\Assets\FieldCollection;
 use App\Plugins\Contracts\BasePlugin;
 use App\Plugins\Search\SearchResults;
+use Illuminate\Database\Eloquent\Builder;
 
 class Bente extends BasePlugin
 {
     /**
      * @var string
      */
-    protected $pluginName = 'Bente';
+    protected $pluginName = 'Bentes Plugin';
 
     /**
      * @return FieldCollection
@@ -19,18 +21,18 @@ class Bente extends BasePlugin
     public function fields(): FieldCollection
     {
         return new FieldCollection([
-            // new Field('ID', 'id', 'text'),
         ]);
     }
 
     /**
      * @param $payload
+     * @param Builder $builder
      *
      * @return SearchResults
      */
-    public function search($payload): SearchResults
+    public function search($payload, Builder $builder): SearchResults
     {
-        return $this->getLocations([]);
+        return $this->getLocations([], $builder);
     }
 
     /**

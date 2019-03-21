@@ -18,8 +18,9 @@ class SearchableResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'creator' => $this->creator,
-            'activated' => $this->activated
+            'identifier' => $this->identifier,
+            'activated' => $this->activated,
+            'fields' => $this->fields
         ];
     }
 }

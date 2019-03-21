@@ -6,13 +6,14 @@ use App\Plugins\Assets\FieldCollection;
 use App\Plugins\Contracts\BasePlugin;
 use App\Plugins\Assets\Field;
 use App\Plugins\Search\SearchResults;
+use Illuminate\Database\Eloquent\Builder;
 
 class IMS extends BasePlugin
 {
     /**
      * @var string
      */
-    protected $pluginName = 'IMS';
+    protected $pluginName = 'IMS Plugin';
 
     /**
      * @return FieldCollection
@@ -26,16 +27,17 @@ class IMS extends BasePlugin
 
     /**
      * @param $payload
+     * @param Builder $builder
      *
      * @return SearchResults
      */
-    public function search($payload): SearchResults
+    public function search($payload, Builder $builder): SearchResults
     {
         $faust = 1234;
 
         $id = $this->retrieveFromIMS($faust);
 
-        return $this->getLocations(['identifier_1' => $id]);
+        return $this->getLocations(['identifier_1' => $id], $builder);
     }
 
     /**

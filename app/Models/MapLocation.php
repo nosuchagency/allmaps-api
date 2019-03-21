@@ -568,6 +568,30 @@ class MapLocation extends Model
     }
 
     /**
+     * Get searchables
+     */
+    public function getSearchables()
+    {
+        $query = Searchable::active()->with([
+            'fields' => function ($query) {
+                $query->whereMapLocationId($this->id);
+            }
+        ]);
+
+        $searchables = $query->get()->map(function (Searchable $searchable) {
+            $fields = $searchable->getPlugin()->fields();
+            $fields->each(function ($field) use ($searchable) {
+                $existingField = $searchable->fields->where('identifier', $field->identifier)->first();
+                $field->value = $existingField ? $existingField->value : null;
+            });
+            $searchable->fields = $fields;
+            return $searchable;
+        });
+
+        return $searchables;
+    }
+
+    /**
      * Get the floor that owns the Location.
      */
     public function floor()

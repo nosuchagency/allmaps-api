@@ -2,7 +2,7 @@
 
 namespace App\Plugins\Assets;
 
-class Field
+class Field implements \JsonSerializable
 {
     /**
      * @var string
@@ -12,7 +12,7 @@ class Field
     /**
      * @var string
      */
-    protected $key;
+    protected $identifier;
 
     /**
      * @var string
@@ -20,17 +20,33 @@ class Field
     protected $type;
 
     /**
+     * @var string
+     */
+    protected $value;
+
+    /**
      * PluginField constructor.
      *
      * @param string $label
-     * @param string $key
+     * @param string $identifier
      * @param string $type
      */
-    public function __construct(string $label, string $key, string $type)
+    public function __construct(string $label, string $identifier, string $type)
     {
         $this->label = $label;
-        $this->key = $key;
+        $this->identifier = $identifier;
         $this->type = $type;
+    }
+
+    /**
+     * @param $property
+     * @param $value
+     */
+    public function __set($property, $value)
+    {
+        if (property_exists($this, $property)) {
+            $this->$property = $value;
+        }
     }
 
     /**
@@ -45,5 +61,18 @@ class Field
         }
 
         return null;
+    }
+
+    /**
+     * @return array|mixed
+     */
+    public function jsonSerialize()
+    {
+        return [
+            'label' => $this->label,
+            'identifier' => $this->identifier,
+            'type' => $this->type,
+            'value' => $this->value,
+        ];
     }
 }

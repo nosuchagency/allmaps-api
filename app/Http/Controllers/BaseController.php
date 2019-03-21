@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Plugins\Search\SearchResolver;
+use App\Plugins\Search\SearchableResolver;
 use Illuminate\Database\Eloquent\Builder;
 
 class BaseController extends Controller
@@ -18,10 +18,10 @@ class BaseController extends Controller
         $locations = collect();
 
         foreach ($variants as $variant => $payload) {
-            $searcher = (new SearchResolver())->resolve($variant, $query);
+            $searcher = (new SearchableResolver())->resolve($variant);
 
             if ($searcher) {
-                $locations = $locations->merge($searcher->search($payload));
+                $locations = $locations->merge($searcher->search($payload, $query));
             }
         }
 

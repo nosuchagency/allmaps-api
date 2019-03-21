@@ -7,8 +7,8 @@ use App\Models\Beacon;
 use App\Models\Fixture;
 use App\Models\Floor;
 use App\Models\MapLocation;
+use App\Models\MapLocationField;
 use App\Models\Poi;
-use Illuminate\Http\Request;
 
 class MapLocationService
 {
@@ -38,41 +38,58 @@ class MapLocationService
             $location->beacon()->associate($associated);
         }
 
-        if ($request->has('fields')) {
-            $this->setPluginFields($request->get('fields'));
-        }
-
         if (!$location->name) {
             $location->name = optional($associated)->name;
         }
 
         $location->save();
 
+        if ($request->has('searchables')) {
+            $this->setPluginFields($request->get('searchables'), $location);
+        }
+
         return $location->refresh();
     }
 
     /**
-     * @param Request $request
+     * @param MapLocationRequest $request
      * @param MapLocation $location
      *
      * @return MapLocation
      */
-    public function update(Request $request, MapLocation $location): MapLocation
+    public function update(MapLocationRequest $request, MapLocation $location): MapLocation
     {
         $location->fill($request->only($location->getFillable()));
         $location->setImage($request->get('image'));
         $location->save();
 
+        if ($request->has('searchables')) {
+            $this->setPluginFields($request->get('searchables'), $location);
+        }
+
         return $location->refresh();
     }
 
     /**
-     * @param array $fields
+     * @param array $searchables
+     * @param MapLocation $location
      */
-    protected function setPluginFields(array $fields)
+    protected function setPluginFields(array $searchables, MapLocation $location)
     {
-        foreach ($fields as $key => $field) {
+        foreach ($searchables as $searchable) {
+            foreach ($searchable['fields'] as $field) {
+                $attributes = [
+                    'searchable_id' => $searchable['id'],
+                    'identifier' => $field['identifier'],
+                    'map_location_id' => $location->id
+                ];
 
+                MapLocationField::updateOrCreate($attributes, [
+                    'type' => $field['type'],
+                    'value' => $field['value'],
+                    'label' => $field['label']
+                ]);
+            }
         }
     }
 }

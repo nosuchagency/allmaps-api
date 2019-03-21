@@ -58,7 +58,12 @@ class MapLocationRequest extends FormRequest
             'publish_at' => 'date|nullable',
             'unpublish_at' => 'date|nullable',
             'coordinates' => 'array|nullable',
-            'fields' => 'array'
+            'searchables' => 'array',
+            'searchables.*.id' => 'required',
+            'searchables.*.fields' => 'required|array',
+            'searchables.*.fields.*.identifier' => 'required',
+            'searchables.*.fields.*.type' => 'required|in:text,boolean',
+            'searchables.*.fields.*.value' => 'required',
         ];
 
         if ($this->method() === 'POST') {

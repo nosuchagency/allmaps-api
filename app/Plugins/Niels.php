@@ -6,13 +6,14 @@ use App\Plugins\Assets\FieldCollection;
 use App\Plugins\Contracts\BasePlugin;
 use App\Plugins\Assets\Field;
 use App\Plugins\Search\SearchResults;
+use Illuminate\Database\Eloquent\Builder;
 
 class Niels extends BasePlugin
 {
     /**
      * @var string
      */
-    protected $pluginName = 'Niels';
+    protected $pluginName = 'Niels Plugin';
 
     /**
      * @return FieldCollection
@@ -21,17 +22,20 @@ class Niels extends BasePlugin
     {
         return new FieldCollection([
             new Field('ID', 'id', 'text'),
+            new Field('Faust', 'faust', 'boolean'),
+            new Field('Hest', 'hest', 'text'),
         ]);
     }
 
     /**
-    * @param $payload
-    *
-    * @return SearchResults
-    */
-    public function search($payload): SearchResults
+     * @param $payload
+     * @param Builder $builder
+     *
+     * @return SearchResults
+     */
+    public function search($payload, Builder $builder): SearchResults
     {
-        return $this->getLocations(['id' => '1']);
+        return $this->getLocations(['id' => '1'], $builder);
     }
 
     /**

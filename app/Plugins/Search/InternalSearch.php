@@ -35,21 +35,12 @@ class InternalSearch implements Search
     ];
 
     /**
-     * InternalSearch constructor.
-     *
-     * @param Builder $query
-     */
-    public function __construct(Builder $query)
-    {
-        $this->query = $query;
-    }
-
-    /**
      * @param $payload
+     * @param Builder $builder
      *
      * @return SearchResults
      */
-    public function search($payload): SearchResults
+    public function search($payload, Builder $builder): SearchResults
     {
         $constraints = [];
 
@@ -60,7 +51,7 @@ class InternalSearch implements Search
         }
 
         return new SearchResults(
-            $this->query->where(function (Builder $query) use ($constraints) {
+            $builder->where(function (Builder $query) use ($constraints) {
                 $query->orWhere($constraints);
             })->get()
         );

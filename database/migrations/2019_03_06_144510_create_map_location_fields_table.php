@@ -17,6 +17,7 @@ class CreateMapLocationFieldsTable extends Migration
             $table->increments('id');
 
             $table->string('identifier');
+            $table->string('type')->default('text');
             $table->string('value')->nullable();
 
             $table->unsignedInteger('map_location_id');
@@ -30,6 +31,8 @@ class CreateMapLocationFieldsTable extends Migration
                 ->references('id')
                 ->on('searchables')
                 ->onDelete('cascade');
+
+            $table->unique(['identifier', 'map_location_id', 'searchable_id']);
         });
     }
 

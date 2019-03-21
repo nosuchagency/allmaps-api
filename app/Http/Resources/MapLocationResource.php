@@ -53,6 +53,7 @@ class MapLocationResource extends JsonResource
             'publish_at' => $this->publish_at,
             'unpublish_at' => $this->unpublish_at,
             'coordinates' => $this->coordinates,
+            'searchables' => SearchableResource::collection($this->getSearchables()),
             'poi' => $this->poi ? new PoiResource($this->poi) : null,
             'beacon' => $this->beacon ? new BeaconResource($this->beacon) : null,
             'fixture' => $this->fixture ? new FixtureResource($this->fixture) : null
