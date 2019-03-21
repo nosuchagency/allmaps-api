@@ -63,7 +63,7 @@ class MapLocationRequest extends FormRequest
             'searchables.*.fields' => 'required|array',
             'searchables.*.fields.*.identifier' => 'required',
             'searchables.*.fields.*.type' => 'required|in:text,boolean',
-            'searchables.*.fields.*.value' => 'required',
+            'searchables.*.fields.*.value' => 'present',
         ];
 
         if ($this->method() === 'POST') {
