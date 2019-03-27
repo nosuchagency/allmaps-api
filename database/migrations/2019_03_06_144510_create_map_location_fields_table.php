@@ -32,7 +32,7 @@ class CreateMapLocationFieldsTable extends Migration
                 ->on('searchables')
                 ->onDelete('cascade');
 
-            $table->unique(['identifier', 'map_location_id', 'searchable_id']);
+            $table->unique(['identifier', 'map_location_id', 'searchable_id'], 'identifier_map_location_searchable_unique');
         });
     }
 
