@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Filters\BeaconFilter;
-use App\Filters\IndexFilter;
 use App\Pivots\BeaconContainer;
 use App\Traits\HasCategory;
 use App\Traits\HasCreatedBy;
@@ -32,21 +31,9 @@ class Beacon extends Model
         'eddystone_url',
         'eddystone_tlm',
         'eddystone_eid',
-        'lat',
-        'lng',
         'category_id',
         'category',
         'created_by'
-    ];
-
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'lat' => 'float',
-        'lng' => 'float',
     ];
 
     /**
@@ -65,7 +52,8 @@ class Beacon extends Model
      */
     public $relationships = [
         'tags',
-        'containers'
+        'containers',
+        'locations'
     ];
 
     /**
