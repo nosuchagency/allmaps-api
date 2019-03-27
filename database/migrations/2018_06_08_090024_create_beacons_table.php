@@ -18,12 +18,10 @@ class CreateBeaconsTable extends Migration
             $table->string('name');
             $table->text('description')->nullable();
 
-            // iBeacon fields
             $table->string('proximity_uuid')->nullable();
             $table->integer('major')->nullable();
             $table->integer('minor')->nullable();
 
-            // Eddystone fields
             $table->string('eddystone_uid')->nullable();
             $table->string('eddystone_url')->nullable();
             $table->string('eddystone_tlm')->nullable();
@@ -31,12 +29,6 @@ class CreateBeaconsTable extends Migration
 
             $table->string('lat')->nullable();
             $table->string('lng')->nullable();
-
-            $table->unsignedInteger('floor_id')->nullable();
-            $table->foreign('floor_id')
-                ->references('id')
-                ->on('floors')
-                ->onDelete('set null');
 
             $table->category();
             $table->createdBy();

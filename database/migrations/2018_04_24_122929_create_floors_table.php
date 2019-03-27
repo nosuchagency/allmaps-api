@@ -24,7 +24,6 @@ class CreateFloorsTable extends Migration
                 ->on('buildings')
                 ->onDelete('cascade');
 
-            $table->longText('floor_plan')->nullable();
             $table->integer('level')->nullable();
 
             $table->createdBy();

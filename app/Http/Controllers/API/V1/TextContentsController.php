@@ -25,13 +25,13 @@ class TextContentsController extends Controller
     }
 
     /**
+     * @param TextContentRequest $request
      * @param Container $container
      * @param Folder $folder
-     * @param TextContentRequest $request
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(Container $container, Folder $folder, TextContentRequest $request)
+    public function store(TextContentRequest $request, Container $container, Folder $folder)
     {
         $text = new TextContent($request->validated());
         $text->container()->associate($container);
@@ -45,14 +45,14 @@ class TextContentsController extends Controller
     }
 
     /**
+     * @param TextContentRequest $request
      * @param Container $container
      * @param Folder $folder
      * @param TextContent $text
-     * @param TextContentRequest $request
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Container $container, Folder $folder, TextContent $text, TextContentRequest $request)
+    public function update(TextContentRequest $request, Container $container, Folder $folder, TextContent $text)
     {
         $text->fill($request->validated())->save();
 

@@ -11,10 +11,11 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\Traits\LogsActivity;
+use Staudenmeir\EloquentHasManyDeep\HasRelationships;
 
 class Place extends Model
 {
-    use HasRelations, HasCategory, SoftDeletes, HasCreatedBy, LogsActivity, HasImage;
+    use HasRelations, HasCategory, SoftDeletes, HasCreatedBy, LogsActivity, HasImage, HasRelationships;
 
     const IMAGE_DIRECTORY_PATH = '/uploads/places';
 
@@ -26,7 +27,7 @@ class Place extends Model
     protected $fillable = [
         'name',
         'address',
-        'zipcode',
+        'postcode',
         'city',
         'lat',
         'lng',
@@ -61,13 +62,11 @@ class Place extends Model
      *
      * @var array
      */
-    public $relations = [
+    public $relationships = [
         'tags',
         'buildings',
         'buildings.floors',
-        'buildings.floors.pois',
-        'buildings.floors.beacons',
-        'buildings.floors.findables',
+        'buildings.floors.locations'
     ];
 
     /**
@@ -84,6 +83,14 @@ class Place extends Model
     public function buildings()
     {
         return $this->hasMany(Building::class);
+    }
+
+    /**
+     * Get all of the locations for the place
+     */
+    public function locations()
+    {
+        return $this->hasManyDeep(MapLocation::class, [Building::class, Floor::class]);
     }
 
     /**

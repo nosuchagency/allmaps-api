@@ -25,13 +25,13 @@ class VideoContentsController extends Controller
     }
 
     /**
+     * @param VideoContentRequest $request
      * @param Container $container
      * @param Folder $folder
-     * @param VideoContentRequest $request
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(Container $container, Folder $folder, VideoContentRequest $request)
+    public function store(VideoContentRequest $request, Container $container, Folder $folder)
     {
         $video = new VideoContent($request->validated());
         $video->container()->associate($container);
@@ -45,14 +45,14 @@ class VideoContentsController extends Controller
     }
 
     /**
+     * @param VideoContentRequest $request
      * @param Container $container
      * @param Folder $folder
      * @param VideoContent $video
-     * @param VideoContentRequest $request
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Container $container, Folder $folder, VideoContent $video, VideoContentRequest $request)
+    public function update(VideoContentRequest $request, Container $container, Folder $folder, VideoContent $video)
     {
         $video->fill($request->validated())->save();
 

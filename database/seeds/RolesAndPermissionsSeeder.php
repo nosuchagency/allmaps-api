@@ -55,10 +55,20 @@ class RolesAndPermissionsSeeder extends Seeder
         Permission::firstOrCreate(['name' => 'pois.update', 'guard_name' => 'api']);
         Permission::firstOrCreate(['name' => 'pois.delete', 'guard_name' => 'api']);
 
-        Permission::firstOrCreate(['name' => 'findables.create', 'guard_name' => 'api']);
-        Permission::firstOrCreate(['name' => 'findables.read', 'guard_name' => 'api']);
-        Permission::firstOrCreate(['name' => 'findables.update', 'guard_name' => 'api']);
-        Permission::firstOrCreate(['name' => 'findables.delete', 'guard_name' => 'api']);
+        Permission::firstOrCreate(['name' => 'fixtures.create', 'guard_name' => 'api']);
+        Permission::firstOrCreate(['name' => 'fixtures.read', 'guard_name' => 'api']);
+        Permission::firstOrCreate(['name' => 'fixtures.update', 'guard_name' => 'api']);
+        Permission::firstOrCreate(['name' => 'fixtures.delete', 'guard_name' => 'api']);
+
+        Permission::firstOrCreate(['name' => 'searchables.create', 'guard_name' => 'api']);
+        Permission::firstOrCreate(['name' => 'searchables.read', 'guard_name' => 'api']);
+        Permission::firstOrCreate(['name' => 'searchables.update', 'guard_name' => 'api']);
+        Permission::firstOrCreate(['name' => 'searchables.delete', 'guard_name' => 'api']);
+
+        Permission::firstOrCreate(['name' => 'plugins.create', 'guard_name' => 'api']);
+        Permission::firstOrCreate(['name' => 'plugins.read', 'guard_name' => 'api']);
+        Permission::firstOrCreate(['name' => 'plugins.update', 'guard_name' => 'api']);
+        Permission::firstOrCreate(['name' => 'plugins.delete', 'guard_name' => 'api']);
 
         Permission::firstOrCreate(['name' => 'map-components.create', 'guard_name' => 'api']);
         Permission::firstOrCreate(['name' => 'map-components.read', 'guard_name' => 'api']);
@@ -143,10 +153,20 @@ class RolesAndPermissionsSeeder extends Seeder
             'pois.update',
             'pois.delete',
 
-            'findables.create',
-            'findables.read',
-            'findables.update',
-            'findables.delete',
+            'fixtures.create',
+            'fixtures.read',
+            'fixtures.update',
+            'fixtures.delete',
+
+            'searchables.create',
+            'searchables.read',
+            'searchables.update',
+            'searchables.delete',
+
+            'plugins.create',
+            'plugins.read',
+            'plugins.update',
+            'plugins.delete',
 
             'map-components.create',
             'map-components.read',

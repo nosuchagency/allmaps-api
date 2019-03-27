@@ -19,7 +19,6 @@ class Floor extends Model
      */
     protected $fillable = [
         'name',
-        'floor_plan',
         'level',
         'building_id',
         'created_by'
@@ -39,11 +38,9 @@ class Floor extends Model
      *
      * @var array
      */
-    public $relations = [
+    public $relationships = [
         'structures',
-        'pois',
-        'findables',
-        'beacons'
+        'locations'
     ];
 
     /**
@@ -63,29 +60,11 @@ class Floor extends Model
     }
 
     /**
-     * Get the pois of the floor
+     * Get the locations of the floor
      */
-    public function pois()
+    public function locations()
     {
-        return $this->hasMany(MapLocation::class)
-            ->whereNotNull('poi_id');
-    }
-
-    /**
-     * Get the findables of the floor
-     */
-    public function findables()
-    {
-        return $this->hasMany(MapLocation::class)
-            ->whereNotNull('findable_id');
-    }
-
-    /**
-     * Get the beacons of the floor
-     */
-    public function beacons()
-    {
-        return $this->hasMany(Beacon::class);
+        return $this->hasMany(MapLocation::class);
     }
 
     protected static function boot()
@@ -93,26 +72,14 @@ class Floor extends Model
         parent::boot();
 
         static::deleting(function ($floor) {
-            $floor->pois->each(function ($poi) {
-                $poi->delete();
-            });
-            $floor->findables->each(function ($findable) {
-                $findable->delete();
-            });
-            $floor->beacons->each(function ($beacon) {
-                $beacon->delete();
+            $floor->locations->each(function ($location) {
+                $location->delete();
             });
         });
 
         static::restoring(function ($floor) {
-            $floor->pois->each(function ($poi) {
-                $poi->restore();
-            });
-            $floor->findables->each(function ($findable) {
-                $findable->restore();
-            });
-            $floor->beacons->each(function ($beacon) {
-                $beacon->restore();
+            $floor->locations->each(function ($location) {
+                $location->restore();
             });
         });
     }

@@ -7,7 +7,7 @@ use App\Http\Requests\BulkDeleteRequest;
 use App\Http\Requests\MapComponentRequest;
 use App\Http\Resources\MapComponentResource;
 use App\Models\MapComponent;
-use App\Models\Tag;
+use App\Services\MapComponentService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -15,14 +15,23 @@ class MapComponentsController extends Controller
 {
 
     /**
-     * MapComponentsController constructor.
+     * @var MapComponentService
      */
-    public function __construct()
+    protected $mapComponentService;
+
+    /**
+     * MapComponentsController constructor.
+     *
+     * @param MapComponentService $mapComponentService
+     */
+    public function __construct(MapComponentService $mapComponentService)
     {
         $this->middleware('permission:map-components.create')->only(['store']);
         $this->middleware('permission:map-components.read')->only(['index', 'show', 'paginated']);
         $this->middleware('permission:map-components.update')->only(['update']);
         $this->middleware('permission:map-components.delete')->only(['destroy', 'bulkDestroy']);
+
+        $this->mapComponentService = $mapComponentService;
     }
 
     /**
@@ -56,14 +65,9 @@ class MapComponentsController extends Controller
      */
     public function store(MapComponentRequest $request)
     {
-        $mapComponent = MapComponent::create($request->except('image'));
-        $mapComponent->addAndSaveImage($request->get('image'));
+        $mapComponent = $this->mapComponentService->create($request);
 
-        foreach ($request->get('tags') as $tag) {
-            $mapComponent->tags()->attach(Tag::find($tag['id']));
-        }
-
-        $mapComponent->load($mapComponent->relations);
+        $mapComponent->load($mapComponent->relationships);
 
         return response()->json(new MapComponentResource($mapComponent), Response::HTTP_CREATED);
     }
@@ -75,29 +79,22 @@ class MapComponentsController extends Controller
      */
     public function show(MapComponent $mapComponent)
     {
-        $mapComponent->load($mapComponent->relations);
+        $mapComponent->load($mapComponent->relationships);
 
         return response()->json(new MapComponentResource($mapComponent), Response::HTTP_OK);
     }
 
     /**
-     * @param MapComponent $mapComponent
      * @param MapComponentRequest $request
+     * @param MapComponent $mapComponent
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(MapComponent $mapComponent, MapComponentRequest $request)
+    public function update(MapComponentRequest $request, MapComponent $mapComponent)
     {
-        $mapComponent->fill($request->except('image'))->save();
-        $mapComponent->addAndSaveImage($request->get('image'));
+        $mapComponent = $this->mapComponentService->update($request, $mapComponent);
 
-        $mapComponent->tags()->sync([]);
-
-        foreach ($request->get('tags') as $tag) {
-            $mapComponent->tags()->attach(Tag::find($tag['id']));
-        }
-
-        $mapComponent->load($mapComponent->relations);
+        $mapComponent->load($mapComponent->relationships);
 
         return response()->json(new MapComponentResource($mapComponent), Response::HTTP_OK);
     }

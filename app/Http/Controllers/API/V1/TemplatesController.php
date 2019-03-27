@@ -62,7 +62,7 @@ class TemplatesController extends Controller
             $template->tags()->attach(Tag::find($tag['id']));
         }
 
-        $template->load($template->relations);
+        $template->load($template->relationships);
 
         return response()->json(new TemplateResource($template), Response::HTTP_CREATED);
     }
@@ -74,7 +74,7 @@ class TemplatesController extends Controller
      */
     public function show(Template $template)
     {
-        $template->load($template->relations);
+        $template->load($template->relationships);
 
         return response()->json(new TemplateResource($template), Response::HTTP_OK);
     }
@@ -95,7 +95,7 @@ class TemplatesController extends Controller
             $template->tags()->attach(Tag::find($tag['id']));
         }
 
-        $template->load($template->relations);
+        $template->load($template->relationships);
 
         return response()->json(new TemplateResource($template), Response::HTTP_OK);
     }

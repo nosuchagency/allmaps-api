@@ -70,12 +70,12 @@ class RolesController extends Controller
     }
 
     /**
-     * @param Role $role
      * @param RoleRequest $request
+     * @param Role $role
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Role $role, RoleRequest $request)
+    public function update(RoleRequest $request, Role $role)
     {
         $role->fill($request->validated())->save();
 

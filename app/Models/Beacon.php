@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use App\Filters\BeaconFilter;
 use App\Filters\IndexFilter;
+use App\Pivots\BeaconContainer;
 use App\Traits\HasCategory;
 use App\Traits\HasCreatedBy;
 use App\Traits\HasRelations;
@@ -32,7 +34,6 @@ class Beacon extends Model
         'eddystone_eid',
         'lat',
         'lng',
-        'floor_id',
         'category_id',
         'category',
         'created_by'
@@ -62,17 +63,17 @@ class Beacon extends Model
      *
      * @var array
      */
-    public $relations = [
+    public $relationships = [
         'tags',
         'containers'
     ];
 
     /**
-     * Get the floor that owns the beacon
+     * Get the locations for the Beacon.
      */
-    public function floor()
+    public function locations()
     {
-        return $this->belongsTo(Floor::class);
+        return $this->hasMany(MapLocation::class);
     }
 
     /**
@@ -102,6 +103,6 @@ class Beacon extends Model
      */
     public function scopeFilter(Builder $builder, $request)
     {
-        return (new IndexFilter($request))->filter($builder);
+        return (new BeaconFilter($request))->filter($builder);
     }
 }

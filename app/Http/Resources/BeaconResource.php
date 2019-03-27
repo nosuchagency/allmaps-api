@@ -17,7 +17,7 @@ class BeaconResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'location_type' => 'beacon',
+            'image' => url('/img/bullseye.png'),
             'name' => $this->name,
             'description' => $this->description,
             'proximity_uuid' => $this->proximity_uuid,

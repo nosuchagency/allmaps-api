@@ -25,7 +25,7 @@ class Poi extends Model
      */
     protected $fillable = [
         'name',
-        'internal_name',
+        'description',
         'image',
         'type',
         'color',
@@ -48,7 +48,7 @@ class Poi extends Model
      *
      * @var array
      */
-    public $relations = [
+    public $relationships = [
         'tags',
         'locations'
     ];

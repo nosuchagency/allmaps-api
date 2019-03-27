@@ -70,7 +70,7 @@ class UsersController extends Controller
             $user->tags()->attach(Tag::find($tag['id']));
         }
 
-        $user->load($user->relations);
+        $user->load($user->relationships);
 
         return response()->json(new UserResource($user), Response::HTTP_CREATED);
     }
@@ -82,18 +82,18 @@ class UsersController extends Controller
      */
     public function show(User $user)
     {
-        $user->load($user->relations);
+        $user->load($user->relationships);
 
         return response()->json(new UserResource($user), Response::HTTP_OK);
     }
 
     /**
-     * @param User $user
      * @param UserRequest $request
+     * @param User $user
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(User $user, UserRequest $request)
+    public function update(UserRequest $request, User $user)
     {
         $user->fill($request->only('name', 'email'));
 
@@ -109,7 +109,7 @@ class UsersController extends Controller
             $user->tags()->attach(Tag::find($tag['id']));
         }
 
-        $user->load($user->relations);
+        $user->load($user->relationships);
 
         return response()->json(new UserResource($user), Response::HTTP_OK);
     }

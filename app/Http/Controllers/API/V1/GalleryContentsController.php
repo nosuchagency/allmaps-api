@@ -25,13 +25,13 @@ class GalleryContentsController extends Controller
     }
 
     /**
+     * @param GalleryContentRequest $request
      * @param Container $container
      * @param Folder $folder
-     * @param GalleryContentRequest $request
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(Container $container, Folder $folder, GalleryContentRequest $request)
+    public function store(GalleryContentRequest $request, Container $container, Folder $folder)
     {
         $gallery = new GalleryContent($request->validated());
         $gallery->container()->associate($container);
@@ -45,14 +45,14 @@ class GalleryContentsController extends Controller
     }
 
     /**
+     * @param GalleryContentRequest $request
      * @param Container $container
      * @param Folder $folder
      * @param GalleryContent $gallery
-     * @param GalleryContentRequest $request
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Container $container, Folder $folder, GalleryContent $gallery, GalleryContentRequest $request)
+    public function update(GalleryContentRequest $request, Container $container, Folder $folder, GalleryContent $gallery)
     {
         $gallery->fill($request->validated())->save();
 

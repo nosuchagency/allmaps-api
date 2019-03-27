@@ -62,7 +62,7 @@ class LayoutsController extends Controller
             $layout->tags()->attach(Tag::find($tag['id']));
         }
 
-        $layout->load($layout->relations);
+        $layout->load($layout->relationships);
 
         return response()->json(new LayoutResource($layout), Response::HTTP_CREATED);
     }
@@ -74,7 +74,7 @@ class LayoutsController extends Controller
      */
     public function show(Layout $layout)
     {
-        $layout->load($layout->relations);
+        $layout->load($layout->relationships);
 
         return response()->json(new LayoutResource($layout), Response::HTTP_OK);
     }
@@ -95,7 +95,7 @@ class LayoutsController extends Controller
             $layout->tags()->attach(Tag::find($tag['id']));
         }
 
-        $layout->load($layout->relations);
+        $layout->load($layout->relationships);
 
         return response()->json(new LayoutResource($layout), Response::HTTP_OK);
     }

@@ -18,7 +18,7 @@ class CreatePlacesTable extends Migration
 
             $table->string('name');
             $table->string('address')->nullable();
-            $table->string('zipcode')->nullable();
+            $table->string('postcode')->nullable();
             $table->string('city')->nullable();
             $table->string('image')->nullable();
 

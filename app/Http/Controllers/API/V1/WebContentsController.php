@@ -25,13 +25,13 @@ class WebContentsController extends Controller
     }
 
     /**
+     * @param WebContentRequest $request
      * @param Container $container
      * @param Folder $folder
-     * @param WebContentRequest $request
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(Container $container, Folder $folder, WebContentRequest $request)
+    public function store(WebContentRequest $request, Container $container, Folder $folder)
     {
         $web = new WebContent($request->validated());
         $web->container()->associate($container);
@@ -45,14 +45,14 @@ class WebContentsController extends Controller
     }
 
     /**
+     * @param WebContentRequest $request
      * @param Container $container
      * @param Folder $folder
      * @param WebContent $web
-     * @param WebContentRequest $request
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Container $container, Folder $folder, WebContent $web, WebContentRequest $request)
+    public function update(WebContentRequest $request, Container $container, Folder $folder, WebContent $web)
     {
         $web->fill($request->validated())->save();
 

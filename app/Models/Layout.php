@@ -42,7 +42,7 @@ class Layout extends Model
      *
      * @var array
      */
-    public $relations = [
+    public $relationships = [
         'tags',
         'templates'
     ];

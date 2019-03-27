@@ -40,11 +40,9 @@ class Building extends Model
      *
      * @var array
      */
-    public $relations = [
+    public $relationships = [
         'floors',
-        'floors.pois',
-        'floors.beacons',
-        'floors.findables'
+        'floors.locations'
     ];
 
     /**
@@ -62,6 +60,14 @@ class Building extends Model
     {
         return $this->hasMany(Floor::class)
             ->orderBy('level');
+    }
+
+    /**
+     * Get all of the locations for the building
+     */
+    public function locations()
+    {
+        return $this->hasManyThrough(MapLocation::class, Floor::class);
     }
 
     protected static function boot()

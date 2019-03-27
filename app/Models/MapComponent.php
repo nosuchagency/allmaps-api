@@ -63,7 +63,7 @@ class MapComponent extends Model
      *
      * @var array
      */
-    public $relations = [
+    public $relationships = [
         'tags',
         'structures'
     ];

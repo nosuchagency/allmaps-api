@@ -29,7 +29,7 @@ class MapComponentRequest extends FormRequest
             'description' => '',
             'type' => [
                 'required',
-                Rule::in(['plan', 'wall', 'room', 'fixture']),
+                Rule::in(['plan', 'wall', 'room', 'decor']),
             ],
             'shape' => [
                 'required',

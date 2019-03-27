@@ -21,7 +21,7 @@ trait HasRelations
             $relations = explode(',', $relations);
 
             foreach ($relations as $relation) {
-                if (in_array($relation, $this->relations ?? [])) {
+                if (in_array($relation, $this->relationships ?? [])) {
                     $query->with($relation);
                 }
             }

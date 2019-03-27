@@ -66,7 +66,7 @@ class ContainersController extends Controller
             $container->tags()->attach(Tag::find($tag['id']));
         }
 
-        $container->load($container->relations);
+        $container->load($container->relationships);
 
         return response()->json(new ContainerResource($container), Response::HTTP_CREATED);
     }
@@ -78,7 +78,7 @@ class ContainersController extends Controller
      */
     public function show(Container $container)
     {
-        $container->load($container->relations);
+        $container->load($container->relationships);
 
         return response()->json(new ContainerResource($container), Response::HTTP_OK);
     }
@@ -99,7 +99,7 @@ class ContainersController extends Controller
             $container->tags()->attach(Tag::find($tag['id']));
         }
 
-        $container->load($container->relations);
+        $container->load($container->relationships);
 
         return response()->json(new ContainerResource($container), Response::HTTP_OK);
     }

@@ -28,7 +28,7 @@ class ContentResource extends JsonResource
             'content_id' => $this->content_id,
             'order' => $this->order,
             'category' => $this->category,
-            'tags' => TagResource::collection($this->whenLoaded('tags')),
+            'tags' => TagResource::collection($this->tags),
             'created_by' => $this->created_by,
             'created_at' => $this->created_at->format('Y-m-d H:i:s'),
             'updated_at' => $this->created_at->format('Y-m-d H:i:s'),

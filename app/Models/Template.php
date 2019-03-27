@@ -56,7 +56,7 @@ class Template extends Model
      *
      * @var array
      */
-    public $relations = [
+    public $relationships = [
         'tags'
     ];
 

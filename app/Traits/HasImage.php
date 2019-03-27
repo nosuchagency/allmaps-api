@@ -13,7 +13,7 @@ trait HasImage
      *
      * @return void
      */
-    public function addAndSaveImage($image, $removeExistingImage = true)
+    public function setImage($image, $removeExistingImage = true)
     {
         if (empty($image)) {
             $this->removeExistingImage();
@@ -41,7 +41,6 @@ trait HasImage
         }
 
         $this->image = self::IMAGE_DIRECTORY_PATH . '/' . $imageName;
-        $this->save();
     }
 
     /**
@@ -56,7 +55,6 @@ trait HasImage
         }
 
         $this->image = null;
-        $this->save();
     }
 
     /**
