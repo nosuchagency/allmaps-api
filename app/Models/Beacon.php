@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Filters\BeaconFilter;
 use App\Filters\IndexFilter;
 use App\Pivots\BeaconContainer;
 use App\Traits\HasCategory;
@@ -102,6 +103,6 @@ class Beacon extends Model
      */
     public function scopeFilter(Builder $builder, $request)
     {
-        return (new IndexFilter($request))->filter($builder);
+        return (new BeaconFilter($request))->filter($builder);
     }
 }

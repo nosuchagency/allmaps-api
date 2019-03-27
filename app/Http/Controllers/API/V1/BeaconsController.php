@@ -33,7 +33,7 @@ class BeaconsController extends Controller
      */
     public function index(Request $request)
     {
-        $beacons = Beacon::withRelations($request)->get();
+        $beacons = Beacon::withRelations($request)->filter($request)->get();
 
         return response()->json(BeaconResource::collection($beacons), Response::HTTP_OK);
     }
