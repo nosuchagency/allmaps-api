@@ -30,7 +30,7 @@ class FixtureRequest extends FormRequest
             'width' => 'integer|nullable',
             'height' => 'integer|nullable',
             'category' => '',
-            'tags' => 'present|array',
+            'tags' => 'array',
             'tags.*.id' => 'required|exists:tags,id'
         ];
     }

@@ -34,7 +34,7 @@ class BeaconRequest extends FormRequest
             'eddystone_tlm' => '',
             'eddystone_eid' => '',
             'category' => '',
-            'tags' => 'present|array',
+            'tags' => 'array',
             'tags.*.id' => 'required|exists:tags,id'
         ];
     }

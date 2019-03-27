@@ -27,7 +27,7 @@ class VideoContentRequest extends FormRequest
             'title' => 'required',
             'yt_url' => 'required|url',
             'category' => '',
-            'tags' => 'present|array',
+            'tags' => 'array',
             'tags.*.id' => 'required|exists:tags,id'
         ];
     }

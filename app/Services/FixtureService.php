@@ -22,7 +22,7 @@ class FixtureService
 
         $fixture->save();
 
-        foreach ($request->get('tags') as $tag) {
+        foreach ($request->get('tags', []) as $tag) {
             $fixture->tags()->attach(Tag::find($tag['id']));
         }
 
@@ -43,7 +43,7 @@ class FixtureService
 
         $fixture->tags()->sync([]);
 
-        foreach ($request->get('tags') as $tag) {
+        foreach ($request->get('tags', []) as $tag) {
             $fixture->tags()->attach(Tag::find($tag['id']));
         }
 

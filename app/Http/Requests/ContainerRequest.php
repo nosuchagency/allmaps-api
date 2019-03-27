@@ -28,7 +28,7 @@ class ContainerRequest extends FormRequest
             'description' => '',
             'folders_enabled' => 'boolean',
             'category' => '',
-            'tags' => 'present|array',
+            'tags' => 'array',
             'tags.*.id' => 'required|exists:tags,id'
         ];
     }

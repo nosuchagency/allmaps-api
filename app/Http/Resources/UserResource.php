@@ -20,8 +20,9 @@ class UserResource extends JsonResource
             'name' => $this->name,
             'email' => $this->email,
             'locale' => $this->locale,
-            'role' => $this->getRoleNames()->first(),
+            'role' => $this->roles()->first(),
             'category' => new CategoryResource($this->category),
+            'permissions' => $this->getAllPermissions()->pluck('name'),
             'tags' => TagResource::collection($this->whenLoaded('tags')),
             'contents' => ContentResource::collection($this->whenLoaded('contents')),
             'actions' => ActionResource::collection($this->mostRecentActions())

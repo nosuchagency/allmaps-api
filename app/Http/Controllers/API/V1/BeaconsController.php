@@ -59,7 +59,7 @@ class BeaconsController extends Controller
     {
         $beacon = Beacon::create($request->validated());
 
-        foreach ($request->get('tags') as $tag) {
+        foreach ($request->get('tags', []) as $tag) {
             $beacon->tags()->attach(Tag::find($tag['id']));
         }
 
@@ -92,7 +92,7 @@ class BeaconsController extends Controller
 
         $beacon->tags()->sync([]);
 
-        foreach ($request->get('tags') as $tag) {
+        foreach ($request->get('tags', []) as $tag) {
             $beacon->tags()->attach(Tag::find($tag['id']));
         }
 

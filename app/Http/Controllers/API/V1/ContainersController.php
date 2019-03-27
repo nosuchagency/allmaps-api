@@ -62,7 +62,7 @@ class ContainersController extends Controller
     {
         $container = Container::create($request->validated());
 
-        foreach ($request->get('tags') as $tag) {
+        foreach ($request->get('tags', []) as $tag) {
             $container->tags()->attach(Tag::find($tag['id']));
         }
 
@@ -95,7 +95,7 @@ class ContainersController extends Controller
 
         $container->tags()->sync([]);
 
-        foreach ($request->get('tags') as $tag) {
+        foreach ($request->get('tags', []) as $tag) {
             $container->tags()->attach(Tag::find($tag['id']));
         }
 

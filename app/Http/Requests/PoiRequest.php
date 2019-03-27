@@ -34,7 +34,7 @@ class PoiRequest extends FormRequest
             'color' => '',
             'image' => '',
             'category' => '',
-            'tags' => 'present|array',
+            'tags' => 'array',
             'tags.*.id' => 'required|exists:tags,id'
         ];
     }

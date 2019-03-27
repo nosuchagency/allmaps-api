@@ -58,7 +58,7 @@ class TemplatesController extends Controller
     {
         $template = Template::create($request->validated());
 
-        foreach ($request->get('tags') as $tag) {
+        foreach ($request->get('tags', []) as $tag) {
             $template->tags()->attach(Tag::find($tag['id']));
         }
 
@@ -91,7 +91,7 @@ class TemplatesController extends Controller
 
         $template->tags()->sync([]);
 
-        foreach ($request->get('tags') as $tag) {
+        foreach ($request->get('tags', []) as $tag) {
             $template->tags()->attach(Tag::find($tag['id']));
         }
 

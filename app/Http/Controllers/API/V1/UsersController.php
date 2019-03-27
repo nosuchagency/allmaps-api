@@ -57,7 +57,7 @@ class UsersController extends Controller
      */
     public function store(UserRequest $request)
     {
-        $user = new User($request->only('name', 'email'));
+        $user = new User($request->only('name', 'email', 'locale', 'category'));
         $user->assignRole($request->get('role'));
 
         if ($password = $request->get('password')) {
@@ -66,7 +66,7 @@ class UsersController extends Controller
 
         $user->save();
 
-        foreach ($request->get('tags') as $tag) {
+        foreach ($request->get('tags', []) as $tag) {
             $user->tags()->attach(Tag::find($tag['id']));
         }
 
@@ -95,7 +95,7 @@ class UsersController extends Controller
      */
     public function update(UserRequest $request, User $user)
     {
-        $user->fill($request->only('name', 'email'));
+        $user->fill($request->only('name', 'email', 'locale'));
 
         if ($password = $request->get('password')) {
             $user->password = Hash::make($password);
@@ -105,7 +105,7 @@ class UsersController extends Controller
 
         $user->tags()->sync([]);
 
-        foreach ($request->get('tags') as $tag) {
+        foreach ($request->get('tags', []) as $tag) {
             $user->tags()->attach(Tag::find($tag['id']));
         }
 

@@ -22,7 +22,7 @@ class MapComponentService
 
         $mapComponent->save();
 
-        foreach ($request->get('tags') as $tag) {
+        foreach ($request->get('tags', []) as $tag) {
             $mapComponent->tags()->attach(Tag::find($tag['id']));
         }
 
@@ -43,7 +43,7 @@ class MapComponentService
 
         $mapComponent->tags()->sync([]);
 
-        foreach ($request->get('tags') as $tag) {
+        foreach ($request->get('tags', []) as $tag) {
             $mapComponent->tags()->attach(Tag::find($tag['id']));
         }
 

@@ -4,7 +4,7 @@ namespace App\Http\Controllers\API\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProfileRequest;
-use App\Http\Resources\ProfileResource;
+use App\Http\Resources\UserResource;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 
@@ -18,7 +18,7 @@ class ProfileController extends Controller
     {
         $user = auth()->user();
 
-        return response()->json(new ProfileResource($user), Response::HTTP_OK);
+        return response()->json(new UserResource($user), Response::HTTP_OK);
     }
 
     /**
@@ -39,6 +39,6 @@ class ProfileController extends Controller
 
         $user->save();
 
-        return response()->json(new ProfileResource($user), Response::HTTP_OK);
+        return response()->json(new UserResource($user), Response::HTTP_OK);
     }
 }

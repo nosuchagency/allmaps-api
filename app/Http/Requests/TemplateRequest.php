@@ -31,7 +31,7 @@ class TemplateRequest extends FormRequest
             'hook' => '',
             'layout' => '',
             'category' => '',
-            'tags' => 'present|array',
+            'tags' => 'array',
             'tags.*.id' => 'required|exists:tags,id'
         ];
     }

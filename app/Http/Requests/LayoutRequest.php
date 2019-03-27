@@ -28,7 +28,7 @@ class LayoutRequest extends FormRequest
             'description' => '',
             'content' => '',
             'category' => '',
-            'tags' => 'present|array',
+            'tags' => 'array',
             'tags.*.id' => 'required|exists:tags,id'
         ];
     }

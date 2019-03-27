@@ -37,7 +37,7 @@ class TextContentsController extends Controller
         $text->container()->associate($container);
         $text = $folder->texts()->save($text);
 
-        foreach ($request->get('tags') as $tag) {
+        foreach ($request->get('tags', []) as $tag) {
             $text->tags()->attach(Tag::find($tag['id']));
         }
 
@@ -58,7 +58,7 @@ class TextContentsController extends Controller
 
         $text->tags()->sync([]);
 
-        foreach ($request->get('tags') as $tag) {
+        foreach ($request->get('tags', []) as $tag) {
             $text->tags()->attach(Tag::find($tag['id']));
         }
 
