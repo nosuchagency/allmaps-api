@@ -41,7 +41,7 @@ class PoisController extends Controller
      */
     public function index(Request $request)
     {
-        $pois = Poi::withRelations($request)->get();
+        $pois = Poi::withRelations($request)->filter($request)->get();
 
         return response()->json(PoiResource::collection($pois), Response::HTTP_OK);
     }

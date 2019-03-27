@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Filters\IndexFilter;
+use App\Filters\PoiFilter;
 use App\Traits\HasCategory;
 use App\Traits\HasCreatedBy;
 use App\Traits\HasImage;
@@ -79,7 +80,7 @@ class Poi extends Model
      */
     public function scopeFilter(Builder $builder, $request)
     {
-        return (new IndexFilter($request))->filter($builder);
+        return (new PoiFilter($request))->filter($builder);
     }
 
     protected static function boot()
