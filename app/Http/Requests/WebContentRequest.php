@@ -24,7 +24,7 @@ class WebContentRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => 'required',
+            'name' => 'required',
             'url' => 'url',
             'category' => '',
             'tags' => 'array',

@@ -24,7 +24,7 @@ class ImageContentRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => 'required',
+            'name' => 'required',
             'image' => '',
             'category' => '',
             'tags' => 'array',
