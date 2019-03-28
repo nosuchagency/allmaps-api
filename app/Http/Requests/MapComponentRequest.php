@@ -43,7 +43,7 @@ class MapComponentRequest extends FormRequest
             'height' => 'integer|nullable',
             'image' => '',
             'category' => '',
-            'tags' => 'present|array',
+            'tags' => 'array',
             'tags.*.id' => 'required|exists:tags,id'
         ];
     }

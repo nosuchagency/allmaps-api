@@ -37,7 +37,7 @@ class FileContentsController extends Controller
         $file->container()->associate($container);
         $file = $folder->files()->save($file);
 
-        foreach ($request->get('tags') as $tag) {
+        foreach ($request->get('tags', []) as $tag) {
             $file->tags()->attach(Tag::find($tag['id']));
         }
 
@@ -58,7 +58,7 @@ class FileContentsController extends Controller
 
         $file->tags()->sync([]);
 
-        foreach ($request->get('tags') as $tag) {
+        foreach ($request->get('tags', []) as $tag) {
             $file->tags()->attach(Tag::find($tag['id']));
         }
 

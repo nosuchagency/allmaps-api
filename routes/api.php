@@ -20,7 +20,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/logout', ['as' => 'logout', 'uses' => 'AuthController@logout']);
 
     Route::get('/profile', ['as' => 'profile', 'uses' => 'ProfileController@show']);
-    Route::put('/profile', ['as' => 'profile.update', 'uses' => 'ProfileController@update']);
 
     Route::get('/search', ['as' => 'search', 'uses' => 'SearchController']);
     Route::get('/plugins', ['as' => 'plugins.index', 'uses' => 'PluginsController']);

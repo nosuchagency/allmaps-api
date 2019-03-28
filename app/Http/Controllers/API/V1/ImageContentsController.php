@@ -39,7 +39,7 @@ class ImageContentsController extends Controller
         $image->setImage($request->get('image'));
         $image->save();
 
-        foreach ($request->get('tags') as $tag) {
+        foreach ($request->get('tags', []) as $tag) {
             $image->tags()->attach(Tag::find($tag['id']));
         }
 
@@ -62,7 +62,7 @@ class ImageContentsController extends Controller
 
         $image->tags()->sync([]);
 
-        foreach ($request->get('tags') as $tag) {
+        foreach ($request->get('tags', []) as $tag) {
             $image->tags()->attach(Tag::find($tag['id']));
         }
 

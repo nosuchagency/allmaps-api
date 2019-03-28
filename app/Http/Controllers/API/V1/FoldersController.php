@@ -63,7 +63,7 @@ class FoldersController extends Controller
     {
         $folder = $container->folders()->create($request->validated());
 
-        foreach ($request->get('tags') as $tag) {
+        foreach ($request->get('tags', []) as $tag) {
             $folder->tags()->attach(Tag::find($tag['id']));
         }
 
@@ -98,7 +98,7 @@ class FoldersController extends Controller
 
         $folder->tags()->sync([]);
 
-        foreach ($request->get('tags') as $tag) {
+        foreach ($request->get('tags', []) as $tag) {
             $folder->tags()->attach(Tag::find($tag['id']));
         }
 

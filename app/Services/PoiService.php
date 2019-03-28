@@ -22,7 +22,7 @@ class PoiService
 
         $poi->save();
 
-        foreach ($request->get('tags') as $tag) {
+        foreach ($request->get('tags', []) as $tag) {
             $poi->tags()->attach(Tag::find($tag['id']));
         }
 
@@ -43,7 +43,7 @@ class PoiService
 
         $poi->tags()->sync([]);
 
-        foreach ($request->get('tags') as $tag) {
+        foreach ($request->get('tags', []) as $tag) {
             $poi->tags()->attach(Tag::find($tag['id']));
         }
 

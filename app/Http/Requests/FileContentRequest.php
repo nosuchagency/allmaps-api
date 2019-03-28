@@ -26,7 +26,7 @@ class FileContentRequest extends FormRequest
         return [
             'title' => 'required',
             'category' => '',
-            'tags' => 'present|array',
+            'tags' => 'array',
             'tags.*.id' => 'required|exists:tags,id'
         ];
     }

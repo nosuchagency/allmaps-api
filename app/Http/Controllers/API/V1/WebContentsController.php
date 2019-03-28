@@ -37,7 +37,7 @@ class WebContentsController extends Controller
         $web->container()->associate($container);
         $web = $folder->web()->save($web);
 
-        foreach ($request->get('tags') as $tag) {
+        foreach ($request->get('tags', []) as $tag) {
             $web->tags()->attach(Tag::find($tag['id']));
         }
 
@@ -58,7 +58,7 @@ class WebContentsController extends Controller
 
         $web->tags()->sync([]);
 
-        foreach ($request->get('tags') as $tag) {
+        foreach ($request->get('tags', []) as $tag) {
             $web->tags()->attach(Tag::find($tag['id']));
         }
 

@@ -29,23 +29,24 @@ class UserRequest extends FormRequest
 
         $rules = [
             'name' => 'required',
-            'password' => '',
+            'password' => [],
+            'locale' => '',
             'email' => [
                 'required',
                 'email',
-                Rule::unique('users')->ignore($user),
+                Rule::unique('users')->ignore($user)
             ],
             'role' => [
                 'required',
                 Rule::in(Role::all()->pluck('name')),
             ],
             'category' => '',
-            'tags' => 'present|array',
+            'tags' => 'array',
             'tags.*.id' => 'required|exists:tags,id'
         ];
 
         if (!$user) {
-            $rules['password'] = 'required';
+            $rules['password'][] = 'required';
         }
 
         return $rules;

@@ -27,7 +27,7 @@ class ImageContentRequest extends FormRequest
             'title' => 'required',
             'image' => '',
             'category' => '',
-            'tags' => 'present|array',
+            'tags' => 'array',
             'tags.*.id' => 'required|exists:tags,id'
         ];
     }

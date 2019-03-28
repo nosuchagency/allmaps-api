@@ -58,7 +58,7 @@ class LayoutsController extends Controller
     {
         $layout = Layout::create($request->validated());
 
-        foreach ($request->get('tags') as $tag) {
+        foreach ($request->get('tags', []) as $tag) {
             $layout->tags()->attach(Tag::find($tag['id']));
         }
 
@@ -91,7 +91,7 @@ class LayoutsController extends Controller
 
         $layout->tags()->sync([]);
 
-        foreach ($request->get('tags') as $tag) {
+        foreach ($request->get('tags', []) as $tag) {
             $layout->tags()->attach(Tag::find($tag['id']));
         }
 

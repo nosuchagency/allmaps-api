@@ -37,7 +37,7 @@ class GalleryContentsController extends Controller
         $gallery->container()->associate($container);
         $gallery = $folder->galleries()->save($gallery);
 
-        foreach ($request->get('tags') as $tag) {
+        foreach ($request->get('tags', []) as $tag) {
             $gallery->tags()->attach(Tag::find($tag['id']));
         }
 
@@ -58,7 +58,7 @@ class GalleryContentsController extends Controller
 
         $gallery->tags()->sync([]);
 
-        foreach ($request->get('tags') as $tag) {
+        foreach ($request->get('tags', []) as $tag) {
             $gallery->tags()->attach(Tag::find($tag['id']));
         }
 

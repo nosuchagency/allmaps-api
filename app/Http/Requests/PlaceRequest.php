@@ -33,7 +33,7 @@ class PlaceRequest extends FormRequest
             'lng' => 'required',
             'activated' => 'boolean',
             'category' => '',
-            'tags' => 'present|array',
+            'tags' => 'array',
             'tags.*.id' => 'required|exists:tags,id'
         ];
     }

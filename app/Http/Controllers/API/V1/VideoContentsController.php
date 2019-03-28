@@ -37,7 +37,7 @@ class VideoContentsController extends Controller
         $video->container()->associate($container);
         $video = $folder->videos()->save($video);
 
-        foreach ($request->get('tags') as $tag) {
+        foreach ($request->get('tags', []) as $tag) {
             $video->tags()->attach(Tag::find($tag['id']));
         }
 
@@ -58,7 +58,7 @@ class VideoContentsController extends Controller
 
         $video->tags()->sync([]);
 
-        foreach ($request->get('tags') as $tag) {
+        foreach ($request->get('tags', []) as $tag) {
             $video->tags()->attach(Tag::find($tag['id']));
         }
 

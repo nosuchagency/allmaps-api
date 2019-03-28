@@ -27,7 +27,7 @@ class WebContentRequest extends FormRequest
             'title' => 'required',
             'url' => 'url',
             'category' => '',
-            'tags' => 'present|array',
+            'tags' => 'array',
             'tags.*.id' => 'required|exists:tags,id'
         ];
     }

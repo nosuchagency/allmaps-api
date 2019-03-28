@@ -20,7 +20,7 @@ class PlaceService
         $place->setImage($request->get('image'));
         $place->save();
 
-        foreach ($request->get('tags') as $tag) {
+        foreach ($request->get('tags', []) as $tag) {
             $place->tags()->attach(Tag::find($tag['id']));
         }
 
@@ -41,7 +41,7 @@ class PlaceService
 
         $place->tags()->sync([]);
 
-        foreach ($request->get('tags') as $tag) {
+        foreach ($request->get('tags', []) as $tag) {
             $place->tags()->attach(Tag::find($tag['id']));
         }
 
