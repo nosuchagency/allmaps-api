@@ -3,14 +3,11 @@
 namespace App\Http\Controllers\API\V1;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\ProfileRequest;
 use App\Http\Resources\UserResource;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Hash;
 
 class ProfileController extends Controller
 {
-
     /**
      * @return \Illuminate\Http\JsonResponse
      */
@@ -18,26 +15,7 @@ class ProfileController extends Controller
     {
         $user = auth()->user();
 
-        return response()->json(new UserResource($user), Response::HTTP_OK);
-    }
-
-    /**
-     * @param ProfileRequest $request
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function update(ProfileRequest $request)
-    {
-        $user = auth()->user();
-
-        $user->fill($request->except('password', 'role'));
-        $user->assignRole($request->get('role'));
-
-        if ($password = $request->get('password')) {
-            $user->password = Hash::make($password);
-        }
-
-        $user->save();
+        $user->load($user->relationships);
 
         return response()->json(new UserResource($user), Response::HTTP_OK);
     }
