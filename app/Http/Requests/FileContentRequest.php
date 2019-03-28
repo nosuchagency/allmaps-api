@@ -24,7 +24,7 @@ class FileContentRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => 'required',
+            'name' => 'required',
             'category' => '',
             'tags' => 'array',
             'tags.*.id' => 'required|exists:tags,id'

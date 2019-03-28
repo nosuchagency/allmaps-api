@@ -25,7 +25,7 @@ class TextContentRequest extends FormRequest
     {
         return [
             'text' => '',
-            'title' => 'required',
+            'name' => 'required',
             'category' => '',
             'tags' => 'array',
             'tags.*.id' => 'required|exists:tags,id'

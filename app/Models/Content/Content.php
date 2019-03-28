@@ -10,10 +10,11 @@ use App\Traits\HasCreatedBy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Content extends Model
 {
-    use HasCategory, SoftDeletes, HasCreatedBy;
+    use HasCategory, SoftDeletes, HasCreatedBy, LogsActivity;
 
     protected $table = 'content';
 
@@ -23,7 +24,7 @@ class Content extends Model
      * @var array
      */
     protected $fillable = [
-        'title',
+        'name',
         'type',
         'image',
         'url',

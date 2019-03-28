@@ -24,7 +24,7 @@ class VideoContentRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => 'required',
+            'name' => 'required',
             'yt_url' => 'required|url',
             'category' => '',
             'tags' => 'array',

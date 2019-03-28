@@ -25,7 +25,7 @@ class ContentRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => 'required',
+            'name' => 'required',
             'type' => [
                 'required',
                 Rule::in(['image', 'video', 'text', 'gallery', 'file', 'web']),
