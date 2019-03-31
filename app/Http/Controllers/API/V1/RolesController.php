@@ -9,7 +9,6 @@ use App\Http\Resources\RoleResource;
 use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Spatie\Permission\Models\Permission;
 
 class RolesController extends Controller
 {
@@ -56,6 +55,8 @@ class RolesController extends Controller
     {
         $role = Role::create($request->only('name'));
 
+        $role->setPermissions($request->get('permissions', []));
+
         return response()->json(new RoleResource($role), Response::HTTP_CREATED);
     }
 
@@ -77,33 +78,9 @@ class RolesController extends Controller
      */
     public function update(RoleRequest $request, Role $role)
     {
-        $role->fill($request->validated())->save();
+        $role->fill($request->only('name'))->save();
 
-        return response()->json(new RoleResource($role), Response::HTTP_OK);
-    }
-
-    /**
-     * @param Role $role
-     * @param $permission
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function grantPermission(Role $role, Permission $permission)
-    {
-        $role->givePermissionTo($permission->name);
-
-        return response()->json(new RoleResource($role), Response::HTTP_OK);
-    }
-
-    /**
-     * @param Role $role
-     * @param $permission
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function revokePermission(Role $role, Permission $permission)
-    {
-        $role->revokePermissionTo($permission->name);
+        $role->setPermissions($request->get('permissions', []));
 
         return response()->json(new RoleResource($role), Response::HTTP_OK);
     }
