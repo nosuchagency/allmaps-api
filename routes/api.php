@@ -42,6 +42,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::apiResource('fixtures', 'FixturesController');
     Route::apiResource('map-components', 'MapComponentsController');
     Route::apiResource('layouts', 'LayoutsController');
+    Route::apiResource('permissions', 'PermissionsController');
     Route::apiResource('pois', 'PoisController')->parameters(['pois' => 'poi']);
     Route::apiResource('tokens', 'TokensController');
     Route::apiResource('users', 'UsersController');
@@ -61,11 +62,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/roles/bulk-destroy', ['as' => 'roles.bulk-destroy', 'uses' => 'RolesController@bulkDestroy']);
     Route::post('/tags/bulk-destroy', ['as' => 'tags.bulk-destroy', 'uses' => 'TagsController@bulkDestroy']);
     Route::post('/templates/bulk-destroy', ['as' => 'templates.bulk-destroy', 'uses' => 'TemplatesController@bulkDestroy']);
-
-    Route::group(['prefix' => 'roles/{role}/permissions/{permission}'], function () {
-        Route::post('/', ['as' => 'role.permission.grant', 'uses' => 'RolesController@grantPermission']);
-        Route::delete('/', ['as' => 'role.permission.revoke', 'uses' => 'RolesController@revokePermission']);
-    });
 
     Route::group(['prefix' => 'beacons/{beacon}/containers/{container}'], function () {
         Route::get('/', ['as' => 'beacon.containers.show', 'uses' => 'BeaconContainersController@show']);

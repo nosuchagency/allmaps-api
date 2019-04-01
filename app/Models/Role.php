@@ -25,18 +25,42 @@ class Role extends \Spatie\Permission\Models\Role
     }
 
     /**
-     * @param iterable $permissions
+     * @return \Illuminate\Database\Eloquent\Collection|Permission[]
      */
-    public function setPermissions(iterable $permissions)
+    public function getPermissions()
     {
-        $this->syncPermissions([]);
+        $rolePermissions = $this->permissions->pluck('name');
 
-        collect($permissions)->each(function ($permission) {
-            $permission = Permission::where('name', $permission)->first();
+        $permissions = Permission::all();
 
-            if ($permission) {
-                $this->givePermissionTo($permission->name);
+        foreach ($permissions as $permission) {
+            if ($rolePermissions->contains($permission->name)) {
+                $permission->possessed = true;
+            } else {
+                $permission->possessed = false;
             }
-        });
+        }
+
+        return $permissions;
+    }
+
+    /**
+     * @param array $permissions
+     *
+     * @return void
+     */
+    public function setPermissions(array $permissions)
+    {
+        foreach ($permissions as $permission) {
+            if (!isset($permission['possessed'], $permission['name'])) {
+                continue;
+            }
+
+            if ($permission['possessed']) {
+                $this->givePermissionTo($permission['name']);
+            } else {
+                $this->revokePermissionTo($permission['name']);
+            }
+        }
     }
 }
