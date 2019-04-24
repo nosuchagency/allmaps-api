@@ -9,6 +9,7 @@ use App\Http\Resources\TokenResource;
 use App\Models\Token;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Str;
 
 class TokensController extends Controller
 {
@@ -57,7 +58,7 @@ class TokensController extends Controller
     {
         $token = Token::create([
             'name' => $request->get('name'),
-            'token' => str_random(60)
+            'token' => Str::random(60)
         ]);
 
         $token->syncRoles($request->get('role'));

@@ -15,6 +15,7 @@ use Faker\Generator as Faker;
 
 $factory->define(App\Models\Category::class, function (Faker $faker) {
     return [
-        'name' => str_random(30)
+        'name' => $faker->title,
+        'description' => $faker->paragraph
     ];
 });

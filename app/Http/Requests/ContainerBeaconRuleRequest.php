@@ -35,10 +35,10 @@ class ContainerBeaconRuleRequest extends FormRequest
             ],
             'time_restricted' => 'boolean',
             'date_restricted' => 'boolean',
-            'time_from' => 'date_format:H:i|nullable',
-            'time_to' => 'date_format:H:i|nullable',
-            'date_from' => 'date|nullable',
-            'date_to' => 'date|nullable',
+            'time_from' => 'nullable|date_format:H:i',
+            'time_to' => 'nullable|date_format:H:i',
+            'date_from' => 'nullable|date',
+            'date_to' => 'nullable|date',
         ];
     }
 }

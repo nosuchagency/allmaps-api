@@ -7,16 +7,14 @@ use App\Http\Requests\BuildingRequest;
 use App\Http\Requests\BulkDeleteRequest;
 use App\Http\Requests\SearchRequest;
 use App\Http\Resources\BuildingResource;
-use App\Http\Resources\MapLocationResource;
+use App\Http\Resources\LocationResource;
 use App\Models\Building;
-use App\Models\Place;
 use App\Services\BuildingService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class BuildingsController extends BaseController
 {
-
     /**
      * @var BuildingService
      */
@@ -38,41 +36,43 @@ class BuildingsController extends BaseController
     }
 
     /**
-     *
      * @param Request $request
-     * @param Place $place
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function index(Request $request, Place $place)
+    public function index(Request $request)
     {
-        $buildings = $place->buildings()->withRelations($request)->get();
+        $buildings = Building::query()
+            ->withRelations($request)
+            ->filter($request)
+            ->get();
 
         return response()->json(BuildingResource::collection($buildings), Response::HTTP_OK);
     }
 
     /**
      * @param Request $request
-     * @param Place $place
      *
      * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
-    public function paginated(Request $request, Place $place)
+    public function paginated(Request $request)
     {
-        $buildings = $place->buildings()->withRelations($request)->filter($request)->paginate($this->paginationNumber());
+        $buildings = Building::query()
+            ->withRelations($request)
+            ->filter($request)
+            ->paginate($this->paginationNumber());
 
         return BuildingResource::collection($buildings);
     }
 
     /**
      * @param BuildingRequest $request
-     * @param Place $place
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(BuildingRequest $request, Place $place)
+    public function store(BuildingRequest $request)
     {
-        $building = $this->buildingService->create($request, $place);
+        $building = $this->buildingService->create($request);
 
         $building->load($building->relationships);
 
@@ -80,12 +80,11 @@ class BuildingsController extends BaseController
     }
 
     /**
-     * @param Place $place
      * @param Building $building
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function show(Place $place, Building $building)
+    public function show(Building $building)
     {
         $building->load($building->relationships);
 
@@ -94,14 +93,13 @@ class BuildingsController extends BaseController
 
     /**
      * @param BuildingRequest $request
-     * @param Place $place
      * @param Building $building
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(BuildingRequest $request, Place $place, Building $building)
+    public function update(BuildingRequest $request, Building $building)
     {
-        $building = $this->buildingService->update($request, $building);
+        $building = $this->buildingService->update($building, $request);
 
         $building->load($building->relationships);
 
@@ -109,13 +107,12 @@ class BuildingsController extends BaseController
     }
 
     /**
-     * @param Place $place
      * @param Building $building
      *
      * @return \Illuminate\Http\JsonResponse
      * @throws \Exception
      */
-    public function destroy(Place $place, Building $building)
+    public function destroy(Building $building)
     {
         $building->delete();
 
@@ -140,15 +137,14 @@ class BuildingsController extends BaseController
 
     /**
      * @param SearchRequest $request
-     * @param Place $place
      * @param Building $building
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function search(SearchRequest $request, Place $place, Building $building)
+    public function search(SearchRequest $request, Building $building)
     {
         $locations = $this->searchForLocations($request->all(), $building->locations()->getQuery());
 
-        return response()->json(MapLocationResource::collection($locations), Response::HTTP_OK);
+        return response()->json(LocationResource::collection($locations), Response::HTTP_OK);
     }
 }

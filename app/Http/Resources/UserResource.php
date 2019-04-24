@@ -25,7 +25,7 @@ class UserResource extends JsonResource
             'permissions' => $this->getAllPermissions()->pluck('name'),
             'tags' => TagResource::collection($this->whenLoaded('tags')),
             'contents' => ContentResource::collection($this->whenLoaded('contents')),
-            'actions' => ActionResource::collection($this->mostRecentActions())
+            'actions' => ActionResource::collection($this->recentActions())
         ];
     }
 }

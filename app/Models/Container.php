@@ -8,6 +8,7 @@ use App\Pivots\BeaconContainer;
 use App\Traits\HasCategory;
 use App\Traits\HasCreatedBy;
 use App\Traits\HasRelations;
+use Askedio\SoftCascade\Traits\SoftCascadeTrait;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -15,9 +16,20 @@ use Spatie\Activitylog\Traits\LogsActivity;
 
 class Container extends Model
 {
-    use HasRelations, HasCategory, SoftDeletes, HasCreatedBy, LogsActivity;
+    use HasRelations, HasCategory, SoftDeletes, HasCreatedBy, LogsActivity, SoftCascadeTrait;
 
+    /**
+     * @var string
+     */
     protected $table = 'content_containers';
+
+    /**
+     * @var array
+     */
+    protected $softCascade = [
+        'folders',
+        'contents'
+    ];
 
     /**
      * The attributes that are mass assignable.

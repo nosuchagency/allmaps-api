@@ -57,6 +57,6 @@ class Searchable extends Model
      */
     public function fields()
     {
-        return $this->hasMany(MapLocationField::class);
+        return $this->hasMany(LocationField::class);
     }
 }

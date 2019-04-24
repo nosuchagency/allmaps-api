@@ -10,13 +10,34 @@ use App\Traits\HasCreatedBy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Nanigans\SingleTableInheritance\SingleTableInheritanceTrait;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 class Content extends Model
 {
-    use HasCategory, SoftDeletes, HasCreatedBy, LogsActivity;
+    use HasCategory, SoftDeletes, HasCreatedBy, LogsActivity, SingleTableInheritanceTrait;
 
+    /**
+     * @var string
+     */
     protected $table = 'content';
+
+    /**
+     * @var string
+     */
+    protected static $singleTableTypeField = 'type';
+
+    /**
+     * @var array
+     */
+    protected static $singleTableSubclasses = [
+        FileContent::class,
+        GalleryContent::class,
+        ImageContent::class,
+        TextContent::class,
+        VideoContent::class,
+        WebContent::class
+    ];
 
     /**
      * The attributes that are mass assignable.
@@ -68,7 +89,7 @@ class Content extends Model
      */
     public function folder()
     {
-        return $this->belongsTo(Folder::class);
+        return $this->belongsTo(Folder::class, 'folder_id');
     }
 
     /**
@@ -76,7 +97,7 @@ class Content extends Model
      */
     public function container()
     {
-        return $this->belongsTo(Container::class);
+        return $this->belongsTo(Container::class, 'container_id');
     }
 
     /**
@@ -84,7 +105,7 @@ class Content extends Model
      */
     public function content()
     {
-        return $this->belongsTo(Content::class);
+        return $this->belongsTo(Content::class, 'container_id');
     }
 
     /**

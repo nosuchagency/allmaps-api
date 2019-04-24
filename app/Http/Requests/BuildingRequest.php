@@ -23,9 +23,16 @@ class BuildingRequest extends FormRequest
      */
     public function rules()
     {
-        return [
+        $rules = [
             'name' => 'required',
             'image' => ''
         ];
+
+        if ($this->method() === 'POST') {
+            $rules['place'] = 'required';
+            $rules['place.id'] = 'required|exists:places,id,deleted_at,NULL';
+        }
+
+        return $rules;
     }
 }

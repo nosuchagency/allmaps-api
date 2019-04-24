@@ -1,0 +1,91 @@
+<?php
+
+namespace Tests\Feature\Structures;
+
+use App\Models\Floor;
+use App\Models\Component;
+use App\Models\Structure;
+use Illuminate\Foundation\Testing\WithFaker;
+use Tests\TestCase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+
+class StructuresCreateTest extends TestCase
+{
+    use RefreshDatabase, WithFaker;
+
+    /** @test */
+    public function a_guest_cannot_create_structures()
+    {
+        $this->postJson(route('structures.store'))->assertStatus(401);
+    }
+
+    /** @test */
+    public function an_authenticated_user_without_create_permission_cannot_create_structures()
+    {
+        $this->signIn();
+
+        $this->postJson(route('structures.store'))->assertStatus(403);
+    }
+
+    /** @test */
+    public function an_authenticated_user_with_create_permission_can_create_structures()
+    {
+        $this->create()->assertStatus(201);
+        $this->assertCount(1, Structure::all());
+    }
+
+    /** @test */
+    public function a_structure_requires_a_floor()
+    {
+        $this->create(['floor' => null])->assertJsonValidationErrors(['floor', 'floor.id']);
+    }
+
+    /** @test */
+    public function a_structure_requires_a_component()
+    {
+        $this->create(['component' => null])->assertJsonValidationErrors('component');
+    }
+
+    /** @test */
+    public function a_structure_requires_coordinates_to_be_an_array()
+    {
+        $this->create(['coordinates' => 'not-an-array'])->assertJsonValidationErrors('coordinates');
+    }
+
+    /** @test */
+    public function a_structure_requires_markers_to_be_an_array()
+    {
+        $this->create(['markers' => 'not-an-array'])->assertJsonValidationErrors('markers');
+    }
+
+    /**
+     * @param array $attributes
+     *
+     * @return \Illuminate\Foundation\Testing\TestResponse
+     */
+    protected function create($attributes = [])
+    {
+        $this->signIn()->assignRole(
+            $this->createRoleWithPermissions(['floors.create'])
+        );
+
+        return $this->postJson(route('structures.store'), $this->validFields($attributes));
+    }
+
+    /**
+     * @param array $overrides
+     *
+     * @return array
+     */
+    protected function validFields($overrides = [])
+    {
+        return array_merge([
+            'name' => $this->faker->title,
+            'coordinates' => [],
+            'markers' => [],
+            'radius' => '',
+            'component' => factory(Component::class)->create(),
+            'floor' => factory(Floor::class)->create()
+        ], $overrides);
+    }
+}

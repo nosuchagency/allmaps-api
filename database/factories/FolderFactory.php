@@ -1,6 +1,7 @@
 <?php
 
 use Faker\Generator as Faker;
+use App\Models\Container;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,6 +16,7 @@ use Faker\Generator as Faker;
 
 $factory->define(App\Models\Folder::class, function (Faker $faker) {
     return [
-        'name' => $faker->sentence,
+        'name' => $faker->title,
+        'container_id' => factory(Container::class)->create()
     ];
 });

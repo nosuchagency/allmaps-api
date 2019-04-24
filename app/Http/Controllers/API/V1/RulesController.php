@@ -76,6 +76,6 @@ class RulesController extends Controller
 
         $beacon->pivot->rules()->findOrFail($rule)->delete();
 
-        return response()->json(null, Response::HTTP_CREATED);
+        return response()->json(null, Response::HTTP_OK);
     }
 }

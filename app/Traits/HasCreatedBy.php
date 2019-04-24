@@ -13,8 +13,7 @@ trait HasCreatedBy
     protected static function bootHasCreatedBy()
     {
         static::saving(function (Model $model) {
-            static::userGuard();
-            if (!isset($model->created_by)) {
+            if (auth()->check() && empty($model->created_by)) {
                 $model->created_by = auth()->user()->getKey();
             }
         });
@@ -27,15 +26,5 @@ trait HasCreatedBy
     public function creator()
     {
         return $this->belongsTo(User::class, 'created_by', 'id');
-    }
-
-    /**
-     * @throws \Exception
-     */
-    protected static function userGuard()
-    {
-        if (auth()->guest()) {
-            throw new \Exception('No authenticated user.');
-        }
     }
 }

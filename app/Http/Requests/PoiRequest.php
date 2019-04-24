@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Rules\Imageable;
+use App\Rules\RequiredIdRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -31,9 +31,10 @@ class PoiRequest extends FormRequest
                 'required',
                 Rule::in(['image', 'area']),
             ],
-            'color' => '',
+            'color' => ['nullable', 'required_if:type,area', 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
             'image' => '',
-            'category' => '',
+            'category' => ['nullable', new RequiredIdRule],
+            'category.id' => 'exists:categories,id',
             'tags' => 'array',
             'tags.*.id' => 'required|exists:tags,id'
         ];

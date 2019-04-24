@@ -3,7 +3,7 @@
 namespace App\Plugins\Search;
 
 use App\Models\Searchable;
-use App\Models\MapLocation;
+use App\Models\Location;
 use App\Plugins\Contracts\BasePlugin;
 use App\Plugins\Contracts\Search;
 use Illuminate\Database\Eloquent\Builder;

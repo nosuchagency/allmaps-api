@@ -20,32 +20,4 @@ class ContainerObserver
             'primary' => true
         ]);
     }
-
-    /**
-     * Handle the container "updated" event.
-     *
-     * @param  \App\Models\Container $container
-     *
-     * @return void
-     */
-    public function deleting(Container $container)
-    {
-        $container->folders()->each(function ($folder) {
-            $folder->delete();
-        });
-    }
-
-    /**
-     * Handle the container "restoring" event.
-     *
-     * @param  \App\Models\Container $container
-     *
-     * @return void
-     */
-    public function restoring(Container $container)
-    {
-        $container->folders()->each(function ($folder) {
-            $folder->restore();
-        });
-    }
 }

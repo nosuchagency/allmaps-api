@@ -1,6 +1,7 @@
 <?php
 
 use Faker\Generator as Faker;
+use App\Models\Building;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,6 +16,7 @@ use Faker\Generator as Faker;
 
 $factory->define(App\Models\Floor::class, function (Faker $faker) {
     return [
-        'name' => $faker->company
+        'name' => $faker->company,
+        'building_id' => factory(Building::class)->create()
     ];
 });

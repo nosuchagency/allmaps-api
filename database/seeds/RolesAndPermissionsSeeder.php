@@ -70,10 +70,10 @@ class RolesAndPermissionsSeeder extends Seeder
         Permission::firstOrCreate(['name' => 'plugins.update', 'guard_name' => 'api']);
         Permission::firstOrCreate(['name' => 'plugins.delete', 'guard_name' => 'api']);
 
-        Permission::firstOrCreate(['name' => 'map-components.create', 'guard_name' => 'api']);
-        Permission::firstOrCreate(['name' => 'map-components.read', 'guard_name' => 'api']);
-        Permission::firstOrCreate(['name' => 'map-components.update', 'guard_name' => 'api']);
-        Permission::firstOrCreate(['name' => 'map-components.delete', 'guard_name' => 'api']);
+        Permission::firstOrCreate(['name' => 'components.create', 'guard_name' => 'api']);
+        Permission::firstOrCreate(['name' => 'components.read', 'guard_name' => 'api']);
+        Permission::firstOrCreate(['name' => 'components.update', 'guard_name' => 'api']);
+        Permission::firstOrCreate(['name' => 'components.delete', 'guard_name' => 'api']);
 
         Permission::firstOrCreate(['name' => 'categories.create', 'guard_name' => 'api']);
         Permission::firstOrCreate(['name' => 'categories.read', 'guard_name' => 'api']);
@@ -168,10 +168,10 @@ class RolesAndPermissionsSeeder extends Seeder
             'plugins.update',
             'plugins.delete',
 
-            'map-components.create',
-            'map-components.read',
-            'map-components.update',
-            'map-components.delete',
+            'components.create',
+            'components.read',
+            'components.update',
+            'components.delete',
 
             'categories.create',
             'categories.read',

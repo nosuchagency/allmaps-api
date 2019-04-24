@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\RequiredIdRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class VideoContentRequest extends FormRequest
@@ -26,7 +27,8 @@ class VideoContentRequest extends FormRequest
         return [
             'name' => 'required',
             'yt_url' => 'required|url',
-            'category' => '',
+            'category' => ['nullable', new RequiredIdRule],
+            'category.id' => 'exists:categories,id',
             'tags' => 'array',
             'tags.*.id' => 'required|exists:tags,id'
         ];

@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\RequiredIdRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class TemplateRequest extends FormRequest
@@ -30,7 +31,8 @@ class TemplateRequest extends FormRequest
             'activated' => 'boolean',
             'hook' => '',
             'layout' => '',
-            'category' => '',
+            'category' => ['nullable', new RequiredIdRule],
+            'category.id' => 'exists:categories,id',
             'tags' => 'array',
             'tags.*.id' => 'required|exists:tags,id'
         ];

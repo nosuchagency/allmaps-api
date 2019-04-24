@@ -38,7 +38,10 @@ class FixturesController extends Controller
      */
     public function index(Request $request)
     {
-        $fixtures = Fixture::withRelations($request)->get();
+        $fixtures = Fixture::query()
+            ->withRelations($request)
+            ->filter($request)
+            ->get();
 
         return response()->json(FixtureResource::collection($fixtures), Response::HTTP_OK);
     }
@@ -50,7 +53,10 @@ class FixturesController extends Controller
      */
     public function paginated(Request $request)
     {
-        $fixtures = Fixture::withRelations($request)->filter($request)->paginate($this->paginationNumber());
+        $fixtures = Fixture::query()
+            ->withRelations($request)
+            ->filter($request)
+            ->paginate($this->paginationNumber());
 
         return FixtureResource::collection($fixtures);
     }

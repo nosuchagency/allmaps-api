@@ -22,8 +22,8 @@ class CreatePlacesTable extends Migration
             $table->string('city')->nullable();
             $table->string('image')->nullable();
 
-            $table->string('lat');
-            $table->string('lng');
+            $table->string('latitude')->nullable();
+            $table->string('longitude')->nullable();
 
             $table->boolean('activated')->default(false);
 

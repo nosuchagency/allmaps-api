@@ -7,6 +7,7 @@ use App\Traits\HasCategory;
 use App\Traits\HasCreatedBy;
 use App\Traits\HasImage;
 use App\Traits\HasRelations;
+use Askedio\SoftCascade\Traits\SoftCascadeTrait;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -14,9 +15,16 @@ use Spatie\Activitylog\Traits\LogsActivity;
 
 class Fixture extends Model
 {
-    use HasRelations, HasCategory, SoftDeletes, HasCreatedBy, HasImage, LogsActivity;
+    use HasRelations, HasCategory, SoftDeletes, HasCreatedBy, HasImage, LogsActivity, SoftCascadeTrait;
 
     const IMAGE_DIRECTORY_PATH = '/uploads/fixtures';
+
+    /**
+     * @var array
+     */
+    protected $softCascade = [
+        'locations'
+    ];
 
     /**
      * The attributes that are mass assignable.
@@ -66,7 +74,7 @@ class Fixture extends Model
      */
     public function locations()
     {
-        return $this->hasMany(MapLocation::class);
+        return $this->hasMany(Location::class);
     }
 
     /**
@@ -80,22 +88,5 @@ class Fixture extends Model
     public function scopeFilter(Builder $builder, $request)
     {
         return (new IndexFilter($request))->filter($builder);
-    }
-
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::deleting(function ($fixture) {
-            $fixture->locations->each(function ($location) {
-                $location->delete();
-            });
-        });
-
-        static::restoring(function ($fixture) {
-            $fixture->locations->each(function ($location) {
-                $location->restore();
-            });
-        });
     }
 }

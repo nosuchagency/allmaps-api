@@ -2,24 +2,27 @@
 
 namespace App\Services;
 
-use App\Http\Requests\BuildingRequest;
+use App\Contracts\ModelServiceContract;
 use App\Models\Building;
 use App\Models\Place;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
 
-class BuildingService
+class BuildingService implements ModelServiceContract
 {
     /**
-     * @param BuildingRequest $request
-     * @param Place $place
+     * @param Request $request
      *
-     * @return Building
+     * @return Model
      */
-    public function create(BuildingRequest $request, Place $place): Building
+    public function create(Request $request)
     {
         $building = new Building();
-        $building->place()->associate($place);
+        $building->place()->associate(
+            Place::find($request->input('place.id'))
+        );
 
-        $building->fill($request->only($place->getFillable()));
+        $building->fill($request->only($building->getFillable()));
         $building->setImage($request->get('image'));
 
         $building->save();
@@ -28,12 +31,12 @@ class BuildingService
     }
 
     /**
-     * @param BuildingRequest $request
-     * @param Building $building
+     * @param Model $building
+     * @param Request $request
      *
-     * @return Building
+     * @return Model
      */
-    public function update(BuildingRequest $request, Building $building): Building
+    public function update(Model $building, Request $request)
     {
         $building->fill($request->only($building->getFillable()));
         $building->setImage($request->get('image'));

@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\RequiredIdRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class BeaconRequest extends FormRequest
@@ -26,14 +27,15 @@ class BeaconRequest extends FormRequest
         return [
             'name' => 'required',
             'description' => '',
-            'proximity_uuid' => '',
-            'major' => 'numeric|nullable',
-            'minor' => 'numeric|nullable',
-            'eddystone_uid' => '',
-            'eddystone_url' => '',
+            'proximity_uuid' => 'nullable|uuid',
+            'major' => 'nullable|integer|between:0,65535',
+            'minor' => 'nullable|integer|between:0,65535',
+            'eddystone_uid' => 'nullable|uuid',
+            'eddystone_url' => 'nullable|url',
             'eddystone_tlm' => '',
             'eddystone_eid' => '',
-            'category' => '',
+            'category' => ['nullable', new RequiredIdRule],
+            'category.id' => 'exists:categories,id',
             'tags' => 'array',
             'tags.*.id' => 'required|exists:tags,id'
         ];

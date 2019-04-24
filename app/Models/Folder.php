@@ -12,6 +12,7 @@ use App\Models\Content\WebContent;
 use App\Traits\HasCategory;
 use App\Traits\HasCreatedBy;
 use App\Traits\HasRelations;
+use Askedio\SoftCascade\Traits\SoftCascadeTrait;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -19,9 +20,19 @@ use Spatie\Activitylog\Traits\LogsActivity;
 
 class Folder extends Model
 {
-    use HasRelations, HasCategory, SoftDeletes, HasCreatedBy, LogsActivity;
+    use HasRelations, HasCategory, SoftDeletes, HasCreatedBy, LogsActivity, SoftCascadeTrait;
 
+    /**
+     * @var string
+     */
     protected $table = 'content_folders';
+
+    /**
+     * @var array
+     */
+    protected $softCascade = [
+        'contents'
+    ];
 
     /**
      * The attributes that are mass assignable.
@@ -144,6 +155,11 @@ class Folder extends Model
         return $this->hasMany(WebContent::class);
     }
 
+    /**
+     * @param $query
+     *
+     * @return mixed
+     */
     public function scopePrimary($query)
     {
         return $query->where('primary', true);
@@ -152,17 +168,6 @@ class Folder extends Model
     public static function boot()
     {
         parent::boot();
-
-        static::deleting(function ($folder) {
-            $folder->contents->each(function ($content) {
-                $content->delete();
-            });
-        });
-        static::restoring(function ($folder) {
-            $folder->contents->each(function ($content) {
-                $content->restore();
-            });
-        });
 
         static::addGlobalScope('order', function (Builder $builder) {
             $builder->orderBy('order');

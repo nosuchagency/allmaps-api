@@ -7,6 +7,7 @@ use App\Traits\HasCategory;
 use App\Traits\HasCreatedBy;
 use App\Traits\HasImage;
 use App\Traits\HasRelations;
+use Askedio\SoftCascade\Traits\SoftCascadeTrait;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -15,9 +16,16 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
 
 class Place extends Model
 {
-    use HasRelations, HasCategory, SoftDeletes, HasCreatedBy, LogsActivity, HasImage, HasRelationships;
+    use HasRelations, HasCategory, SoftDeletes, HasCreatedBy, LogsActivity, HasImage, HasRelationships, SoftCascadeTrait;
 
     const IMAGE_DIRECTORY_PATH = '/uploads/places';
+
+    /**
+     * @var array
+     */
+    protected $softCascade = [
+        'buildings'
+    ];
 
     /**
      * The attributes that are mass assignable.
@@ -29,8 +37,8 @@ class Place extends Model
         'address',
         'postcode',
         'city',
-        'lat',
-        'lng',
+        'latitude',
+        'longitude',
         'category_id',
         'created_by',
         'category',
@@ -43,8 +51,8 @@ class Place extends Model
      * @var array
      */
     protected $casts = [
-        'lat' => 'float',
-        'lng' => 'float',
+        'latitude' => 'float',
+        'longitude' => 'float',
         'activated' => 'boolean'
     ];
 
@@ -90,7 +98,7 @@ class Place extends Model
      */
     public function locations()
     {
-        return $this->hasManyDeep(MapLocation::class, [Building::class, Floor::class]);
+        return $this->hasManyDeep(Location::class, [Building::class, Floor::class]);
     }
 
     /**
@@ -105,21 +113,4 @@ class Place extends Model
     {
         return (new IndexFilter($request))->filter($builder);
     }
-
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::deleting(function ($place) {
-            $place->buildings->each(function ($building) {
-                $building->delete();
-            });
-        });
-        static::restoring(function ($place) {
-            $place->buildings->each(function ($building) {
-                $building->restore();
-            });
-        });
-    }
-
 }
