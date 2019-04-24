@@ -26,7 +26,7 @@ class FolderRequest extends FormRequest
     {
         return [
             'name' => 'required',
-            'category' => [new RequiredIdRule],
+            'category' => ['nullable', new RequiredIdRule],
             'category.id' => 'exists:categories,id',
             'tags' => 'array',
             'tags.*.id' => 'required|exists:tags,id'

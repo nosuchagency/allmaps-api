@@ -2,10 +2,7 @@
 
 namespace Tests\Unit;
 
-use App\Models\Beacon;
 use App\Models\Layout;
-use App\Models\MapLocation;
-use App\Models\Template;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Database\Eloquent\Collection;

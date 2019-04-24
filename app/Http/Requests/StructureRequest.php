@@ -23,7 +23,6 @@ class StructureRequest extends FormRequest
      */
     public function rules()
     {
-
         $rules = [
             'name' => '',
             'coordinates' => 'array',
