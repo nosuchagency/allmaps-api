@@ -83,7 +83,7 @@ class LocationService implements ModelServiceContract
                 $attributes = [
                     'searchable_id' => $searchable['id'],
                     'identifier' => $field['identifier'],
-                    'map_location_id' => $location->id
+                    'location_id' => $location->id
                 ];
 
                 LocationField::updateOrCreate($attributes, [
