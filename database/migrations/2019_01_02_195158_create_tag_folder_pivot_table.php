@@ -19,7 +19,7 @@ class CreateTagFolderPivotTable extends Migration
             $table->unsignedInteger('folder_id');
             $table->foreign('folder_id')
                 ->references('id')
-                ->on('content_folders')
+                ->on('folders')
                 ->onDelete('cascade');
         });
     }

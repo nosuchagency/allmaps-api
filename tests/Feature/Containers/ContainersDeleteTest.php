@@ -36,7 +36,7 @@ class ContainersDeleteTest extends TestCase
 
         $container = factory(Container::class)->create();
         $this->deleteJson(route('containers.destroy', ['container' => $container]))->assertStatus(200);
-        $this->assertSoftDeleted('content_containers', ['id' => $container->id]);
+        $this->assertSoftDeleted('containers', ['id' => $container->id]);
     }
 
     /** @test */

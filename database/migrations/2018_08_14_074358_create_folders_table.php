@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateContentContainersTable extends Migration
+class CreateFoldersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,18 @@ class CreateContentContainersTable extends Migration
      */
     public function up()
     {
-        Schema::create('content_containers', function (Blueprint $table) {
+        Schema::create('folders', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->string('description')->nullable();
-            $table->boolean('folders_enabled')->default(false);
+            $table->boolean('primary')->default(false);
+
+            $table->unsignedInteger('container_id');
+            $table->foreign('container_id')
+                ->references('id')
+                ->on('containers')
+                ->onDelete('cascade');
+
+            $table->unsignedInteger('order')->nullable();
 
             $table->category();
             $table->createdBy();
@@ -33,6 +40,6 @@ class CreateContentContainersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('content_containers');
+        Schema::dropIfExists('folders');
     }
 }

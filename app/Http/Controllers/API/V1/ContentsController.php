@@ -5,58 +5,105 @@ namespace App\Http\Controllers\API\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\BulkDeleteRequest;
 use App\Http\Requests\ContentRequest;
-use App\Models\Container;
+use App\Http\Resources\ContentResource;
 use App\Models\Content\Content;
-use App\Models\Folder;
+use App\Services\ContentService;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class ContentsController extends Controller
 {
 
     /**
-     * @param ContentRequest $request
-     * @param Container $container
-     * @param Folder $folder
+     * @var ContentService
+     */
+    protected $contentService;
+
+    /**
+     * ContentsController constructor.
+     *
+     * @param ContentService $contentService
+     */
+    public function __construct(ContentService $contentService)
+    {
+        $this->middleware('permission:contents.create')->only(['store']);
+        $this->middleware('permission:contents.read')->only(['index', 'paginated', 'show']);
+        $this->middleware('permission:contents.update')->only(['update']);
+        $this->middleware('permission:contents.delete')->only(['destroy', 'bulkDestroy']);
+
+        $this->contentService = $contentService;
+    }
+
+    /**
+     * @param Request $request
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(ContentRequest $request, Container $container, Folder $folder)
+    public function index(Request $request)
     {
-        $contentArgs = array_merge(
-            $request->validated(), [
-                'container_id' => $container->id
-            ]
-        );
+        $contents = Content::query()
+            ->filter($request)
+            ->get();
 
-        $content = $folder->contents()->create($contentArgs);
+        return response()->json(ContentResource::collection($contents), Response::HTTP_OK);
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     */
+    public function paginated(Request $request)
+    {
+        $contents = Content::query()
+            ->filter($request)
+            ->paginate($this->paginationNumber());
+
+        return ContentResource::collection($contents);
+    }
+
+    /**
+     * @param ContentRequest $request
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function store(ContentRequest $request)
+    {
+        $content = $this->contentService->create($request);
 
         return response()->json($content, Response::HTTP_CREATED);
     }
 
     /**
-     * @param ContentRequest $request
-     * @param Container $container
-     * @param Folder $folder
      * @param Content $content
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(ContentRequest $request, Container $container, Folder $folder, Content $content)
+    public function show(Content $content)
     {
-        $content->fill($request->only('title'))->save();
+        return response()->json(new ContentResource($content), Response::HTTP_OK);
+    }
+
+    /**
+     * @param ContentRequest $request
+     * @param Content $content
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function update(ContentRequest $request, Content $content)
+    {
+        $content = $this->contentService->update($content, $request);
 
         return response()->json($content, Response::HTTP_OK);
     }
 
     /**
-     * @param Container $container
-     * @param Folder $folder
      * @param Content $content
      *
      * @return \Illuminate\Http\JsonResponse
      * @throws \Exception
      */
-    public function destroy(Container $container, Folder $folder, Content $content)
+    public function destroy(Content $content)
     {
         $content->delete();
 

@@ -2,6 +2,7 @@
 
 namespace App\Models\Content;
 
+use App\Filters\IndexFilter;
 use App\Models\Container;
 use App\Models\Folder;
 use App\Models\Tag;
@@ -10,33 +11,23 @@ use App\Traits\HasCreatedBy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Nanigans\SingleTableInheritance\SingleTableInheritanceTrait;
 use Spatie\Activitylog\Traits\LogsActivity;
+use Tightenco\Parental\HasChildren;
 
 class Content extends Model
 {
-    use HasCategory, SoftDeletes, HasCreatedBy, LogsActivity, SingleTableInheritanceTrait;
-
-    /**
-     * @var string
-     */
-    protected $table = 'content';
-
-    /**
-     * @var string
-     */
-    protected static $singleTableTypeField = 'type';
+    use HasCategory, SoftDeletes, HasCreatedBy, LogsActivity, HasChildren;
 
     /**
      * @var array
      */
-    protected static $singleTableSubclasses = [
-        FileContent::class,
-        GalleryContent::class,
-        ImageContent::class,
-        TextContent::class,
-        VideoContent::class,
-        WebContent::class
+    protected $childTypes = [
+        'file' => FileContent::class,
+        'gallery' => GalleryContent::class,
+        'image' => ImageContent::class,
+        'text' => TextContent::class,
+        'video' => VideoContent::class,
+        'web' => WebContent::class
     ];
 
     /**
@@ -53,7 +44,6 @@ class Content extends Model
         'yt_url',
         'order',
         'folder_id',
-        'container_id',
         'content_id',
         'created_by',
         'category_id',
@@ -123,5 +113,18 @@ class Content extends Model
         static::addGlobalScope('order', function (Builder $builder) {
             $builder->orderBy('order');
         });
+    }
+
+    /**
+     * Process filters
+     *
+     * @param Builder $builder
+     * @param $request
+     *
+     * @return Builder $builder
+     */
+    public function scopeFilter(Builder $builder, $request)
+    {
+        return (new IndexFilter($request))->filter($builder);
     }
 }
