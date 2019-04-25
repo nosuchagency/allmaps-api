@@ -3,7 +3,6 @@
 namespace Tests\Feature\Contents;
 
 use App\Models\Category;
-use App\Models\Container;
 use App\Models\Content\Content;
 use App\Models\Folder;
 use App\Models\Tag;
@@ -55,6 +54,19 @@ class ContentsCreateTest extends TestCase
         $this->create(['folder' => null])->assertJsonValidationErrors('folder');
     }
 
+    /** @test */
+    public function category_needs_to_be_a_valid_category_object()
+    {
+        $this->create(['category' => ['id' => 2]])->assertJsonValidationErrors(['category.id']);
+        $this->create(['category' => []])->assertJsonValidationErrors(['category']);
+    }
+
+    /** @test */
+    public function tags_needs_to_be_an_array_of_valid_tag_objects()
+    {
+        $this->create(['tags' => 'not-a-valid-tags-array'])->assertJsonValidationErrors(['tags']);
+    }
+
     /**
      * @param array $attributes
      *
@@ -81,7 +93,9 @@ class ContentsCreateTest extends TestCase
         return array_merge([
             'name' => $this->faker->title,
             'type' => $this->faker->randomElement(['image', 'video', 'text', 'gallery', 'file', 'web']),
-            'folder' => $folder
+            'folder' => $folder,
+            'category' => factory(Category::class)->create(),
+            'tags' => factory(Tag::class, 2)->create()
         ], $overrides);
     }
 }

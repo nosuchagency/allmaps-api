@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\RequiredIdRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -26,10 +27,15 @@ class ContentRequest extends FormRequest
     {
         $rules = [
             'name' => 'required',
+            'url' => 'url',
             'type' => [
                 'required',
                 Rule::in(['image', 'video', 'text', 'gallery', 'file', 'web']),
-            ]
+            ],
+            'category' => ['nullable', new RequiredIdRule],
+            'category.id' => 'exists:categories,id',
+            'tags' => 'array',
+            'tags.*.id' => 'required|exists:tags,id'
         ];
 
         if ($this->method() === 'POST') {
