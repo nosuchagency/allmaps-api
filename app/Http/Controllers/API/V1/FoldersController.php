@@ -9,63 +9,72 @@ use App\Http\Resources\FolderResource;
 use App\Models\Container;
 use App\Models\Folder;
 use App\Models\Tag;
+use App\Services\FolderService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class FoldersController extends Controller
 {
+    /**
+     * @var FolderService
+     */
+    protected $folderService;
+
 
     /**
      * FoldersController constructor.
+     *
+     * @param FolderService $folderService
      */
-    public function __construct()
+    public function __construct(FolderService $folderService)
     {
         $this->middleware('permission:folders.create')->only(['store']);
         $this->middleware('permission:folders.read')->only(['index', 'show']);
         $this->middleware('permission:folders.update')->only(['update']);
         $this->middleware('permission:folders.delete')->only(['destroy', 'bulkDestroy']);
+
+        $this->folderService = $folderService;
     }
 
     /**
      *
      * @param Request $request
-     * @param Container $container
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function index(Request $request, Container $container)
+    public function index(Request $request)
     {
-        $folders = Folder::withRelations($request)->get();
+        $folders = Folder::query()
+            ->withRelations($request)
+            ->filter($request)
+            ->get();
 
         return response()->json(FolderResource::collection($folders), Response::HTTP_OK);
     }
 
     /**
      * @param Request $request
-     * @param Container $container
      *
      * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
-    public function paginated(Request $request, Container $container)
+    public function paginated(Request $request)
     {
-        $buildings = Folder::withRelations($request)->filter($request)->paginate($this->paginationNumber());
+        $buildings = Folder::query()
+            ->withRelations($request)
+            ->filter($request)
+            ->paginate($this->paginationNumber());
 
         return FolderResource::collection($buildings);
     }
 
     /**
      * @param FolderRequest $request
-     * @param Container $container
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(FolderRequest $request, Container $container)
+    public function store(FolderRequest $request)
     {
-        $folder = $container->folders()->create($request->validated());
-
-        foreach ($request->get('tags', []) as $tag) {
-            $folder->tags()->attach(Tag::find($tag['id']));
-        }
+        $folder = $this->folderService->create($request);
 
         $folder->load($folder->relationships);
 
@@ -73,12 +82,11 @@ class FoldersController extends Controller
     }
 
     /**
-     * @param Container $container
      * @param Folder $folder
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function show(Container $container, Folder $folder)
+    public function show(Folder $folder)
     {
         $folder->load($folder->relationships);
 
@@ -87,20 +95,13 @@ class FoldersController extends Controller
 
     /**
      * @param FolderRequest $request
-     * @param Container $container
      * @param Folder $folder
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(FolderRequest $request, Container $container, Folder $folder)
+    public function update(FolderRequest $request, Folder $folder)
     {
-        $folder->fill($request->validated())->save();
-
-        $folder->tags()->sync([]);
-
-        foreach ($request->get('tags', []) as $tag) {
-            $folder->tags()->attach(Tag::find($tag['id']));
-        }
+        $folder = $this->folderService->update($folder, $request);
 
         $folder->load($folder->relationships);
 
@@ -108,13 +109,12 @@ class FoldersController extends Controller
     }
 
     /**
-     * @param Container $container
      * @param Folder $folder
      *
      * @return \Illuminate\Http\JsonResponse
      * @throws \Exception
      */
-    public function destroy(Container $container, Folder $folder)
+    public function destroy(Folder $folder)
     {
         if ($folder->primary) {
             return response()->json(null, Response::HTTP_UNAUTHORIZED);

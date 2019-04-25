@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Unit\Models;
 
 use App\Models\Container;
 use App\Models\Content\FileContent;
@@ -39,7 +39,7 @@ class FolderTest extends TestCase
     {
         $folder = factory(Folder::class)->create();
         $folder->delete();
-        $this->assertSoftDeleted('content_folders', ['id' => $folder->id]);
+        $this->assertSoftDeleted('folders', ['id' => $folder->id]);
     }
 
     /** @test */
@@ -47,12 +47,11 @@ class FolderTest extends TestCase
     {
         $folder = factory(Folder::class)->create();
         $content = factory(FileContent::class)->create([
-            'folder_id' => $folder->id,
-            'container_id' => $folder->container_id
+            'folder_id' => $folder->id
         ]);
 
         $folder->delete();
 
-        $this->assertSoftDeleted('content', ['id' => $content->id]);
+        $this->assertSoftDeleted('contents', ['id' => $content->id]);
     }
 }

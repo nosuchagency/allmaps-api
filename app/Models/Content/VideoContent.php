@@ -2,10 +2,9 @@
 
 namespace App\Models\Content;
 
+use Tightenco\Parental\HasParent;
+
 class VideoContent extends Content
 {
-    /**
-     * @var string
-     */
-    protected static $singleTableType = 'video';
+    use HasParent;
 }

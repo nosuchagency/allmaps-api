@@ -19,7 +19,7 @@ class CreateTagContentPivotTable extends Migration
             $table->unsignedInteger('content_id');
             $table->foreign('content_id')
                 ->references('id')
-                ->on('content')
+                ->on('contents')
                 ->onDelete('cascade');
         });
     }

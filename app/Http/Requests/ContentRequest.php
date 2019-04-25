@@ -24,13 +24,19 @@ class ContentRequest extends FormRequest
      */
     public function rules()
     {
-        return [
+        $rules = [
             'name' => 'required',
             'type' => [
                 'required',
                 Rule::in(['image', 'video', 'text', 'gallery', 'file', 'web']),
-            ],
-            'file' => '',
+            ]
         ];
+
+        if ($this->method() === 'POST') {
+            $rules['folder'] = 'required';
+            $rules['folder.id'] = 'required|exists:folders,id,deleted_at,NULL';
+        }
+
+        return $rules;
     }
 }

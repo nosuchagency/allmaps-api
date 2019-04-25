@@ -2,10 +2,9 @@
 
 namespace App\Models\Content;
 
+use Tightenco\Parental\HasParent;
+
 class GalleryContent extends Content
 {
-    /**
-     * @var string
-     */
-    protected static $singleTableType = 'gallery';
+    use HasParent;
 }

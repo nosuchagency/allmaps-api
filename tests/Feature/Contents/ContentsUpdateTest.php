@@ -1,13 +1,13 @@
 <?php
 
-namespace Tests\Feature\Containers;
+namespace Tests\Feature\Contents;
 
 use App\Models\Container;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class ContainersUpdateTest extends TestCase
+class ContentsUpdateTest extends TestCase
 {
     use RefreshDatabase, WithFaker;
 

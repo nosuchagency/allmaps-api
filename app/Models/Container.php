@@ -19,11 +19,6 @@ class Container extends Model
     use HasRelations, HasCategory, SoftDeletes, HasCreatedBy, LogsActivity, SoftCascadeTrait;
 
     /**
-     * @var string
-     */
-    protected $table = 'content_containers';
-
-    /**
      * @var array
      */
     protected $softCascade = [
@@ -77,6 +72,14 @@ class Container extends Model
     ];
 
     /**
+     * Get the contents for the container through the folder
+     */
+    public function contents()
+    {
+        return $this->hasManyThrough(Content::class, Folder::class);
+    }
+
+    /**
      * The tags that belong to the container
      */
     public function tags()
@@ -85,19 +88,11 @@ class Container extends Model
     }
 
     /**
-     * Get the folders for the content.
+     * Get the folders for the container
      */
     public function folders()
     {
         return $this->hasMany(Folder::class);
-    }
-
-    /**
-     * Get the contents for the content container.
-     */
-    public function contents()
-    {
-        return $this->hasMany(Content::class);
     }
 
     /**

@@ -24,12 +24,19 @@ class FolderRequest extends FormRequest
      */
     public function rules()
     {
-        return [
+        $rules = [
             'name' => 'required',
             'category' => ['nullable', new RequiredIdRule],
             'category.id' => 'exists:categories,id',
             'tags' => 'array',
             'tags.*.id' => 'required|exists:tags,id'
         ];
+
+        if ($this->method() === 'POST') {
+            $rules['container'] = 'required';
+            $rules['container.id'] = 'required|exists:containers,id,deleted_at,NULL';
+        }
+
+        return $rules;
     }
 }

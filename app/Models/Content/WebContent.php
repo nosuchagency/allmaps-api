@@ -2,10 +2,9 @@
 
 namespace App\Models\Content;
 
+use Tightenco\Parental\HasParent;
+
 class WebContent extends Content
 {
-    /**
-     * @var string
-     */
-    protected static $singleTableType = 'web';
+    use HasParent;
 }

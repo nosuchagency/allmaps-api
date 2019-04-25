@@ -2,13 +2,8 @@
 
 namespace App\Models;
 
+use App\Filters\IndexFilter;
 use App\Models\Content\Content;
-use App\Models\Content\FileContent;
-use App\Models\Content\GalleryContent;
-use App\Models\Content\ImageContent;
-use App\Models\Content\TextContent;
-use App\Models\Content\VideoContent;
-use App\Models\Content\WebContent;
 use App\Traits\HasCategory;
 use App\Traits\HasCreatedBy;
 use App\Traits\HasRelations;
@@ -21,11 +16,6 @@ use Spatie\Activitylog\Traits\LogsActivity;
 class Folder extends Model
 {
     use HasRelations, HasCategory, SoftDeletes, HasCreatedBy, LogsActivity, SoftCascadeTrait;
-
-    /**
-     * @var string
-     */
-    protected $table = 'content_folders';
 
     /**
      * @var array
@@ -74,13 +64,7 @@ class Folder extends Model
      */
     public $relationships = [
         'tags',
-        'contents',
-        'images',
-        'videos',
-        'files',
-        'galleries',
-        'texts',
-        'web'
+        'contents'
     ];
 
     /**
@@ -108,54 +92,6 @@ class Folder extends Model
     }
 
     /**
-     * Get the images for the folder.
-     */
-    public function images()
-    {
-        return $this->hasMany(ImageContent::class);
-    }
-
-    /**
-     * Get the videos for the folder.
-     */
-    public function videos()
-    {
-        return $this->hasMany(VideoContent::class);
-    }
-
-    /**
-     * Get the files for the folder.
-     */
-    public function files()
-    {
-        return $this->hasMany(FileContent::class);
-    }
-
-    /**
-     * Get the galleries for the folder.
-     */
-    public function galleries()
-    {
-        return $this->hasMany(GalleryContent::class);
-    }
-
-    /**
-     * Get the texts for the folder.
-     */
-    public function texts()
-    {
-        return $this->hasMany(TextContent::class);
-    }
-
-    /**
-     * Get the web links for the folder.
-     */
-    public function web()
-    {
-        return $this->hasMany(WebContent::class);
-    }
-
-    /**
      * @param $query
      *
      * @return mixed
@@ -172,5 +108,18 @@ class Folder extends Model
         static::addGlobalScope('order', function (Builder $builder) {
             $builder->orderBy('order');
         });
+    }
+
+    /**
+     * Process filters
+     *
+     * @param Builder $builder
+     * @param $request
+     *
+     * @return Builder $builder
+     */
+    public function scopeFilter(Builder $builder, $request)
+    {
+        return (new IndexFilter($request))->filter($builder);
     }
 }
