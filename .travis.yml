@@ -3,6 +3,11 @@ language: php
 php:
   - 7.2
 
+branches:
+  only:
+  - master
+  - development
+
 before_script:
   - cp .env.travis .env
   - composer self-update
