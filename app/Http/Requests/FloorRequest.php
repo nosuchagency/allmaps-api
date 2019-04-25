@@ -23,9 +23,16 @@ class FloorRequest extends FormRequest
      */
     public function rules()
     {
-        return [
+        $rules = [
             'name' => 'required',
             'level' => 'nullable|integer'
         ];
+
+        if ($this->method() === 'POST') {
+            $rules['building'] = 'required';
+            $rules['building.id'] = 'required|exists:buildings,id,deleted_at,NULL';
+        }
+
+        return $rules;
     }
 }

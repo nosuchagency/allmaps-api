@@ -3,10 +3,12 @@
 namespace App\Pivots;
 
 use App\Models\Rule;
+use Askedio\SoftCascade\Traits\SoftCascadeTrait;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
 class BeaconContainer extends Pivot
 {
+
     /**
      * The attributes that are mass assignable.
      *

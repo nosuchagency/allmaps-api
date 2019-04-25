@@ -27,9 +27,6 @@ class CreateBeaconsTable extends Migration
             $table->string('eddystone_tlm')->nullable();
             $table->string('eddystone_eid')->nullable();
 
-            $table->string('lat')->nullable();
-            $table->string('lng')->nullable();
-
             $table->category();
             $table->createdBy();
             $table->timestamps();

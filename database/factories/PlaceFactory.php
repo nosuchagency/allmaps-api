@@ -18,6 +18,10 @@ $factory->define(App\Models\Place::class, function (Faker $faker) {
         'name' => $faker->company,
         'address' => $faker->address,
         'postcode' => $faker->postcode,
-        'city' => $faker->city
+        'city' => $faker->city,
+        'image' => '',
+        'latitude' => $faker->latitude,
+        'longitude' => $faker->longitude,
+        'category' => null
     ];
 });

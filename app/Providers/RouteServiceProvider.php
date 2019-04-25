@@ -25,13 +25,6 @@ class RouteServiceProvider extends ServiceProvider
     public function boot()
     {
         parent::boot();
-
-        Route::bind('permission', function ($value) {
-
-            $permission = Permission::where('name', $value)->first();
-
-            return $permission ?? abort(404);
-        });
     }
 
     /**
@@ -41,7 +34,7 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function map()
     {
-        $this->mapApiRoutes();
+        $this->mapApiV1Routes();
         $this->mapWebRoutes();
     }
 
@@ -65,16 +58,16 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    protected function mapApiRoutes()
+    protected function mapApiV1Routes()
     {
         Route::prefix('json')
             ->middleware('web')
             ->namespace($this->namespace . '\API\V1')
-            ->group(base_path('routes/api.php'));
+            ->group(base_path('routes/api/v1/api.php'));
 
         Route::prefix('api/v1')
             ->middleware(['api'])
             ->namespace($this->namespace . '\API\V1')
-            ->group(base_path('routes/api.php'));
+            ->group(base_path('routes/api/v1/api.php'));
     }
 }

@@ -2,18 +2,20 @@
 
 namespace App\Services;
 
-use App\Http\Requests\PlaceRequest;
+use App\Contracts\ModelServiceContract;
 use App\Models\Place;
 use App\Models\Tag;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
 
-class PlaceService
+class PlaceService implements ModelServiceContract
 {
     /**
-     * @param PlaceRequest $request
+     * @param Request $request
      *
-     * @return Place
+     * @return Model
      */
-    public function create(PlaceRequest $request): Place
+    public function create(Request $request)
     {
         $place = new Place();
         $place->fill($request->only($place->getFillable()));
@@ -28,12 +30,12 @@ class PlaceService
     }
 
     /**
-     * @param PlaceRequest $request
-     * @param Place $place
+     * @param Request $request
+     * @param Model $place
      *
-     * @return Place
+     * @return Model
      */
-    public function update(PlaceRequest $request, Place $place): Place
+    public function update(Model $place, Request $request)
     {
         $place->fill($request->only($place->getFillable()));
         $place->setImage($request->get('image'));

@@ -2,18 +2,28 @@
 
 namespace App\Models;
 
+use App\Filters\IndexFilter;
 use App\Traits\HasCreatedBy;
 use App\Traits\HasImage;
 use App\Traits\HasRelations;
+use Askedio\SoftCascade\Traits\SoftCascadeTrait;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 class Building extends Model
 {
-    use HasRelations, SoftDeletes, HasCreatedBy, LogsActivity, HasImage;
+    use HasRelations, SoftDeletes, HasCreatedBy, LogsActivity, HasImage, SoftCascadeTrait;
 
     const IMAGE_DIRECTORY_PATH = '/uploads/buildings';
+
+    /**
+     * @var array
+     */
+    protected $softCascade = [
+        'floors'
+    ];
 
     /**
      * The attributes that are mass assignable.
@@ -67,22 +77,19 @@ class Building extends Model
      */
     public function locations()
     {
-        return $this->hasManyThrough(MapLocation::class, Floor::class);
+        return $this->hasManyThrough(Location::class, Floor::class);
     }
 
-    protected static function boot()
+    /**
+     * Process filters
+     *
+     * @param Builder $builder
+     * @param $request
+     *
+     * @return Builder $builder
+     */
+    public function scopeFilter(Builder $builder, $request)
     {
-        parent::boot();
-
-        static::deleting(function ($building) {
-            $building->floors->each(function ($floor) {
-                $floor->delete();
-            });
-        });
-        static::restoring(function ($building) {
-            $building->floors->each(function ($floor) {
-                $floor->restore();
-            });
-        });
+        return (new IndexFilter($request))->filter($builder);
     }
 }

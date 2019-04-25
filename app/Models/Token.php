@@ -29,12 +29,15 @@ class Token extends Model implements AuthorizableContract
         'created_by'
     ];
 
+
     /**
+     * @param int $count
+     *
      * @return \Illuminate\Database\Eloquent\Collection|\Illuminate\Support\Collection
      */
-    public function mostRecentActions()
+    public function recentActions($count = 20)
     {
-        return $this->actions()->orderBy('id', 'desc')->take(20)->get();
+        return $this->actions()->orderBy('id', 'desc')->take($count)->get();
     }
 
     /**

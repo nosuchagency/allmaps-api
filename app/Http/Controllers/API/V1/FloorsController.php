@@ -7,65 +7,72 @@ use App\Http\Requests\BulkDeleteRequest;
 use App\Http\Requests\FloorRequest;
 use App\Http\Requests\SearchRequest;
 use App\Http\Resources\FloorResource;
-use App\Http\Resources\MapLocationResource;
-use App\Models\Building;
+use App\Http\Resources\LocationResource;
 use App\Models\Floor;
-use App\Models\Place;
+use App\Services\FloorService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class FloorsController extends BaseController
 {
+    /**
+     * @var FloorService
+     */
+    protected $floorService;
 
     /**
      * FloorsController constructor.
+     *
+     * @param FloorService $floorService
      */
-    public function __construct()
+    public function __construct(FloorService $floorService)
     {
         $this->middleware('permission:floors.create')->only(['store']);
         $this->middleware('permission:floors.read')->only(['index', 'paginated', 'show']);
         $this->middleware('permission:floors.update')->only(['update']);
         $this->middleware('permission:floors.delete')->only(['destroy', 'bulkDestroy']);
+
+        $this->floorService = $floorService;
     }
 
     /**
      * @param Request $request
-     * @param Place $place
-     * @param Building $building
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function index(Request $request, Place $place, Building $building)
+    public function index(Request $request)
     {
-        $floors = $building->floors()->withRelations($request)->get();
+        $floors = Floor::query()
+            ->withRelations($request)
+            ->filter($request)
+            ->get();
 
         return response()->json(FloorResource::collection($floors), Response::HTTP_OK);
     }
 
     /**
      * @param Request $request
-     * @param Place $place
-     * @param Building $building
      *
      * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
-    public function paginated(Request $request, Place $place, Building $building)
+    public function paginated(Request $request)
     {
-        $floors = $building->floors()->withRelations($request)->filter($request)->paginate($this->paginationNumber());
+        $floors = Floor::query()
+            ->withRelations($request)
+            ->filter($request)
+            ->paginate($this->paginationNumber());
 
         return FloorResource::collection($floors);
     }
 
     /**
      * @param FloorRequest $request
-     * @param Place $place
-     * @param Building $building
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(FloorRequest $request, Place $place, Building $building)
+    public function store(FloorRequest $request)
     {
-        $floor = $building->floors()->create($request->validated());
+        $floor = $this->floorService->create($request);
 
         $floor->load($floor->relationships);
 
@@ -73,13 +80,11 @@ class FloorsController extends BaseController
     }
 
     /**
-     * @param Place $place
-     * @param Building $building
      * @param Floor $floor
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function show(Place $place, Building $building, Floor $floor)
+    public function show(Floor $floor)
     {
         $floor->load($floor->relationships);
 
@@ -88,15 +93,13 @@ class FloorsController extends BaseController
 
     /**
      * @param FloorRequest $request
-     * @param Place $place
-     * @param Building $building
      * @param Floor $floor
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(FloorRequest $request, Place $place, Building $building, Floor $floor)
+    public function update(FloorRequest $request, Floor $floor)
     {
-        $floor->fill($request->validated())->save();
+        $floor = $this->floorService->update($floor, $request);
 
         $floor->load($floor->relationships);
 
@@ -104,14 +107,12 @@ class FloorsController extends BaseController
     }
 
     /**
-     * @param Place $place
-     * @param Building $building
      * @param Floor $floor
      *
      * @return \Illuminate\Http\JsonResponse
      * @throws \Exception
      */
-    public function destroy(Place $place, Building $building, Floor $floor)
+    public function destroy(Floor $floor)
     {
         $floor->delete();
 
@@ -136,16 +137,14 @@ class FloorsController extends BaseController
 
     /**
      * @param SearchRequest $request
-     * @param Place $place
-     * @param Building $building
      * @param Floor $floor
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function search(SearchRequest $request, Place $place, Building $building, Floor $floor)
+    public function search(SearchRequest $request, Floor $floor)
     {
         $locations = $this->searchForLocations($request->all(), $floor->locations()->getQuery());
 
-        return response()->json(MapLocationResource::collection($locations), Response::HTTP_OK);
+        return response()->json(LocationResource::collection($locations), Response::HTTP_OK);
     }
 }

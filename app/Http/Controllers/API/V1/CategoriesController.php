@@ -27,11 +27,15 @@ class CategoriesController extends Controller
     }
 
     /**
+     * @param Request $request
+     *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function index()
+    public function index(Request $request)
     {
-        $categories = Category::all();
+        $categories = Category::query()
+            ->filter($request)
+            ->get();
 
         return response()->json(CategoryResource::collection($categories), Response::HTTP_OK);
     }
@@ -43,7 +47,9 @@ class CategoriesController extends Controller
      */
     public function paginated(Request $request)
     {
-        $categories = Category::filter($request)->paginate($this->paginationNumber());
+        $categories = Category::query()
+            ->filter($request)
+            ->paginate($this->paginationNumber());
 
         return CategoryResource::collection($categories);
     }

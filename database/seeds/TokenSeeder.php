@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 
 use App\Models\Token;
 
@@ -10,7 +11,7 @@ class TokenSeeder extends Seeder
     {
         $token = Token::firstOrCreate([
             'name' => 'Seeded Token',
-            'token' => str_random(60)
+            'token' => Str::random(60)(60)
         ]);
 
         $token->assignRole('admin');

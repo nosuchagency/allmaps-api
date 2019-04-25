@@ -161,8 +161,6 @@ return [
         App\Providers\MacroServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
-        App\Providers\ViewComposerServiceProvider::class,
-
     ],
 
     /*

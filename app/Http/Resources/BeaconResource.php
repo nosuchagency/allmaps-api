@@ -29,7 +29,7 @@ class BeaconResource extends JsonResource
             'eddystone_eid' => $this->eddystone_eid,
             'creator' => $this->creator,
             'category' => new CategoryResource($this->category),
-            'locations' => MapLocationResource::collection($this->whenLoaded('locations')),
+            'locations' => LocationResource::collection($this->whenLoaded('locations')),
             'tags' => TagResource::collection($this->whenLoaded('tags')),
             'containers' => BeaconContainerResource::collection($this->whenLoaded('containers'))
         ];

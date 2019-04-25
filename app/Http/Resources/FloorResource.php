@@ -24,8 +24,8 @@ class FloorResource extends JsonResource
             'created_at' => $this->created_at->toDateTimeString(),
             'updated_at' => $this->updated_at->toDateTimeString(),
             'creator' => $this->creator,
-            'structures' => MapStructureResource::collection($this->whenLoaded('structures')),
-            'locations' => MapLocationResource::collection($this->whenLoaded('locations'))
+            'structures' => StructureResource::collection($this->whenLoaded('structures')),
+            'locations' => LocationResource::collection($this->whenLoaded('locations'))
         ];
     }
 }

@@ -34,7 +34,10 @@ class ContainersController extends Controller
      */
     public function index(Request $request)
     {
-        $containers = Container::withRelations($request)->get();
+        $containers = Container::query()
+            ->withRelations($request)
+            ->filter($request)
+            ->get();
 
         return response()->json(ContainerResource::collection($containers), Response::HTTP_OK);
     }
@@ -48,7 +51,10 @@ class ContainersController extends Controller
      */
     public function paginated(Request $request)
     {
-        $containers = Container::withRelations($request)->filter($request)->paginate($this->paginationNumber());
+        $containers = Container::query()
+            ->withRelations($request)
+            ->filter($request)
+            ->paginate($this->paginationNumber());
 
         return ContainerResource::collection($containers);
     }

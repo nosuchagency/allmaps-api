@@ -6,7 +6,7 @@ use App\Http\Controllers\BaseController;
 use App\Http\Requests\BulkDeleteRequest;
 use App\Http\Requests\PlaceRequest;
 use App\Http\Requests\SearchRequest;
-use App\Http\Resources\MapLocationResource;
+use App\Http\Resources\LocationResource;
 use App\Http\Resources\PlaceResource;
 use App\Models\Place;
 use App\Services\PlaceService;
@@ -15,7 +15,6 @@ use Illuminate\Http\Response;
 
 class PlacesController extends BaseController
 {
-
     /**
      * @var PlaceService
      */
@@ -43,7 +42,9 @@ class PlacesController extends BaseController
      */
     public function index(Request $request)
     {
-        $places = Place::withRelations($request)->get();
+        $places = Place::query()
+            ->withRelations($request)
+            ->get();
 
         return response()->json(PlaceResource::collection($places), Response::HTTP_OK);
     }
@@ -55,7 +56,10 @@ class PlacesController extends BaseController
      */
     public function paginated(Request $request)
     {
-        $places = Place::withRelations($request)->filter($request)->paginate($this->paginationNumber());
+        $places = Place::query()
+            ->withRelations($request)
+            ->filter($request)
+            ->paginate($this->paginationNumber());
 
         return PlaceResource::collection($places);
     }
@@ -94,7 +98,7 @@ class PlacesController extends BaseController
      */
     public function update(Place $place, PlaceRequest $request)
     {
-        $place = $this->placeService->update($request, $place);
+        $place = $this->placeService->update($place, $request);
 
         $place->load($place->relationships);
 
@@ -140,6 +144,6 @@ class PlacesController extends BaseController
     {
         $locations = $this->searchForLocations($request->all(), $place->locations()->getQuery());
 
-        return response()->json(MapLocationResource::collection($locations), Response::HTTP_OK);
+        return response()->json(LocationResource::collection($locations), Response::HTTP_OK);
     }
 }

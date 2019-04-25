@@ -18,12 +18,12 @@ class AuthController extends Controller
         $credentials = $request->only('email', 'password');
 
         if (!$token = auth()->attempt($credentials)) {
-            return response()->json(['message' => 'Invalid credentials'], 422);
+            return response()->json(['message' => 'Invalid credentials'], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
         $this->logSuccessfulLogin();
 
-        return response()->json(null, Response::HTTP_OK)
+        return response()->json(['message' => 'Successfully logged in'], Response::HTTP_OK)
             ->header('Authorization', 'Bearer ' . $token);
     }
 

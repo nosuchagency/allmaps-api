@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\RequiredIdRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class FixtureRequest extends FormRequest
@@ -27,9 +28,10 @@ class FixtureRequest extends FormRequest
             'name' => 'required',
             'description' => '',
             'image' => '',
-            'width' => 'integer|nullable',
-            'height' => 'integer|nullable',
-            'category' => '',
+            'width' => 'nullable|integer|min:0',
+            'height' => 'nullable|integer|min:0',
+            'category' => ['nullable', new RequiredIdRule],
+            'category.id' => 'exists:categories,id',
             'tags' => 'array',
             'tags.*.id' => 'required|exists:tags,id'
         ];

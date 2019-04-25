@@ -15,13 +15,20 @@ use Spatie\Activitylog\Traits\CausesActivity;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Permission\Traits\HasRoles;
 use Tymon\JWTAuth\Contracts\JWTSubject;
+use Illuminate\Support\Str;
 
 class User extends Authenticatable implements JWTSubject
 {
     use HasRelations, HasCategory, Notifiable, HasRoles, CausesActivity, LogsActivity;
 
+    /**
+     * @var string
+     */
     protected $guard_name = 'api';
 
+    /**
+     * @var array
+     */
     protected static $ignoreChangedAttributes = [
         'remember_token'
     ];
@@ -82,7 +89,7 @@ class User extends Authenticatable implements JWTSubject
      */
     public function getInvitationLink()
     {
-        return 'https://link.com?token=' . str_random(30);
+        return 'https://link.com?token=' . Str::random(30);
     }
 
     /**
@@ -91,18 +98,20 @@ class User extends Authenticatable implements JWTSubject
     public function setPasswordAttribute($password)
     {
         if (!$password) {
-            $password = Hash::make(str_random(60));
+            $password = Hash::make(Str::random(60));
         }
 
         $this->attributes['password'] = $password;
     }
 
     /**
+     * @param int $count
+     *
      * @return \Illuminate\Database\Eloquent\Collection|\Illuminate\Support\Collection
      */
-    public function mostRecentActions()
+    public function recentActions($count = 20)
     {
-        return $this->actions()->orderBy('id', 'desc')->take(20)->get();
+        return $this->actions()->orderBy('id', 'desc')->take($count)->get();
     }
 
     /**

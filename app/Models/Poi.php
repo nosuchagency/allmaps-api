@@ -2,12 +2,12 @@
 
 namespace App\Models;
 
-use App\Filters\IndexFilter;
 use App\Filters\PoiFilter;
 use App\Traits\HasCategory;
 use App\Traits\HasCreatedBy;
 use App\Traits\HasImage;
 use App\Traits\HasRelations;
+use Askedio\SoftCascade\Traits\SoftCascadeTrait;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -15,9 +15,16 @@ use Spatie\Activitylog\Traits\LogsActivity;
 
 class Poi extends Model
 {
-    use HasRelations, HasCategory, SoftDeletes, HasCreatedBy, HasImage, LogsActivity;
+    use HasRelations, HasCategory, SoftDeletes, HasCreatedBy, HasImage, LogsActivity, SoftCascadeTrait;
 
     const IMAGE_DIRECTORY_PATH = '/uploads/pois';
+
+    /**
+     * @var array
+     */
+    protected $softCascade = [
+        'locations'
+    ];
 
     /**
      * The attributes that are mass assignable.
@@ -67,7 +74,7 @@ class Poi extends Model
      */
     public function locations()
     {
-        return $this->hasMany(MapLocation::class);
+        return $this->hasMany(Location::class);
     }
 
     /**
@@ -81,22 +88,5 @@ class Poi extends Model
     public function scopeFilter(Builder $builder, $request)
     {
         return (new PoiFilter($request))->filter($builder);
-    }
-
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::deleting(function ($poi) {
-            $poi->locations->each(function ($location) {
-                $location->delete();
-            });
-        });
-
-        static::restoring(function ($poi) {
-            $poi->locations->each(function ($location) {
-                $location->restore();
-            });
-        });
     }
 }

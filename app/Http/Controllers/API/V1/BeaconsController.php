@@ -33,7 +33,10 @@ class BeaconsController extends Controller
      */
     public function index(Request $request)
     {
-        $beacons = Beacon::withRelations($request)->filter($request)->get();
+        $beacons = Beacon::query()
+            ->withRelations($request)
+            ->filter($request)
+            ->get();
 
         return response()->json(BeaconResource::collection($beacons), Response::HTTP_OK);
     }
@@ -45,7 +48,10 @@ class BeaconsController extends Controller
      */
     public function paginated(Request $request)
     {
-        $beacons = Beacon::withRelations($request)->filter($request)->paginate($this->paginationNumber());
+        $beacons = Beacon::query()
+            ->withRelations($request)
+            ->filter($request)
+            ->paginate($this->paginationNumber());
 
         return BeaconResource::collection($beacons);
     }

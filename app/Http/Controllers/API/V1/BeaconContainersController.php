@@ -83,6 +83,6 @@ class BeaconContainersController extends Controller
     {
         $beacon->containers()->detach($container);
 
-        return response()->json(null, Response::HTTP_CREATED);
+        return response()->json(null, Response::HTTP_OK);
     }
 }

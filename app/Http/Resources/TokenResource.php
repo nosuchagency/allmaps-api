@@ -21,7 +21,7 @@ class TokenResource extends JsonResource
             'token' => $this->token,
             'creator' => $this->creator,
             'role' => $this->getRoleNames()->first(),
-            'actions' => ActionResource::collection($this->mostRecentActions())
+            'actions' => ActionResource::collection($this->recentActions())
         ];
     }
 }

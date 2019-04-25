@@ -2,15 +2,26 @@
 
 namespace App\Models;
 
+use App\Filters\IndexFilter;
 use App\Traits\HasCreatedBy;
 use App\Traits\HasRelations;
+use Askedio\SoftCascade\Traits\SoftCascadeTrait;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 class Floor extends Model
 {
-    use HasRelations, SoftDeletes, HasCreatedBy, LogsActivity;
+    use HasRelations, SoftDeletes, HasCreatedBy, LogsActivity, SoftCascadeTrait;
+
+    /**
+     * @var array
+     */
+    protected $softCascade = [
+        'structures',
+        'locations'
+    ];
 
     /**
      * The attributes that are mass assignable.
@@ -56,7 +67,7 @@ class Floor extends Model
      */
     public function structures()
     {
-        return $this->hasMany(MapStructure::class);
+        return $this->hasMany(Structure::class);
     }
 
     /**
@@ -64,23 +75,19 @@ class Floor extends Model
      */
     public function locations()
     {
-        return $this->hasMany(MapLocation::class);
+        return $this->hasMany(Location::class);
     }
 
-    protected static function boot()
+    /**
+     * Process filters
+     *
+     * @param Builder $builder
+     * @param $request
+     *
+     * @return Builder $builder
+     */
+    public function scopeFilter(Builder $builder, $request)
     {
-        parent::boot();
-
-        static::deleting(function ($floor) {
-            $floor->locations->each(function ($location) {
-                $location->delete();
-            });
-        });
-
-        static::restoring(function ($floor) {
-            $floor->locations->each(function ($location) {
-                $location->restore();
-            });
-        });
+        return (new IndexFilter($request))->filter($builder);
     }
 }
