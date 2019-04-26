@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Locale;
 use App\Rules\RequiredIdRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -26,16 +27,14 @@ class UserRequest extends FormRequest
      */
     public function rules()
     {
-        $user = $this->route('user');
-
         $rules = [
             'name' => 'required',
             'password' => [],
-            'locale' => '',
+            'locale' => ['required', Rule::in(Locale::LOCALES)],
             'email' => [
                 'required',
                 'email',
-                Rule::unique('users')->ignore($user)
+                Rule::unique('users')->ignore($this->route('user'))
             ],
             'role' => [
                 'required',
@@ -47,7 +46,7 @@ class UserRequest extends FormRequest
             'tags.*.id' => 'required|exists:tags,id'
         ];
 
-        if (!$user) {
+        if ($this->method() === 'POST') {
             $rules['password'][] = 'required';
         }
 

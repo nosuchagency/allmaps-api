@@ -3,6 +3,8 @@
 namespace Tests\Feature\Beacons;
 
 use App\Models\Beacon;
+use App\Models\Category;
+use App\Models\Tag;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -73,8 +75,8 @@ class BeaconsUpdateTest extends TestCase
             'eddystone_url' => $this->faker->url,
             'eddystone_tlm' => $this->faker->title,
             'eddystone_eid' => $this->faker->title,
-            'category' => null,
-            'tags' => []
+            'category' => factory(Category::class)->create(),
+            'tags' => factory(Tag::class, 2)->create()
         ], $overrides);
     }
 }

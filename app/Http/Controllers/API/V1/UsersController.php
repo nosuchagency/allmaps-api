@@ -33,7 +33,10 @@ class UsersController extends Controller
      */
     public function index(Request $request)
     {
-        $users = User::withRelations($request)->get();
+        $users = User::query()
+            ->withRelations($request)
+            ->filter($request)
+            ->get();
 
         return response()->json(UserResource::collection($users), Response::HTTP_OK);
     }
@@ -45,7 +48,10 @@ class UsersController extends Controller
      */
     public function paginated(Request $request)
     {
-        $users = User::withRelations($request)->filter($request)->paginate($this->paginationNumber());
+        $users = User::query()
+            ->withRelations($request)
+            ->filter($request)
+            ->paginate($this->paginationNumber());
 
         return UserResource::collection($users);
     }

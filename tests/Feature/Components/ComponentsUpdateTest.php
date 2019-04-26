@@ -2,7 +2,9 @@
 
 namespace Tests\Feature\Components;
 
+use App\Models\Category;
 use App\Models\Component;
+use App\Models\Tag;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -74,9 +76,9 @@ class ComponentsUpdateTest extends TestCase
             'curved' => $this->faker->boolean,
             'width' => $this->faker->numberBetween(0, 10),
             'height' => $this->faker->numberBetween(0, 10),
-            'image' => '',
-            'category' => null,
-            'tags' => []
+            'image' => null,
+            'category' => factory(Category::class)->create(),
+            'tags' => factory(Tag::class, 2)->create()
         ], $overrides);
     }
 }

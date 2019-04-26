@@ -27,7 +27,10 @@ class ContentRequest extends FormRequest
     {
         $rules = [
             'name' => 'required',
-            'url' => 'url',
+            'text' => '',
+            'image' => '',
+            'yt_url' => 'nullable|url',
+            'url' => 'nullable|url',
             'type' => [
                 'required',
                 Rule::in(['image', 'video', 'text', 'gallery', 'file', 'web']),

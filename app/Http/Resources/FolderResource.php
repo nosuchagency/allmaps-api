@@ -19,6 +19,7 @@ class FolderResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'order' => $this->order,
+            'primary' => $this->primary,
             'container' => $this->container,
             'category' => new CategoryResource($this->category),
             'tags' => TagResource::collection($this->whenLoaded('tags')),

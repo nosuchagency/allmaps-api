@@ -68,7 +68,7 @@ class BuildingsCreateTest extends TestCase
     {
         return array_merge([
             'name' => $this->faker->title,
-            'image' => '',
+            'image' => null,
             'place' => factory(Place::class)->create()
         ], $overrides);
     }

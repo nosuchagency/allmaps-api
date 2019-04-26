@@ -107,6 +107,7 @@ class ComponentsCreateTest extends TestCase
     public function tags_needs_to_be_an_array_of_valid_tag_objects()
     {
         $this->create(['tags' => 'not-a-valid-tags-array'])->assertJsonValidationErrors(['tags']);
+        $this->create(['tags' => ['not-a-valid-tag-object']])->assertJsonValidationErrors(['tags.0.id']);
     }
 
     /**
@@ -141,7 +142,7 @@ class ComponentsCreateTest extends TestCase
             'curved' => $this->faker->boolean,
             'width' => $this->faker->numberBetween(0, 10),
             'height' => $this->faker->numberBetween(0, 10),
-            'image' => '',
+            'image' => null,
             'category' => factory(Category::class)->create(),
             'tags' => factory(Tag::class, 2)->create()
         ], $overrides);

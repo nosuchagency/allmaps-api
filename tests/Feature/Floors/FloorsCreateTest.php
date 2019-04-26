@@ -69,7 +69,7 @@ class FloorsCreateTest extends TestCase
         return array_merge([
             'name' => $this->faker->title,
             'level' => $this->faker->randomNumber(),
-            'image' => '',
+            'image' => null,
             'building' => factory(Building::class)->create()
         ], $overrides);
     }

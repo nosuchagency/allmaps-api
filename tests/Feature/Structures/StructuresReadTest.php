@@ -47,6 +47,6 @@ class StructuresReadTest extends TestCase
 
         $structure = factory(Structure::class)->create();
 
-        $this->getJson(route('structures.show', ['structures' => $structure]))->assertStatus(200);
+        $this->getJson(route('structures.show', ['structure' => $structure]))->assertStatus(200);
     }
 }

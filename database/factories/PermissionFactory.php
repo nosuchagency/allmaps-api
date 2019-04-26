@@ -1,8 +1,6 @@
 <?php
 
 use Faker\Generator as Faker;
-use Illuminate\Support\Str;
-use App\Locale;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,12 +13,8 @@ use App\Locale;
 |
 */
 
-$factory->define(App\Models\User::class, function (Faker $faker) {
+$factory->define(\Spatie\Permission\Models\Permission::class, function (Faker $faker) {
     return [
-        'name' => $faker->name,
-        'email' => $faker->unique()->safeEmail,
-        'locale' => $faker->randomElement(Locale::LOCALES),
-        'password' => 'secret',
-        'remember_token' => Str::random(10),
+        'name' => $faker->title
     ];
 });

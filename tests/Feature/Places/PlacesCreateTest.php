@@ -69,6 +69,7 @@ class PlacesCreateTest extends TestCase
     public function tags_needs_to_be_an_array_of_valid_tag_objects()
     {
         $this->create(['tags' => 'not-a-valid-tags-array'])->assertJsonValidationErrors(['tags']);
+        $this->create(['tags' => ['not-a-valid-tag-object']])->assertJsonValidationErrors(['tags.0.id']);
     }
 
     /**
@@ -97,7 +98,7 @@ class PlacesCreateTest extends TestCase
             'address' => $this->faker->address,
             'postcode' => $this->faker->postcode,
             'city' => $this->faker->city,
-            'image' => '',
+            'image' => null,
             'latitude' => $this->faker->latitude,
             'longitude' => $this->faker->longitude,
             'activated' => $this->faker->boolean,

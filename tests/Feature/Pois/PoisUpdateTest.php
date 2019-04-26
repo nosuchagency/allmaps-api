@@ -2,7 +2,9 @@
 
 namespace Tests\Feature\Pois;
 
+use App\Models\Category;
 use App\Models\Poi;
+use App\Models\Tag;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -67,9 +69,9 @@ class PoisUpdateTest extends TestCase
             'name' => $this->faker->title,
             'type' => $this->faker->randomElement(['area', 'image']),
             'color' => $this->faker->hexColor,
-            'image' => '',
-            'category' => null,
-            'tags' => []
+            'image' => null,
+            'category' => factory(Category::class)->create(),
+            'tags' => factory(Tag::class, 2)->create()
         ], $overrides);
     }
 }
