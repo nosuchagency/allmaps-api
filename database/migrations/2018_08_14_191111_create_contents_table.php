@@ -20,6 +20,7 @@ class CreateContentsTable extends Migration
             $table->string('image')->nullable();
             $table->longText('text')->nullable();
             $table->text('url')->nullable();
+            $table->text('yt_url')->nullable();
 
             $table->unsignedInteger('folder_id');
             $table->foreign('folder_id')

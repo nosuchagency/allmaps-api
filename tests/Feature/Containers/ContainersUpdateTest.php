@@ -2,7 +2,9 @@
 
 namespace Tests\Feature\Containers;
 
+use App\Models\Category;
 use App\Models\Container;
+use App\Models\Tag;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -67,8 +69,8 @@ class ContainersUpdateTest extends TestCase
             'name' => $this->faker->title,
             'description' => $this->faker->paragraph,
             'folders_enabled' => $this->faker->boolean,
-            'category' => null,
-            'tags' => []
+            'category' => factory(Category::class)->create(),
+            'tags' => factory(Tag::class, 2)->create()
         ], $overrides);
     }
 }

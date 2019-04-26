@@ -65,7 +65,7 @@ class BuildingsUpdateTest extends TestCase
     {
         return array_merge([
             'name' => $this->faker->title,
-            'image' => '',
+            'image' => null,
         ], $overrides);
     }
 }

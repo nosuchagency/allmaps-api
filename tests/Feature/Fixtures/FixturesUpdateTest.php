@@ -2,7 +2,9 @@
 
 namespace Tests\Feature\Fixtures;
 
+use App\Models\Category;
 use App\Models\Fixture;
+use App\Models\Tag;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -69,8 +71,8 @@ class FixturesUpdateTest extends TestCase
             'image' => null,
             'width' => rand(0, 10),
             'height' => rand(0, 10),
-            'category' => null,
-            'tags' => []
+            'category' => factory(Category::class)->create(),
+            'tags' => factory(Tag::class, 2)->create()
         ], $overrides);
     }
 }

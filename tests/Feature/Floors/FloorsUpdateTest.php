@@ -66,7 +66,7 @@ class FloorsUpdateTest extends TestCase
         return array_merge([
             'name' => $this->faker->title,
             'level' => $this->faker->randomNumber(),
-            'image' => '',
+            'image' => null,
         ], $overrides);
     }
 }

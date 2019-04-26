@@ -1,38 +1,39 @@
 <?php
 
-namespace Tests\Feature\Contents;
+namespace Tests\Feature\Users;
 
+use App\Locale;
 use App\Models\Category;
-use App\Models\Content\Content;
-use App\Models\Folder;
+use App\Models\Role;
 use App\Models\Tag;
+use App\Models\User;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class ContentsCreateTest extends TestCase
+class UsersCreateTest extends TestCase
 {
     use RefreshDatabase, WithFaker;
 
     /** @test */
-    public function a_guest_cannot_create_contents()
+    public function a_guest_cannot_create_users()
     {
-        $this->postJson(route('contents.store'))->assertStatus(401);
+        $this->postJson(route('users.store'))->assertStatus(401);
     }
 
     /** @test */
-    public function an_authenticated_user_without_create_permission_cannot_create_contents()
+    public function an_authenticated_user_without_create_permission_cannot_create_users()
     {
         $this->signIn();
 
-        $this->postJson(route('contents.store'))->assertStatus(403);
+        $this->postJson(route('users.store'))->assertStatus(403);
     }
 
     /** @test */
-    public function an_authenticated_user_with_create_permission_can_create_containers()
+    public function an_authenticated_user_with_create_permission_can_create_users()
     {
         $this->create()->assertStatus(201);
-        $this->assertCount(1, Content::all());
+        $this->assertCount(2, User::all());
     }
 
     /** @test */
@@ -42,28 +43,30 @@ class ContentsCreateTest extends TestCase
     }
 
     /** @test */
-    public function it_requires_a_valid_type()
+    public function it_requires_a_password()
     {
-        $this->create(['type' => null])->assertJsonValidationErrors('type');
-        $this->create(['type' => 'not-a-valid-type'])->assertJsonValidationErrors('type');
+        $this->create(['password' => null])->assertJsonValidationErrors('password');
     }
 
     /** @test */
-    public function it_requires_a_folder()
+    public function it_requires_a_valid_locale()
     {
-        $this->create(['folder' => null])->assertJsonValidationErrors('folder');
+        $this->create(['locale' => null])->assertJsonValidationErrors('locale');
+        $this->create(['locale' => 'not-a-valid-locale'])->assertJsonValidationErrors('locale');
     }
 
     /** @test */
-    public function url_needs_to_be_a_valid_url()
+    public function it_requires_a_valid_email()
     {
-        $this->create(['url' => 'not-a-valid-url'])->assertJsonValidationErrors('url');
+        $this->create(['email' => null])->assertJsonValidationErrors('email');
+        $this->create(['email' => 'not-a-valid-email'])->assertJsonValidationErrors('email');
     }
 
     /** @test */
-    public function youtube_url_needs_to_be_a_valid_url()
+    public function it_requires_a_valid_role()
     {
-        $this->create(['yt_url' => 'not-a-valid-url'])->assertJsonValidationErrors('yt_url');
+        $this->create(['role' => null])->assertJsonValidationErrors('role');
+        $this->create(['role' => 'not-a-valid-role'])->assertJsonValidationErrors('role');
     }
 
     /** @test */
@@ -88,10 +91,10 @@ class ContentsCreateTest extends TestCase
     protected function create($attributes = [])
     {
         $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['contents.create'])
+            $this->createRoleWithPermissions(['users.create'])
         );
 
-        return $this->postJson(route('contents.store'), $this->validFields($attributes));
+        return $this->postJson(route('users.store'), $this->validFields($attributes));
     }
 
     /**
@@ -102,13 +105,11 @@ class ContentsCreateTest extends TestCase
     protected function validFields($overrides = [])
     {
         return array_merge([
-            'name' => $this->faker->title,
-            'text' => $this->faker->paragraph,
-            'image' => null,
-            'url' => $this->faker->url,
-            'yt_url' => $this->faker->url,
-            'type' => $this->faker->randomElement(['image', 'video', 'text', 'gallery', 'file', 'web']),
-            'folder' => factory(Folder::class)->create(),
+            'name' => $this->faker->name,
+            'password' => $this->faker->password,
+            'locale' => $this->faker->randomElement(Locale::LOCALES),
+            'email' => $this->faker->email,
+            'role' => factory(Role::class)->create()->name,
             'category' => factory(Category::class)->create(),
             'tags' => factory(Tag::class, 2)->create()
         ], $overrides);

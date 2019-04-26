@@ -2,7 +2,9 @@
 
 namespace Tests\Feature\Places;
 
+use App\Models\Category;
 use App\Models\Place;
+use App\Models\Tag;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -68,12 +70,12 @@ class PlacesUpdateTest extends TestCase
             'address' => $this->faker->address,
             'postcode' => $this->faker->postcode,
             'city' => $this->faker->city,
-            'image' => '',
+            'image' => null,
             'latitude' => $this->faker->latitude,
             'longitude' => $this->faker->longitude,
             'activated' => $this->faker->boolean,
-            'category' => null,
-            'tags' => []
+            'category' => factory(Category::class)->create(),
+            'tags' => factory(Tag::class, 2)->create()
         ], $overrides);
     }
 }

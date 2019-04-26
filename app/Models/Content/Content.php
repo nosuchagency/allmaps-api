@@ -8,6 +8,7 @@ use App\Models\Folder;
 use App\Models\Tag;
 use App\Traits\HasCategory;
 use App\Traits\HasCreatedBy;
+use App\Traits\HasRelations;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -16,7 +17,7 @@ use Tightenco\Parental\HasChildren;
 
 class Content extends Model
 {
-    use HasCategory, SoftDeletes, HasCreatedBy, LogsActivity, HasChildren;
+    use HasRelations, HasCategory, SoftDeletes, HasCreatedBy, LogsActivity, HasChildren;
 
     /**
      * @var array
@@ -62,6 +63,15 @@ class Content extends Model
     ];
 
     /**
+     * Model Relations
+     *
+     * @var array
+     */
+    public $relationships = [
+        'tags'
+    ];
+
+    /**
      * The tags that belong to the content
      */
     public function tags()
@@ -79,7 +89,7 @@ class Content extends Model
      */
     public function folder()
     {
-        return $this->belongsTo(Folder::class, 'folder_id');
+        return $this->belongsTo(Folder::class);
     }
 
     /**

@@ -63,6 +63,7 @@ class FixturesCreateTest extends TestCase
     public function tags_needs_to_be_an_array_of_valid_tag_objects()
     {
         $this->create(['tags' => 'not-a-valid-tags-array'])->assertJsonValidationErrors(['tags']);
+        $this->create(['tags' => ['not-a-valid-tag-object']])->assertJsonValidationErrors(['tags.0.id']);
     }
 
     /**
