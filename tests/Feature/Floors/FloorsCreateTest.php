@@ -67,7 +67,7 @@ class FloorsCreateTest extends TestCase
     protected function validFields($overrides = [])
     {
         return array_merge([
-            'name' => $this->faker->title,
+            'name' => $this->faker->name,
             'level' => $this->faker->randomNumber(),
             'image' => null,
             'building' => factory(Building::class)->create()

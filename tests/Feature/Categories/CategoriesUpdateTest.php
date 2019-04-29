@@ -34,9 +34,9 @@ class CategoriesUpdateTest extends TestCase
     {
         $category = factory(Category::class)->create();
 
-        $attributes = ['id' => $category->id, 'name' => $this->faker->title];
+        $attributes = ['id' => $category->id, 'name' => $this->faker->name];
 
-        $this->update($category, $attributes)->assertStatus(200);
+        $this->update($category, $attributes)->assertOk();
 
         $this->assertDatabaseHas('categories', $attributes);
     }
@@ -64,7 +64,7 @@ class CategoriesUpdateTest extends TestCase
     protected function validFields($overrides = [])
     {
         return array_merge([
-            'name' => $this->faker->title,
+            'name' => $this->faker->name,
             'description' => $this->faker->paragraph
         ], $overrides);
     }

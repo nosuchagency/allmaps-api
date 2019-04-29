@@ -15,11 +15,11 @@ use Illuminate\Http\Response;
 
 class FoldersController extends Controller
 {
+
     /**
      * @var FolderService
      */
     protected $folderService;
-
 
     /**
      * FoldersController constructor.

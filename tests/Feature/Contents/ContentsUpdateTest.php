@@ -36,9 +36,9 @@ class ContentsUpdateTest extends TestCase
     {
         $container = factory(Container::class)->create();
 
-        $attributes = ['id' => $container->id, 'name' => $this->faker->title];
+        $attributes = ['id' => $container->id, 'name' => $this->faker->name];
 
-        $this->update($container, $attributes)->assertStatus(200);
+        $this->update($container, $attributes)->assertOk();
 
         $this->assertDatabaseHas('containers', $attributes);
     }
@@ -66,7 +66,7 @@ class ContentsUpdateTest extends TestCase
     protected function validFields($overrides = [])
     {
         return array_merge([
-            'name' => $this->faker->title,
+            'name' => $this->faker->name,
             'description' => $this->faker->paragraph,
             'folders_enabled' => $this->faker->boolean,
             'category' => factory(Category::class)->create(),

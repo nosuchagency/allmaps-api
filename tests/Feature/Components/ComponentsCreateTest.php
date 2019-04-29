@@ -2,9 +2,11 @@
 
 namespace Tests\Feature\Components;
 
+use App\ComponentType;
 use App\Models\Category;
 use App\Models\Component;
 use App\Models\Tag;
+use App\Shape;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -100,7 +102,7 @@ class ComponentsCreateTest extends TestCase
     public function category_needs_to_be_a_valid_category_object()
     {
         $this->create(['category' => ['id' => 2]])->assertJsonValidationErrors(['category.id']);
-        $this->create(['category' => []])->assertJsonValidationErrors(['category']);
+        $this->create(['category' => ['not-a-valid-category-object']])->assertJsonValidationErrors(['category']);
     }
 
     /** @test */
@@ -132,10 +134,10 @@ class ComponentsCreateTest extends TestCase
     protected function validFields($overrides = [])
     {
         return array_merge([
-            'name' => $this->faker->title,
+            'name' => $this->faker->name,
             'description' => $this->faker->paragraph,
-            'type' => $this->faker->randomElement(['plan', 'wall', 'room', 'decor']),
-            'shape' => $this->faker->randomElement(['polyline', 'polygon', 'rectangle', 'circle', 'image']),
+            'type' => $this->faker->randomElement(ComponentType::TYPES),
+            'shape' => $this->faker->randomElement(Shape::SHAPES),
             'color' => $this->faker->hexColor,
             'opacity' => rand(0, 10) / 10,
             'weight' => $this->faker->numberBetween(1, 10),

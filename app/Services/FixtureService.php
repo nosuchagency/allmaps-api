@@ -2,24 +2,24 @@
 
 namespace App\Services;
 
-use App\Http\Requests\FixtureRequest;
+use App\Contracts\ModelServiceContract;
 use App\Models\Fixture;
 use App\Models\Tag;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
 
-class FixtureService
+class FixtureService implements ModelServiceContract
 {
     /**
-     * @param FixtureRequest $request
+     * @param Request $request
      *
-     * @return Fixture
+     * @return Model
      */
-    public function create(FixtureRequest $request): Fixture
+    public function create(Request $request)
     {
         $fixture = new Fixture();
-
         $fixture->fill($request->only($fixture->getFillable()));
         $fixture->setImage($request->get('image'));
-
         $fixture->save();
 
         foreach ($request->get('tags', []) as $tag) {
@@ -30,12 +30,12 @@ class FixtureService
     }
 
     /**
-     * @param FixtureRequest $request
-     * @param Fixture $fixture
+     * @param Model $fixture
+     * @param Request $request
      *
-     * @return Fixture
+     * @return Model
      */
-    public function update(FixtureRequest $request, Fixture $fixture): Fixture
+    public function update(Model $fixture, Request $request)
     {
         $fixture->fill($request->only($fixture->getFillable()));
         $fixture->setImage($request->get('image'));

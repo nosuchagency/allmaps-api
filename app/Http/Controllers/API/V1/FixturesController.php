@@ -14,6 +14,9 @@ use Illuminate\Http\Response;
 class FixturesController extends Controller
 {
 
+    /**
+     * @var FixtureService
+     */
     protected $fixtureService;
 
     /**
@@ -95,7 +98,7 @@ class FixturesController extends Controller
      */
     public function update(FixtureRequest $request, Fixture $fixture)
     {
-        $fixture = $this->fixtureService->update($request, $fixture);
+        $fixture = $this->fixtureService->update($fixture, $request);
 
         $fixture->load($fixture->relationships);
 

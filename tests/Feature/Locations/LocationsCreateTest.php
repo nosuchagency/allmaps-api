@@ -62,7 +62,7 @@ class LocationsCreateTest extends TestCase
     protected function validFields($overrides = [])
     {
         return array_merge([
-            'name' => $this->faker->title,
+            'name' => $this->faker->name,
             'floor' => factory(Floor::class)->create(),
             'beacon' => factory(Beacon::class)->create()
         ], $overrides);

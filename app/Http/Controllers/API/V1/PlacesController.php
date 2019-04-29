@@ -15,6 +15,7 @@ use Illuminate\Http\Response;
 
 class PlacesController extends BaseController
 {
+
     /**
      * @var PlaceService
      */

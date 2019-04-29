@@ -8,6 +8,7 @@ use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\Access\Authorizable;
+use Illuminate\Support\Str;
 use Spatie\Activitylog\Traits\CausesActivity;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Permission\Traits\HasRoles;
@@ -25,7 +26,6 @@ class Token extends Model implements AuthorizableContract
      */
     protected $fillable = [
         'name',
-        'token',
         'created_by'
     ];
 
@@ -51,5 +51,14 @@ class Token extends Model implements AuthorizableContract
     public function scopeFilter(Builder $builder, $request)
     {
         return (new SearchFilter($request))->filter($builder);
+    }
+
+
+    /**
+     * @return void
+     */
+    public function generateToken()
+    {
+        $this->token = Str::random(60);
     }
 }

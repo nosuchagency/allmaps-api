@@ -30,16 +30,14 @@ class UserRequest extends FormRequest
         $rules = [
             'name' => 'required',
             'password' => [],
-            'locale' => ['required', Rule::in(Locale::LOCALES)],
+            'locale' => ['nullable', Rule::in(Locale::LOCALES)],
             'email' => [
                 'required',
                 'email',
                 Rule::unique('users')->ignore($this->route('user'))
             ],
-            'role' => [
-                'required',
-                Rule::in(Role::all()->pluck('name')),
-            ],
+            'role' => 'required',
+            'role.id' => 'required|exists:roles,id',
             'category' => ['nullable', new RequiredIdRule],
             'category.id' => 'exists:categories,id',
             'tags' => 'array',

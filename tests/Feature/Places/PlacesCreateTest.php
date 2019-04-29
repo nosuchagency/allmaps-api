@@ -62,7 +62,7 @@ class PlacesCreateTest extends TestCase
     public function category_needs_to_be_a_valid_category_object()
     {
         $this->create(['category' => ['id' => 2]])->assertJsonValidationErrors(['category.id']);
-        $this->create(['category' => []])->assertJsonValidationErrors(['category']);
+        $this->create(['category' => ['not-a-valid-category-object']])->assertJsonValidationErrors(['category']);
     }
 
     /** @test */
@@ -94,7 +94,7 @@ class PlacesCreateTest extends TestCase
     protected function validFields($overrides = [])
     {
         return array_merge([
-            'name' => $this->faker->title,
+            'name' => $this->faker->name,
             'address' => $this->faker->address,
             'postcode' => $this->faker->postcode,
             'city' => $this->faker->city,

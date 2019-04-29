@@ -35,7 +35,7 @@ class CategoriesReadTest extends TestCase
             $this->createRoleWithPermissions(['categories.read'])
         );
 
-        $this->getJson(route('categories.index'))->assertStatus(200);
+        $this->getJson(route('categories.index'))->assertOk();
     }
 
     /** @test */
@@ -47,6 +47,6 @@ class CategoriesReadTest extends TestCase
 
         $category = factory(Category::class)->create();
 
-        $this->getJson(route('categories.show', ['category' => $category]))->assertStatus(200);
+        $this->getJson(route('categories.show', ['category' => $category]))->assertOk();
     }
 }

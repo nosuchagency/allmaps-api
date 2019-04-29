@@ -34,9 +34,9 @@ class FloorsUpdateTest extends TestCase
     {
         $floor = factory(Floor::class)->create();
 
-        $attributes = ['id' => $floor->id, 'name' => $this->faker->title];
+        $attributes = ['id' => $floor->id, 'name' => $this->faker->name];
 
-        $this->update($floor, $attributes)->assertStatus(200);
+        $this->update($floor, $attributes)->assertOk();
 
         $this->assertDatabaseHas('floors', $attributes);
     }
@@ -64,7 +64,7 @@ class FloorsUpdateTest extends TestCase
     protected function validFields($overrides = [])
     {
         return array_merge([
-            'name' => $this->faker->title,
+            'name' => $this->faker->name,
             'level' => $this->faker->randomNumber(),
             'image' => null,
         ], $overrides);

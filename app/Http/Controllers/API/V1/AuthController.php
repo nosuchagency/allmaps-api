@@ -8,6 +8,7 @@ use App\Http\Requests\LoginRequest;
 
 class AuthController extends Controller
 {
+
     /**
      * @param  LoginRequest $request
      *

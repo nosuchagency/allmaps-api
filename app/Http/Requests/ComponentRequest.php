@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\ComponentType;
 use App\Rules\RequiredIdRule;
+use App\Shape;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -30,11 +32,11 @@ class ComponentRequest extends FormRequest
             'description' => '',
             'type' => [
                 'required',
-                Rule::in(['plan', 'wall', 'room', 'decor']),
+                Rule::in(ComponentType::TYPES),
             ],
             'shape' => [
                 'required',
-                Rule::in(['polyline', 'polygon', 'rectangle', 'circle', 'image']),
+                Rule::in(Shape::SHAPES),
             ],
             'color' => ['required', 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
             'opacity' => 'nullable|numeric|between:0,1',

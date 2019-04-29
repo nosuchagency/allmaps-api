@@ -14,7 +14,7 @@
 Route::post('login', ['as' => 'login', 'uses' => 'AuthController@login']);
 
 Route::post('/password/email', ['as' => 'password.email', 'uses' => 'Auth\ForgotPasswordController@sendResetLinkEmail']);
-Route::post('/password/reset', ['as' => '', 'uses' => 'Auth\ResetPasswordController@reset']);
+Route::post('/password/reset', ['as' => 'password.reset', 'uses' => 'Auth\ResetPasswordController@reset']);
 
 Route::group(['middleware' => 'auth'], function () {
     Route::post('/logout', ['as' => 'logout', 'uses' => 'AuthController@logout']);
@@ -93,18 +93,21 @@ Route::group(['middleware' => 'auth'], function () {
         Route::delete('/', ['as' => 'beacon.containers.destroy', 'uses' => 'BeaconContainersController@destroy']);
     });
 
-    Route::post('/containers/{container}/beacons', ['as' => 'container.beacons.store', 'uses' => 'ContainerBeaconsController@store']);
+    Route::group(['prefix' => 'containers/{container}/beacons'], function () {
 
-    Route::group(['prefix' => 'containers/{container}/beacons/{beacon}'], function () {
-        Route::get('/', ['as' => 'container.beacons.show', 'uses' => 'ContainerBeaconsController@show']);
-        Route::put('/', ['as' => 'container.beacons.update', 'uses' => 'ContainerBeaconsController@update']);
         Route::post('/', ['as' => 'container.beacons.store', 'uses' => 'ContainerBeaconsController@store']);
-        Route::delete('/', ['as' => 'container.beacons.destroy', 'uses' => 'ContainerBeaconsController@destroy']);
 
-        Route::post('/rules', ['as' => 'rules.store', 'uses' => 'RulesController@store']);
-        Route::get('/rules/{rule}', ['as' => 'rules.show', 'uses' => 'RulesController@show']);
-        Route::put('/rules/{rule}', ['as' => 'rules.update', 'uses' => 'RulesController@update']);
-        Route::delete('/rules/{rule}', ['as' => 'rules.destroy', 'uses' => 'RulesController@destroy']);
+        Route::group(['prefix' => '{beacon}'], function () {
+            Route::get('/', ['as' => 'container.beacons.show', 'uses' => 'ContainerBeaconsController@show']);
+            Route::put('/', ['as' => 'container.beacons.update', 'uses' => 'ContainerBeaconsController@update']);
+            Route::post('/', ['as' => 'container.beacons.store', 'uses' => 'ContainerBeaconsController@store']);
+            Route::delete('/', ['as' => 'container.beacons.destroy', 'uses' => 'ContainerBeaconsController@destroy']);
+
+            Route::post('/rules', ['as' => 'rules.store', 'uses' => 'RulesController@store']);
+            Route::get('/rules/{rule}', ['as' => 'rules.show', 'uses' => 'RulesController@show']);
+            Route::put('/rules/{rule}', ['as' => 'rules.update', 'uses' => 'RulesController@update']);
+            Route::delete('/rules/{rule}', ['as' => 'rules.destroy', 'uses' => 'RulesController@destroy']);
+        });
     });
 
     Route::put('/folders/reorder', ['as' => 'folders.reorder', 'uses' => 'OrderController@folders']);

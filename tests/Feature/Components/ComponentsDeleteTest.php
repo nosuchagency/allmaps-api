@@ -28,20 +28,20 @@ class ComponentsDeleteTest extends TestCase
     }
 
     /** @test */
-    public function an_authenticated_user_with_delete_permission_may_delete_specific_components()
+    public function an_authenticated_user_with_delete_permission_can_delete_specific_components()
     {
         $this->signIn()->assignRole(
             $this->createRoleWithPermissions(['components.delete'])
         );
 
         $component = factory(Component::class)->create();
-        $this->deleteJson(route('components.destroy', ['component' => $component]))->assertStatus(200);
+        $this->deleteJson(route('components.destroy', ['component' => $component]))->assertOk();
 
         $this->assertSoftDeleted('components', ['id' => $component->id]);
     }
 
     /** @test */
-    public function an_authenticated_user_with_delete_permission_may_delete_components_in_bulk()
+    public function an_authenticated_user_with_delete_permission_can_delete_components_in_bulk()
     {
         $this->signIn()->assignRole(
             $this->createRoleWithPermissions(['components.delete'])
@@ -49,7 +49,7 @@ class ComponentsDeleteTest extends TestCase
 
         $components = factory(Component::class, 5)->create();
         $this->assertCount(5, Component::all());
-        $this->postJson(route('components.bulk-destroy'), ['items' => $components])->assertStatus(200);
+        $this->postJson(route('components.bulk-destroy'), ['items' => $components])->assertOk();
         $this->assertCount(0, Component::all());
     }
 }

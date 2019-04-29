@@ -35,7 +35,7 @@ class BuildingsReadTest extends TestCase
             $this->createRoleWithPermissions(['buildings.read'])
         );
 
-        $this->getJson(route('buildings.index'))->assertStatus(200);
+        $this->getJson(route('buildings.index'))->assertOk();
     }
 
     /** @test */
@@ -47,6 +47,6 @@ class BuildingsReadTest extends TestCase
 
         $building = factory(Building::class)->create();
 
-        $this->getJson(route('buildings.show', ['building' => $building]))->assertStatus(200);
+        $this->getJson(route('buildings.show', ['building' => $building]))->assertOk();
     }
 }

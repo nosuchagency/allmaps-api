@@ -35,7 +35,7 @@ class FixturesReadTest extends TestCase
             $this->createRoleWithPermissions(['fixtures.read'])
         );
 
-        $this->getJson(route('fixtures.index'))->assertStatus(200);
+        $this->getJson(route('fixtures.index'))->assertOk();
     }
 
     /** @test */
@@ -47,6 +47,6 @@ class FixturesReadTest extends TestCase
 
         $fixture = factory(Fixture::class)->create();
 
-        $this->getJson(route('fixtures.show', ['fixture' => $fixture]))->assertStatus(200);
+        $this->getJson(route('fixtures.show', ['fixture' => $fixture]))->assertOk();
     }
 }

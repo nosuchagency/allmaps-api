@@ -92,7 +92,7 @@ class ComponentsController extends Controller
      */
     public function update(ComponentRequest $request, Component $component)
     {
-        $component = $this->componentService->update($request, $component);
+        $component = $this->componentService->update($component, $request);
 
         $component->load($component->relationships);
 

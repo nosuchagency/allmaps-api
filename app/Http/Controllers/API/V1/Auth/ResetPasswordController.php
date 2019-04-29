@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Foundation\Auth\ResetsPasswords;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
@@ -63,8 +64,8 @@ class ResetPasswordController extends Controller
         );
 
         return $response == Password::PASSWORD_RESET
-            ? response()->json(['message' => trans($response), 'status' => true], 201)
-            : response()->json(['message' => trans($response), 'status' => false], 401);
+            ? response()->json(['message' => trans($response), 'status' => true], Response::HTTP_OK)
+            : response()->json(['message' => trans($response), 'status' => false], Response::HTTP_OK);
     }
 
     /**

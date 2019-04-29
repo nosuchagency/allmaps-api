@@ -8,6 +8,7 @@ use App\Http\Requests\UserRequest;
 use App\Http\Resources\UserResource;
 use App\Models\Tag;
 use App\Models\User;
+use App\Services\UserService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
@@ -16,14 +17,23 @@ class UsersController extends Controller
 {
 
     /**
-     * UsersController constructor.
+     * @var UserService
      */
-    public function __construct()
+    protected $userService;
+
+    /**
+     * UsersController constructor.
+     *
+     * @param UserService $userService
+     */
+    public function __construct(UserService $userService)
     {
         $this->middleware('permission:users.create')->only(['store']);
         $this->middleware('permission:users.read')->only(['index', 'show', 'paginated']);
         $this->middleware('permission:users.update')->only(['update']);
         $this->middleware('permission:users.delete')->only(['destroy', 'bulkDestroy']);
+
+        $this->userService = $userService;
     }
 
     /**
@@ -63,18 +73,7 @@ class UsersController extends Controller
      */
     public function store(UserRequest $request)
     {
-        $user = new User($request->only('name', 'email', 'locale', 'category'));
-        $user->assignRole($request->get('role'));
-
-        if ($password = $request->get('password')) {
-            $user->password = Hash::make($password);
-        }
-
-        $user->save();
-
-        foreach ($request->get('tags', []) as $tag) {
-            $user->tags()->attach(Tag::find($tag['id']));
-        }
+        $user = $this->userService->create($request);
 
         $user->load($user->relationships);
 
@@ -101,19 +100,7 @@ class UsersController extends Controller
      */
     public function update(UserRequest $request, User $user)
     {
-        $user->fill($request->only('name', 'email', 'locale', 'category'));
-
-        if ($password = $request->get('password')) {
-            $user->password = Hash::make($password);
-        }
-        $user->syncRoles($request->get('role'));
-        $user->save();
-
-        $user->tags()->sync([]);
-
-        foreach ($request->get('tags', []) as $tag) {
-            $user->tags()->attach(Tag::find($tag['id']));
-        }
+        $user = $this->userService->update($user, $request);
 
         $user->load($user->relationships);
 

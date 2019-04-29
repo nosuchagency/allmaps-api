@@ -49,13 +49,6 @@ class UsersCreateTest extends TestCase
     }
 
     /** @test */
-    public function it_requires_a_valid_locale()
-    {
-        $this->create(['locale' => null])->assertJsonValidationErrors('locale');
-        $this->create(['locale' => 'not-a-valid-locale'])->assertJsonValidationErrors('locale');
-    }
-
-    /** @test */
     public function it_requires_a_valid_email()
     {
         $this->create(['email' => null])->assertJsonValidationErrors('email');
@@ -66,14 +59,15 @@ class UsersCreateTest extends TestCase
     public function it_requires_a_valid_role()
     {
         $this->create(['role' => null])->assertJsonValidationErrors('role');
-        $this->create(['role' => 'not-a-valid-role'])->assertJsonValidationErrors('role');
+        $this->create(['role' => 'not-a-valid-role'])->assertJsonValidationErrors('role.id');
+        $this->create(['role' => ['not-a-valid-role-object']])->assertJsonValidationErrors('role.id');
     }
 
     /** @test */
     public function category_needs_to_be_a_valid_category_object()
     {
         $this->create(['category' => ['id' => 2]])->assertJsonValidationErrors(['category.id']);
-        $this->create(['category' => []])->assertJsonValidationErrors(['category']);
+        $this->create(['category' => ['not-a-valid-category-object']])->assertJsonValidationErrors(['category']);
     }
 
     /** @test */
@@ -109,7 +103,7 @@ class UsersCreateTest extends TestCase
             'password' => $this->faker->password,
             'locale' => $this->faker->randomElement(Locale::LOCALES),
             'email' => $this->faker->email,
-            'role' => factory(Role::class)->create()->name,
+            'role' => factory(Role::class)->create(),
             'category' => factory(Category::class)->create(),
             'tags' => factory(Tag::class, 2)->create()
         ], $overrides);

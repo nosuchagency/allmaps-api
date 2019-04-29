@@ -35,7 +35,7 @@ class ContainerBeaconsController extends Controller
 
         $beacon = $container->beacons()->find($beacon->id);
 
-        return response()->json(new ContainerBeaconResource($beacon), Response::HTTP_CREATED);
+        return response()->json(new ContainerBeaconResource($beacon), Response::HTTP_OK);
     }
 
     /**
@@ -64,7 +64,7 @@ class ContainerBeaconsController extends Controller
 
         $beaconId = $request->input('beacon.id');
 
-        $beacon->pivot->beacon_id = $beaconId;
+        $beacon->pivot->beacon_id = $request->input('beacon.id');
         $beacon->pivot->save();
 
         $beacon = $container->beacons()->find($beaconId);
@@ -82,6 +82,6 @@ class ContainerBeaconsController extends Controller
     {
         $container->beacons()->detach($beacon);
 
-        return response()->json(null, Response::HTTP_CREATED);
+        return response()->json(null, Response::HTTP_OK);
     }
 }

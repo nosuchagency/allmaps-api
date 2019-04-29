@@ -19,7 +19,6 @@ class StructuresController extends Controller
      */
     protected $structureService;
 
-
     /**
      * StructuresController constructor.
      *

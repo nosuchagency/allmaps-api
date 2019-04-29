@@ -8,6 +8,7 @@ use Illuminate\Http\Response;
 
 class ProfileController extends Controller
 {
+
     /**
      * @return \Illuminate\Http\JsonResponse
      */

@@ -7,6 +7,7 @@ use App\Http\Requests\TokenRequest;
 use App\Http\Requests\BulkDeleteRequest;
 use App\Http\Resources\TokenResource;
 use App\Models\Token;
+use App\Services\TokenService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Str;
@@ -15,24 +16,35 @@ class TokensController extends Controller
 {
 
     /**
-     * Instantiate controller
-     *
-     * @return void
+     * @var TokenService
      */
-    public function __construct()
+    protected $tokenService;
+
+    /**
+     * TokensController constructor.
+     *
+     * @param TokenService $tokenService
+     */
+    public function __construct(TokenService $tokenService)
     {
         $this->middleware('permission:tokens.create')->only(['store']);
         $this->middleware('permission:tokens.read')->only(['index', 'show', 'paginated']);
         $this->middleware('permission:tokens.update')->only(['update']);
         $this->middleware('permission:tokens.delete')->only(['destroy', 'bulkDestroy']);
+
+        $this->tokenService = $tokenService;
     }
 
     /**
+     * @param Request $request
+     *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function index()
+    public function index(Request $request)
     {
-        $tokens = Token::all();
+        $tokens = Token::query()
+            ->filter($request)
+            ->get();
 
         return response()->json(TokenResource::collection($tokens), Response::HTTP_OK);
     }
@@ -44,7 +56,9 @@ class TokensController extends Controller
      */
     public function paginated(Request $request)
     {
-        $tokens = Token::filter($request)->paginate($this->paginationNumber());
+        $tokens = Token::query()
+            ->filter($request)
+            ->paginate($this->paginationNumber());
 
         return TokenResource::collection($tokens);
     }
@@ -56,12 +70,7 @@ class TokensController extends Controller
      */
     public function store(TokenRequest $request)
     {
-        $token = Token::create([
-            'name' => $request->get('name'),
-            'token' => Str::random(60)
-        ]);
-
-        $token->syncRoles($request->get('role'));
+        $token = $this->tokenService->create($request);
 
         return response()->json(new TokenResource($token), Response::HTTP_CREATED);
     }
@@ -84,9 +93,7 @@ class TokensController extends Controller
      */
     public function update(TokenRequest $request, Token $token)
     {
-        $token->fill($request->only('name'))->save();
-
-        $token->syncRoles($request->get('role'));
+        $token = $this->tokenService->update($token, $request);
 
         return response()->json(new TokenResource($token), Response::HTTP_OK);
     }

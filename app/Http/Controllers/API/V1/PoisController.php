@@ -41,7 +41,10 @@ class PoisController extends Controller
      */
     public function index(Request $request)
     {
-        $pois = Poi::withRelations($request)->filter($request)->get();
+        $pois = Poi::query()
+            ->withRelations($request)
+            ->filter($request)
+            ->get();
 
         return response()->json(PoiResource::collection($pois), Response::HTTP_OK);
     }
@@ -53,7 +56,10 @@ class PoisController extends Controller
      */
     public function paginated(Request $request)
     {
-        $pois = Poi::withRelations($request)->filter($request)->paginate($this->paginationNumber());
+        $pois = Poi::query()
+            ->withRelations($request)
+            ->filter($request)
+            ->paginate($this->paginationNumber());
 
         return PoiResource::collection($pois);
     }
@@ -92,7 +98,7 @@ class PoisController extends Controller
      */
     public function update(PoiRequest $request, Poi $poi)
     {
-        $poi = $this->poiService->update($request, $poi);
+        $poi = $this->poiService->update($poi, $request);
 
         $poi->load($poi->relationships);
 

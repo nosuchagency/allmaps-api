@@ -35,7 +35,7 @@ class TagsReadTest extends TestCase
             $this->createRoleWithPermissions(['tags.read'])
         );
 
-        $this->getJson(route('tags.index'))->assertStatus(200);
+        $this->getJson(route('tags.index'))->assertOk();
     }
 
     /** @test */
@@ -47,6 +47,6 @@ class TagsReadTest extends TestCase
 
         $tag = factory(Tag::class)->create();
 
-        $this->getJson(route('tags.show', ['tag' => $tag]))->assertStatus(200);
+        $this->getJson(route('tags.show', ['tag' => $tag]))->assertOk();
     }
 }

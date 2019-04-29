@@ -5,6 +5,7 @@ namespace Tests\Feature\Pois;
 use App\Models\Category;
 use App\Models\Poi;
 use App\Models\Tag;
+use App\PoiTypes;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -36,9 +37,9 @@ class PoisUpdateTest extends TestCase
     {
         $poi = factory(Poi::class)->create();
 
-        $attributes = ['id' => $poi->id, 'name' => $this->faker->title];
+        $attributes = ['id' => $poi->id, 'name' => $this->faker->name];
 
-        $this->update($poi, $attributes)->assertStatus(200);
+        $this->update($poi, $attributes)->assertOk();
 
         $this->assertDatabaseHas('pois', $attributes);
     }
@@ -66,8 +67,8 @@ class PoisUpdateTest extends TestCase
     protected function validFields($overrides = [])
     {
         return array_merge([
-            'name' => $this->faker->title,
-            'type' => $this->faker->randomElement(['area', 'image']),
+            'name' => $this->faker->name,
+            'type' => $this->faker->randomElement(PoiTypes::TYPES),
             'color' => $this->faker->hexColor,
             'image' => null,
             'category' => factory(Category::class)->create(),

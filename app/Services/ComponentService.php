@@ -2,18 +2,20 @@
 
 namespace App\Services;
 
-use App\Http\Requests\ComponentRequest;
+use App\Contracts\ModelServiceContract;
 use App\Models\Component;
 use App\Models\Tag;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
 
-class ComponentService
+class ComponentService implements ModelServiceContract
 {
     /**
-     * @param ComponentRequest $request
+     * @param Request $request
      *
-     * @return Component
+     * @return Model
      */
-    public function create(ComponentRequest $request): Component
+    public function create(Request $request)
     {
         $component = new Component();
 
@@ -30,12 +32,12 @@ class ComponentService
     }
 
     /**
-     * @param ComponentRequest $request
-     * @param Component $component
+     * @param Model $component
+     * @param Request $request
      *
-     * @return Component
+     * @return Model
      */
-    public function update(ComponentRequest $request, Component $component): Component
+    public function update(Model $component, Request $request)
     {
         $component->fill($request->only($component->getFillable()));
         $component->setImage($request->get('image'));

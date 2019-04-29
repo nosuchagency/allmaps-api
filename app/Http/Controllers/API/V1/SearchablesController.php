@@ -11,6 +11,7 @@ use Illuminate\Http\Response;
 
 class SearchablesController extends Controller
 {
+
     /**
      * @var SearchableResolver
      */

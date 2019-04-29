@@ -38,9 +38,9 @@ class UsersUpdateTest extends TestCase
     {
         $user = factory(User::class)->create();
 
-        $attributes = ['id' => $user->id, 'name' => $this->faker->title];
+        $attributes = ['id' => $user->id, 'name' => $this->faker->name];
 
-        $this->update($user, $attributes)->assertStatus(200);
+        $this->update($user, $attributes)->assertOk();
 
         $this->assertDatabaseHas('users', $attributes);
     }
@@ -72,7 +72,7 @@ class UsersUpdateTest extends TestCase
             'password' => $this->faker->password,
             'locale' => $this->faker->randomElement(Locale::LOCALES),
             'email' => $this->faker->email,
-            'role' => factory(Role::class)->create()->name,
+            'role' => factory(Role::class)->create(),
             'category' => factory(Category::class)->create(),
             'tags' => factory(Tag::class, 2)->create()
         ], $overrides);

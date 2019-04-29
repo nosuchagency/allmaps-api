@@ -15,6 +15,7 @@ use Illuminate\Http\Response;
 
 class BuildingsController extends BaseController
 {
+
     /**
      * @var BuildingService
      */

@@ -34,9 +34,9 @@ class BuildingsUpdateTest extends TestCase
     {
         $building = factory(Building::class)->create();
 
-        $attributes = ['id' => $building->id, 'name' => $this->faker->title];
+        $attributes = ['id' => $building->id, 'name' => $this->faker->name];
 
-        $this->update($building, $attributes)->assertStatus(200);
+        $this->update($building, $attributes)->assertOk();
 
         $this->assertDatabaseHas('buildings', $attributes);
     }
@@ -64,7 +64,7 @@ class BuildingsUpdateTest extends TestCase
     protected function validFields($overrides = [])
     {
         return array_merge([
-            'name' => $this->faker->title,
+            'name' => $this->faker->name,
             'image' => null,
         ], $overrides);
     }

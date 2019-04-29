@@ -15,6 +15,7 @@ use Illuminate\Http\Response;
 
 class FloorsController extends BaseController
 {
+
     /**
      * @var FloorService
      */

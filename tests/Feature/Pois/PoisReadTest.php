@@ -35,7 +35,7 @@ class PoisReadTest extends TestCase
             $this->createRoleWithPermissions(['pois.read'])
         );
 
-        $this->getJson(route('pois.index'))->assertStatus(200);
+        $this->getJson(route('pois.index'))->assertOk();
     }
 
     /** @test */
@@ -47,6 +47,6 @@ class PoisReadTest extends TestCase
 
         $poi = factory(Poi::class)->create();
 
-        $this->getJson(route('pois.show', ['poi' => $poi]))->assertStatus(200);
+        $this->getJson(route('pois.show', ['poi' => $poi]))->assertOk();
     }
 }

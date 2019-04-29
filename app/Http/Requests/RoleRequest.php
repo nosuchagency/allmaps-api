@@ -24,14 +24,13 @@ class RoleRequest extends FormRequest
     public function rules()
     {
         $rules = [
+            'name' => 'sometimes|required',
             'permissions' => 'array',
             'permissions.*.id' => 'required|exists:permissions,id'
         ];
 
         if ($this->method() === 'POST') {
             $rules['name'] = 'required';
-        } else {
-            $rules['name'] = 'sometimes|required';
         }
 
         return $rules;

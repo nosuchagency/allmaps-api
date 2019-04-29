@@ -28,19 +28,19 @@ class UsersDeleteTest extends TestCase
     }
 
     /** @test */
-    public function an_authenticated_user_with_delete_permission_may_delete_specific_user()
+    public function an_authenticated_user_with_delete_permission_can_delete_specific_user()
     {
         $this->signIn()->assignRole(
             $this->createRoleWithPermissions(['users.delete'])
         );
 
         $user = factory(User::class)->create();
-        $this->deleteJson(route('users.destroy', ['user' => $user]))->assertStatus(200);
+        $this->deleteJson(route('users.destroy', ['user' => $user]))->assertOk();
         $this->assertDatabaseMissing('users', ['id' => $user->id]);
     }
 
     /** @test */
-    public function an_authenticated_user_with_delete_permission_may_delete_users_in_bulk()
+    public function an_authenticated_user_with_delete_permission_can_delete_users_in_bulk()
     {
         $this->signIn()->assignRole(
             $this->createRoleWithPermissions(['users.delete'])
@@ -48,7 +48,7 @@ class UsersDeleteTest extends TestCase
 
         $users = factory(User::class, 5)->create();
         $this->assertCount(6, User::all());
-        $this->postJson(route('users.bulk-destroy'), ['items' => $users])->assertStatus(200);
+        $this->postJson(route('users.bulk-destroy'), ['items' => $users])->assertOk();
         $this->assertCount(1, User::all());
     }
 }

@@ -2,21 +2,22 @@
 
 namespace App\Services;
 
-use App\Http\Requests\PoiRequest;
+use App\Contracts\ModelServiceContract;
 use App\Models\Poi;
 use App\Models\Tag;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
 
-class PoiService
+class PoiService implements ModelServiceContract
 {
     /**
-     * @param PoiRequest $request
+     * @param Request $request
      *
-     * @return Poi
+     * @return Model
      */
-    public function create(PoiRequest $request): Poi
+    public function create(Request $request)
     {
         $poi = new Poi();
-
         $poi->fill($request->only($poi->getFillable()));
         $poi->setImage($request->get('image'));
 
@@ -30,12 +31,12 @@ class PoiService
     }
 
     /**
-     * @param PoiRequest $request
-     * @param Poi $poi
+     * @param Model $poi
+     * @param Request $request
      *
-     * @return Poi
+     * @return Model
      */
-    public function update(PoiRequest $request, Poi $poi): Poi
+    public function update(Model $poi, Request $request)
     {
         $poi->fill($request->only($poi->getFillable()));
         $poi->setImage($request->get('image'));

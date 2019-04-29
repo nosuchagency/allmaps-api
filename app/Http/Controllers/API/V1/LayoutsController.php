@@ -32,7 +32,10 @@ class LayoutsController extends Controller
      */
     public function index(Request $request)
     {
-        $layouts = Layout::withRelations($request)->get();
+        $layouts = Layout::query()
+            ->withRelations($request)
+            ->filter($request)
+            ->get();
 
         return response()->json(LayoutResource::collection($layouts), Response::HTTP_OK);
     }
@@ -44,7 +47,10 @@ class LayoutsController extends Controller
      */
     public function paginated(Request $request)
     {
-        $layouts = Layout::withRelations($request)->filter($request)->paginate($this->paginationNumber());
+        $layouts = Layout::query()
+            ->withRelations($request)
+            ->filter($request)
+            ->paginate($this->paginationNumber());
 
         return LayoutResource::collection($layouts);
     }

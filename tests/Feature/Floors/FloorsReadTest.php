@@ -35,7 +35,7 @@ class FloorsReadTest extends TestCase
             $this->createRoleWithPermissions(['floors.read'])
         );
 
-        $this->getJson(route('floors.index'))->assertStatus(200);
+        $this->getJson(route('floors.index'))->assertOk();
     }
 
     /** @test */
@@ -47,6 +47,6 @@ class FloorsReadTest extends TestCase
 
         $floor = factory(Floor::class)->create();
 
-        $this->getJson(route('floors.show', ['floor' => $floor]))->assertStatus(200);
+        $this->getJson(route('floors.show', ['floor' => $floor]))->assertOk();
     }
 }

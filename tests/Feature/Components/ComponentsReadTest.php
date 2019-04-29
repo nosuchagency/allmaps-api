@@ -35,7 +35,7 @@ class ComponentsReadTest extends TestCase
             $this->createRoleWithPermissions(['components.read'])
         );
 
-        $this->getJson(route('components.index'))->assertStatus(200);
+        $this->getJson(route('components.index'))->assertOk();
     }
 
     /** @test */
@@ -47,6 +47,6 @@ class ComponentsReadTest extends TestCase
 
         $component = factory(Component::class)->create();
 
-        $this->getJson(route('components.show', ['component' => $component]))->assertStatus(200);
+        $this->getJson(route('components.show', ['component' => $component]))->assertOk();
     }
 }

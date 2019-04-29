@@ -35,7 +35,7 @@ class TokensReadTest extends TestCase
             $this->createRoleWithPermissions(['tokens.read'])
         );
 
-        $this->getJson(route('tokens.index'))->assertStatus(200);
+        $this->getJson(route('tokens.index'))->assertOk();
     }
 
     /** @test */
@@ -47,6 +47,6 @@ class TokensReadTest extends TestCase
 
         $token = factory(Token::class)->create();
 
-        $this->getJson(route('tokens.show', ['token' => $token]))->assertStatus(200);
+        $this->getJson(route('tokens.show', ['token' => $token]))->assertOk();
     }
 }

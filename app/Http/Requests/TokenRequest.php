@@ -27,10 +27,8 @@ class TokenRequest extends FormRequest
     {
         return [
             'name' => 'required',
-            'role' => [
-                'required',
-                Rule::in(Role::all()->pluck('name')),
-            ],
+            'role' => 'required',
+            'role.id' => 'required|exists:roles,id'
         ];
     }
 }

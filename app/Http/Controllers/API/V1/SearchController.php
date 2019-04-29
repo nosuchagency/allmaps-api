@@ -9,6 +9,7 @@ use Illuminate\Http\Response;
 
 class SearchController extends BaseController
 {
+
     /**
      * @param SearchRequest $request
      *

@@ -35,7 +35,7 @@ class BeaconContainersController extends Controller
 
         $container = $beacon->containers()->find($container->id);
 
-        return response()->json(new BeaconContainerResource($container), Response::HTTP_CREATED);
+        return response()->json(new BeaconContainerResource($container), Response::HTTP_OK);
     }
 
     /**

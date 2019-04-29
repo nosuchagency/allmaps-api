@@ -19,7 +19,7 @@ class LogoutTest extends TestCase
     {
         $this->signIn();
 
-        $this->postJson(route('logout'))->assertStatus(200);
+        $this->postJson(route('logout'))->assertOk();
     }
 
     /** @test */

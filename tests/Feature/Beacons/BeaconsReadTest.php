@@ -36,7 +36,7 @@ class BeaconsReadTest extends TestCase
             $this->createRoleWithPermissions(['beacons.read'])
         );
 
-        $this->getJson(route('beacons.index'))->assertStatus(200);
+        $this->getJson(route('beacons.index'))->assertOk();
     }
 
     /** @test */
@@ -48,6 +48,6 @@ class BeaconsReadTest extends TestCase
 
         $beacon = factory(Beacon::class)->create();
 
-        $this->getJson(route('beacons.show', ['beacon' => $beacon]))->assertStatus(200);
+        $this->getJson(route('beacons.show', ['beacon' => $beacon]))->assertOk();
     }
 }

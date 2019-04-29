@@ -43,7 +43,8 @@ class TokensCreateTest extends TestCase
     public function it_requires_a_valid_role()
     {
         $this->create(['role' => null])->assertJsonValidationErrors('role');
-        $this->create(['role' => 'not-a-valid-role'])->assertJsonValidationErrors('role');
+        $this->create(['role' => 'not-a-valid-role'])->assertJsonValidationErrors('role.id');
+        $this->create(['role' => ['not-a-valid-role-object']])->assertJsonValidationErrors('role.id');
     }
 
     /**
@@ -69,7 +70,7 @@ class TokensCreateTest extends TestCase
     {
         return array_merge([
             'name' => $this->faker->name,
-            'role' => factory(Role::class)->create()->name
+            'role' => factory(Role::class)->create()
         ], $overrides);
     }
 }

@@ -3,6 +3,8 @@
 namespace App\Services;
 
 use App\Contracts\ModelServiceContract;
+use App\Models\Component;
+use App\Models\Floor;
 use App\Models\Structure;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
@@ -17,9 +19,13 @@ class StructureService implements ModelServiceContract
     public function create(Request $request)
     {
         $structure = new Structure();
+        $structure->floor()->associate(
+            Floor::find($request->input('floor.id'))
+        );
 
-        $structure->floor_id = $request->input('floor.id');
-        $structure->component_id = $request->input('component.id');
+        $structure->component()->associate(
+            Component::find($request->input('component.id'))
+        );
 
         $structure->fill($request->only($structure->getFillable()));
 

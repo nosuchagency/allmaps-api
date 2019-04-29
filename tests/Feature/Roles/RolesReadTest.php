@@ -35,7 +35,7 @@ class RolesReadTest extends TestCase
             $this->createRoleWithPermissions(['roles.read'])
         );
 
-        $this->getJson(route('roles.index'))->assertStatus(200);
+        $this->getJson(route('roles.index'))->assertOk();
     }
 
     /** @test */
@@ -47,6 +47,6 @@ class RolesReadTest extends TestCase
 
         $role = factory(Role::class)->create();
 
-        $this->getJson(route('roles.show', ['role' => $role]))->assertStatus(200);
+        $this->getJson(route('roles.show', ['role' => $role]))->assertOk();
     }
 }

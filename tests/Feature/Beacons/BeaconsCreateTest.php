@@ -78,7 +78,7 @@ class BeaconsCreateTest extends TestCase
     public function category_needs_to_be_a_valid_category_object()
     {
         $this->create(['category' => ['id' => 2]])->assertJsonValidationErrors(['category.id']);
-        $this->create(['category' => []])->assertJsonValidationErrors(['category']);
+        $this->create(['category' => ['not-a-valid-category-object']])->assertJsonValidationErrors(['category']);
     }
 
     /** @test */
@@ -110,15 +110,15 @@ class BeaconsCreateTest extends TestCase
     protected function validFields($overrides = [])
     {
         return array_merge([
-            'name' => $this->faker->title,
+            'name' => $this->faker->name,
             'description' => $this->faker->paragraph,
             'proximity_uuid' => $this->faker->uuid,
             'major' => $this->faker->numberBetween(0, 65535),
             'minor' => $this->faker->numberBetween(0, 65535),
             'eddystone_uid' => $this->faker->uuid,
             'eddystone_url' => $this->faker->url,
-            'eddystone_tlm' => $this->faker->title,
-            'eddystone_eid' => $this->faker->title,
+            'eddystone_tlm' => $this->faker->name,
+            'eddystone_eid' => $this->faker->name,
             'category' => factory(Category::class)->create(),
             'tags' => factory(Tag::class, 2)->create()
         ], $overrides);

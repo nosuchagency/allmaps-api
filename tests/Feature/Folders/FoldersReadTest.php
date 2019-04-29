@@ -35,7 +35,7 @@ class FoldersReadTest extends TestCase
             $this->createRoleWithPermissions(['folders.read'])
         );
 
-        $this->getJson(route('folders.index'))->assertStatus(200);
+        $this->getJson(route('folders.index'))->assertOk();
     }
 
     /** @test */
@@ -47,6 +47,6 @@ class FoldersReadTest extends TestCase
 
         $folder = factory(Folder::class)->create();
 
-        $this->getJson(route('folders.show', ['folder' => $folder]))->assertStatus(200);
+        $this->getJson(route('folders.show', ['folder' => $folder]))->assertOk();
     }
 }

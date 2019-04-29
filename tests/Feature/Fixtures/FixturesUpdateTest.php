@@ -36,9 +36,9 @@ class FixturesUpdateTest extends TestCase
     {
         $fixture = factory(Fixture::class)->create();
 
-        $attributes = ['id' => $fixture->id, 'name' => $this->faker->title];
+        $attributes = ['id' => $fixture->id, 'name' => $this->faker->name];
 
-        $this->update($fixture, $attributes)->assertStatus(200);
+        $this->update($fixture, $attributes)->assertOk();
 
         $this->assertDatabaseHas('fixtures', $attributes);
     }
@@ -66,7 +66,7 @@ class FixturesUpdateTest extends TestCase
     protected function validFields($overrides = [])
     {
         return array_merge([
-            'name' => $this->faker->title,
+            'name' => $this->faker->name,
             'description' => $this->faker->paragraph,
             'image' => null,
             'width' => rand(0, 10),

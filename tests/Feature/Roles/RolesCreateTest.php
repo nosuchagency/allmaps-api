@@ -68,7 +68,7 @@ class RolesCreateTest extends TestCase
     protected function validFields($overrides = [])
     {
         return array_merge([
-            'name' => $this->faker->title,
+            'name' => $this->faker->name,
             'permissions' => factory(Permission::class, 2)->create()
         ], $overrides);
     }

@@ -20,7 +20,7 @@ class LoginTest extends TestCase
         $user = factory(User::class)->create();
 
         $this->postJson(route('login'), ['email' => $user->email, 'password' => 'secret'])
-            ->assertStatus(200)
+            ->assertOk()
             ->assertHeader('Authorization');
     }
 

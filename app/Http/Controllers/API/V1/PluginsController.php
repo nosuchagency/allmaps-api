@@ -9,6 +9,7 @@ use Illuminate\Http\Response;
 
 class PluginsController extends Controller
 {
+
     /**
      * @var SearchableResolver
      */

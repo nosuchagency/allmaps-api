@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\ContentTypes;
 use App\Rules\RequiredIdRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -33,7 +34,7 @@ class ContentRequest extends FormRequest
             'url' => 'nullable|url',
             'type' => [
                 'required',
-                Rule::in(['image', 'video', 'text', 'gallery', 'file', 'web']),
+                Rule::in(ContentTypes::TYPES),
             ],
             'category' => ['nullable', new RequiredIdRule],
             'category.id' => 'exists:categories,id',

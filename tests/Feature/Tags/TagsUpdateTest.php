@@ -34,9 +34,9 @@ class TagsUpdateTest extends TestCase
     {
         $tag = factory(Tag::class)->create();
 
-        $attributes = ['id' => $tag->id, 'name' => $this->faker->title];
+        $attributes = ['id' => $tag->id, 'name' => $this->faker->name];
 
-        $this->update($tag, $attributes)->assertStatus(200);
+        $this->update($tag, $attributes)->assertOk();
 
         $this->assertDatabaseHas('tags', $attributes);
     }
@@ -64,7 +64,7 @@ class TagsUpdateTest extends TestCase
     protected function validFields($overrides = [])
     {
         return array_merge([
-            'name' => $this->faker->title,
+            'name' => $this->faker->name,
             'description' => $this->faker->paragraph
         ], $overrides);
     }

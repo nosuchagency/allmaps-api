@@ -5,6 +5,7 @@ namespace Tests\Feature\Pois;
 use App\Models\Category;
 use App\Models\Poi;
 use App\Models\Tag;
+use App\PoiTypes;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -57,7 +58,7 @@ class PoisCreateTest extends TestCase
     public function category_needs_to_be_a_valid_category_object()
     {
         $this->create(['category' => ['id' => 2]])->assertJsonValidationErrors(['category.id']);
-        $this->create(['category' => []])->assertJsonValidationErrors(['category']);
+        $this->create(['category' => ['not-a-valid-category-object']])->assertJsonValidationErrors(['category']);
     }
 
     /** @test */
@@ -89,8 +90,8 @@ class PoisCreateTest extends TestCase
     protected function validFields($overrides = [])
     {
         return array_merge([
-            'name' => $this->faker->title,
-            'type' => $this->faker->randomElement(['area', 'image']),
+            'name' => $this->faker->name,
+            'type' => $this->faker->randomElement(PoiTypes::TYPES),
             'color' => $this->faker->hexColor,
             'image' => null,
             'category' => factory(Category::class)->create(),

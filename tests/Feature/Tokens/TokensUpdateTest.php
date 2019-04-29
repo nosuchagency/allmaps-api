@@ -39,9 +39,9 @@ class TokensUpdateTest extends TestCase
     {
         $token = factory(Token::class)->create();
 
-        $attributes = ['id' => $token->id, 'name' => $this->faker->title];
+        $attributes = ['id' => $token->id, 'name' => $this->faker->name];
 
-        $this->update($token, $attributes)->assertStatus(200);
+        $this->update($token, $attributes)->assertOk();
 
         $this->assertDatabaseHas('tokens', $attributes);
     }
@@ -70,7 +70,7 @@ class TokensUpdateTest extends TestCase
     {
         return array_merge([
             'name' => $this->faker->name,
-            'role' => factory(Role::class)->create()->name
+            'role' => factory(Role::class)->create()
         ], $overrides);
     }
 }

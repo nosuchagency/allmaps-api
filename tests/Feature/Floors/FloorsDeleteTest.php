@@ -28,19 +28,19 @@ class FloorsDeleteTest extends TestCase
     }
 
     /** @test */
-    public function an_authenticated_user_with_delete_permission_may_delete_specific_floor()
+    public function an_authenticated_user_with_delete_permission_can_delete_specific_floor()
     {
         $this->signIn()->assignRole(
             $this->createRoleWithPermissions(['floors.delete'])
         );
 
         $floor = factory(Floor::class)->create();
-        $this->deleteJson(route('floors.destroy', ['floor' => $floor]))->assertStatus(200);
+        $this->deleteJson(route('floors.destroy', ['floor' => $floor]))->assertOk();
         $this->assertSoftDeleted('floors', ['id' => $floor->id]);
     }
 
     /** @test */
-    public function an_authenticated_user_with_delete_permission_may_delete_floors_in_bulk()
+    public function an_authenticated_user_with_delete_permission_can_delete_floors_in_bulk()
     {
         $this->signIn()->assignRole(
             $this->createRoleWithPermissions(['floors.delete'])
@@ -48,7 +48,7 @@ class FloorsDeleteTest extends TestCase
 
         $floors = factory(Floor::class, 5)->create();
         $this->assertCount(5, Floor::all());
-        $this->postJson(route('floors.bulk-destroy'), ['items' => $floors])->assertStatus(200);
+        $this->postJson(route('floors.bulk-destroy'), ['items' => $floors])->assertOk();
         $this->assertCount(0, Floor::all());
     }
 }

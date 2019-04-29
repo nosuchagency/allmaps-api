@@ -9,12 +9,12 @@ use Spatie\Permission\Models\Permission;
 
 class PermissionsController extends Controller
 {
+
     /**
-     * @param Request $request
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function index(Request $request)
+    public function index()
     {
         $permissions = Permission::all();
 

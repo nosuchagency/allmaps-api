@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\PoiTypes;
 use App\Rules\RequiredIdRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -29,7 +30,7 @@ class PoiRequest extends FormRequest
             'name' => 'required',
             'type' => [
                 'required',
-                Rule::in(['image', 'area']),
+                Rule::in(PoiTypes::TYPES),
             ],
             'color' => ['nullable', 'required_if:type,area', 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
             'image' => '',
