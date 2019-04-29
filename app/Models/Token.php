@@ -17,6 +17,9 @@ class Token extends Model implements AuthorizableContract
 {
     use HasRoles, Authorizable, HasCreatedBy, CausesActivity, LogsActivity;
 
+    /**
+     * @var string
+     */
     protected $guard_name = 'api';
 
     /**
@@ -28,7 +31,6 @@ class Token extends Model implements AuthorizableContract
         'name',
         'created_by'
     ];
-
 
     /**
      * @param int $count
