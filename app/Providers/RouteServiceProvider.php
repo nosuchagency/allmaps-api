@@ -34,7 +34,8 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function map()
     {
-        $this->mapApiV1Routes();
+        $this->mapTokenRoutes();
+        $this->mapUserRoutes();
         $this->mapWebRoutes();
     }
 
@@ -52,22 +53,33 @@ class RouteServiceProvider extends ServiceProvider
     }
 
     /**
-     * Define the "api" routes for the application.
-     *
-     * These routes are typically stateless.
+     * Define the "user" routes for the application.
      *
      * @return void
      */
-    protected function mapApiV1Routes()
+    protected function mapUserRoutes()
     {
-//        Route::prefix('json')
-//            ->middleware('web')
-//            ->namespace($this->namespace . '\API\V1')
-//            ->group(base_path('routes/api/v1/api.php'));
+        Route::prefix('v1/user')
+            ->middleware(['api', 'auth'])
+            ->namespace($this->namespace . '\API\V1')
+            ->group(base_path('routes/api/v1/crud.php'));
 
-        Route::prefix('api/v1')
+        Route::prefix('v1/user')
             ->middleware(['api'])
             ->namespace($this->namespace . '\API\V1')
-            ->group(base_path('routes/api/v1/api.php'));
+            ->group(base_path('routes/api/v1/misc.php'));
+    }
+
+    /**
+     * Define the "token" routes for the application.
+     *
+     * @return void
+     */
+    protected function mapTokenRoutes()
+    {
+        Route::prefix('v1/token')
+            ->middleware(['api', 'auth:token'])
+            ->namespace($this->namespace . '\API\V1')
+            ->group(base_path('routes/api/v1/crud.php'));
     }
 }

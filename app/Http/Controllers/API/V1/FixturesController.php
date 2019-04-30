@@ -27,7 +27,7 @@ class FixturesController extends Controller
     public function __construct(FixtureService $fixtureService)
     {
         $this->middleware('permission:fixtures.create')->only(['store']);
-        $this->middleware('permission:fixtures.read')->only(['index', 'show', 'paginated']);
+        $this->middleware('permission:fixtures.read')->only(['index', 'paginated', 'show']);
         $this->middleware('permission:fixtures.update')->only(['update']);
         $this->middleware('permission:fixtures.delete')->only(['destroy', 'bulkDestroy']);
 

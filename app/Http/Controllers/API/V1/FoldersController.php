@@ -29,7 +29,7 @@ class FoldersController extends Controller
     public function __construct(FolderService $folderService)
     {
         $this->middleware('permission:folders.create')->only(['store']);
-        $this->middleware('permission:folders.read')->only(['index', 'show']);
+        $this->middleware('permission:folders.read')->only(['index', 'paginated', 'show']);
         $this->middleware('permission:folders.update')->only(['update']);
         $this->middleware('permission:folders.delete')->only(['destroy', 'bulkDestroy']);
 

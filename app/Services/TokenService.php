@@ -21,7 +21,7 @@ class TokenService implements ModelServiceContract
     {
         $token = new Token();
         $token->fill($request->only($token->getFillable()));
-        $token->syncRoles($request->get('role.id'));
+        $token->syncRoles($request->input('role.id'));
         $token->generateToken();
         $token->save();
 
@@ -37,7 +37,7 @@ class TokenService implements ModelServiceContract
     public function update(Model $token, Request $request)
     {
         $token->fill($request->only($token->getFillable()));
-        $token->syncRoles($request->get('role.id'));
+        $token->syncRoles($request->input('role.id'));
         $token->save();
 
         return $token->refresh();

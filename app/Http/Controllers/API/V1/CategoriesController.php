@@ -21,7 +21,7 @@ class CategoriesController extends Controller
     public function __construct()
     {
         $this->middleware('permission:categories.create')->only(['store']);
-        $this->middleware('permission:categories.read')->only(['index', 'show', 'paginated']);
+        $this->middleware('permission:categories.read')->only(['index', 'paginated', 'show']);
         $this->middleware('permission:categories.update')->only(['update']);
         $this->middleware('permission:categories.delete')->only(['destroy', 'bulkDestroy']);
     }

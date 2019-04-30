@@ -27,7 +27,7 @@ class ComponentsController extends Controller
     public function __construct(ComponentService $componentService)
     {
         $this->middleware('permission:components.create')->only(['store']);
-        $this->middleware('permission:components.read')->only(['index', 'show', 'paginated']);
+        $this->middleware('permission:components.read')->only(['index', 'paginated', 'show']);
         $this->middleware('permission:components.update')->only(['update']);
         $this->middleware('permission:components.delete')->only(['destroy', 'bulkDestroy']);
 

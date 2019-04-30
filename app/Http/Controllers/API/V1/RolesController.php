@@ -24,12 +24,17 @@ class RolesController extends Controller
         $this->middleware('permission:roles.delete')->only(['destroy', 'bulkDestroy', 'revokePermission']);
     }
 
+
     /**
+     * @param Request $request
+     *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function index()
+    public function index(Request $request)
     {
-        $roles = Role::all();
+        $roles = Role::query()
+            ->filter($request)
+            ->get();
 
         return response()->json(RoleResource::collection($roles), Response::HTTP_OK);
     }
@@ -41,7 +46,9 @@ class RolesController extends Controller
      */
     public function paginated(Request $request)
     {
-        $roles = Role::filter($request)->paginate($this->paginationNumber());
+        $roles = Role::query()
+            ->filter($request)
+            ->paginate($this->paginationNumber());
 
         return RoleResource::collection($roles);
     }

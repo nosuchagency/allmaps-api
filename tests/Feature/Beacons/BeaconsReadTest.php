@@ -3,7 +3,6 @@
 namespace Tests\Feature\Beacons;
 
 use App\Models\Beacon;
-use App\Models\Category;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
