@@ -20,7 +20,7 @@ class ContainersController extends Controller
     public function __construct()
     {
         $this->middleware('permission:containers.create')->only(['store']);
-        $this->middleware('permission:containers.read')->only(['index', 'show', 'paginated']);
+        $this->middleware('permission:containers.read')->only(['index', 'paginated', 'show']);
         $this->middleware('permission:containers.update')->only(['update']);
         $this->middleware('permission:containers.delete')->only(['destroy', 'bulkDestroy']);
     }

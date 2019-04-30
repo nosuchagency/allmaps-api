@@ -20,7 +20,7 @@ class BeaconsController extends Controller
     public function __construct()
     {
         $this->middleware('permission:beacons.create')->only(['store']);
-        $this->middleware('permission:beacons.read')->only(['index', 'show', 'paginated']);
+        $this->middleware('permission:beacons.read')->only(['index', 'paginated', 'show']);
         $this->middleware('permission:beacons.update')->only(['update']);
         $this->middleware('permission:beacons.delete')->only(['destroy', 'bulkDestroy']);
     }

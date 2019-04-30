@@ -20,7 +20,7 @@ class LayoutsController extends Controller
     public function __construct()
     {
         $this->middleware('permission:layouts.create')->only(['store']);
-        $this->middleware('permission:layouts.read')->only(['index', 'show', 'paginated']);
+        $this->middleware('permission:layouts.read')->only(['index', 'paginated', 'show']);
         $this->middleware('permission:layouts.update')->only(['update']);
         $this->middleware('permission:layouts.delete')->only(['destroy', 'bulkDestroy']);
     }
