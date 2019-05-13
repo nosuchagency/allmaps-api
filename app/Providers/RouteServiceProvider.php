@@ -4,7 +4,6 @@ namespace App\Providers;
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
-use Spatie\Permission\Models\Permission;
 
 class RouteServiceProvider extends ServiceProvider
 {
@@ -49,6 +48,7 @@ class RouteServiceProvider extends ServiceProvider
     protected function mapWebRoutes()
     {
         Route::namespace($this->namespace)
+            ->middleware(['web'])
             ->group(base_path('routes/web.php'));
     }
 

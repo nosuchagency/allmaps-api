@@ -1,12 +1,9 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Models;
 
 use App\Contracts\ModelServiceContract;
-use App\Models\Place;
-use App\Models\Tag;
 use App\Models\Token;
-use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 

@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Models;
 
 use App\Contracts\ModelServiceContract;
-use App\Models\Container;
 use App\Models\Folder;
 use App\Models\Tag;
 use Illuminate\Database\Eloquent\Model;
@@ -20,7 +19,7 @@ class FolderService implements ModelServiceContract
     {
         $folder = new Folder();
         $folder->container()->associate(
-            Container::find($request->input('container.id'))
+            $request->input('container.id')
         );
         $folder->fill($request->only($folder->getFillable()));
         $folder->save();

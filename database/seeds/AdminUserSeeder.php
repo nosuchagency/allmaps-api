@@ -12,7 +12,7 @@ class AdminUserSeeder extends Seeder
             'email' => 'webmaster@nosuchagency.dk'
         ], [
             'name' => 'webmaster',
-            'password' => bcrypt('password12')
+            'password' => 'password12'
         ]);
 
         $user->assignRole('admin');

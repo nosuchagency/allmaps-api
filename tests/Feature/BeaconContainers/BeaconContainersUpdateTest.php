@@ -13,48 +13,48 @@ class BeaconContainersUpdateTest extends TestCase
     use RefreshDatabase, WithFaker;
 
     /** @test */
-    public function a_guest_cannot_change_a_beacon_on_a_container()
+    public function a_guest_cannot_change_a_container_on_a_beacon()
     {
-        $this->postJson(route('container.beacons.update', [
-            'container' => factory(Container::class)->create(),
+        $this->putJson(route('beacon.containers.update', [
             'beacon' => factory(Beacon::class)->create(),
+            'container' => factory(Container::class)->create(),
         ]))->assertStatus(401);
     }
 
     /** @test */
-    public function an_authenticated_user_without_create_permission_cannot_change_a_beacon_on_a_container()
+    public function an_authenticated_user_without_create_permission_cannot_change_a_container_on_a_beacon()
     {
         $this->signIn();
 
-        $this->postJson(route('container.beacons.update', [
-            'container' => factory(Container::class)->create(),
+        $this->putJson(route('beacon.containers.update', [
             'beacon' => factory(Beacon::class)->create(),
+            'container' => factory(Container::class)->create(),
         ]))->assertStatus(403);
     }
 
     /** @test */
-    public function a_guest_cannot_update_beacons()
+    public function a_guest_can_change_a_container_on_a_beacon()
     {
         $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['containers.update'])
+            $this->createRoleWithPermissions(['beacons.update', 'containers.update'])
         );
-
-        $beacon = factory(Beacon::class)->create();
 
         $container = factory(Container::class)->create();
-        $container->beacons()->attach(
-            $beacon
+
+        $beacon = factory(Beacon::class)->create();
+        $beacon->containers()->attach(
+            $container
         );
 
-        $newBeacon = factory(Beacon::class)->create();
+        $newContainer = factory(Container::class)->create();
 
-        $this->putJson(route('container.beacons.update', [
-            'container' => $container,
+        $this->putJson(route('beacon.containers.update', [
             'beacon' => $beacon,
+            'container' => $container,
         ]), [
-            'beacon' => $newBeacon
+            'container' => $newContainer
         ])->assertStatus(200);
 
-        $this->assertTrue($newBeacon->is($container->beacons()->first()));
+        $this->assertTrue($newContainer->is($beacon->containers()->first()));
     }
 }

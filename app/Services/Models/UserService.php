@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Models;
 
 use App\Contracts\ModelServiceContract;
 use App\Models\Tag;
@@ -19,7 +19,8 @@ class UserService implements ModelServiceContract
     {
         $user = new User();
         $user->fill($request->only($user->getFillable()));
-        $user->syncRoles($request->get('role.id'));
+        $user->password = $request->get('password');
+        $user->syncRoles($request->input('role.id'));
         $user->save();
 
         foreach ($request->get('tags', []) as $tag) {
@@ -38,7 +39,12 @@ class UserService implements ModelServiceContract
     public function update(Model $user, Request $request)
     {
         $user->fill($request->only($user->getFillable()));
-        $user->syncRoles($request->get('role.id'));
+        $user->syncRoles($request->input('role.id'));
+
+        if ($request->filled('password')) {
+            $user->password = $request->get('password');
+        }
+
         $user->save();
 
         foreach ($request->get('tags', []) as $tag) {

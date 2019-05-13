@@ -4,6 +4,7 @@ namespace Tests\Feature\Containers;
 
 use App\Models\Category;
 use App\Models\Container;
+use App\Models\Skin;
 use App\Models\Tag;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -69,6 +70,9 @@ class ContainersUpdateTest extends TestCase
             'name' => $this->faker->name,
             'description' => $this->faker->paragraph,
             'folders_enabled' => $this->faker->boolean,
+            'mobile_skin' => factory(Skin::class)->create(),
+            'tablet_skin' => factory(Skin::class)->create(),
+            'desktop_skin' => factory(Skin::class)->create(),
             'category' => factory(Category::class)->create(),
             'tags' => factory(Tag::class, 2)->create()
         ], $overrides);

@@ -56,7 +56,6 @@ class Location extends Model
         'publish_at',
         'unpublish_at',
         'coordinates',
-        'poi_id',
         'created_by'
     ];
 

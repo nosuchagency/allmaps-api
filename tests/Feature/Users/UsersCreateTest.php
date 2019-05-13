@@ -8,12 +8,24 @@ use App\Models\Role;
 use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class UsersCreateTest extends TestCase
 {
     use RefreshDatabase, WithFaker;
+
+    /**
+     * @var string
+     */
+    protected $password;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->password = $this->faker->password(8);
+    }
 
     /** @test */
     public function a_guest_cannot_create_users()
@@ -32,8 +44,22 @@ class UsersCreateTest extends TestCase
     /** @test */
     public function an_authenticated_user_with_create_permission_can_create_users()
     {
-        $this->create()->assertStatus(201);
-        $this->assertCount(2, User::all());
+        $attributes = [
+            'name' => $this->faker->name,
+            'email' => $this->faker->email,
+            'locale' => $this->faker->randomElement(Locale::LOCALES)
+        ];
+
+        $userResponse = $this->create($attributes)->assertStatus(201)->decodeResponseJson();
+
+        $attributes['id'] = $userResponse['id'];
+
+        $this->assertDatabaseHas('users', $attributes);
+
+        $user = User::find($userResponse['id']);
+        $this->assertTrue(Hash::check($this->password, $user->password));
+        $this->assertCount(2, $user->tags);
+        $this->assertInstanceOf(Category::class, $user->category);
     }
 
     /** @test */
@@ -53,6 +79,12 @@ class UsersCreateTest extends TestCase
     {
         $this->create(['email' => null])->assertJsonValidationErrors('email');
         $this->create(['email' => 'not-a-valid-email'])->assertJsonValidationErrors('email');
+    }
+
+    /** @test */
+    public function it_requires_locale_to_be_valid()
+    {
+        $this->create(['locale' => 'not-a-valid-locale'])->assertJsonValidationErrors('locale');
     }
 
     /** @test */
@@ -100,7 +132,7 @@ class UsersCreateTest extends TestCase
     {
         return array_merge([
             'name' => $this->faker->name,
-            'password' => $this->faker->password,
+            'password' => $this->password,
             'locale' => $this->faker->randomElement(Locale::LOCALES),
             'email' => $this->faker->email,
             'role' => factory(Role::class)->create(),

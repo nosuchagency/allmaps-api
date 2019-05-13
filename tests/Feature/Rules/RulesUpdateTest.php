@@ -79,7 +79,7 @@ class RulesUpdateTest extends TestCase
     protected function update($rule, $attributes = [])
     {
         $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['beacons.update'])
+            $this->createRoleWithPermissions(['beacons.update', 'containers.update'])
         );
 
         return $this->putJson(route('rules.update', [

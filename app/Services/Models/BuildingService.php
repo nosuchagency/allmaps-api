@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Models;
 
 use App\Contracts\ModelServiceContract;
 use App\Models\Building;
-use App\Models\Place;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 
@@ -19,7 +18,7 @@ class BuildingService implements ModelServiceContract
     {
         $building = new Building();
         $building->place()->associate(
-            Place::find($request->input('place.id'))
+            $request->input('place.id')
         );
 
         $building->fill($request->only($building->getFillable()));

@@ -1,12 +1,10 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Models;
 
 use App\Contracts\ModelServiceContract;
-use App\Http\Requests\LocationRequest;
 use App\Models\Beacon;
 use App\Models\Fixture;
-use App\Models\Floor;
 use App\Models\Location;
 use App\Models\LocationField;
 use App\Models\Poi;
@@ -25,7 +23,7 @@ class LocationService implements ModelServiceContract
         $location = new Location();
 
         $location->floor()->associate(
-            Floor::find($request->input('floor.id'))
+            $request->input('floor.id')
         );
 
         $location->fill($request->only($location->getFillable()));

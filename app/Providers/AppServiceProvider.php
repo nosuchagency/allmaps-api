@@ -3,8 +3,10 @@
 namespace App\Providers;
 
 use App\Models\Container;
+use App\Models\Skin;
 use App\Models\User;
 use App\Observers\ContainerObserver;
+use App\Observers\SkinsObserver;
 use App\Observers\UserObserver;
 use Illuminate\Http\Resources\Json\Resource;
 use Illuminate\Support\ServiceProvider;
@@ -18,8 +20,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        User::observe(UserObserver::class);
         Container::observe(ContainerObserver::class);
+        Skin::observe(SkinsObserver::class);
+        User::observe(UserObserver::class);
+
         Resource::withoutWrapping();
     }
 

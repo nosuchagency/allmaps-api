@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Models;
 
 use App\Contracts\ModelServiceContract;
 use App\Factories\ContentFactory;
-use App\Models\Folder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 
@@ -33,7 +32,7 @@ class ContentService implements ModelServiceContract
         $content = $this->contentFactory->make($request->get('type'));
 
         $content->folder()->associate(
-            Folder::find($request->input('folder.id'))
+            $request->input('folder.id')
         );
 
         $content->fill($request->only($content->getFillable()));

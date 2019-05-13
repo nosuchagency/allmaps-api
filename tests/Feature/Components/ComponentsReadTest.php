@@ -39,6 +39,16 @@ class ComponentsReadTest extends TestCase
     }
 
     /** @test */
+    public function an_authenticated_user_with_read_permission_can_view_components_paginated()
+    {
+        $this->signIn()->assignRole(
+            $this->createRoleWithPermissions(['components.read'])
+        );
+
+        $this->getJson(route('components.paginated'))->assertOk();
+    }
+
+    /** @test */
     public function an_authenticated_user_with_read_permission_can_view_a_specific_component()
     {
         $this->signIn()->assignRole(

@@ -39,6 +39,16 @@ class RolesReadTest extends TestCase
     }
 
     /** @test */
+    public function an_authenticated_user_with_read_permission_can_view_roles_paginated()
+    {
+        $this->signIn()->assignRole(
+            $this->createRoleWithPermissions(['roles.read'])
+        );
+
+        $this->getJson(route('roles.paginated'))->assertOk();
+    }
+
+    /** @test */
     public function an_authenticated_user_with_read_permission_can_view_a_specific_role()
     {
         $this->signIn()->assignRole(

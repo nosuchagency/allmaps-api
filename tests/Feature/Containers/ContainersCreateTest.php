@@ -4,6 +4,7 @@ namespace Tests\Feature\Containers;
 
 use App\Models\Category;
 use App\Models\Container;
+use App\Models\Skin;
 use App\Models\Tag;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -23,7 +24,6 @@ class ContainersCreateTest extends TestCase
     public function an_authenticated_user_without_create_permission_cannot_create_containers()
     {
         $this->signIn();
-
         $this->postJson(route('containers.store'))->assertStatus(403);
     }
 
@@ -45,6 +45,34 @@ class ContainersCreateTest extends TestCase
     {
         $this->create(['folders_enabled' => 'not-a-valid-boolean'])->assertJsonValidationErrors('folders_enabled');
         $this->create(['folders_enabled' => null])->assertJsonValidationErrors('folders_enabled');
+    }
+
+    /** @test */
+    public function mobile_skin_needs_to_be_a_valid_skin_object()
+    {
+        $this->create(['mobile_skin' => ['id' => 10]])->assertJsonValidationErrors(['mobile_skin.id']);
+        $this->create(['mobile_skin' => ['not-a-valid-skin-object']])->assertJsonValidationErrors(['mobile_skin']);
+    }
+
+    /** @test */
+    public function tablet_skin_needs_to_be_a_valid_skin_object()
+    {
+        $this->create(['tablet_skin' => ['id' => 10]])->assertJsonValidationErrors(['tablet_skin.id']);
+        $this->create(['tablet_skin' => ['not-a-valid-skin-object']])->assertJsonValidationErrors(['tablet_skin']);
+    }
+
+    /** @test */
+    public function desktop_skin_needs_to_be_a_valid_skin_object()
+    {
+        $this->create(['desktop_skin' => ['id' => 10]])->assertJsonValidationErrors(['desktop_skin.id']);
+        $this->create(['desktop_skin' => ['not-a-valid-skin-object']])->assertJsonValidationErrors(['desktop_skin']);
+    }
+
+    /** @test */
+    public function mobile_skin_needs_to_be_a_valid_mobile_object()
+    {
+        $this->create(['mobile_skin' => ['id' => 10]])->assertJsonValidationErrors(['mobile_skin.id']);
+        $this->create(['mobile_skin' => ['not-a-valid-skin-object']])->assertJsonValidationErrors(['mobile_skin']);
     }
 
     /** @test */
@@ -86,6 +114,9 @@ class ContainersCreateTest extends TestCase
             'name' => $this->faker->name,
             'description' => $this->faker->paragraph,
             'folders_enabled' => $this->faker->boolean,
+            'mobile_skin' => factory(Skin::class)->create(['mobile' => true]),
+            'tablet_skin' => factory(Skin::class)->create(['tablet' => true]),
+            'desktop_skin' => factory(Skin::class)->create(['desktop' => true]),
             'category' => factory(Category::class)->create(),
             'tags' => factory(Tag::class, 2)->create()
         ], $overrides);

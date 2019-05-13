@@ -39,6 +39,16 @@ class FoldersReadTest extends TestCase
     }
 
     /** @test */
+    public function an_authenticated_user_with_read_permission_can_view_folders_paginated()
+    {
+        $this->signIn()->assignRole(
+            $this->createRoleWithPermissions(['folders.read'])
+        );
+
+        $this->getJson(route('folders.paginated'))->assertOk();
+    }
+
+    /** @test */
     public function an_authenticated_user_with_read_permission_can_view_a_specific_folder()
     {
         $this->signIn()->assignRole(

@@ -38,7 +38,7 @@ class RulesReadTest extends TestCase
     /** @test */
     public function a_guest_cannot_read_rules()
     {
-        $this->getJson(route('beacon.containers.show', [
+        $this->getJson(route('rules.show', [
             'beacon' => $this->beacon,
             'container' => $this->container,
             'rule' => $this->rule
@@ -50,7 +50,7 @@ class RulesReadTest extends TestCase
     {
         $this->signIn();
 
-        $this->getJson(route('beacon.containers.show', [
+        $this->getJson(route('rules.show', [
             'beacon' => $this->beacon,
             'container' => $this->container,
             'rule' => $this->rule
@@ -61,10 +61,10 @@ class RulesReadTest extends TestCase
     public function an_authenticated_user_with_read_permission_can_read_rules()
     {
         $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['beacons.read'])
+            $this->createRoleWithPermissions(['beacons.read', 'containers.read'])
         );
 
-        $this->getJson(route('beacon.containers.show', [
+        $this->getJson(route('rules.show', [
             'beacon' => $this->beacon,
             'container' => $this->container,
             'rule' => $this->rule

@@ -70,6 +70,11 @@ class RolesAndPermissionsSeeder extends Seeder
         Permission::firstOrCreate(['name' => 'plugins.update', 'guard_name' => 'api']);
         Permission::firstOrCreate(['name' => 'plugins.delete', 'guard_name' => 'api']);
 
+        Permission::firstOrCreate(['name' => 'skins.create', 'guard_name' => 'api']);
+        Permission::firstOrCreate(['name' => 'skins.read', 'guard_name' => 'api']);
+        Permission::firstOrCreate(['name' => 'skins.update', 'guard_name' => 'api']);
+        Permission::firstOrCreate(['name' => 'skins.delete', 'guard_name' => 'api']);
+
         Permission::firstOrCreate(['name' => 'components.create', 'guard_name' => 'api']);
         Permission::firstOrCreate(['name' => 'components.read', 'guard_name' => 'api']);
         Permission::firstOrCreate(['name' => 'components.update', 'guard_name' => 'api']);
@@ -167,6 +172,11 @@ class RolesAndPermissionsSeeder extends Seeder
             'plugins.read',
             'plugins.update',
             'plugins.delete',
+
+            'skins.create',
+            'skins.read',
+            'skins.update',
+            'skins.delete',
 
             'components.create',
             'components.read',

@@ -32,6 +32,7 @@ Route::get('/users/paginated', ['as' => 'users.paginated', 'uses' => 'UsersContr
 Route::get('/roles/paginated', ['as' => 'roles.paginated', 'uses' => 'RolesController@paginated']);
 Route::get('/tags/paginated', ['as' => 'tags.paginated', 'uses' => 'TagsController@paginated']);
 Route::get('/templates/paginated', ['as' => 'templates.paginated', 'uses' => 'TemplatesController@paginated']);
+Route::get('/skins/paginated', ['as' => 'skins.paginated', 'uses' => 'SkinsController@paginated']);
 Route::get('/structures/paginated', ['as' => 'structures.paginated', 'uses' => 'StructuresController@paginated']);
 
 Route::apiResource('beacons', 'BeaconsController');
@@ -52,6 +53,7 @@ Route::apiResource('tokens', 'TokensController');
 Route::apiResource('users', 'UsersController');
 Route::apiResource('roles', 'RolesController');
 Route::apiResource('searchables', 'SearchablesController');
+Route::apiResource('skins', 'SkinsController');
 Route::apiResource('structures', 'StructuresController');
 Route::apiResource('tags', 'TagsController');
 Route::apiResource('templates', 'TemplatesController');
@@ -65,7 +67,6 @@ Route::post('/contents/bulk-destroy', ['as' => 'contents.bulk-destroy', 'uses' =
 Route::post('/fixtures/bulk-destroy', ['as' => 'fixtures.bulk-destroy', 'uses' => 'FixturesController@bulkDestroy']);
 Route::post('/floors/bulk-destroy', ['as' => 'floors.bulk-destroy', 'uses' => 'FloorsController@bulkDestroy']);
 Route::post('/folders/bulk-destroy', ['as' => 'folders.bulk-destroy', 'uses' => 'FoldersController@bulkDestroy']);
-Route::post('/structures/bulk-destroy', ['as' => 'structures.bulk-destroy', 'uses' => 'StructuresController@bulkDestroy']);
 Route::post('/layouts/bulk-destroy', ['as' => 'layouts.bulk-destroy', 'uses' => 'LayoutsController@bulkDestroy']);
 Route::post('/locations/bulk-destroy', ['as' => 'locations.bulk-destroy', 'uses' => 'LocationsController@bulkDestroy']);
 Route::post('/places/bulk-destroy', ['as' => 'places.bulk-destroy', 'uses' => 'PlacesController@bulkDestroy']);
@@ -75,6 +76,8 @@ Route::post('/users/bulk-destroy', ['as' => 'users.bulk-destroy', 'uses' => 'Use
 Route::post('/roles/bulk-destroy', ['as' => 'roles.bulk-destroy', 'uses' => 'RolesController@bulkDestroy']);
 Route::post('/tags/bulk-destroy', ['as' => 'tags.bulk-destroy', 'uses' => 'TagsController@bulkDestroy']);
 Route::post('/templates/bulk-destroy', ['as' => 'templates.bulk-destroy', 'uses' => 'TemplatesController@bulkDestroy']);
+Route::post('/skins/bulk-destroy', ['as' => 'skins.bulk-destroy', 'uses' => 'SkinsController@bulkDestroy']);
+Route::post('/structures/bulk-destroy', ['as' => 'structures.bulk-destroy', 'uses' => 'StructuresController@bulkDestroy']);
 
 Route::group(['prefix' => 'beacons/{beacon}/containers/{container}'], function () {
     Route::get('/', ['as' => 'beacon.containers.show', 'uses' => 'BeaconContainersController@show']);

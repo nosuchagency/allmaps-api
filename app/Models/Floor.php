@@ -31,7 +31,6 @@ class Floor extends Model
     protected $fillable = [
         'name',
         'level',
-        'building_id',
         'created_by'
     ];
 

@@ -39,6 +39,16 @@ class StructuresReadTest extends TestCase
     }
 
     /** @test */
+    public function an_authenticated_user_with_read_permission_can_view_structures_paginated()
+    {
+        $this->signIn()->assignRole(
+            $this->createRoleWithPermissions(['floors.read'])
+        );
+
+        $this->getJson(route('structures.paginated'))->assertOk();
+    }
+
+    /** @test */
     public function an_authenticated_user_with_read_permission_can_view_a_specific_structure()
     {
         $this->signIn()->assignRole(

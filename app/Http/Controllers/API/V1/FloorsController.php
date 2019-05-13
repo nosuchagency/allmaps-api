@@ -9,7 +9,7 @@ use App\Http\Requests\SearchRequest;
 use App\Http\Resources\FloorResource;
 use App\Http\Resources\LocationResource;
 use App\Models\Floor;
-use App\Services\FloorService;
+use App\Services\Models\FloorService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 

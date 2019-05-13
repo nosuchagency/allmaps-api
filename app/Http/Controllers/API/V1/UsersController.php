@@ -6,12 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\BulkDeleteRequest;
 use App\Http\Requests\UserRequest;
 use App\Http\Resources\UserResource;
-use App\Models\Tag;
 use App\Models\User;
-use App\Services\UserService;
+use App\Services\Models\UserService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Hash;
 
 class UsersController extends Controller
 {

@@ -9,7 +9,7 @@ use App\Http\Requests\SearchRequest;
 use App\Http\Resources\BuildingResource;
 use App\Http\Resources\LocationResource;
 use App\Models\Building;
-use App\Services\BuildingService;
+use App\Services\Models\BuildingService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 

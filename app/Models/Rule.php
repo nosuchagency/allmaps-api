@@ -24,8 +24,7 @@ class Rule extends Model
         'date_from',
         'date_to',
         'time_restricted',
-        'date_restricted',
-        'beacon_container_id',
+        'date_restricted'
     ];
 
     /**

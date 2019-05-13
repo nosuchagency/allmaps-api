@@ -7,6 +7,7 @@ use App\Http\Requests\BulkDeleteRequest;
 use App\Http\Requests\TagRequest;
 use App\Http\Resources\TagResource;
 use App\Models\Tag;
+use App\Services\Models\TagService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -14,22 +15,36 @@ class TagsController extends Controller
 {
 
     /**
-     * TagsController constructor.
+     * @var TagService
      */
-    public function __construct()
+    protected $tagService;
+
+    /**
+     * TagsController constructor.
+     *
+     * @param TagService $tagService
+     */
+    public function __construct(TagService $tagService)
     {
         $this->middleware('permission:tags.create')->only(['store']);
         $this->middleware('permission:tags.read')->only(['index', 'show', 'paginated']);
         $this->middleware('permission:tags.update')->only(['update']);
         $this->middleware('permission:tags.delete')->only(['destroy', 'bulkDestroy']);
+
+        $this->tagService = $tagService;
     }
 
+
     /**
+     * @param Request $request
+     *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function index()
+    public function index(Request $request)
     {
-        $tags = Tag::all();
+        $tags = Tag::query()
+            ->filter($request)
+            ->get();
 
         return response()->json(TagResource::collection($tags), Response::HTTP_OK);
     }
@@ -41,7 +56,9 @@ class TagsController extends Controller
      */
     public function paginated(Request $request)
     {
-        $tags = Tag::filter($request)->paginate($this->paginationNumber());
+        $tags = Tag::query()
+            ->filter($request)
+            ->paginate($this->paginationNumber());
 
         return TagResource::collection($tags);
     }
@@ -53,7 +70,7 @@ class TagsController extends Controller
      */
     public function store(TagRequest $request)
     {
-        $tag = Tag::create($request->validated());
+        $tag = $this->tagService->create($request);
 
         return response()->json(new TagResource($tag), Response::HTTP_CREATED);
     }
@@ -76,7 +93,7 @@ class TagsController extends Controller
      */
     public function update(TagRequest $request, Tag $tag)
     {
-        $tag->fill($request->validated())->save();
+        $tag = $this->tagService->update($tag, $request);
 
         return response()->json(new TagResource($tag), Response::HTTP_OK);
     }

@@ -23,8 +23,6 @@ class Structure extends Model
         'coordinates',
         'markers',
         'radius',
-        'component_id',
-        'floor_id',
         'created_by'
     ];
 

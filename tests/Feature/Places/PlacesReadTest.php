@@ -39,6 +39,16 @@ class PlacesReadTest extends TestCase
     }
 
     /** @test */
+    public function an_authenticated_user_with_read_permission_can_view_places_paginated()
+    {
+        $this->signIn()->assignRole(
+            $this->createRoleWithPermissions(['places.read'])
+        );
+
+        $this->getJson(route('places.paginated'))->assertOk();
+    }
+
+    /** @test */
     public function an_authenticated_user_with_read_permission_can_view_a_specific_place()
     {
         $this->signIn()->assignRole(

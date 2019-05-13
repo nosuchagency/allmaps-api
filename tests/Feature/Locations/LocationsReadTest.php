@@ -39,6 +39,16 @@ class LocationsReadTest extends TestCase
     }
 
     /** @test */
+    public function an_authenticated_user_with_read_permission_can_view_locations_paginated()
+    {
+        $this->signIn()->assignRole(
+            $this->createRoleWithPermissions(['floors.read'])
+        );
+
+        $this->getJson(route('locations.paginated'))->assertOk();
+    }
+
+    /** @test */
     public function an_authenticated_user_with_read_permission_can_view_a_specific_location()
     {
         $this->signIn()->assignRole(

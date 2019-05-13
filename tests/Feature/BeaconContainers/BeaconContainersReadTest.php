@@ -44,7 +44,7 @@ class BeaconContainersReadTest extends TestCase
     public function an_authenticated_user_with_read_permission_can_read_container_attached_to_a_beacon()
     {
         $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['beacons.read'])
+            $this->createRoleWithPermissions(['beacons.read', 'containers.read'])
         );
 
         $beacon = factory(Beacon::class)->create();

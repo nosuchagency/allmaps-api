@@ -28,6 +28,7 @@ class ContentRequest extends FormRequest
     {
         $rules = [
             'name' => 'required',
+            'order' => 'nullable|integer',
             'text' => '',
             'image' => '',
             'yt_url' => 'nullable|url',

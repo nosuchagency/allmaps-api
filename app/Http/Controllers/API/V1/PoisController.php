@@ -7,7 +7,7 @@ use App\Http\Requests\BulkDeleteRequest;
 use App\Http\Requests\PoiRequest;
 use App\Http\Resources\PoiResource;
 use App\Models\Poi;
-use App\Services\PoiService;
+use App\Services\Models\PoiService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 

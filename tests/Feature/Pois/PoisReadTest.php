@@ -39,6 +39,16 @@ class PoisReadTest extends TestCase
     }
 
     /** @test */
+    public function an_authenticated_user_with_read_permission_can_view_pois_paginated()
+    {
+        $this->signIn()->assignRole(
+            $this->createRoleWithPermissions(['pois.read'])
+        );
+
+        $this->getJson(route('pois.paginated'))->assertOk();
+    }
+
+    /** @test */
     public function an_authenticated_user_with_read_permission_can_view_a_specific_poi()
     {
         $this->signIn()->assignRole(

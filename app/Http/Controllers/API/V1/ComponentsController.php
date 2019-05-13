@@ -7,7 +7,7 @@ use App\Http\Requests\BulkDeleteRequest;
 use App\Http\Requests\ComponentRequest;
 use App\Http\Resources\ComponentResource;
 use App\Models\Component;
-use App\Services\ComponentService;
+use App\Services\Models\ComponentService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -41,7 +41,10 @@ class ComponentsController extends Controller
      */
     public function index(Request $request)
     {
-        $components = Component::withRelations($request)->get();
+        $components = Component::query()
+            ->withRelations($request)
+            ->filter($request)
+            ->get();
 
         return response()->json(ComponentResource::collection($components), Response::HTTP_OK);
     }
@@ -53,7 +56,10 @@ class ComponentsController extends Controller
      */
     public function paginated(Request $request)
     {
-        $components = Component::withRelations($request)->filter($request)->paginate($this->paginationNumber());
+        $components = Component::query()
+            ->withRelations($request)
+            ->filter($request)
+            ->paginate($this->paginationNumber());
 
         return ComponentResource::collection($components);
     }

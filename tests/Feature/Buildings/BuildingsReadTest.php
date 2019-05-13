@@ -39,6 +39,16 @@ class BuildingsReadTest extends TestCase
     }
 
     /** @test */
+    public function an_authenticated_user_with_read_permission_can_view_buildings_paginated()
+    {
+        $this->signIn()->assignRole(
+            $this->createRoleWithPermissions(['buildings.read'])
+        );
+
+        $this->getJson(route('buildings.paginated'))->assertOk();
+    }
+
+    /** @test */
     public function an_authenticated_user_with_read_permission_can_view_a_specific_building()
     {
         $this->signIn()->assignRole(

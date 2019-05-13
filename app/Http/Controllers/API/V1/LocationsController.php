@@ -6,7 +6,7 @@ use App\Http\Requests\BulkDeleteRequest;
 use App\Models\Location;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use App\Services\LocationService;
+use App\Services\Models\LocationService;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LocationRequest;
 use App\Http\Resources\LocationResource;

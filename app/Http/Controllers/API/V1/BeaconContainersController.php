@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\BeaconContainerRequest;
 use App\Http\Resources\BeaconContainerResource;
 use App\Models\Beacon;
-use App\Models\Container;
 use Illuminate\Http\Response;
 
 class BeaconContainersController extends Controller
@@ -17,36 +16,36 @@ class BeaconContainersController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('permission:beacons.create')->only(['store']);
-        $this->middleware('permission:beacons.read')->only(['show']);
-        $this->middleware('permission:beacons.update')->only(['update']);
-        $this->middleware('permission:beacons.delete')->only(['destroy']);
+        $this->middleware(['permission:beacons.create', 'permission:containers.create'])->only(['store']);
+        $this->middleware(['permission:beacons.read', 'permission:containers.read'])->only(['show']);
+        $this->middleware(['permission:beacons.update', 'permission:containers.update'])->only(['update']);
+        $this->middleware(['permission:beacons.delete', 'permission:containers.delete'])->only(['destroy']);
     }
 
     /**
      * @param Beacon $beacon
-     * @param Container $container
+     * @param $containerId
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(Beacon $beacon, Container $container)
+    public function store(Beacon $beacon, $containerId)
     {
-        $beacon->containers()->attach($container);
+        $beacon->containers()->attach($containerId);
 
-        $container = $beacon->containers()->find($container->id);
+        $container = $beacon->containers()->find($containerId);
 
         return response()->json(new BeaconContainerResource($container), Response::HTTP_OK);
     }
 
     /**
      * @param Beacon $beacon
-     * @param Container $container
+     * @param $containerId
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function show(Beacon $beacon, Container $container)
+    public function show(Beacon $beacon, $containerId)
     {
-        $container = $beacon->containers()->findOrFail($container->id);
+        $container = $beacon->containers()->findOrFail($containerId);
 
         return response()->json(new BeaconContainerResource($container), Response::HTTP_OK);
     }
@@ -55,13 +54,13 @@ class BeaconContainersController extends Controller
      *
      * @param BeaconContainerRequest $request
      * @param Beacon $beacon
-     * @param Container $container
+     * @param $containerId
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(BeaconContainerRequest $request, Beacon $beacon, Container $container)
+    public function update(BeaconContainerRequest $request, Beacon $beacon, $containerId)
     {
-        $container = $beacon->containers()->findOrFail($container->id);
+        $container = $beacon->containers()->findOrFail($containerId);
 
         $containerId = $request->input('container.id');
 
@@ -75,13 +74,13 @@ class BeaconContainersController extends Controller
 
     /**
      * @param Beacon $beacon
-     * @param Container $container
+     * @param $containerId
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy(Beacon $beacon, Container $container)
+    public function destroy(Beacon $beacon, $containerId)
     {
-        $beacon->containers()->detach($container);
+        $beacon->containers()->detach($containerId);
 
         return response()->json(null, Response::HTTP_OK);
     }

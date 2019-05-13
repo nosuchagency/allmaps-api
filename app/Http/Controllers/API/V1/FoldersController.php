@@ -6,10 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\BulkDeleteRequest;
 use App\Http\Requests\FolderRequest;
 use App\Http\Resources\FolderResource;
-use App\Models\Container;
 use App\Models\Folder;
-use App\Models\Tag;
-use App\Services\FolderService;
+use App\Services\Models\FolderService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 

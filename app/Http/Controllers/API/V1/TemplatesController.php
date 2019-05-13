@@ -6,8 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\BulkDeleteRequest;
 use App\Http\Requests\TemplateRequest;
 use App\Http\Resources\TemplateResource;
-use App\Models\Tag;
 use App\Models\Template;
+use App\Services\Models\TemplateService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -15,14 +15,23 @@ class TemplatesController extends Controller
 {
 
     /**
-     * TemplatesController constructor.
+     * @var TemplateService
      */
-    public function __construct()
+    protected $templateService;
+
+    /**
+     * TemplatesController constructor.
+     *
+     * @param TemplateService $templateService
+     */
+    public function __construct(TemplateService $templateService)
     {
         $this->middleware('permission:templates.create')->only(['store']);
         $this->middleware('permission:templates.read')->only(['index', 'show', 'paginated']);
         $this->middleware('permission:templates.update')->only(['update']);
         $this->middleware('permission:templates.delete')->only(['destroy', 'bulkDestroy']);
+
+        $this->templateService = $templateService;
     }
 
     /**
@@ -32,7 +41,10 @@ class TemplatesController extends Controller
      */
     public function index(Request $request)
     {
-        $templates = Template::withRelations($request)->get();
+        $templates = Template::query()
+            ->withRelations($request)
+            ->filter($request)
+            ->get();
 
         return response()->json(TemplateResource::collection($templates), Response::HTTP_OK);
     }
@@ -44,7 +56,10 @@ class TemplatesController extends Controller
      */
     public function paginated(Request $request)
     {
-        $templates = Template::withRelations($request)->filter($request)->paginate($this->paginationNumber());
+        $templates = Template::query()
+            ->withRelations($request)
+            ->filter($request)
+            ->paginate($this->paginationNumber());
 
         return TemplateResource::collection($templates);
     }
@@ -56,11 +71,7 @@ class TemplatesController extends Controller
      */
     public function store(TemplateRequest $request)
     {
-        $template = Template::create($request->validated());
-
-        foreach ($request->get('tags', []) as $tag) {
-            $template->tags()->attach(Tag::find($tag['id']));
-        }
+        $template = $this->templateService->create($request);
 
         $template->load($template->relationships);
 
@@ -87,13 +98,7 @@ class TemplatesController extends Controller
      */
     public function update(TemplateRequest $request, Template $template)
     {
-        $template->fill($request->validated())->save();
-
-        $template->tags()->sync([]);
-
-        foreach ($request->get('tags', []) as $tag) {
-            $template->tags()->attach(Tag::find($tag['id']));
-        }
+        $template = $this->templateService->update($template, $request);
 
         $template->load($template->relationships);
 

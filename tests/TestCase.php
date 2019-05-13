@@ -6,12 +6,15 @@ use App\Models\Role;
 use App\Models\User;
 use Illuminate\Contracts\Auth\Authenticatable as UserContract;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
+use Illuminate\Support\Facades\File;
 use Spatie\Permission\Models\Permission;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 abstract class TestCase extends BaseTestCase
 {
     use CreatesApplication;
+
+    protected $skinsDirectory;
 
     /**
      * @param User $user
@@ -72,6 +75,36 @@ abstract class TestCase extends BaseTestCase
         }
 
         return $role;
+    }
+
+    protected function createSkinsDirectory()
+    {
+        $this->skinsDirectory = public_path(config('bb.skins.directory'));
+
+        if (!File::isDirectory($this->skinsDirectory)) {
+            File::makeDirectory($this->skinsDirectory, 0755, true);
+        }
+    }
+
+    protected function removeSkinsDirectory()
+    {
+        if (File::isDirectory($this->skinsDirectory)) {
+            File::deleteDirectory($this->skinsDirectory);
+        }
+    }
+
+    protected function addDirectory($directoryName)
+    {
+        if (!File::isDirectory($this->skinsDirectory . $directoryName)) {
+            File::makeDirectory($this->skinsDirectory . $directoryName);
+        }
+    }
+
+    protected function addFile($stubPath, $directory)
+    {
+        $path = base_path('tests/Stubs/' . $stubPath);
+
+        File::put($this->skinsDirectory . $directory . '/index.html', File::get($path));
     }
 
 }

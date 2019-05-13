@@ -39,6 +39,16 @@ class TokensReadTest extends TestCase
     }
 
     /** @test */
+    public function an_authenticated_user_with_read_permission_can_view_tokens_paginated()
+    {
+        $this->signIn()->assignRole(
+            $this->createRoleWithPermissions(['tokens.read'])
+        );
+
+        $this->getJson(route('tokens.paginated'))->assertOk();
+    }
+
+    /** @test */
     public function an_authenticated_user_with_read_permission_can_view_a_specific_token()
     {
         $this->signIn()->assignRole(

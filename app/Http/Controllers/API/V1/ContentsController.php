@@ -7,7 +7,7 @@ use App\Http\Requests\BulkDeleteRequest;
 use App\Http\Requests\ContentRequest;
 use App\Http\Resources\ContentResource;
 use App\Models\Content\Content;
-use App\Services\ContentService;
+use App\Services\Models\ContentService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 

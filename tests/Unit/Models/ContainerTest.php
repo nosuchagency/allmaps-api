@@ -4,6 +4,7 @@ namespace Tests\Unit\Models;
 
 use App\Models\Container;
 use App\Models\Folder;
+use App\Models\Skin;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Database\Eloquent\Collection;
@@ -46,6 +47,36 @@ class ContainerTest extends TestCase
         $container = factory(Container::class)->create();
         $container->delete();
         $this->assertSoftDeleted('containers', ['id' => $container->id]);
+    }
+
+    /** @test */
+    public function it_has_a_mobile_skin()
+    {
+        $container = factory(Container::class)->create([
+            'mobile_skin_id' => factory(Skin::class)->create()
+        ]);
+
+        $this->assertInstanceOf(Skin::class, $container->mobileSkin);
+    }
+
+    /** @test */
+    public function it_has_a_tablet_skin()
+    {
+        $container = factory(Container::class)->create([
+            'tablet_skin_id' => factory(Skin::class)->create()
+        ]);
+
+        $this->assertInstanceOf(Skin::class, $container->tabletSkin);
+    }
+
+    /** @test */
+    public function it_has_a_desktop_skin()
+    {
+        $container = factory(Container::class)->create([
+            'desktop_skin_id' => factory(Skin::class)->create()
+        ]);
+
+        $this->assertInstanceOf(Skin::class, $container->desktopSkin);
     }
 
     /** @test */

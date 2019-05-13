@@ -39,6 +39,16 @@ class FloorsReadTest extends TestCase
     }
 
     /** @test */
+    public function an_authenticated_user_with_read_permission_can_view_floors_paginated()
+    {
+        $this->signIn()->assignRole(
+            $this->createRoleWithPermissions(['floors.read'])
+        );
+
+        $this->getJson(route('floors.paginated'))->assertOk();
+    }
+
+    /** @test */
     public function an_authenticated_user_with_read_permission_can_view_a_specific_floor()
     {
         $this->signIn()->assignRole(

@@ -26,8 +26,6 @@ class Template extends Model
         'content',
         'activated',
         'hook',
-        'layout',
-        'layout_id',
         'category_id',
         'category',
         'created_by'
@@ -59,18 +57,6 @@ class Template extends Model
     public $relationships = [
         'tags'
     ];
-
-    /**
-     * Set the layout.
-     *
-     * @param  mixed $value
-     *
-     * @return void
-     */
-    public function setLayoutAttribute($value)
-    {
-        $this->attributes['layout_id'] = is_array($value) ? $value['id'] : $value;
-    }
 
     /**
      * The tags that belong to the template

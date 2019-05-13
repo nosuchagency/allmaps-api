@@ -12,3 +12,5 @@
  */
 
 Route::get('/', ['uses' => 'WelcomeController@index']);
+Route::get('/skins/{skin}/download', ['uses' => 'SkinDownloadsController@download']);
+Route::get('/containers/{container}/player', ['as' => 'container.players.show', 'uses' => 'ContainerPlayersController@show']);

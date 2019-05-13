@@ -89,7 +89,7 @@ class RulesCreateTest extends TestCase
     protected function create($attributes = [])
     {
         $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['beacons.create'])
+            $this->createRoleWithPermissions(['beacons.create', 'containers.create'])
         );
 
         return $this->postJson(route('rules.store', [

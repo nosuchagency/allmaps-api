@@ -7,7 +7,7 @@ use App\Http\Requests\BulkDeleteRequest;
 use App\Http\Requests\FixtureRequest;
 use App\Http\Resources\FixtureResource;
 use App\Models\Fixture;
-use App\Services\FixtureService;
+use App\Services\Models\FixtureService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 

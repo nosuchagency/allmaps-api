@@ -32,7 +32,6 @@ class Building extends Model
      */
     protected $fillable = [
         'name',
-        'place_id',
         'created_by'
     ];
 

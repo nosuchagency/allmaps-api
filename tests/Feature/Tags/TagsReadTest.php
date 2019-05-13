@@ -39,6 +39,16 @@ class TagsReadTest extends TestCase
     }
 
     /** @test */
+    public function an_authenticated_user_with_read_permission_can_view_tags_paginated()
+    {
+        $this->signIn()->assignRole(
+            $this->createRoleWithPermissions(['tags.read'])
+        );
+
+        $this->getJson(route('tags.paginated'))->assertOk();
+    }
+
+    /** @test */
     public function an_authenticated_user_with_read_permission_can_view_a_specific_tag()
     {
         $this->signIn()->assignRole(

@@ -7,7 +7,7 @@ use App\Http\Requests\BulkDeleteRequest;
 use App\Http\Requests\StructureRequest;
 use App\Http\Resources\StructureResource;
 use App\Models\Structure;
-use App\Services\StructureService;
+use App\Services\Models\StructureService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 

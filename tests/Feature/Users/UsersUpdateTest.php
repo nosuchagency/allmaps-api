@@ -8,12 +8,24 @@ use App\Models\Role;
 use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class UsersUpdateTest extends TestCase
 {
     use RefreshDatabase, WithFaker;
+
+    /**
+     * @var string
+     */
+    protected $password;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->password = $this->faker->password(8);
+    }
 
     /** @test */
     public function a_guest_cannot_update_users()
@@ -38,11 +50,28 @@ class UsersUpdateTest extends TestCase
     {
         $user = factory(User::class)->create();
 
-        $attributes = ['id' => $user->id, 'name' => $this->faker->name];
+        $attributes = [
+            'id' => $user->id,
+            'name' => $this->faker->name,
+            'email' => $this->faker->email,
+            'locale' => $this->faker->randomElement(Locale::LOCALES)
+        ];
 
         $this->update($user, $attributes)->assertOk();
 
         $this->assertDatabaseHas('users', $attributes);
+    }
+
+    /** @test */
+    public function it_does_not_require_a_password()
+    {
+        $user = factory(User::class)->create([
+            'password' => $this->password
+        ]);
+
+        $this->update($user, ['password' => null])->assertOk();
+
+        $this->assertTrue(Hash::check($this->password, $user->password));
     }
 
     /**
@@ -69,7 +98,7 @@ class UsersUpdateTest extends TestCase
     {
         return array_merge([
             'name' => $this->faker->name,
-            'password' => $this->faker->password,
+            'password' => $this->password,
             'locale' => $this->faker->randomElement(Locale::LOCALES),
             'email' => $this->faker->email,
             'role' => factory(Role::class)->create(),

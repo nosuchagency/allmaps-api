@@ -39,6 +39,16 @@ class ContainersReadTest extends TestCase
     }
 
     /** @test */
+    public function an_authenticated_user_with_read_permission_can_view_containers_paginated()
+    {
+        $this->signIn()->assignRole(
+            $this->createRoleWithPermissions(['containers.read'])
+        );
+
+        $this->getJson(route('containers.paginated'))->assertOk();
+    }
+
+    /** @test */
     public function an_authenticated_user_with_read_permission_can_view_a_specific_container()
     {
         $this->signIn()->assignRole(

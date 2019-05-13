@@ -9,7 +9,7 @@ use App\Http\Requests\SearchRequest;
 use App\Http\Resources\LocationResource;
 use App\Http\Resources\PlaceResource;
 use App\Models\Place;
-use App\Services\PlaceService;
+use App\Services\Models\PlaceService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -45,6 +45,7 @@ class PlacesController extends BaseController
     {
         $places = Place::query()
             ->withRelations($request)
+            ->filter($request)
             ->get();
 
         return response()->json(PlaceResource::collection($places), Response::HTTP_OK);

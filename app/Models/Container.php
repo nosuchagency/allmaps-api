@@ -105,6 +105,49 @@ class Container extends Model
     }
 
     /**
+     * @param $type
+     *
+     * @return Skin
+     */
+    public function getSkin($type)
+    {
+        switch ($type) {
+            case 'mobile' :
+                return $this->mobileSkin;
+            case 'tablet' :
+                return $this->tabletSkin;
+            case 'desktop' :
+                return $this->desktopSkin;
+            default :
+                return $this->mobileSkin;
+        }
+    }
+
+    /**
+     * Get the mobile skin
+     */
+    public function mobileSkin()
+    {
+        return $this->belongsTo(Skin::class);
+    }
+
+    /**
+     * Get the tablet skin
+     */
+    public function tabletSkin()
+    {
+        return $this->belongsTo(Skin::class);
+    }
+
+    /**
+     * Get the desktop skin
+     */
+    public function desktopSkin()
+    {
+        return $this->belongsTo(Skin::class);
+    }
+
+    /**
      * Get primary folder
      *
      * @return mixed

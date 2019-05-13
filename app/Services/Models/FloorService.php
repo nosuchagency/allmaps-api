@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Models;
 
 use App\Contracts\ModelServiceContract;
-use App\Models\Building;
 use App\Models\Floor;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
@@ -19,7 +18,7 @@ class FloorService implements ModelServiceContract
     {
         $floor = new Floor();
         $floor->building()->associate(
-            Building::find($request->input('building.id'))
+            $request->input('building.id')
         );
 
         $floor->fill($request->only($floor->getFillable()));

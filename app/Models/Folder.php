@@ -32,7 +32,6 @@ class Folder extends Model
     protected $fillable = [
         'name',
         'primary',
-        'container_id',
         'order',
         'created_by',
         'category_id',

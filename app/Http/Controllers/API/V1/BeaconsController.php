@@ -7,7 +7,7 @@ use App\Http\Requests\BeaconRequest;
 use App\Http\Requests\BulkDeleteRequest;
 use App\Http\Resources\BeaconResource;
 use App\Models\Beacon;
-use App\Models\Tag;
+use App\Services\Models\BeaconService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -15,14 +15,23 @@ class BeaconsController extends Controller
 {
 
     /**
-     * BeaconsController constructor.
+     * @var BeaconService
      */
-    public function __construct()
+    protected $beaconService;
+
+    /**
+     * BeaconsController constructor.
+     *
+     * @param BeaconService $beaconService
+     */
+    public function __construct(BeaconService $beaconService)
     {
         $this->middleware('permission:beacons.create')->only(['store']);
         $this->middleware('permission:beacons.read')->only(['index', 'paginated', 'show']);
         $this->middleware('permission:beacons.update')->only(['update']);
         $this->middleware('permission:beacons.delete')->only(['destroy', 'bulkDestroy']);
+
+        $this->beaconService = $beaconService;
     }
 
     /**
@@ -63,11 +72,7 @@ class BeaconsController extends Controller
      */
     public function store(BeaconRequest $request)
     {
-        $beacon = Beacon::create($request->validated());
-
-        foreach ($request->get('tags', []) as $tag) {
-            $beacon->tags()->attach(Tag::find($tag['id']));
-        }
+        $beacon = $this->beaconService->create($request);
 
         $beacon->load($beacon->relationships);
 
@@ -94,13 +99,7 @@ class BeaconsController extends Controller
      */
     public function update(BeaconRequest $request, Beacon $beacon)
     {
-        $beacon->fill($request->validated())->save();
-
-        $beacon->tags()->sync([]);
-
-        foreach ($request->get('tags', []) as $tag) {
-            $beacon->tags()->attach(Tag::find($tag['id']));
-        }
+        $beacon = $this->beaconService->update($beacon, $request);
 
         $beacon->load($beacon->relationships);
 

@@ -19,6 +19,24 @@ class CreateContainersTable extends Migration
             $table->string('description')->nullable();
             $table->boolean('folders_enabled')->default(false);
 
+            $table->unsignedInteger('mobile_skin_id')->nullable();
+            $table->foreign('mobile_skin_id')
+                ->references('id')
+                ->on('skins')
+                ->onDelete('set null');
+
+            $table->unsignedInteger('tablet_skin_id')->nullable();
+            $table->foreign('tablet_skin_id')
+                ->references('id')
+                ->on('skins')
+                ->onDelete('set null');
+
+            $table->unsignedInteger('desktop_skin_id')->nullable();
+            $table->foreign('desktop_skin_id')
+                ->references('id')
+                ->on('skins')
+                ->onDelete('set null');
+
             $table->category();
             $table->createdBy();
             $table->timestamps();

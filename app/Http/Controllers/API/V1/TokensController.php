@@ -7,10 +7,9 @@ use App\Http\Requests\TokenRequest;
 use App\Http\Requests\BulkDeleteRequest;
 use App\Http\Resources\TokenResource;
 use App\Models\Token;
-use App\Services\TokenService;
+use App\Services\Models\TokenService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Str;
 
 class TokensController extends Controller
 {
