@@ -47,7 +47,7 @@ class FoldersController extends Controller
             ->filter($request)
             ->get();
 
-        return response()->json(FolderResource::collection($folders), Response::HTTP_OK);
+        return $this->json(FolderResource::collection($folders), Response::HTTP_OK);
     }
 
     /**
@@ -76,7 +76,7 @@ class FoldersController extends Controller
 
         $folder->load($folder->relationships);
 
-        return response()->json(new FolderResource($folder), Response::HTTP_CREATED);
+        return $this->json(new FolderResource($folder), Response::HTTP_CREATED);
     }
 
     /**
@@ -88,7 +88,7 @@ class FoldersController extends Controller
     {
         $folder->load($folder->relationships);
 
-        return response()->json(new FolderResource($folder), Response::HTTP_OK);
+        return $this->json(new FolderResource($folder), Response::HTTP_OK);
     }
 
     /**
@@ -103,7 +103,7 @@ class FoldersController extends Controller
 
         $folder->load($folder->relationships);
 
-        return response()->json(new FolderResource($folder), Response::HTTP_OK);
+        return $this->json(new FolderResource($folder), Response::HTTP_OK);
     }
 
     /**
@@ -115,12 +115,12 @@ class FoldersController extends Controller
     public function destroy(Folder $folder)
     {
         if ($folder->primary) {
-            return response()->json(null, Response::HTTP_UNAUTHORIZED);
+            return $this->json(null, Response::HTTP_UNAUTHORIZED);
         }
 
         $folder->delete();
 
-        return response()->json(null, Response::HTTP_OK);
+        return $this->json(null, Response::HTTP_OK);
     }
 
     /**
@@ -141,6 +141,6 @@ class FoldersController extends Controller
             }
         });
 
-        return response()->json(null, Response::HTTP_OK);
+        return $this->json(null, Response::HTTP_OK);
     }
 }

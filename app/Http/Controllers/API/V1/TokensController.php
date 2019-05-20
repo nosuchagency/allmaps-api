@@ -45,7 +45,7 @@ class TokensController extends Controller
             ->filter($request)
             ->get();
 
-        return response()->json(TokenResource::collection($tokens), Response::HTTP_OK);
+        return $this->json(TokenResource::collection($tokens), Response::HTTP_OK);
     }
 
     /**
@@ -71,7 +71,7 @@ class TokensController extends Controller
     {
         $token = $this->tokenService->create($request);
 
-        return response()->json(new TokenResource($token), Response::HTTP_CREATED);
+        return $this->json(new TokenResource($token), Response::HTTP_CREATED);
     }
 
     /**
@@ -81,7 +81,7 @@ class TokensController extends Controller
      */
     public function show(Token $token)
     {
-        return response()->json(new TokenResource($token), Response::HTTP_OK);
+        return $this->json(new TokenResource($token), Response::HTTP_OK);
     }
 
     /**
@@ -94,7 +94,7 @@ class TokensController extends Controller
     {
         $token = $this->tokenService->update($token, $request);
 
-        return response()->json(new TokenResource($token), Response::HTTP_OK);
+        return $this->json(new TokenResource($token), Response::HTTP_OK);
     }
 
     /**
@@ -107,7 +107,7 @@ class TokensController extends Controller
     {
         $token->delete();
 
-        return response()->json(null, Response::HTTP_OK);
+        return $this->json(null, Response::HTTP_OK);
     }
 
     /**
@@ -123,6 +123,6 @@ class TokensController extends Controller
             }
         });
 
-        return response()->json(null, Response::HTTP_OK);
+        return $this->json(null, Response::HTTP_OK);
     }
 }

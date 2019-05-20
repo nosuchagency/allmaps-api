@@ -45,7 +45,7 @@ class CategoriesController extends Controller
             ->filter($request)
             ->get();
 
-        return response()->json(CategoryResource::collection($categories), Response::HTTP_OK);
+        return $this->json(CategoryResource::collection($categories), Response::HTTP_OK);
     }
 
     /**
@@ -71,7 +71,7 @@ class CategoriesController extends Controller
     {
         $category = $this->categoryService->create($request);
 
-        return response()->json(new CategoryResource($category), Response::HTTP_CREATED);
+        return $this->json(new CategoryResource($category), Response::HTTP_CREATED);
     }
 
     /**
@@ -81,7 +81,7 @@ class CategoriesController extends Controller
      */
     public function show(Category $category)
     {
-        return response()->json(new CategoryResource($category), Response::HTTP_OK);
+        return $this->json(new CategoryResource($category), Response::HTTP_OK);
     }
 
     /**
@@ -94,7 +94,7 @@ class CategoriesController extends Controller
     {
         $category = $this->categoryService->update($category, $request);
 
-        return response()->json(new CategoryResource($category), Response::HTTP_OK);
+        return $this->json(new CategoryResource($category), Response::HTTP_OK);
     }
 
     /**
@@ -107,7 +107,7 @@ class CategoriesController extends Controller
     {
         $category->delete();
 
-        return response()->json(null, Response::HTTP_OK);
+        return $this->json(null, Response::HTTP_OK);
     }
 
     /**
@@ -123,6 +123,6 @@ class CategoriesController extends Controller
             }
         });
 
-        return response()->json(null, Response::HTTP_OK);
+        return $this->json(null, Response::HTTP_OK);
     }
 }

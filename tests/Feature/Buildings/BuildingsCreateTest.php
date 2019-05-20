@@ -40,6 +40,18 @@ class BuildingsCreateTest extends TestCase
     }
 
     /** @test */
+    public function a_building_requires_a_valid_latitude()
+    {
+        $this->create(['latitude' => 'not-a-valid-latitude'])->assertJsonValidationErrors('latitude');
+    }
+
+    /** @test */
+    public function a_building_requires_a_valid_longitude()
+    {
+        $this->create(['longitude' => 'not-a-valid-longitude'])->assertJsonValidationErrors('longitude');
+    }
+
+    /** @test */
     public function a_building_requires_a_place()
     {
         $this->create(['place' => null])->assertJsonValidationErrors('place');
@@ -68,6 +80,8 @@ class BuildingsCreateTest extends TestCase
     {
         return array_merge([
             'name' => $this->faker->name,
+            'latitude' => $this->faker->latitude,
+            'longitude' => $this->faker->longitude,
             'image' => null,
             'place' => factory(Place::class)->create()
         ], $overrides);

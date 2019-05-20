@@ -44,7 +44,7 @@ class SkinsController extends Controller
             ->filter($request)
             ->get();
 
-        return response()->json(SkinResource::collection($skins), Response::HTTP_OK);
+        return $this->json(SkinResource::collection($skins), Response::HTTP_OK);
     }
 
     /**
@@ -72,7 +72,7 @@ class SkinsController extends Controller
     {
         $skin = $this->skinService->create($request);
 
-        return response()->json(new SkinResource($skin), Response::HTTP_CREATED);
+        return $this->json(new SkinResource($skin), Response::HTTP_CREATED);
     }
 
     /**
@@ -82,7 +82,7 @@ class SkinsController extends Controller
      */
     public function show(Skin $skin)
     {
-        return response()->json(new SkinResource($skin), Response::HTTP_OK);
+        return $this->json(new SkinResource($skin), Response::HTTP_OK);
     }
 
 
@@ -97,7 +97,7 @@ class SkinsController extends Controller
     {
         $skin = $this->skinService->update($skin, $request);
 
-        return response()->json(new SkinResource($skin), Response::HTTP_OK);
+        return $this->json(new SkinResource($skin), Response::HTTP_OK);
     }
 
     /**
@@ -110,7 +110,7 @@ class SkinsController extends Controller
     {
         $skin->delete();
 
-        return response()->json(null, Response::HTTP_OK);
+        return $this->json(null, Response::HTTP_OK);
     }
 
     /**
@@ -126,6 +126,6 @@ class SkinsController extends Controller
             }
         });
 
-        return response()->json(null, Response::HTTP_OK);
+        return $this->json(null, Response::HTTP_OK);
     }
 }

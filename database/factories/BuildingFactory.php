@@ -15,8 +15,13 @@ use App\Models\Place;
 */
 
 $factory->define(App\Models\Building::class, function (Faker $faker) {
+
+    $place = factory(Place::class)->create();
+
     return [
         'name' => $faker->company,
-        'place_id' => factory(Place::class)->create()
+        'place_id' => $place,
+        'latitude' => $place->latitude,
+        'longitude' => $place->longitude,
     ];
 });

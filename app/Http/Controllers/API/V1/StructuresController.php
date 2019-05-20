@@ -45,7 +45,7 @@ class StructuresController extends Controller
             ->filter($request)
             ->get();
 
-        return response()->json(StructureResource::collection($structures), Response::HTTP_OK);
+        return $this->json(StructureResource::collection($structures), Response::HTTP_OK);
     }
 
     /**
@@ -71,7 +71,7 @@ class StructuresController extends Controller
     {
         $structure = $this->structureService->create($request);
 
-        return response()->json(new StructureResource($structure), Response::HTTP_CREATED);
+        return $this->json(new StructureResource($structure), Response::HTTP_CREATED);
     }
 
     /**
@@ -81,7 +81,7 @@ class StructuresController extends Controller
      */
     public function show(Structure $structure)
     {
-        return response()->json(new StructureResource($structure), Response::HTTP_OK);
+        return $this->json(new StructureResource($structure), Response::HTTP_OK);
     }
 
     /**
@@ -94,7 +94,7 @@ class StructuresController extends Controller
     {
         $structure = $this->structureService->update($structure, $request);
 
-        return response()->json(new StructureResource($structure), Response::HTTP_OK);
+        return $this->json(new StructureResource($structure), Response::HTTP_OK);
     }
 
     /**
@@ -107,7 +107,7 @@ class StructuresController extends Controller
     {
         $structure->delete();
 
-        return response()->json(null, Response::HTTP_OK);
+        return $this->json(null, Response::HTTP_OK);
     }
 
     /**
@@ -123,6 +123,6 @@ class StructuresController extends Controller
             }
         });
 
-        return response()->json(null, Response::HTTP_OK);
+        return $this->json(null, Response::HTTP_OK);
     }
 }

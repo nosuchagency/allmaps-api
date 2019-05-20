@@ -52,7 +52,7 @@ class ForgotPasswordController extends Controller
         );
 
         return $response == Password::RESET_LINK_SENT
-            ? response()->json(['message' => trans($response), 'status' => true], Response::HTTP_OK)
-            : response()->json(['message' => trans($response), 'status' => false], Response::HTTP_OK);
+            ? $this->json(['message' => trans($response), 'status' => true], Response::HTTP_OK)
+            : $this->json(['message' => trans($response), 'status' => false], Response::HTTP_OK);
     }
 }

@@ -31,7 +31,7 @@ class OrderController extends Controller
             Folder::find($value)->update(['order' => $key]);
         });
 
-        return response()->json(null, Response::HTTP_OK);
+        return $this->json(null, Response::HTTP_OK);
     }
 
     /**
@@ -45,6 +45,6 @@ class OrderController extends Controller
             Content::find($value)->update(['order' => $key]);
         });
 
-        return response()->json(null, Response::HTTP_OK);
+        return $this->json(null, Response::HTTP_OK);
     }
 }

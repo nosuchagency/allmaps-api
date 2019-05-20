@@ -4,6 +4,7 @@ namespace App\Services\Models;
 
 use App\Contracts\ModelServiceContract;
 use App\Models\Building;
+use App\Models\Place;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 
@@ -17,12 +18,16 @@ class BuildingService implements ModelServiceContract
     public function create(Request $request)
     {
         $building = new Building();
-        $building->place()->associate(
-            $request->input('place.id')
-        );
 
+        $place = Place::find($request->input('place.id'));
+        $building->place()->associate($place);
         $building->fill($request->only($building->getFillable()));
         $building->setImage($request->get('image'));
+
+        if (!$building->latitude || !$building->longitude) {
+            $building->latitude = $building->place->latitude;
+            $building->longitude = $building->place->longitude;
+        }
 
         $building->save();
 
@@ -39,6 +44,12 @@ class BuildingService implements ModelServiceContract
     {
         $building->fill($request->only($building->getFillable()));
         $building->setImage($request->get('image'));
+
+        if (!$building->latitude || !$building->longitude) {
+            $building->latitude = $building->place->latitude;
+            $building->longitude = $building->place->longitude;
+        }
+
         $building->save();
 
         return $building->refresh();

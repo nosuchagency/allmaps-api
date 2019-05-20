@@ -74,7 +74,8 @@ class Place extends Model
         'tags',
         'buildings',
         'buildings.floors',
-        'buildings.floors.locations'
+        'buildings.floors.locations',
+        'buildings.floors.structures',
     ];
 
     /**

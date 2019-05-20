@@ -32,7 +32,19 @@ class Building extends Model
      */
     protected $fillable = [
         'name',
-        'created_by'
+        'latitude',
+        'longitude',
+        'created_by',
+    ];
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'latitude' => 'float',
+        'longitude' => 'float',
     ];
 
     /**

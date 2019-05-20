@@ -47,7 +47,7 @@ class BeaconsController extends Controller
             ->filter($request)
             ->get();
 
-        return response()->json(BeaconResource::collection($beacons), Response::HTTP_OK);
+        return $this->json(BeaconResource::collection($beacons), Response::HTTP_OK);
     }
 
     /**
@@ -76,7 +76,7 @@ class BeaconsController extends Controller
 
         $beacon->load($beacon->relationships);
 
-        return response()->json(new BeaconResource($beacon), Response::HTTP_CREATED);
+        return $this->json(new BeaconResource($beacon), Response::HTTP_CREATED);
     }
 
     /**
@@ -88,7 +88,7 @@ class BeaconsController extends Controller
     {
         $beacon->load($beacon->relationships);
 
-        return response()->json(new BeaconResource($beacon), Response::HTTP_OK);
+        return $this->json(new BeaconResource($beacon), Response::HTTP_OK);
     }
 
     /**
@@ -103,7 +103,7 @@ class BeaconsController extends Controller
 
         $beacon->load($beacon->relationships);
 
-        return response()->json(new BeaconResource($beacon), Response::HTTP_OK);
+        return $this->json(new BeaconResource($beacon), Response::HTTP_OK);
     }
 
     /**
@@ -116,7 +116,7 @@ class BeaconsController extends Controller
     {
         $beacon->delete();
 
-        return response()->json(null, Response::HTTP_OK);
+        return $this->json(null, Response::HTTP_OK);
     }
 
     /**
@@ -132,6 +132,6 @@ class BeaconsController extends Controller
             }
         });
 
-        return response()->json(null, Response::HTTP_OK);
+        return $this->json(null, Response::HTTP_OK);
     }
 }

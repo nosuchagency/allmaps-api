@@ -46,7 +46,7 @@ class ComponentsController extends Controller
             ->filter($request)
             ->get();
 
-        return response()->json(ComponentResource::collection($components), Response::HTTP_OK);
+        return $this->json(ComponentResource::collection($components), Response::HTTP_OK);
     }
 
     /**
@@ -75,7 +75,7 @@ class ComponentsController extends Controller
 
         $component->load($component->relationships);
 
-        return response()->json(new ComponentResource($component), Response::HTTP_CREATED);
+        return $this->json(new ComponentResource($component), Response::HTTP_CREATED);
     }
 
     /**
@@ -87,7 +87,7 @@ class ComponentsController extends Controller
     {
         $component->load($component->relationships);
 
-        return response()->json(new ComponentResource($component), Response::HTTP_OK);
+        return $this->json(new ComponentResource($component), Response::HTTP_OK);
     }
 
     /**
@@ -102,7 +102,7 @@ class ComponentsController extends Controller
 
         $component->load($component->relationships);
 
-        return response()->json(new ComponentResource($component), Response::HTTP_OK);
+        return $this->json(new ComponentResource($component), Response::HTTP_OK);
     }
 
     /**
@@ -115,7 +115,7 @@ class ComponentsController extends Controller
     {
         $component->delete();
 
-        return response()->json(null, Response::HTTP_OK);
+        return $this->json(null, Response::HTTP_OK);
     }
 
     /**
@@ -131,6 +131,6 @@ class ComponentsController extends Controller
             }
         });
 
-        return response()->json(null, Response::HTTP_OK);
+        return $this->json(null, Response::HTTP_OK);
     }
 }

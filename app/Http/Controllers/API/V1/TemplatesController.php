@@ -46,7 +46,7 @@ class TemplatesController extends Controller
             ->filter($request)
             ->get();
 
-        return response()->json(TemplateResource::collection($templates), Response::HTTP_OK);
+        return $this->json(TemplateResource::collection($templates), Response::HTTP_OK);
     }
 
     /**
@@ -75,7 +75,7 @@ class TemplatesController extends Controller
 
         $template->load($template->relationships);
 
-        return response()->json(new TemplateResource($template), Response::HTTP_CREATED);
+        return $this->json(new TemplateResource($template), Response::HTTP_CREATED);
     }
 
     /**
@@ -87,7 +87,7 @@ class TemplatesController extends Controller
     {
         $template->load($template->relationships);
 
-        return response()->json(new TemplateResource($template), Response::HTTP_OK);
+        return $this->json(new TemplateResource($template), Response::HTTP_OK);
     }
 
     /**
@@ -102,7 +102,7 @@ class TemplatesController extends Controller
 
         $template->load($template->relationships);
 
-        return response()->json(new TemplateResource($template), Response::HTTP_OK);
+        return $this->json(new TemplateResource($template), Response::HTTP_OK);
     }
 
     /**
@@ -115,7 +115,7 @@ class TemplatesController extends Controller
     {
         $template->delete();
 
-        return response()->json(null, Response::HTTP_OK);
+        return $this->json(null, Response::HTTP_OK);
     }
 
     /**
@@ -131,6 +131,6 @@ class TemplatesController extends Controller
             }
         });
 
-        return response()->json(null, Response::HTTP_OK);
+        return $this->json(null, Response::HTTP_OK);
     }
 }

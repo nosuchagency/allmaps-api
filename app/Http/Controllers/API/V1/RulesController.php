@@ -36,7 +36,7 @@ class RulesController extends Controller
 
         $rule = $beacon->pivot->rules()->create($request->validated());
 
-        return response()->json(new RuleResource ($rule), Response::HTTP_CREATED);
+        return $this->json(new RuleResource ($rule), Response::HTTP_CREATED);
     }
 
     /**
@@ -52,7 +52,7 @@ class RulesController extends Controller
 
         $rule = $beacon->pivot->rules()->findOrFail($rule);
 
-        return response()->json(new RuleResource($rule), Response::HTTP_OK);
+        return $this->json(new RuleResource($rule), Response::HTTP_OK);
     }
 
     /**
@@ -71,7 +71,7 @@ class RulesController extends Controller
 
         $rule->fill($request->validated())->save();
 
-        return response()->json(new RuleResource($rule), Response::HTTP_OK);
+        return $this->json(new RuleResource($rule), Response::HTTP_OK);
     }
 
     /**
@@ -87,6 +87,6 @@ class RulesController extends Controller
 
         $beacon->pivot->rules()->findOrFail($rule)->delete();
 
-        return response()->json(null, Response::HTTP_OK);
+        return $this->json(null, Response::HTTP_OK);
     }
 }

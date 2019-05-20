@@ -19,6 +19,9 @@ class CreateBuildingsTable extends Migration
             $table->string('name');
             $table->string('image')->nullable();
 
+            $table->string('latitude');
+            $table->string('longitude');
+
             $table->unsignedInteger('place_id');
             $table->foreign('place_id')
                 ->references('id')

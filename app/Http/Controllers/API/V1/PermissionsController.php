@@ -17,6 +17,6 @@ class PermissionsController extends Controller
     {
         $permissions = Permission::all();
 
-        return response()->json($permissions, Response::HTTP_OK);
+        return $this->json($permissions, Response::HTTP_OK);
     }
 }

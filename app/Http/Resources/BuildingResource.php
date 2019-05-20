@@ -19,6 +19,8 @@ class BuildingResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'image' => $this->getImageUrl(),
+            'latitude' => $this->latitude,
+            'longitude' => $this->longitude,
             'place' => $this->place,
             'created_at' => $this->created_at->toDateTimeString(),
             'updated_at' => $this->updated_at->toDateTimeString(),

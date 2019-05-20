@@ -48,7 +48,7 @@ class ContainersController extends Controller
             ->filter($request)
             ->get();
 
-        return response()->json(ContainerResource::collection($containers), Response::HTTP_OK);
+        return $this->json(ContainerResource::collection($containers), Response::HTTP_OK);
     }
 
     /**
@@ -79,7 +79,7 @@ class ContainersController extends Controller
 
         $container->load($container->relationships);
 
-        return response()->json(new ContainerResource($container), Response::HTTP_CREATED);
+        return $this->json(new ContainerResource($container), Response::HTTP_CREATED);
     }
 
     /**
@@ -91,7 +91,7 @@ class ContainersController extends Controller
     {
         $container->load($container->relationships);
 
-        return response()->json(new ContainerResource($container), Response::HTTP_OK);
+        return $this->json(new ContainerResource($container), Response::HTTP_OK);
     }
 
     /**
@@ -106,7 +106,7 @@ class ContainersController extends Controller
 
         $container->load($container->relationships);
 
-        return response()->json(new ContainerResource($container), Response::HTTP_OK);
+        return $this->json(new ContainerResource($container), Response::HTTP_OK);
     }
 
     /**
@@ -119,7 +119,7 @@ class ContainersController extends Controller
     {
         $container->delete();
 
-        return response()->json(null, Response::HTTP_OK);
+        return $this->json(null, Response::HTTP_OK);
     }
 
     /**
@@ -135,6 +135,6 @@ class ContainersController extends Controller
             }
         });
 
-        return response()->json(null, Response::HTTP_OK);
+        return $this->json(null, Response::HTTP_OK);
     }
 }

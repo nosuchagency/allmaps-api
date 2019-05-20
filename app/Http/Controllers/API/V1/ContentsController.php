@@ -45,7 +45,7 @@ class ContentsController extends Controller
             ->filter($request)
             ->get();
 
-        return response()->json(ContentResource::collection($contents), Response::HTTP_OK);
+        return $this->json(ContentResource::collection($contents), Response::HTTP_OK);
     }
 
     /**
@@ -71,7 +71,7 @@ class ContentsController extends Controller
     {
         $content = $this->contentService->create($request);
 
-        return response()->json($content, Response::HTTP_CREATED);
+        return $this->json($content, Response::HTTP_CREATED);
     }
 
     /**
@@ -81,7 +81,7 @@ class ContentsController extends Controller
      */
     public function show(Content $content)
     {
-        return response()->json(new ContentResource($content), Response::HTTP_OK);
+        return $this->json(new ContentResource($content), Response::HTTP_OK);
     }
 
     /**
@@ -94,7 +94,7 @@ class ContentsController extends Controller
     {
         $content = $this->contentService->update($content, $request);
 
-        return response()->json($content, Response::HTTP_OK);
+        return $this->json($content, Response::HTTP_OK);
     }
 
     /**
@@ -107,7 +107,7 @@ class ContentsController extends Controller
     {
         $content->delete();
 
-        return response()->json(null, Response::HTTP_OK);
+        return $this->json(null, Response::HTTP_OK);
     }
 
     /**
@@ -123,6 +123,6 @@ class ContentsController extends Controller
             }
         });
 
-        return response()->json(null, Response::HTTP_OK);
+        return $this->json(null, Response::HTTP_OK);
     }
 }

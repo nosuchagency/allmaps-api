@@ -57,9 +57,33 @@ class ComponentsCreateTest extends TestCase
     }
 
     /** @test */
+    public function a_component_requires_stroke_to_be_a_valid_boolean()
+    {
+        $this->create(['stroke' => 'not-a-valid-boolean'])->assertJsonValidationErrors('stroke');
+    }
+
+    /** @test */
     public function a_component_requires_color_to_be_a_valid_hex_color()
     {
         $this->create(['color' => 'not-a-valid-hex-color'])->assertJsonValidationErrors('color');
+    }
+
+    /** @test */
+    public function a_component_requires_dashed_to_be_a_valid_boolean()
+    {
+        $this->create(['dashed' => 'not-a-valid-boolean'])->assertJsonValidationErrors('dashed');
+    }
+
+    /** @test */
+    public function a_component_requires_fill_to_be_a_valid_boolean()
+    {
+        $this->create(['fill' => 'not-a-valid-boolean'])->assertJsonValidationErrors('fill');
+    }
+
+    /** @test */
+    public function a_component_requires_fill_color_to_be_a_valid_hex_color()
+    {
+        $this->create(['fill_color' => 'not-a-valid-hex-color'])->assertJsonValidationErrors('fill_color');
     }
 
     /** @test */
@@ -71,11 +95,18 @@ class ComponentsCreateTest extends TestCase
     }
 
     /** @test */
+    public function a_component_requires_fill_opacity_to_be_between_0_and_1()
+    {
+        $this->create(['fill_opacity' => -0.01])->assertJsonValidationErrors('fill_opacity');
+        $this->create(['fill_opacity' => 'not-a-valid-opacity'])->assertJsonValidationErrors('fill_opacity');
+        $this->create(['fill_opacity' => 1.01])->assertJsonValidationErrors('fill_opacity');
+    }
+
+    /** @test */
     public function a_component_requires_weight_to_be_a_valid_integer()
     {
         $this->create(['weight' => -1])->assertJsonValidationErrors('weight');
         $this->create(['weight' => 'not-a-valid-weight'])->assertJsonValidationErrors('weight');
-        $this->create(['weight' => 11])->assertJsonValidationErrors('weight');
     }
 
     /** @test */
@@ -135,16 +166,22 @@ class ComponentsCreateTest extends TestCase
     {
         return array_merge([
             'name' => $this->faker->name,
-            'description' => $this->faker->paragraph,
             'type' => $this->faker->randomElement(ComponentType::TYPES),
             'shape' => $this->faker->randomElement(Shape::SHAPES),
+            'description' => $this->faker->paragraph,
+            'stroke' => $this->faker->boolean,
             'color' => $this->faker->hexColor,
-            'opacity' => rand(0, 10) / 10,
             'weight' => $this->faker->numberBetween(1, 10),
+            'opacity' => rand(0, 10) / 10,
+            'dashed' => $this->faker->boolean,
+            'dash_pattern' => '5,3,2',
+            'fill' => $this->faker->boolean,
+            'fill_color' => $this->faker->hexColor,
+            'fill_opacity' => rand(0, 10) / 10,
             'curved' => $this->faker->boolean,
+            'image' => null,
             'width' => $this->faker->numberBetween(0, 10),
             'height' => $this->faker->numberBetween(0, 10),
-            'image' => null,
             'category' => factory(Category::class)->create(),
             'tags' => factory(Tag::class, 2)->create()
         ], $overrides);

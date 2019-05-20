@@ -19,12 +19,12 @@ class AuthController extends Controller
         $credentials = $request->only('email', 'password');
 
         if (!$token = auth()->attempt($credentials)) {
-            return response()->json(['message' => 'Invalid credentials'], Response::HTTP_UNPROCESSABLE_ENTITY);
+            return $this->json(['message' => 'Invalid credentials'], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
         $this->logSuccessfulLogin();
 
-        return response()->json(['message' => 'Successfully logged in'], Response::HTTP_OK)
+        return $this->json(['message' => 'Successfully logged in'], Response::HTTP_OK)
             ->header('Authorization', 'Bearer ' . $token);
     }
 
@@ -35,7 +35,7 @@ class AuthController extends Controller
     {
         auth()->logout();
 
-        return response()->json(['message' => 'Successfully logged out'], Response::HTTP_OK);
+        return $this->json(['message' => 'Successfully logged out'], Response::HTTP_OK);
     }
 
     /**

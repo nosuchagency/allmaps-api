@@ -34,15 +34,21 @@ class Component extends Model
     protected $fillable = [
         'name',
         'type',
-        'description',
         'shape',
+        'description',
+        'stroke',
         'color',
-        'opacity',
         'weight',
+        'opacity',
+        'dashed',
+        'dash_pattern',
+        'fill',
+        'fill_color',
+        'fill_opacity',
         'curved',
+        'image',
         'width',
         'height',
-        'image',
         'category_id',
         'created_by',
         'category'
@@ -54,6 +60,11 @@ class Component extends Model
      * @var array
      */
     protected $casts = [
+        'stroke' => 'boolean',
+        'opacity' => 'double',
+        'dashed' => 'boolean',
+        'fill' => 'boolean',
+        'fill_opacity' => 'double',
         'curved' => 'boolean',
     ];
 

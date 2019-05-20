@@ -37,7 +37,7 @@ class LayoutsController extends Controller
             ->filter($request)
             ->get();
 
-        return response()->json(LayoutResource::collection($layouts), Response::HTTP_OK);
+        return $this->json(LayoutResource::collection($layouts), Response::HTTP_OK);
     }
 
     /**
@@ -70,7 +70,7 @@ class LayoutsController extends Controller
 
         $layout->load($layout->relationships);
 
-        return response()->json(new LayoutResource($layout), Response::HTTP_CREATED);
+        return $this->json(new LayoutResource($layout), Response::HTTP_CREATED);
     }
 
     /**
@@ -82,7 +82,7 @@ class LayoutsController extends Controller
     {
         $layout->load($layout->relationships);
 
-        return response()->json(new LayoutResource($layout), Response::HTTP_OK);
+        return $this->json(new LayoutResource($layout), Response::HTTP_OK);
     }
 
     /**
@@ -103,7 +103,7 @@ class LayoutsController extends Controller
 
         $layout->load($layout->relationships);
 
-        return response()->json(new LayoutResource($layout), Response::HTTP_OK);
+        return $this->json(new LayoutResource($layout), Response::HTTP_OK);
     }
 
     /**
@@ -116,7 +116,7 @@ class LayoutsController extends Controller
     {
         $layout->delete();
 
-        return response()->json(null, Response::HTTP_OK);
+        return $this->json(null, Response::HTTP_OK);
     }
 
     /**
@@ -132,6 +132,6 @@ class LayoutsController extends Controller
             }
         });
 
-        return response()->json(null, Response::HTTP_OK);
+        return $this->json(null, Response::HTTP_OK);
     }
 }

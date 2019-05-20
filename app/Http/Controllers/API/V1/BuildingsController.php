@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\API\V1;
 
-use App\Http\Controllers\BaseController;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\BuildingRequest;
 use App\Http\Requests\BulkDeleteRequest;
 use App\Http\Requests\SearchRequest;
@@ -13,7 +13,7 @@ use App\Services\Models\BuildingService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
-class BuildingsController extends BaseController
+class BuildingsController extends Controller
 {
 
     /**
@@ -48,7 +48,7 @@ class BuildingsController extends BaseController
             ->filter($request)
             ->get();
 
-        return response()->json(BuildingResource::collection($buildings), Response::HTTP_OK);
+        return $this->json(BuildingResource::collection($buildings), Response::HTTP_OK);
     }
 
     /**
@@ -77,7 +77,7 @@ class BuildingsController extends BaseController
 
         $building->load($building->relationships);
 
-        return response()->json(new BuildingResource($building), Response::HTTP_CREATED);
+        return $this->json(new BuildingResource($building), Response::HTTP_CREATED);
     }
 
     /**
@@ -89,7 +89,7 @@ class BuildingsController extends BaseController
     {
         $building->load($building->relationships);
 
-        return response()->json(new BuildingResource($building), Response::HTTP_OK);
+        return $this->json(new BuildingResource($building), Response::HTTP_OK);
     }
 
     /**
@@ -104,7 +104,7 @@ class BuildingsController extends BaseController
 
         $building->load($building->relationships);
 
-        return response()->json(new BuildingResource($building), Response::HTTP_OK);
+        return $this->json(new BuildingResource($building), Response::HTTP_OK);
     }
 
     /**
@@ -117,7 +117,7 @@ class BuildingsController extends BaseController
     {
         $building->delete();
 
-        return response()->json(null, Response::HTTP_OK);
+        return $this->json(null, Response::HTTP_OK);
     }
 
     /**
@@ -133,7 +133,7 @@ class BuildingsController extends BaseController
             }
         });
 
-        return response()->json(null, Response::HTTP_OK);
+        return $this->json(null, Response::HTTP_OK);
     }
 
     /**
@@ -146,6 +146,6 @@ class BuildingsController extends BaseController
     {
         $locations = $this->searchForLocations($request->all(), $building->locations()->getQuery());
 
-        return response()->json(LocationResource::collection($locations), Response::HTTP_OK);
+        return $this->json(LocationResource::collection($locations), Response::HTTP_OK);
     }
 }

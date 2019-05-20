@@ -18,6 +18,6 @@ class ProfileController extends Controller
 
         $user->load($user->relationships);
 
-        return response()->json(new UserResource($user), Response::HTTP_OK);
+        return $this->json(new UserResource($user), Response::HTTP_OK);
     }
 }

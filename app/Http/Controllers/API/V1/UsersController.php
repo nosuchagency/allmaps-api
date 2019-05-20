@@ -46,7 +46,7 @@ class UsersController extends Controller
             ->filter($request)
             ->get();
 
-        return response()->json(UserResource::collection($users), Response::HTTP_OK);
+        return $this->json(UserResource::collection($users), Response::HTTP_OK);
     }
 
     /**
@@ -75,7 +75,7 @@ class UsersController extends Controller
 
         $user->load($user->relationships);
 
-        return response()->json(new UserResource($user), Response::HTTP_CREATED);
+        return $this->json(new UserResource($user), Response::HTTP_CREATED);
     }
 
     /**
@@ -87,7 +87,7 @@ class UsersController extends Controller
     {
         $user->load($user->relationships);
 
-        return response()->json(new UserResource($user), Response::HTTP_OK);
+        return $this->json(new UserResource($user), Response::HTTP_OK);
     }
 
     /**
@@ -102,7 +102,7 @@ class UsersController extends Controller
 
         $user->load($user->relationships);
 
-        return response()->json(new UserResource($user), Response::HTTP_OK);
+        return $this->json(new UserResource($user), Response::HTTP_OK);
     }
 
     /**
@@ -115,7 +115,7 @@ class UsersController extends Controller
     {
         $user->delete();
 
-        return response()->json(null, Response::HTTP_OK);
+        return $this->json(null, Response::HTTP_OK);
     }
 
     /**
@@ -131,6 +131,6 @@ class UsersController extends Controller
             }
         });
 
-        return response()->json(null, Response::HTTP_OK);
+        return $this->json(null, Response::HTTP_OK);
     }
 }

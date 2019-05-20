@@ -45,7 +45,7 @@ class LocationsController extends Controller
             ->filter($request)
             ->get();
 
-        return response()->json(LocationResource::collection($locations), Response::HTTP_OK);
+        return $this->json(LocationResource::collection($locations), Response::HTTP_OK);
     }
 
     /**
@@ -71,7 +71,7 @@ class LocationsController extends Controller
     {
         $location = $this->locationService->create($request);
 
-        return response()->json(new LocationResource($location), Response::HTTP_CREATED);
+        return $this->json(new LocationResource($location), Response::HTTP_CREATED);
     }
 
     /**
@@ -81,7 +81,7 @@ class LocationsController extends Controller
      */
     public function show(Location $location)
     {
-        return response()->json(new LocationResource($location), Response::HTTP_OK);
+        return $this->json(new LocationResource($location), Response::HTTP_OK);
     }
 
     /**
@@ -94,7 +94,7 @@ class LocationsController extends Controller
     {
         $location = $this->locationService->update($location, $request);
 
-        return response()->json(new LocationResource($location), Response::HTTP_OK);
+        return $this->json(new LocationResource($location), Response::HTTP_OK);
     }
 
     /**
@@ -107,7 +107,7 @@ class LocationsController extends Controller
     {
         $location->delete();
 
-        return response()->json(null, Response::HTTP_OK);
+        return $this->json(null, Response::HTTP_OK);
     }
 
     /**
@@ -123,6 +123,6 @@ class LocationsController extends Controller
             }
         });
 
-        return response()->json(null, Response::HTTP_OK);
+        return $this->json(null, Response::HTTP_OK);
     }
 }

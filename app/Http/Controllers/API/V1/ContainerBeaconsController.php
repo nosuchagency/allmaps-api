@@ -35,7 +35,7 @@ class ContainerBeaconsController extends Controller
 
         $beacon = $container->beacons()->find($beaconId);
 
-        return response()->json(new ContainerBeaconResource($beacon), Response::HTTP_OK);
+        return $this->json(new ContainerBeaconResource($beacon), Response::HTTP_OK);
     }
 
     /**
@@ -48,7 +48,7 @@ class ContainerBeaconsController extends Controller
     {
         $beacon = $container->beacons()->findOrFail($beaconId);
 
-        return response()->json(new ContainerBeaconResource($beacon), Response::HTTP_OK);
+        return $this->json(new ContainerBeaconResource($beacon), Response::HTTP_OK);
     }
 
     /**
@@ -69,7 +69,7 @@ class ContainerBeaconsController extends Controller
 
         $beacon = $container->beacons()->find($beaconId);
 
-        return response()->json(new ContainerBeaconResource($beacon), Response::HTTP_OK);
+        return $this->json(new ContainerBeaconResource($beacon), Response::HTTP_OK);
     }
 
     /**
@@ -82,6 +82,6 @@ class ContainerBeaconsController extends Controller
     {
         $container->beacons()->detach($beaconId);
 
-        return response()->json(null, Response::HTTP_OK);
+        return $this->json(null, Response::HTTP_OK);
     }
 }

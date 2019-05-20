@@ -46,7 +46,7 @@ class RolesController extends Controller
             ->filter($request)
             ->get();
 
-        return response()->json(RoleResource::collection($roles), Response::HTTP_OK);
+        return $this->json(RoleResource::collection($roles), Response::HTTP_OK);
     }
 
     /**
@@ -72,7 +72,7 @@ class RolesController extends Controller
     {
         $role = $this->roleService->create($request);
 
-        return response()->json(new RoleResource($role), Response::HTTP_CREATED);
+        return $this->json(new RoleResource($role), Response::HTTP_CREATED);
     }
 
     /**
@@ -82,7 +82,7 @@ class RolesController extends Controller
      */
     public function show(Role $role)
     {
-        return response()->json(new RoleResource($role), Response::HTTP_OK);
+        return $this->json(new RoleResource($role), Response::HTTP_OK);
     }
 
     /**
@@ -95,7 +95,7 @@ class RolesController extends Controller
     {
         $role = $this->roleService->update($role, $request);
 
-        return response()->json(new RoleResource($role), Response::HTTP_OK);
+        return $this->json(new RoleResource($role), Response::HTTP_OK);
     }
 
     /**
@@ -108,7 +108,7 @@ class RolesController extends Controller
     {
         $role->delete();
 
-        return response()->json(null, Response::HTTP_OK);
+        return $this->json(null, Response::HTTP_OK);
     }
 
     /**
@@ -124,6 +124,6 @@ class RolesController extends Controller
             }
         });
 
-        return response()->json(null, Response::HTTP_OK);
+        return $this->json(null, Response::HTTP_OK);
     }
 }

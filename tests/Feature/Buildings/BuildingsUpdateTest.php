@@ -65,6 +65,8 @@ class BuildingsUpdateTest extends TestCase
     {
         return array_merge([
             'name' => $this->faker->name,
+            'latitude' => $this->faker->latitude,
+            'longitude' => $this->faker->longitude,
             'image' => null,
         ], $overrides);
     }

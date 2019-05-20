@@ -46,7 +46,7 @@ class FixturesController extends Controller
             ->filter($request)
             ->get();
 
-        return response()->json(FixtureResource::collection($fixtures), Response::HTTP_OK);
+        return $this->json(FixtureResource::collection($fixtures), Response::HTTP_OK);
     }
 
     /**
@@ -75,7 +75,7 @@ class FixturesController extends Controller
 
         $fixture->load($fixture->relationships);
 
-        return response()->json(new FixtureResource($fixture), Response::HTTP_CREATED);
+        return $this->json(new FixtureResource($fixture), Response::HTTP_CREATED);
     }
 
     /**
@@ -87,7 +87,7 @@ class FixturesController extends Controller
     {
         $fixture->load($fixture->relationships);
 
-        return response()->json(new FixtureResource($fixture), Response::HTTP_OK);
+        return $this->json(new FixtureResource($fixture), Response::HTTP_OK);
     }
 
     /**
@@ -102,7 +102,7 @@ class FixturesController extends Controller
 
         $fixture->load($fixture->relationships);
 
-        return response()->json(new FixtureResource($fixture), Response::HTTP_OK);
+        return $this->json(new FixtureResource($fixture), Response::HTTP_OK);
     }
 
     /**
@@ -115,7 +115,7 @@ class FixturesController extends Controller
     {
         $fixture->delete();
 
-        return response()->json(null, Response::HTTP_OK);
+        return $this->json(null, Response::HTTP_OK);
     }
 
     /**
@@ -131,6 +131,6 @@ class FixturesController extends Controller
             }
         });
 
-        return response()->json(null, Response::HTTP_OK);
+        return $this->json(null, Response::HTTP_OK);
     }
 }

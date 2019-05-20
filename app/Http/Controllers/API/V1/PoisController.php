@@ -46,7 +46,7 @@ class PoisController extends Controller
             ->filter($request)
             ->get();
 
-        return response()->json(PoiResource::collection($pois), Response::HTTP_OK);
+        return $this->json(PoiResource::collection($pois), Response::HTTP_OK);
     }
 
     /**
@@ -75,7 +75,7 @@ class PoisController extends Controller
 
         $poi->load($poi->relationships);
 
-        return response()->json(new PoiResource($poi), Response::HTTP_CREATED);
+        return $this->json(new PoiResource($poi), Response::HTTP_CREATED);
     }
 
     /**
@@ -87,7 +87,7 @@ class PoisController extends Controller
     {
         $poi->load($poi->relationships);
 
-        return response()->json(new PoiResource($poi), Response::HTTP_OK);
+        return $this->json(new PoiResource($poi), Response::HTTP_OK);
     }
 
     /**
@@ -102,7 +102,7 @@ class PoisController extends Controller
 
         $poi->load($poi->relationships);
 
-        return response()->json(new PoiResource($poi), Response::HTTP_OK);
+        return $this->json(new PoiResource($poi), Response::HTTP_OK);
     }
 
     /**
@@ -115,7 +115,7 @@ class PoisController extends Controller
     {
         $poi->delete();
 
-        return response()->json(null, Response::HTTP_OK);
+        return $this->json(null, Response::HTTP_OK);
     }
 
     /**
@@ -131,6 +131,6 @@ class PoisController extends Controller
             }
         });
 
-        return response()->json(null, Response::HTTP_OK);
+        return $this->json(null, Response::HTTP_OK);
     }
 }

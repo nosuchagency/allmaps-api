@@ -25,7 +25,9 @@ class BuildingRequest extends FormRequest
     {
         $rules = [
             'name' => 'required',
-            'image' => ''
+            'image' => '',
+            'latitude' => 'nullable|numeric',
+            'longitude' => 'nullable|numeric',
         ];
 
         if ($this->method() === 'POST') {

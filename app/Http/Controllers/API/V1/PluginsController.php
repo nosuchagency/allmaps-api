@@ -49,6 +49,6 @@ class PluginsController extends Controller
             ];
         });
 
-        return response()->json($plugins, Response::HTTP_OK);
+        return $this->json($plugins, Response::HTTP_OK);
     }
 }

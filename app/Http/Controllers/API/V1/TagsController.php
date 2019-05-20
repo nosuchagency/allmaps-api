@@ -46,7 +46,7 @@ class TagsController extends Controller
             ->filter($request)
             ->get();
 
-        return response()->json(TagResource::collection($tags), Response::HTTP_OK);
+        return $this->json(TagResource::collection($tags), Response::HTTP_OK);
     }
 
     /**
@@ -72,7 +72,7 @@ class TagsController extends Controller
     {
         $tag = $this->tagService->create($request);
 
-        return response()->json(new TagResource($tag), Response::HTTP_CREATED);
+        return $this->json(new TagResource($tag), Response::HTTP_CREATED);
     }
 
     /**
@@ -82,7 +82,7 @@ class TagsController extends Controller
      */
     public function show(Tag $tag)
     {
-        return response()->json(new TagResource($tag), Response::HTTP_OK);
+        return $this->json(new TagResource($tag), Response::HTTP_OK);
     }
 
     /**
@@ -95,7 +95,7 @@ class TagsController extends Controller
     {
         $tag = $this->tagService->update($tag, $request);
 
-        return response()->json(new TagResource($tag), Response::HTTP_OK);
+        return $this->json(new TagResource($tag), Response::HTTP_OK);
     }
 
     /**
@@ -108,7 +108,7 @@ class TagsController extends Controller
     {
         $tag->delete();
 
-        return response()->json(null, Response::HTTP_OK);
+        return $this->json(null, Response::HTTP_OK);
     }
 
     /**
@@ -124,6 +124,6 @@ class TagsController extends Controller
             }
         });
 
-        return response()->json(null, Response::HTTP_OK);
+        return $this->json(null, Response::HTTP_OK);
     }
 }
