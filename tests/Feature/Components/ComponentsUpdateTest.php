@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\Component;
 use App\Models\Tag;
 use App\Shape;
+use App\StrokeType;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -73,18 +74,16 @@ class ComponentsUpdateTest extends TestCase
             'shape' => $this->faker->randomElement(Shape::SHAPES),
             'description' => $this->faker->paragraph,
             'stroke' => $this->faker->boolean,
-            'color' => $this->faker->hexColor,
-            'weight' => $this->faker->numberBetween(1, 10),
-            'opacity' => rand(0, 10) / 10,
-            'dashed' => $this->faker->boolean,
-            'dash_pattern' => '5,3,2',
+            'stroke_type' => $this->faker->randomElement(StrokeType::TYPES),
+            'stroke_color' => $this->faker->hexColor,
+            'stroke_width' => $this->faker->numberBetween(1, 10),
+            'stroke_opacity' => rand(0, 10) / 10,
             'fill' => $this->faker->boolean,
             'fill_color' => $this->faker->hexColor,
             'fill_opacity' => rand(0, 10) / 10,
-            'curved' => $this->faker->boolean,
-            'width' => $this->faker->numberBetween(0, 10),
-            'height' => $this->faker->numberBetween(0, 10),
             'image' => null,
+            'image_width' => $this->faker->numberBetween(0, 10),
+            'image_height' => $this->faker->numberBetween(0, 10),
             'category' => factory(Category::class)->create(),
             'tags' => factory(Tag::class, 2)->create()
         ], $overrides);

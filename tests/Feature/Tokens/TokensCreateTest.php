@@ -29,8 +29,14 @@ class TokensCreateTest extends TestCase
     /** @test */
     public function an_authenticated_user_with_create_permission_can_create_tokens()
     {
+        $this->withoutExceptionHandling();
+
         $this->create()->assertStatus(201);
-        $this->assertCount(1, Token::all());
+        $tokens = Token::all();
+        $this->assertCount(1, $tokens);
+
+        $token = $tokens->first();
+        $this->assertNotEmpty($token->api_token);
     }
 
     /** @test */

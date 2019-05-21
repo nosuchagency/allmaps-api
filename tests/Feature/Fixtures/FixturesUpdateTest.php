@@ -69,8 +69,8 @@ class FixturesUpdateTest extends TestCase
             'name' => $this->faker->name,
             'description' => $this->faker->paragraph,
             'image' => null,
-            'width' => rand(0, 10),
-            'height' => rand(0, 10),
+            'image_width' => rand(0, 10),
+            'image_height' => rand(0, 10),
             'category' => factory(Category::class)->create(),
             'tags' => factory(Tag::class, 2)->create()
         ], $overrides);

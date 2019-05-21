@@ -19,6 +19,7 @@ class CreateLocationFieldsTable extends Migration
             $table->string('identifier');
             $table->string('type')->default('text');
             $table->string('value')->nullable();
+            $table->string('label')->nullable();
 
             $table->unsignedInteger('location_id');
             $table->foreign('location_id')

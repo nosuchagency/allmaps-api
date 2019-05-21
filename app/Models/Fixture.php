@@ -35,8 +35,8 @@ class Fixture extends Model
         'name',
         'description',
         'image',
-        'width',
-        'height',
+        'image_width',
+        'image_height',
         'category_id',
         'created_by',
         'category'

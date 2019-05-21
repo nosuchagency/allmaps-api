@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use App\ComponentType;
 use App\Rules\RequiredIdRule;
 use App\Shape;
+use App\StrokeType;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -39,18 +40,19 @@ class ComponentRequest extends FormRequest
                 Rule::in(Shape::SHAPES),
             ],
             'stroke' => 'boolean',
-            'color' => ['required', 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
-            'weight' => 'integer|min:1',
-            'opacity' => 'nullable|numeric|between:0,1',
-            'dashed' => 'boolean',
-            'dash_pattern' => '',
+            'stroke_type' => [
+                'required',
+                Rule::in(StrokeType::TYPES),
+            ],
+            'stroke_color' => ['required', 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
+            'stroke_width' => 'integer|min:1',
+            'stroke_opacity' => 'nullable|numeric|between:0,1',
             'fill' => 'boolean',
             'fill_color' => ['required', 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
             'fill_opacity' => 'nullable|numeric|between:0,1',
-            'curved' => 'boolean',
             'image' => '',
-            'width' => 'nullable|integer|min:0',
-            'height' => 'nullable|integer|min:0',
+            'image_width' => 'nullable|integer|min:0',
+            'image_height' => 'nullable|integer|min:0',
             'category' => ['nullable', new RequiredIdRule],
             'category.id' => 'exists:categories,id',
             'tags' => 'array',

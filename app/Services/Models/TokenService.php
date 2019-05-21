@@ -6,6 +6,7 @@ use App\Contracts\ModelServiceContract;
 use App\Models\Token;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class TokenService implements ModelServiceContract
 {
@@ -19,7 +20,7 @@ class TokenService implements ModelServiceContract
         $token = new Token();
         $token->fill($request->only($token->getFillable()));
         $token->syncRoles($request->input('role.id'));
-        $token->generateToken();
+        $token->api_token = Str::random(60);
         $token->save();
 
         return $token->refresh();

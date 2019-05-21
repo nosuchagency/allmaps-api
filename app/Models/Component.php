@@ -37,18 +37,16 @@ class Component extends Model
         'shape',
         'description',
         'stroke',
-        'color',
-        'weight',
-        'opacity',
-        'dashed',
-        'dash_pattern',
+        'stroke_type',
+        'stroke_color',
+        'stroke_width',
+        'stroke_opacity',
         'fill',
         'fill_color',
         'fill_opacity',
-        'curved',
         'image',
-        'width',
-        'height',
+        'image_width',
+        'image_height',
         'category_id',
         'created_by',
         'category'
@@ -61,11 +59,9 @@ class Component extends Model
      */
     protected $casts = [
         'stroke' => 'boolean',
-        'opacity' => 'double',
-        'dashed' => 'boolean',
+        'stroke_opacity' => 'double',
         'fill' => 'boolean',
         'fill_opacity' => 'double',
-        'curved' => 'boolean',
     ];
 
     /**

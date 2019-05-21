@@ -20,8 +20,8 @@ class FixtureResource extends JsonResource
             'name' => $this->name,
             'description' => $this->description,
             'image' => $this->getImageUrl(),
-            'width' => $this->width,
-            'height' => $this->height,
+            'image_width' => $this->image_width,
+            'image_height' => $this->image_height,
             'creator' => $this->creator,
             'category' => new CategoryResource($this->category),
             'tags' => TagResource::collection($this->whenLoaded('tags'))
