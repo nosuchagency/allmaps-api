@@ -41,7 +41,7 @@ class Structure extends Model
      * @var array
      */
     protected $casts = [
-        'radius' => 'float',
+        'radius' => 'double',
         'coordinates' => 'array',
         'markers' => 'array',
     ];
