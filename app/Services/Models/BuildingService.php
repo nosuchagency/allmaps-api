@@ -31,7 +31,6 @@ class BuildingService implements ModelServiceContract
         }
 
         if (!$building->latitude || !$building->longitude) {
-
             $building->latitude = $building->place->latitude;
             $building->longitude = $building->place->longitude;
         }
@@ -55,6 +54,12 @@ class BuildingService implements ModelServiceContract
         if (!$building->latitude || !$building->longitude) {
             $building->latitude = $building->place->latitude;
             $building->longitude = $building->place->longitude;
+        }
+
+        if ($request->has('menu')) {
+            $building->menu()->associate(
+                $request->input('menu.id')
+            );
         }
 
         $building->save();

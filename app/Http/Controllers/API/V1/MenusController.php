@@ -42,6 +42,7 @@ class MenusController extends Controller
     public function index(Request $request)
     {
         $menus = Menu::query()
+            ->filter($request)
             ->withRelations($request)
             ->get();
 
@@ -56,6 +57,7 @@ class MenusController extends Controller
     public function paginated(Request $request)
     {
         $menus = Menu::query()
+            ->filter($request)
             ->withRelations($request)
             ->paginate($this->paginationNumber());
 

@@ -4,7 +4,6 @@ namespace Tests\Feature\MenuItems;
 
 use App\Models\Menu;
 use App\Models\MenuItem;
-use App\Models\Poi;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -46,6 +45,36 @@ class MenuItemsCreateTest extends TestCase
         $this->create(['menu' => null])->assertJsonValidationErrors('menu');
     }
 
+    /** @test */
+    public function a_menu_item_requires_a_type()
+    {
+        $this->create(['type' => null])->assertJsonValidationErrors('type');
+    }
+
+    /** @test */
+    public function if_type_is_poi_poi_is_required()
+    {
+        $this->create(['type' => 'poi', 'poi' => null])->assertJsonValidationErrors('poi');
+    }
+
+    /** @test */
+    public function if_type_is_location_location_is_required()
+    {
+        $this->create(['type' => 'location', 'location' => null])->assertJsonValidationErrors('location');
+    }
+
+    /** @test */
+    public function if_type_is_tag_tag_is_required()
+    {
+        $this->create(['type' => 'tag', 'tag' => null])->assertJsonValidationErrors('tag');
+    }
+
+    /** @test */
+    public function if_type_is_category_category_is_required()
+    {
+        $this->create(['type' => 'category', 'category' => null])->assertJsonValidationErrors('category');
+    }
+
     /**
      * @param array $attributes
      *
@@ -70,8 +99,7 @@ class MenuItemsCreateTest extends TestCase
         return array_merge([
             'name' => $this->faker->name,
             'menu' => factory(Menu::class)->create(),
-            'type' => 'poi',
-            'poi' => factory(Poi::class)->create()
+            'type' => 'header',
         ], $overrides);
     }
 }

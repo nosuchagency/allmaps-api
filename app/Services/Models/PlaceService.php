@@ -46,6 +46,13 @@ class PlaceService implements ModelServiceContract
     {
         $place->fill($request->only($place->getFillable()));
         $place->setImage($request->get('image'));
+
+        if ($request->has('menu')) {
+            $place->menu()->associate(
+                $request->input('menu.id')
+            );
+        }
+
         $place->save();
 
         $place->tags()->sync([]);

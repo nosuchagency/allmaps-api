@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use App\Filters\SearchFilter;
 use App\Traits\HasRelations;
 use Askedio\SoftCascade\Traits\SoftCascadeTrait;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -52,5 +54,18 @@ class Menu extends Model
     {
         return $this->hasMany(MenuItem::class)
             ->orderBy('order');
+    }
+
+    /**
+     * Process filters
+     *
+     * @param Builder $builder
+     * @param $request
+     *
+     * @return Builder $builder
+     */
+    public function scopeFilter(Builder $builder, $request)
+    {
+        return (new SearchFilter($request))->filter($builder);
     }
 }
