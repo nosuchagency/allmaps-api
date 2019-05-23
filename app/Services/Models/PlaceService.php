@@ -20,6 +20,13 @@ class PlaceService implements ModelServiceContract
         $place = new Place();
         $place->fill($request->only($place->getFillable()));
         $place->setImage($request->get('image'));
+
+        if ($request->filled('menu')) {
+            $place->menu()->associate(
+                $request->input('menu.id')
+            );
+        }
+
         $place->save();
 
         foreach ($request->get('tags', []) as $tag) {

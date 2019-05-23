@@ -14,14 +14,14 @@ class CreateTemplatesTable extends Migration
     public function up()
     {
         Schema::create('templates', function (Blueprint $table) {
-            $table->increments('id');
+            $table->bigIncrements('id');
             $table->string('name');
             $table->text('hook')->nullable();
             $table->text('description')->nullable();
             $table->longText('content')->nullable();
             $table->boolean('activated')->default(false);
 
-            $table->unsignedInteger('layout_id')->nullable();
+            $table->unsignedBigInteger('layout_id')->nullable();
             $table->foreign('layout_id')
                 ->references('id')
                 ->on('layouts')

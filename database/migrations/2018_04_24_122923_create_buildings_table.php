@@ -14,7 +14,7 @@ class CreateBuildingsTable extends Migration
     public function up()
     {
         Schema::create('buildings', function (Blueprint $table) {
-            $table->increments('id');
+            $table->bigIncrements('id');
 
             $table->string('name');
             $table->string('image')->nullable();
@@ -22,10 +22,16 @@ class CreateBuildingsTable extends Migration
             $table->string('latitude')->nullable(false)->default('55.676098');
             $table->string('longitude')->nullable(false)->default('12.568337');
 
-            $table->unsignedInteger('place_id');
+            $table->unsignedBigInteger('place_id');
             $table->foreign('place_id')
                 ->references('id')
                 ->on('places')
+                ->onDelete('cascade');
+
+            $table->unsignedBigInteger('menu_id')->nullable();
+            $table->foreign('menu_id')
+                ->references('id')
+                ->on('menus')
                 ->onDelete('cascade');
 
             $table->createdBy();

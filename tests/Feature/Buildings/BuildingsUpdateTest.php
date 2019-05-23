@@ -3,6 +3,7 @@
 namespace Tests\Feature\Buildings;
 
 use App\Models\Building;
+use App\Models\Menu;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -68,6 +69,7 @@ class BuildingsUpdateTest extends TestCase
             'latitude' => $this->faker->latitude,
             'longitude' => $this->faker->longitude,
             'image' => null,
+            'menu' => factory(Menu::class)->create(),
         ], $overrides);
     }
 }

@@ -16,7 +16,7 @@ class CreateTagSearchablePivotTable extends Migration
         Schema::create('tag_searchable', function (Blueprint $table) {
             $table->tag();
 
-            $table->unsignedInteger('searchable_id');
+            $table->unsignedBigInteger('searchable_id');
             $table->foreign('searchable_id')
                 ->references('id')
                 ->on('searchables')

@@ -14,11 +14,11 @@ class CreateFloorsTable extends Migration
     public function up()
     {
         Schema::create('floors', function (Blueprint $table) {
-            $table->increments('id');
+            $table->bigIncrements('id');
 
             $table->string('name');
 
-            $table->unsignedInteger('building_id');
+            $table->unsignedBigInteger('building_id');
             $table->foreign('building_id')
                 ->references('id')
                 ->on('buildings')

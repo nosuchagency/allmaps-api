@@ -14,7 +14,7 @@ class CreateComponentsTable extends Migration
     public function up()
     {
         Schema::create('components', function (Blueprint $table) {
-            $table->increments('id');
+            $table->bigIncrements('id');
 
             $table->string('name');
             $table->string('type')->default('plan');

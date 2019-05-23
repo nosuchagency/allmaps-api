@@ -33,6 +33,8 @@ class PlaceRequest extends FormRequest
             'latitude' => 'required|numeric',
             'longitude' => 'required|numeric',
             'activated' => 'boolean',
+            'menu' => ['nullable', new RequiredIdRule],
+            'menu.id' => 'exists:menus,id',
             'category' => ['nullable', new RequiredIdRule],
             'category.id' => 'exists:categories,id',
             'tags' => 'array',

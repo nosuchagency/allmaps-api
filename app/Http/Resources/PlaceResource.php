@@ -25,6 +25,7 @@ class PlaceResource extends JsonResource
             'latitude' => $this->latitude,
             'longitude' => $this->longitude,
             'activated' => $this->activated,
+            'menu' => $this->menu,
             'creator' => $this->creator,
             'created_at' => $this->created_at->toDateTimeString(),
             'updated_at' => $this->updated_at->toDateTimeString(),

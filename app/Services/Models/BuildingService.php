@@ -24,7 +24,14 @@ class BuildingService implements ModelServiceContract
         $building->fill($request->only($building->getFillable()));
         $building->setImage($request->get('image'));
 
+        if ($request->filled('menu')) {
+            $building->menu()->associate(
+                $request->input('menu.id')
+            );
+        }
+
         if (!$building->latitude || !$building->longitude) {
+
             $building->latitude = $building->place->latitude;
             $building->longitude = $building->place->longitude;
         }

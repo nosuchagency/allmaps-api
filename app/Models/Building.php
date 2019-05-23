@@ -75,6 +75,14 @@ class Building extends Model
     }
 
     /**
+     * Get the menu that owns the building
+     */
+    public function menu()
+    {
+        return $this->belongsTo(Menu::class);
+    }
+
+    /**
      * Get the floors for the building
      */
     public function floors()

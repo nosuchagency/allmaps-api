@@ -103,6 +103,14 @@ class Place extends Model
     }
 
     /**
+     * Get the menu that owns the place
+     */
+    public function menu()
+    {
+        return $this->belongsTo(Menu::class);
+    }
+
+    /**
      * Process filters
      *
      * @param Builder $builder

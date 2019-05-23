@@ -16,7 +16,7 @@ class CreateTagFixturePivotTable extends Migration
         Schema::create('tag_fixture', function (Blueprint $table) {
             $table->tag();
 
-            $table->unsignedInteger('fixture_id');
+            $table->unsignedBigInteger('fixture_id');
             $table->foreign('fixture_id')
                 ->references('id')
                 ->on('fixtures')

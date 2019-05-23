@@ -16,7 +16,7 @@ class CreateTagPlacePivotTable extends Migration
         Schema::create('tag_place', function (Blueprint $table) {
             $table->tag();
 
-            $table->unsignedInteger('place_id');
+            $table->unsignedBigInteger('place_id');
             $table->foreign('place_id')
                 ->references('id')
                 ->on('places')

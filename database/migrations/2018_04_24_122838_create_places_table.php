@@ -14,7 +14,7 @@ class CreatePlacesTable extends Migration
     public function up()
     {
         Schema::create('places', function (Blueprint $table) {
-            $table->increments('id');
+            $table->bigIncrements('id');
 
             $table->string('name');
             $table->string('address')->nullable();
@@ -24,6 +24,12 @@ class CreatePlacesTable extends Migration
 
             $table->string('latitude')->nullable(false)->default('55.676098');
             $table->string('longitude')->nullable(false)->default('12.568337');
+
+            $table->unsignedBigInteger('menu_id')->nullable();
+            $table->foreign('menu_id')
+                ->references('id')
+                ->on('menus')
+                ->onDelete('cascade');
 
             $table->boolean('activated')->default(false);
 

@@ -14,11 +14,11 @@ class CreateFoldersTable extends Migration
     public function up()
     {
         Schema::create('folders', function (Blueprint $table) {
-            $table->increments('id');
+            $table->bigIncrements('id');
             $table->string('name');
             $table->boolean('primary')->default(false);
 
-            $table->unsignedInteger('container_id');
+            $table->unsignedBigInteger('container_id');
             $table->foreign('container_id')
                 ->references('id')
                 ->on('containers')

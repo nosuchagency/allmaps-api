@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\ContainerSkins;
 
 use App\Models\Container;
 use App\Models\Skin;

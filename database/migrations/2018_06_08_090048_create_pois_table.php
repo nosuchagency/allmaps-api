@@ -14,7 +14,7 @@ class CreatePoisTable extends Migration
     public function up()
     {
         Schema::create('pois', function (Blueprint $table) {
-            $table->increments('id');
+            $table->bigIncrements('id');
             $table->string('name');
             $table->text('description')->nullable();
 

@@ -2,12 +2,17 @@
 
 namespace App\Providers;
 
+use App\Models\Category;
 use App\Models\Container;
+use App\Models\Location;
+use App\Models\Poi;
 use App\Models\Skin;
+use App\Models\Tag;
 use App\Models\User;
 use App\Observers\ContainerObserver;
 use App\Observers\SkinsObserver;
 use App\Observers\UserObserver;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\Resources\Json\Resource;
 use Illuminate\Support\ServiceProvider;
 
@@ -25,6 +30,13 @@ class AppServiceProvider extends ServiceProvider
         User::observe(UserObserver::class);
 
         Resource::withoutWrapping();
+
+        Relation::morphMap([
+            'poi' => Poi::class,
+            'location' => Location::class,
+            'tag' => Tag::class,
+            'category' => Category::class
+        ]);
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Beacons;
+namespace Tests\Feature\Auth;
 
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;

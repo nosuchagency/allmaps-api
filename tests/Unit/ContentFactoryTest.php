@@ -1,7 +1,8 @@
 <?php
 
-namespace Tests\Unit\Models;
+namespace Tests\Unit;
 
+use Tests\TestCase;
 use App\Factories\ContentFactory;
 use App\Models\Content\FileContent;
 use App\Models\Content\GalleryContent;
@@ -9,7 +10,6 @@ use App\Models\Content\ImageContent;
 use App\Models\Content\TextContent;
 use App\Models\Content\VideoContent;
 use App\Models\Content\WebContent;
-use Tests\TestCase;
 
 class ContentFactoryTest extends TestCase
 {

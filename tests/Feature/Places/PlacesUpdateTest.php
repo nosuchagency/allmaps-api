@@ -3,6 +3,7 @@
 namespace Tests\Feature\Places;
 
 use App\Models\Category;
+use App\Models\Menu;
 use App\Models\Place;
 use App\Models\Tag;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -74,6 +75,7 @@ class PlacesUpdateTest extends TestCase
             'latitude' => $this->faker->latitude,
             'longitude' => $this->faker->longitude,
             'activated' => $this->faker->boolean,
+            'menu' => factory(Menu::class)->create(),
             'category' => factory(Category::class)->create(),
             'tags' => factory(Tag::class, 2)->create()
         ], $overrides);

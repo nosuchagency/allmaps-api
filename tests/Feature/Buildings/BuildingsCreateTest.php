@@ -3,6 +3,7 @@
 namespace Tests\Feature\Buildings;
 
 use App\Models\Building;
+use App\Models\Menu;
 use App\Models\Place;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -57,6 +58,13 @@ class BuildingsCreateTest extends TestCase
         $this->create(['place' => null])->assertJsonValidationErrors('place');
     }
 
+    /** @test */
+    public function menu_needs_to_be_a_valid_menu_object()
+    {
+        $this->create(['menu' => ['id' => 2]])->assertJsonValidationErrors(['menu.id']);
+        $this->create(['menu' => ['not-a-valid-menu-object']])->assertJsonValidationErrors(['menu']);
+    }
+
     /**
      * @param array $attributes
      *
@@ -83,7 +91,8 @@ class BuildingsCreateTest extends TestCase
             'latitude' => $this->faker->latitude,
             'longitude' => $this->faker->longitude,
             'image' => null,
-            'place' => factory(Place::class)->create()
+            'place' => factory(Place::class)->create(),
+            'menu' => factory(Menu::class)->create()
         ], $overrides);
     }
 }

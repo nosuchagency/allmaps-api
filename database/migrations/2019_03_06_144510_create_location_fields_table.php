@@ -14,20 +14,20 @@ class CreateLocationFieldsTable extends Migration
     public function up()
     {
         Schema::create('location_fields', function (Blueprint $table) {
-            $table->increments('id');
+            $table->bigIncrements('id');
 
             $table->string('identifier');
             $table->string('type')->default('text');
             $table->string('value')->nullable();
             $table->string('label')->nullable();
 
-            $table->unsignedInteger('location_id');
+            $table->unsignedBigInteger('location_id');
             $table->foreign('location_id')
                 ->references('id')
                 ->on('locations')
                 ->onDelete('cascade');
 
-            $table->unsignedInteger('searchable_id');
+            $table->unsignedBigInteger('searchable_id');
             $table->foreign('searchable_id')
                 ->references('id')
                 ->on('searchables')

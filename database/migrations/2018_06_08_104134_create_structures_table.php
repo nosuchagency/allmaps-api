@@ -14,7 +14,7 @@ class CreateStructuresTable extends Migration
     public function up()
     {
         Schema::create('structures', function (Blueprint $table) {
-            $table->increments('id');
+            $table->bigIncrements('id');
 
             $table->string('name')->nullable();
 
@@ -22,13 +22,13 @@ class CreateStructuresTable extends Migration
             $table->longText('markers')->nullable();
             $table->decimal('radius', 8, 2)->nullable();
 
-            $table->unsignedInteger('floor_id');
+            $table->unsignedBigInteger('floor_id');
             $table->foreign('floor_id')
                 ->references('id')
                 ->on('floors')
                 ->onDelete('cascade');
 
-            $table->unsignedInteger('component_id');
+            $table->unsignedBigInteger('component_id');
             $table->foreign('component_id')
                 ->references('id')
                 ->on('components')

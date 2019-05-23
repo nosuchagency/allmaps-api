@@ -115,6 +115,11 @@ class RolesAndPermissionsSeeder extends Seeder
         Permission::firstOrCreate(['name' => 'layouts.update', 'guard_name' => 'api']);
         Permission::firstOrCreate(['name' => 'layouts.delete', 'guard_name' => 'api']);
 
+        Permission::firstOrCreate(['name' => 'menus.create', 'guard_name' => 'api']);
+        Permission::firstOrCreate(['name' => 'menus.read', 'guard_name' => 'api']);
+        Permission::firstOrCreate(['name' => 'menus.update', 'guard_name' => 'api']);
+        Permission::firstOrCreate(['name' => 'menus.delete', 'guard_name' => 'api']);
+
         $adminRole = Role::firstOrCreate(['name' => 'admin']);
 
         $adminRole->syncPermissions([
@@ -216,7 +221,12 @@ class RolesAndPermissionsSeeder extends Seeder
             'layouts.create',
             'layouts.read',
             'layouts.update',
-            'layouts.delete'
+            'layouts.delete',
+
+            'menus.create',
+            'menus.read',
+            'menus.update',
+            'menus.delete'
         ]);
 
         $userRole = Role::firstOrCreate(['name' => 'user']);

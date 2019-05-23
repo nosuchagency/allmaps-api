@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\RequiredIdRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class BuildingRequest extends FormRequest
@@ -28,6 +29,8 @@ class BuildingRequest extends FormRequest
             'image' => '',
             'latitude' => 'nullable|numeric',
             'longitude' => 'nullable|numeric',
+            'menu' => ['nullable', new RequiredIdRule],
+            'menu.id' => 'exists:menus,id',
         ];
 
         if ($this->method() === 'POST') {

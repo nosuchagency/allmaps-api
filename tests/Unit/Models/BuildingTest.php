@@ -4,6 +4,7 @@ namespace Tests\Unit\Models;
 
 use App\Models\Building;
 use App\Models\Floor;
+use App\Models\Menu;
 use App\Models\Place;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -18,6 +19,16 @@ class BuildingTest extends TestCase
     {
         $building = factory(Building::class)->create();
         $this->assertInstanceOf(Place::class, $building->place);
+    }
+
+    /** @test */
+    public function it_has_a_menu()
+    {
+        $building = factory(Building::class)->create([
+            'menu_id' => factory(Menu::class)->create()
+        ]);
+
+        $this->assertInstanceOf(Menu::class, $building->menu);
     }
 
     /** @test */

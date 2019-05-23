@@ -14,7 +14,7 @@ class CreateSkinsTable extends Migration
     public function up()
     {
         Schema::create('skins', function (Blueprint $table) {
-            $table->increments('id');
+            $table->bigIncrements('id');
             $table->string('name')->unique();
             $table->string('identifier')->unique();
             $table->boolean('mobile')->default(false);

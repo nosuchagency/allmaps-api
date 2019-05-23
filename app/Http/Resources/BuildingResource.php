@@ -22,9 +22,10 @@ class BuildingResource extends JsonResource
             'latitude' => $this->latitude,
             'longitude' => $this->longitude,
             'place' => $this->place,
+            'menu' => $this->menu,
+            'creator' => $this->creator,
             'created_at' => $this->created_at->toDateTimeString(),
             'updated_at' => $this->updated_at->toDateTimeString(),
-            'creator' => $this->creator,
             'floors' => FloorResource::collection($this->whenLoaded('floors'))
         ];
     }

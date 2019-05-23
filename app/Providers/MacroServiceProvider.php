@@ -30,7 +30,7 @@ class MacroServiceProvider extends ServiceProvider
     protected function blueprintMacros()
     {
         Blueprint::macro('createdBy', function () {
-            $this->unsignedInteger('created_by')->nullable();
+            $this->unsignedBigInteger('created_by')->nullable();
 
             $this->foreign('created_by')
                 ->references('id')
@@ -39,7 +39,7 @@ class MacroServiceProvider extends ServiceProvider
         });
 
         Blueprint::macro('category', function () {
-            $this->unsignedInteger('category_id')->nullable();
+            $this->unsignedBigInteger('category_id')->nullable();
 
             $this->foreign('category_id')
                 ->references('id')
@@ -48,7 +48,7 @@ class MacroServiceProvider extends ServiceProvider
         });
 
         Blueprint::macro('tag', function () {
-            $this->unsignedInteger('tag_id')->nullable();
+            $this->unsignedBigInteger('tag_id')->nullable();
 
             $this->foreign('tag_id')
                 ->references('id')

@@ -3,6 +3,7 @@
 namespace Tests\Unit\Models;
 
 use App\Models\Building;
+use App\Models\Menu;
 use App\Models\Place;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -11,6 +12,16 @@ use Illuminate\Database\Eloquent\Collection;
 class PlaceTest extends TestCase
 {
     use RefreshDatabase;
+
+    /** @test */
+    public function it_has_a_menu()
+    {
+        $place = factory(Place::class)->create([
+            'menu_id' => factory(Menu::class)->create()
+        ]);
+
+        $this->assertInstanceOf(Menu::class, $place->menu);
+    }
 
     /** @test */
     public function a_place_has_tags()
