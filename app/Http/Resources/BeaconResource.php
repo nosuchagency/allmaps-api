@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class BeaconResource extends JsonResource
@@ -9,7 +10,7 @@ class BeaconResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param Request $request
      *
      * @return array
      */
@@ -30,7 +31,7 @@ class BeaconResource extends JsonResource
             'creator' => $this->creator,
             'category' => new CategoryResource($this->category),
             'locations' => LocationResource::collection($this->whenLoaded('locations')),
-            'tags' => TagResource::collection($this->whenLoaded('tags')),
+            'tags' => TagResource::collection($this->tags),
             'containers' => BeaconContainerResource::collection($this->whenLoaded('containers'))
         ];
     }
