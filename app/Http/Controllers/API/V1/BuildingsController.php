@@ -10,7 +10,10 @@ use App\Http\Resources\BuildingResource;
 use App\Http\Resources\LocationResource;
 use App\Models\Building;
 use App\Services\Models\BuildingService;
+use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 
 class BuildingsController extends Controller
@@ -39,7 +42,7 @@ class BuildingsController extends Controller
     /**
      * @param Request $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function index(Request $request)
     {
@@ -54,7 +57,7 @@ class BuildingsController extends Controller
     /**
      * @param Request $request
      *
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     * @return AnonymousResourceCollection
      */
     public function paginated(Request $request)
     {
@@ -69,7 +72,7 @@ class BuildingsController extends Controller
     /**
      * @param BuildingRequest $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function store(BuildingRequest $request)
     {
@@ -83,7 +86,7 @@ class BuildingsController extends Controller
     /**
      * @param Building $building
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function show(Building $building)
     {
@@ -96,7 +99,7 @@ class BuildingsController extends Controller
      * @param BuildingRequest $request
      * @param Building $building
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function update(BuildingRequest $request, Building $building)
     {
@@ -110,8 +113,8 @@ class BuildingsController extends Controller
     /**
      * @param Building $building
      *
-     * @return \Illuminate\Http\JsonResponse
-     * @throws \Exception
+     * @return JsonResponse
+     * @throws Exception
      */
     public function destroy(Building $building)
     {
@@ -123,7 +126,7 @@ class BuildingsController extends Controller
     /**
      * @param BulkDeleteRequest $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function bulkDestroy(BulkDeleteRequest $request)
     {
@@ -140,7 +143,7 @@ class BuildingsController extends Controller
      * @param SearchRequest $request
      * @param Building $building
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function search(SearchRequest $request, Building $building)
     {

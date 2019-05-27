@@ -17,11 +17,18 @@ class CreatePoisTable extends Migration
             $table->bigIncrements('id');
             $table->string('name');
             $table->text('description')->nullable();
+            $table->string('type')->nullable();
 
             $table->string('image')->nullable();
 
-            $table->string('type')->nullable();
-            $table->string('color')->nullable();
+            $table->boolean('stroke')->default(true);
+            $table->string('stroke_type')->default('solid');
+            $table->string('stroke_color')->default('#3388ff');
+            $table->unsignedInteger('stroke_width')->default(3);
+            $table->decimal('stroke_opacity', 2, 1)->default(1.0);
+            $table->boolean('fill')->default(true);
+            $table->string('fill_color')->default('#3388ff');
+            $table->decimal('fill_opacity', 2, 1)->default(0.2);
 
             $table->category();
             $table->createdBy();

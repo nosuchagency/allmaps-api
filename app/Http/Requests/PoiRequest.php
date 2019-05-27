@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\PoiTypes;
 use App\Rules\RequiredIdRule;
+use App\StrokeType;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -32,7 +33,17 @@ class PoiRequest extends FormRequest
                 'required',
                 Rule::in(PoiTypes::TYPES),
             ],
-            'color' => ['nullable', 'required_if:type,area', 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
+            'stroke' => 'boolean',
+            'stroke_type' => [
+                'required',
+                Rule::in(StrokeType::TYPES),
+            ],
+            'stroke_color' => ['required', 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
+            'stroke_width' => 'integer|min:1',
+            'stroke_opacity' => 'nullable|numeric|between:0,1',
+            'fill' => 'boolean',
+            'fill_color' => ['required', 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
+            'fill_opacity' => 'nullable|numeric|between:0,1',
             'image' => '',
             'category' => ['nullable', new RequiredIdRule],
             'category.id' => 'exists:categories,id',

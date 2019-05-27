@@ -18,7 +18,7 @@ class MenuResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'items' => MenuItemResource::collection($this->whenLoaded('items'))
+            'items' => MenuItemResource::collection($this->items)
         ];
     }
 }

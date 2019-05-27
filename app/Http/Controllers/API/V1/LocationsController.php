@@ -4,7 +4,9 @@ namespace App\Http\Controllers\API\V1;
 
 use App\Http\Requests\BulkDeleteRequest;
 use App\Models\Location;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 use App\Services\Models\LocationService;
 use App\Http\Controllers\Controller;
@@ -37,7 +39,7 @@ class LocationsController extends Controller
     /**
      * @param Request $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function index(Request $request)
     {
@@ -51,7 +53,7 @@ class LocationsController extends Controller
     /**
      * @param Request $request
      *
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     * @return AnonymousResourceCollection
      */
     public function paginated(Request $request)
     {
@@ -65,7 +67,7 @@ class LocationsController extends Controller
     /**
      * @param LocationRequest $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function store(LocationRequest $request)
     {
@@ -77,7 +79,7 @@ class LocationsController extends Controller
     /**
      * @param Location $location
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function show(Location $location)
     {
@@ -88,7 +90,7 @@ class LocationsController extends Controller
      * @param LocationRequest $request
      * @param Location $location
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function update(LocationRequest $request, Location $location)
     {
@@ -100,7 +102,7 @@ class LocationsController extends Controller
     /**
      * @param Location $location
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      * @throws \Exception
      */
     public function destroy(Location $location)
@@ -113,7 +115,7 @@ class LocationsController extends Controller
     /**
      * @param BulkDeleteRequest $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function bulkDestroy(BulkDeleteRequest $request)
     {

@@ -36,10 +36,29 @@ class Poi extends Model
         'description',
         'image',
         'type',
-        'color',
+        'stroke',
+        'stroke_type',
+        'stroke_color',
+        'stroke_width',
+        'stroke_opacity',
+        'fill',
+        'fill_color',
+        'fill_opacity',
         'category_id',
         'created_by',
         'category'
+    ];
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'stroke' => 'boolean',
+        'stroke_opacity' => 'double',
+        'fill' => 'boolean',
+        'fill_opacity' => 'double',
     ];
 
     /**
