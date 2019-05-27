@@ -17,6 +17,7 @@ class CreateMenuItemsTable extends Migration
             $table->bigIncrements('id');
             $table->string('name');
             $table->unsignedInteger('order');
+            $table->boolean('shown')->default(false);
 
             $table->unsignedBigInteger('menu_id');
             $table->foreign('menu_id')

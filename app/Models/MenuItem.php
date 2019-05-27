@@ -16,7 +16,17 @@ class MenuItem extends Model
      */
     protected $fillable = [
         'name',
-        'order'
+        'order',
+        'shown'
+    ];
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'shown' => 'boolean',
     ];
 
     /**

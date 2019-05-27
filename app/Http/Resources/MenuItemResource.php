@@ -19,6 +19,7 @@ class MenuItemResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'order' => $this->order,
+            'shown' => $this->shown,
             'type' => $this->menuable_type ?? 'header',
             'menuable' => $this->menuable
         ];

@@ -29,6 +29,7 @@ class MenuItemRequest extends FormRequest
         $rules = [
             'name' => 'required',
             'order' => 'nullable|integer',
+            'shown' => 'boolean',
             'type' => [
                 'required',
                 Rule::in(MenuItemType::TYPES),
