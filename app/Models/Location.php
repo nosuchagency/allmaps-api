@@ -3,8 +3,10 @@
 namespace App\Models;
 
 use App\Filters\IndexFilter;
+use App\Traits\HasCategory;
 use App\Traits\HasCreatedBy;
 use App\Traits\HasImage;
+use App\Traits\HasRelations;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -13,7 +15,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 
 class Location extends Model
 {
-    use SoftDeletes, HasCreatedBy, HasImage, LogsActivity;
+    use HasRelations, HasCategory, SoftDeletes, HasCreatedBy, HasImage, LogsActivity;
 
     const IMAGE_DIRECTORY_PATH = '/uploads/locations';
 
@@ -56,7 +58,9 @@ class Location extends Model
         'publish_at',
         'unpublish_at',
         'coordinates',
-        'created_by'
+        'category_id',
+        'category',
+        'created_by',
     ];
 
     /**
@@ -78,6 +82,23 @@ class Location extends Model
         'search_activated' => 'boolean'
     ];
 
+    /**
+     * Model Relations
+     *
+     * @var array
+     */
+    public $relationships = [
+        'tags',
+    ];
+
+    /**
+     * The tags that belong to the location
+     */
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class, 'tag_location');
+    }
+
     /**.
      * @param  $value
      *
@@ -91,7 +112,7 @@ class Location extends Model
     /**
      * Set the date from
      *
-     * @param  string $value
+     * @param string $value
      *
      * @return void
      */
@@ -107,7 +128,7 @@ class Location extends Model
     /**
      * Set the date to
      *
-     * @param  string $value
+     * @param string $value
      *
      * @return void
      */
@@ -123,7 +144,7 @@ class Location extends Model
     /**
      * Get monday from
      *
-     * @param  string $value
+     * @param string $value
      *
      * @return string
      */
@@ -139,7 +160,7 @@ class Location extends Model
     /**
      * Set monday from
      *
-     * @param  string $value
+     * @param string $value
      *
      * @return void
      */
@@ -155,7 +176,7 @@ class Location extends Model
     /**
      * Get monday to
      *
-     * @param  string $value
+     * @param string $value
      *
      * @return string
      */
@@ -171,7 +192,7 @@ class Location extends Model
     /**
      * Set monday to
      *
-     * @param  string $value
+     * @param string $value
      *
      * @return void
      */
@@ -187,7 +208,7 @@ class Location extends Model
     /**
      * Get tuesday from
      *
-     * @param  string $value
+     * @param string $value
      *
      * @return string
      */
@@ -203,7 +224,7 @@ class Location extends Model
     /**
      * Set tuesday from
      *
-     * @param  string $value
+     * @param string $value
      *
      * @return void
      */
@@ -219,7 +240,7 @@ class Location extends Model
     /**
      * Get tuesday to
      *
-     * @param  string $value
+     * @param string $value
      *
      * @return string
      */
@@ -235,7 +256,7 @@ class Location extends Model
     /**
      * Set tuesday from
      *
-     * @param  string $value
+     * @param string $value
      *
      * @return void
      */
@@ -251,7 +272,7 @@ class Location extends Model
     /**
      * Get wednesday from
      *
-     * @param  string $value
+     * @param string $value
      *
      * @return string
      */
@@ -267,7 +288,7 @@ class Location extends Model
     /**
      * Set wednesday from
      *
-     * @param  string $value
+     * @param string $value
      *
      * @return void
      */
@@ -283,7 +304,7 @@ class Location extends Model
     /**
      * Get wednesday to
      *
-     * @param  string $value
+     * @param string $value
      *
      * @return string
      */
@@ -299,7 +320,7 @@ class Location extends Model
     /**
      * Set tuesday from
      *
-     * @param  string $value
+     * @param string $value
      *
      * @return void
      */
@@ -315,7 +336,7 @@ class Location extends Model
     /**
      * Get thursday from
      *
-     * @param  string $value
+     * @param string $value
      *
      * @return string
      */
@@ -331,7 +352,7 @@ class Location extends Model
     /**
      * Set thursday from
      *
-     * @param  string $value
+     * @param string $value
      *
      * @return void
      */
@@ -347,7 +368,7 @@ class Location extends Model
     /**
      * Get thursday to
      *
-     * @param  string $value
+     * @param string $value
      *
      * @return string
      */
@@ -363,7 +384,7 @@ class Location extends Model
     /**
      * Set thursday from
      *
-     * @param  string $value
+     * @param string $value
      *
      * @return void
      */
@@ -379,7 +400,7 @@ class Location extends Model
     /**
      * Get friday from
      *
-     * @param  string $value
+     * @param string $value
      *
      * @return string
      */
@@ -395,7 +416,7 @@ class Location extends Model
     /**
      * Set friday from
      *
-     * @param  string $value
+     * @param string $value
      *
      * @return void
      */
@@ -411,7 +432,7 @@ class Location extends Model
     /**
      * Get friday to
      *
-     * @param  string $value
+     * @param string $value
      *
      * @return string
      */
@@ -427,7 +448,7 @@ class Location extends Model
     /**
      * Set friday to
      *
-     * @param  string $value
+     * @param string $value
      *
      * @return void
      */
@@ -443,7 +464,7 @@ class Location extends Model
     /**
      * Get saturday from
      *
-     * @param  string $value
+     * @param string $value
      *
      * @return string
      */
@@ -459,7 +480,7 @@ class Location extends Model
     /**
      * Set saturday from
      *
-     * @param  string $value
+     * @param string $value
      *
      * @return void
      */
@@ -475,7 +496,7 @@ class Location extends Model
     /**
      * Get saturday to
      *
-     * @param  string $value
+     * @param string $value
      *
      * @return string
      */
@@ -491,7 +512,7 @@ class Location extends Model
     /**
      * Set saturday to
      *
-     * @param  string $value
+     * @param string $value
      *
      * @return void
      */
@@ -507,7 +528,7 @@ class Location extends Model
     /**
      * Get sunday from
      *
-     * @param  string $value
+     * @param string $value
      *
      * @return string
      */
@@ -523,7 +544,7 @@ class Location extends Model
     /**
      * Set sunday from
      *
-     * @param  string $value
+     * @param string $value
      *
      * @return void
      */
@@ -539,7 +560,7 @@ class Location extends Model
     /**
      * Get sunday to
      *
-     * @param  string $value
+     * @param string $value
      *
      * @return string
      */
@@ -555,7 +576,7 @@ class Location extends Model
     /**
      * Set sunday to
      *
-     * @param  string $value
+     * @param string $value
      *
      * @return void
      */
@@ -601,43 +622,11 @@ class Location extends Model
     }
 
     /**
-     * Get the poi that owns the Location.
+     * Get the locatable.
      */
-    public function poi()
+    public function locatable()
     {
-        return $this->belongsTo(Poi::class);
-    }
-
-    /**
-     * Get the fixture that owns the Location.
-     */
-    public function fixture()
-    {
-        return $this->belongsTo(Fixture::class);
-    }
-
-    /**
-     * Get the beacon that owns the Location.
-     */
-    public function beacon()
-    {
-        return $this->belongsTo(Beacon::class);
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getType()
-    {
-        if ($this->poi_id) {
-            return 'poi';
-        } else if ($this->fixture_id) {
-            return 'fixture';
-        } else if ($this->beacon_id) {
-            return 'beacon';
-        }
-
-        return null;
+        return $this->morphTo();
     }
 
     /**

@@ -39,7 +39,8 @@ class PoiTest extends TestCase
     {
         $poi = factory(Poi::class)->create();
         $location = factory(Location::class)->create([
-            'poi_id' => $poi->id
+            'locatable_id' => $poi->id,
+            'locatable_type' => 'poi'
         ]);
 
         $poi->delete();

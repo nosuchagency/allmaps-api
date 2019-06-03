@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\RequiredIdRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class LocationRequest extends FormRequest
@@ -64,12 +65,19 @@ class LocationRequest extends FormRequest
             'searchables.*.fields.*.identifier' => 'required',
             'searchables.*.fields.*.type' => 'required|in:text,boolean',
             'searchables.*.fields.*.value' => 'present',
+            'category' => ['nullable', new RequiredIdRule],
+            'category.id' => 'exists:categories,id',
+            'tags' => 'array',
+            'tags.*.id' => 'required|exists:tags,id'
         ];
 
         if ($this->method() === 'POST') {
-            $rules['poi.id'] = 'nullable|exists:pois,id,deleted_at,NULL|required_without_all:beacon.id,fixture.id';
-            $rules['beacon.id'] = 'nullable|exists:beacons,id,deleted_at,NULL|required_without_all:poi.id,fixture.id';
-            $rules['fixture.id'] = 'nullable|exists:fixtures,id,deleted_at,NULL|required_without_all:poi.id,beacon.id';
+            $rules['poi'] = ['nullable', 'required_if:type,poi', new RequiredIdRule];
+            $rules['poi.id'] = 'exists:pois,id';
+            $rules['beacon'] = ['nullable', 'required_if:type,beacon', new RequiredIdRule];
+            $rules['beacon.id'] = 'exists:beacons,id';
+            $rules['fixture'] = ['nullable', 'required_if:type,fixture', new RequiredIdRule];
+            $rules['fixture.id'] = 'exists:fixtures,id';
             $rules['floor'] = 'required';
             $rules['floor.id'] = 'required|exists:floors,id,deleted_at,NULL';
         }

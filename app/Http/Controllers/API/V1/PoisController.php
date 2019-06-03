@@ -8,7 +8,9 @@ use App\Http\Requests\PoiRequest;
 use App\Http\Resources\PoiResource;
 use App\Models\Poi;
 use App\Services\Models\PoiService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 
 class PoisController extends Controller
@@ -37,7 +39,7 @@ class PoisController extends Controller
     /**
      * @param Request $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function index(Request $request)
     {
@@ -52,7 +54,7 @@ class PoisController extends Controller
     /**
      * @param Request $request
      *
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     * @return AnonymousResourceCollection
      */
     public function paginated(Request $request)
     {
@@ -67,7 +69,7 @@ class PoisController extends Controller
     /**
      * @param PoiRequest $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function store(PoiRequest $request)
     {
@@ -81,7 +83,7 @@ class PoisController extends Controller
     /**
      * @param Poi $poi
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function show(Poi $poi)
     {
@@ -94,7 +96,7 @@ class PoisController extends Controller
      * @param PoiRequest $request
      * @param Poi $poi
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function update(PoiRequest $request, Poi $poi)
     {
@@ -108,7 +110,7 @@ class PoisController extends Controller
     /**
      * @param Poi $poi
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      * @throws \Exception
      */
     public function destroy(Poi $poi)
@@ -121,7 +123,7 @@ class PoisController extends Controller
     /**
      * @param BulkDeleteRequest $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function bulkDestroy(BulkDeleteRequest $request)
     {

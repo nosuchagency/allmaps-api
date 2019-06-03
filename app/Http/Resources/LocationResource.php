@@ -2,7 +2,7 @@
 
 namespace App\Http\Resources;
 
-use App\Models\Searchable;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class LocationResource extends JsonResource
@@ -10,18 +10,31 @@ class LocationResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param Request $request
      *
      * @return array
      */
     public function toArray($request)
     {
+        $locatable = null;
+
+        switch ($this->locatable_type) {
+            case 'poi' :
+                $locatable = new PoiResource($this->locatable);
+                break;
+            case 'beacon' :
+                $locatable = new BeaconResource($this->locatable);
+                break;
+            case 'fixture' :
+                $locatable = new FixtureResource($this->locatable);
+                break;
+        }
+
         return [
             'id' => $this->id,
             'name' => $this->name,
             'zoom_to' => $this->zoom_to,
             'zoom_from' => $this->zoom_from,
-            'type' => $this->getType(),
             'title' => $this->title,
             'subtitle' => $this->subtitle,
             'image' => $this->getImageUrl(),
@@ -54,9 +67,10 @@ class LocationResource extends JsonResource
             'unpublish_at' => $this->unpublish_at,
             'coordinates' => $this->coordinates,
             'searchables' => SearchableResource::collection($this->getSearchables()),
-            'poi' => $this->poi ? new PoiResource($this->poi) : null,
-            'beacon' => $this->beacon ? new BeaconResource($this->beacon) : null,
-            'fixture' => $this->fixture ? new FixtureResource($this->fixture) : null
+            'type' => $this->locatable_type,
+            'locatable' => $locatable,
+            'category' => new CategoryResource($this->category),
+            'tags' => TagResource::collection($this->tags)
         ];
     }
 }

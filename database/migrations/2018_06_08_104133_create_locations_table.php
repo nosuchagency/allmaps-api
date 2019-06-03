@@ -58,26 +58,12 @@ class CreateLocationsTable extends Migration
                 ->on('floors')
                 ->onDelete('cascade');
 
-            $table->unsignedBigInteger('poi_id')->nullable();
-            $table->foreign('poi_id')
-                ->references('id')
-                ->on('pois')
-                ->onDelete('cascade');
-
-            $table->unsignedBigInteger('fixture_id')->nullable();
-            $table->foreign('fixture_id')
-                ->references('id')
-                ->on('fixtures')
-                ->onDelete('cascade');
-
-            $table->unsignedBigInteger('beacon_id')->nullable();
-            $table->foreign('beacon_id')
-                ->references('id')
-                ->on('beacons')
-                ->onDelete('cascade');
+            $table->unsignedBigInteger('locatable_id');
+            $table->string('locatable_type');
 
             $table->longText('coordinates')->nullable();
 
+            $table->category();
             $table->createdBy();
             $table->timestamps();
             $table->softDeletes();

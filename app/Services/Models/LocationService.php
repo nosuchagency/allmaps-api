@@ -8,6 +8,7 @@ use App\Models\Fixture;
 use App\Models\Location;
 use App\Models\LocationField;
 use App\Models\Poi;
+use App\Models\Tag;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 
@@ -27,25 +28,29 @@ class LocationService implements ModelServiceContract
         );
 
         $location->fill($request->only($location->getFillable()));
-
         $location->setImage($request->get('image'));
 
-        if ($poiId = $request->input('poi.id')) {
-            $associated = Poi::find($poiId);
-            $location->poi()->associate($associated);
-        } else if ($fixtureId = $request->input('fixture.id')) {
-            $associated = Fixture::find($fixtureId);
-            $location->fixture()->associate($associated);
-        } else if ($beaconId = $request->input('beacon.id')) {
-            $associated = Beacon::find($beaconId);
-            $location->beacon()->associate($associated);
+        if ($request->filled('poi')) {
+            $locatable = Poi::find($request->input('poi.id'));
+        } else if ($request->filled('fixture')) {
+            $locatable = Fixture::find($request->input('fixture.id'));
+        } else if ($request->filled('beacon')) {
+            $locatable = Beacon::find($request->input('beacon.id'));
+        } else {
+            $locatable = null;
         }
 
+        $location->locatable()->associate($locatable);
+
         if (!$location->name) {
-            $location->name = optional($associated)->name;
+            $location->name = $location->locatable->name;
         }
 
         $location->save();
+
+        foreach ($request->get('tags', []) as $tag) {
+            $location->tags()->attach(Tag::find($tag['id']));
+        }
 
         if ($request->has('searchables')) {
             $this->setPluginFields($request->get('searchables'), $location);
@@ -65,6 +70,12 @@ class LocationService implements ModelServiceContract
         $location->fill($request->only($location->getFillable()));
         $location->setImage($request->get('image'));
         $location->save();
+
+        $location->tags()->sync([]);
+
+        foreach ($request->get('tags', []) as $tag) {
+            $location->tags()->attach(Tag::find($tag['id']));
+        }
 
         if ($request->has('searchables')) {
             $this->setPluginFields($request->get('searchables'), $location);

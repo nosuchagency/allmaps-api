@@ -20,7 +20,7 @@ class CreateStructuresTable extends Migration
 
             $table->longText('coordinates')->nullable();
             $table->longText('markers')->nullable();
-            $table->decimal('radius', 8, 2)->nullable();
+            $table->decimal('radius', 8, 2)->default(5);
 
             $table->unsignedBigInteger('floor_id');
             $table->foreign('floor_id')

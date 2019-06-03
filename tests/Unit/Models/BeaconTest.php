@@ -46,7 +46,8 @@ class BeaconTest extends TestCase
     {
         $beacon = factory(Beacon::class)->create();
         $location = factory(Location::class)->create([
-            'beacon_id' => $beacon->id
+            'locatable_id' => $beacon->id,
+            'locatable_type' => 'beacon'
         ]);
 
         $beacon->delete();

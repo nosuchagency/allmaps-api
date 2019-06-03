@@ -5,6 +5,7 @@ namespace Tests\Feature\Beacons;
 use App\Models\Beacon;
 use App\Models\Category;
 use App\Models\Tag;
+use Illuminate\Foundation\Testing\TestResponse;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -47,7 +48,7 @@ class BeaconsUpdateTest extends TestCase
      * @param $beacon
      * @param array $attributes
      *
-     * @return \Illuminate\Foundation\Testing\TestResponse
+     * @return TestResponse
      */
     protected function update($beacon, $attributes = [])
     {

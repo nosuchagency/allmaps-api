@@ -2,7 +2,10 @@
 
 namespace Tests\Feature\Locations;
 
+use App\Models\Category;
 use App\Models\Location;
+use App\Models\Tag;
+use Illuminate\Foundation\Testing\TestResponse;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -45,7 +48,7 @@ class LocationsUpdateTest extends TestCase
      * @param $location
      * @param array $attributes
      *
-     * @return \Illuminate\Foundation\Testing\TestResponse
+     * @return TestResponse
      */
     protected function update($location, $attributes = [])
     {
@@ -64,7 +67,9 @@ class LocationsUpdateTest extends TestCase
     protected function validFields($overrides = [])
     {
         return array_merge([
-            'name' => $this->faker->name
+            'name' => $this->faker->name,
+            'category' => factory(Category::class)->create(),
+            'tags' => factory(Tag::class, 2)->create()
         ], $overrides);
     }
 }

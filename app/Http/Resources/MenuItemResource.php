@@ -10,7 +10,7 @@ class MenuItemResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  Request $request
+     * @param Request $request
      *
      * @return array
      */
@@ -20,7 +20,7 @@ class MenuItemResource extends JsonResource
 
         $type = $this->menuable_type ?? 'header';
 
-        switch($type) {
+        switch ($type) {
             case 'poi' :
                 $menuable = new PoiResource($this->menuable);
                 break;

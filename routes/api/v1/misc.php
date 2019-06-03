@@ -17,6 +17,7 @@ Route::post('/password/email', ['as' => 'password.email', 'uses' => 'Auth\Forgot
 Route::post('/password/reset', ['as' => 'password.reset', 'uses' => 'Auth\ResetPasswordController@reset']);
 
 Route::group(['middleware' => 'auth'], function () {
+    Route::post('/refresh', ['as' => 'refresh', 'uses' => 'AuthController@refresh']);
     Route::post('/logout', ['as' => 'logout', 'uses' => 'AuthController@logout']);
     Route::get('/profile', ['as' => 'profile', 'uses' => 'ProfileController@show']);
 });

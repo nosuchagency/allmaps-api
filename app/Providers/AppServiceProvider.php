@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use App\Models\Beacon;
 use App\Models\Category;
 use App\Models\Container;
+use App\Models\Fixture;
 use App\Models\Location;
 use App\Models\Poi;
 use App\Models\Skin;
@@ -12,6 +14,7 @@ use App\Models\User;
 use App\Observers\ContainerObserver;
 use App\Observers\SkinsObserver;
 use App\Observers\UserObserver;
+use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\Resources\Json\Resource;
 use Illuminate\Support\ServiceProvider;
@@ -32,6 +35,8 @@ class AppServiceProvider extends ServiceProvider
         Resource::withoutWrapping();
 
         Relation::morphMap([
+            'beacon' => Beacon::class,
+            'fixture' => Fixture::class,
             'poi' => Poi::class,
             'location' => Location::class,
             'tag' => Tag::class,
@@ -47,7 +52,7 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         if ($this->app->environment() !== 'production') {
-            $this->app->register(\Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class);
+            $this->app->register(IdeHelperServiceProvider::class);
         }
     }
 }

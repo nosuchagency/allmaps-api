@@ -11,7 +11,7 @@ class LogoutTest extends TestCase
     use RefreshDatabase, WithFaker;
 
     /** @test */
-    public function an_authenticated_can_logout()
+    public function an_authenticated_user_can_logout()
     {
         $this->signIn();
 

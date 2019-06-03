@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API\V1;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use App\Http\Requests\LoginRequest;
 
@@ -10,9 +11,9 @@ class AuthController extends Controller
 {
 
     /**
-     * @param  LoginRequest $request
+     * @param LoginRequest $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function login(LoginRequest $request)
     {
@@ -29,7 +30,16 @@ class AuthController extends Controller
     }
 
     /**
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
+     */
+    public function refresh()
+    {
+        return $this->json(['message' => 'Refresh successful'], Response::HTTP_OK)
+            ->header('Authorization', 'Bearer ' . auth()->refresh());
+    }
+
+    /**
+     * @return JsonResponse
      */
     public function logout()
     {

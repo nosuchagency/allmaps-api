@@ -93,7 +93,7 @@ class Poi extends Model
      */
     public function locations()
     {
-        return $this->hasMany(Location::class);
+        return $this->morphMany(Location::class, 'locatable');
     }
 
     /**

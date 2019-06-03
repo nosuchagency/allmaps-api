@@ -4,6 +4,7 @@ namespace Tests\Feature\Buildings;
 
 use App\Models\Building;
 use App\Models\Menu;
+use Illuminate\Foundation\Testing\TestResponse;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -46,7 +47,7 @@ class BuildingsUpdateTest extends TestCase
      * @param $building
      * @param array $attributes
      *
-     * @return \Illuminate\Foundation\Testing\TestResponse
+     * @return TestResponse
      */
     protected function update($building, $attributes = [])
     {

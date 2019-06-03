@@ -39,7 +39,8 @@ class FixtureTest extends TestCase
     {
         $fixture = factory(Fixture::class)->create();
         $location = factory(Location::class)->create([
-            'fixture_id' => $fixture->id
+            'locatable_id' => $fixture->id,
+            'locatable_type' => 'fixture'
         ]);
 
         $fixture->delete();
