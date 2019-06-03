@@ -3,6 +3,7 @@
 namespace Tests\Feature\Structures;
 
 use App\Models\Structure;
+use Illuminate\Foundation\Testing\TestResponse;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -45,7 +46,7 @@ class StructuresUpdateTest extends TestCase
      * @param $structure
      * @param array $attributes
      *
-     * @return \Illuminate\Foundation\Testing\TestResponse
+     * @return TestResponse
      */
     protected function update($structure, $attributes = [])
     {
@@ -67,7 +68,7 @@ class StructuresUpdateTest extends TestCase
             'name' => $this->faker->name,
             'coordinates' => [],
             'markers' => [],
-            'radius' => ''
+            'radius' => 5
         ], $overrides);
     }
 }

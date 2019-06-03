@@ -5,6 +5,7 @@ namespace Tests\Feature\Structures;
 use App\Models\Floor;
 use App\Models\Component;
 use App\Models\Structure;
+use Illuminate\Foundation\Testing\TestResponse;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -30,6 +31,8 @@ class StructuresCreateTest extends TestCase
     /** @test */
     public function an_authenticated_user_with_create_permission_can_create_structures()
     {
+        $this->withoutExceptionHandling();
+
         $this->create()->assertStatus(201);
         $this->assertCount(1, Structure::all());
     }
@@ -61,7 +64,7 @@ class StructuresCreateTest extends TestCase
     /**
      * @param array $attributes
      *
-     * @return \Illuminate\Foundation\Testing\TestResponse
+     * @return TestResponse
      */
     protected function create($attributes = [])
     {
@@ -83,7 +86,7 @@ class StructuresCreateTest extends TestCase
             'name' => $this->faker->name,
             'coordinates' => [],
             'markers' => [],
-            'radius' => '',
+            'radius' => 5,
             'component' => factory(Component::class)->create(),
             'floor' => factory(Floor::class)->create()
         ], $overrides);
