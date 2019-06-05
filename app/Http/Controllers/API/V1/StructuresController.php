@@ -8,7 +8,9 @@ use App\Http\Requests\StructureRequest;
 use App\Http\Resources\StructureResource;
 use App\Models\Structure;
 use App\Services\Models\StructureService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 
 class StructuresController extends Controller
@@ -37,7 +39,7 @@ class StructuresController extends Controller
     /**
      * @param Request $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function index(Request $request)
     {
@@ -51,7 +53,7 @@ class StructuresController extends Controller
     /**
      * @param Request $request
      *
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     * @return AnonymousResourceCollection
      */
     public function paginated(Request $request)
     {
@@ -65,7 +67,7 @@ class StructuresController extends Controller
     /**
      * @param StructureRequest $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function store(StructureRequest $request)
     {
@@ -77,7 +79,7 @@ class StructuresController extends Controller
     /**
      * @param Structure $structure
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function show(Structure $structure)
     {
@@ -88,7 +90,7 @@ class StructuresController extends Controller
      * @param StructureRequest $request
      * @param Structure $structure
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function update(StructureRequest $request, Structure $structure)
     {
@@ -100,7 +102,7 @@ class StructuresController extends Controller
     /**
      * @param Structure $structure
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      * @throws \Exception
      */
     public function destroy(Structure $structure)
@@ -113,7 +115,7 @@ class StructuresController extends Controller
     /**
      * @param BulkDeleteRequest $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function bulkDestroy(BulkDeleteRequest $request)
     {
