@@ -8,7 +8,10 @@ use App\Http\Requests\SkinRequest;
 use App\Http\Resources\SkinResource;
 use App\Models\Skin;
 use App\Services\Models\SkinService;
+use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 
 class SkinsController extends Controller
@@ -36,7 +39,7 @@ class SkinsController extends Controller
     /**
      * @param Request $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function index(Request $request)
     {
@@ -50,7 +53,7 @@ class SkinsController extends Controller
     /**
      * @param Request $request
      *
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     * @return AnonymousResourceCollection
      */
     public function paginated(Request $request)
     {
@@ -65,8 +68,8 @@ class SkinsController extends Controller
     /**
      * @param SkinRequest $request
      *
-     * @return \Illuminate\Http\JsonResponse
-     * @throws \Exception
+     * @return JsonResponse
+     * @throws Exception
      */
     public function store(SkinRequest $request)
     {
@@ -78,7 +81,7 @@ class SkinsController extends Controller
     /**
      * @param Skin $skin
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function show(Skin $skin)
     {
@@ -90,8 +93,8 @@ class SkinsController extends Controller
      * @param SkinRequest $request
      * @param Skin $skin
      *
-     * @return \Illuminate\Http\JsonResponse
-     * @throws \Exception
+     * @return JsonResponse
+     * @throws Exception
      */
     public function update(SkinRequest $request, Skin $skin)
     {
@@ -103,8 +106,8 @@ class SkinsController extends Controller
     /**
      * @param Skin $skin
      *
-     * @return \Illuminate\Http\JsonResponse
-     * @throws \Exception
+     * @return JsonResponse
+     * @throws Exception
      */
     public function destroy(Skin $skin)
     {
@@ -116,7 +119,7 @@ class SkinsController extends Controller
     /**
      * @param BulkDeleteRequest $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function bulkDestroy(BulkDeleteRequest $request)
     {
