@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ContainerResource extends JsonResource
@@ -9,7 +10,7 @@ class ContainerResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param  Request $request
      *
      * @return array
      */
@@ -24,6 +25,8 @@ class ContainerResource extends JsonResource
             'tablet_skin' => new SkinResource($this->tabletSkin),
             'desktop_skin' => new SkinResource($this->desktopSkin),
             'primary_folder' => new FolderResource($this->primaryFolder()),
+            'created_at' => $this->created_at->toDateTimeString(),
+            'updated_at' => $this->updated_at->toDateTimeString(),
             'category' => new CategoryResource($this->category),
             'tags' => TagResource::collection($this->whenLoaded('tags')),
             'contents' => ContentResource::collection($this->whenLoaded('contents')),

@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class StructureResource extends JsonResource
@@ -9,7 +10,7 @@ class StructureResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param  Request $request
      *
      * @return array
      */
@@ -23,6 +24,8 @@ class StructureResource extends JsonResource
             'radius' => $this->radius,
             'floor' => new FloorResource($this->floor),
             'component' => new ComponentResource($this->component),
+            'created_at' => $this->created_at->toDateTimeString(),
+            'updated_at' => $this->updated_at->toDateTimeString(),
         ];
     }
 }

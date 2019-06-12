@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class RuleResource extends JsonResource
@@ -9,7 +10,7 @@ class RuleResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param  Request $request
      *
      * @return array
      */
@@ -25,8 +26,8 @@ class RuleResource extends JsonResource
             'time_to' => $this->time_to,
             'time_restricted' => $this->time_restricted,
             'date_restricted' => $this->date_restricted,
-            'created_at' => $this->created_at->format('Y-m-d H:i:s'),
-            'updated_at' => $this->updated_at->format('Y-m-d H:i:s'),
+            'created_at' => $this->created_at->toDateTimeString(),
+            'updated_at' => $this->updated_at->toDateTimeString(),
         ];
     }
 }

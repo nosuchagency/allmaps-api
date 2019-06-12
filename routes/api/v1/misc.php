@@ -13,8 +13,8 @@
 
 Route::post('login', ['as' => 'login', 'uses' => 'AuthController@login']);
 
-Route::post('/password/email', ['as' => 'password.email', 'uses' => 'Auth\ForgotPasswordController@sendResetLinkEmail']);
-Route::post('/password/reset', ['as' => 'password.reset', 'uses' => 'Auth\ResetPasswordController@reset']);
+Route::post('/password/email', ['as' => 'password.email', 'uses' => 'Auth\ForgotPasswordController']);
+Route::post('/password/reset', ['as' => 'password.reset', 'uses' => 'Auth\ResetPasswordController']);
 
 Route::group(['middleware' => 'auth'], function () {
     Route::post('/refresh', ['as' => 'refresh', 'uses' => 'AuthController@refresh']);

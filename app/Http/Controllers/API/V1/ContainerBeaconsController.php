@@ -7,6 +7,7 @@ use App\Http\Requests\ContainerBeaconRequest;
 use App\Http\Resources\ContainerBeaconResource;
 use App\Models\Beacon;
 use App\Models\Container;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 
 class ContainerBeaconsController extends Controller
@@ -27,7 +28,7 @@ class ContainerBeaconsController extends Controller
      * @param Container $container
      * @param $beaconId
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function store(Container $container, $beaconId)
     {
@@ -42,7 +43,7 @@ class ContainerBeaconsController extends Controller
      * @param Container $container
      * @param $beaconId
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function show(Container $container, $beaconId)
     {
@@ -56,7 +57,7 @@ class ContainerBeaconsController extends Controller
      * @param Container $container
      * @param $beaconId
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function update(ContainerBeaconRequest $request, Container $container, $beaconId)
     {
@@ -76,7 +77,7 @@ class ContainerBeaconsController extends Controller
      * @param Container $container
      * @param $beaconId
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function destroy(Container $container, $beaconId)
     {

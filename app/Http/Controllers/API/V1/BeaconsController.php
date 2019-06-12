@@ -8,7 +8,10 @@ use App\Http\Requests\BulkDeleteRequest;
 use App\Http\Resources\BeaconResource;
 use App\Models\Beacon;
 use App\Services\Models\BeaconService;
+use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 
 class BeaconsController extends Controller
@@ -38,7 +41,7 @@ class BeaconsController extends Controller
      *
      * @param Request $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function index(Request $request)
     {
@@ -53,7 +56,7 @@ class BeaconsController extends Controller
     /**
      * @param Request $request
      *
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     * @return AnonymousResourceCollection
      */
     public function paginated(Request $request)
     {
@@ -68,7 +71,7 @@ class BeaconsController extends Controller
     /**
      * @param BeaconRequest $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function store(BeaconRequest $request)
     {
@@ -82,7 +85,7 @@ class BeaconsController extends Controller
     /**
      * @param Beacon $beacon
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function show(Beacon $beacon)
     {
@@ -95,7 +98,7 @@ class BeaconsController extends Controller
      * @param BeaconRequest $request
      * @param Beacon $beacon
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function update(BeaconRequest $request, Beacon $beacon)
     {
@@ -109,8 +112,8 @@ class BeaconsController extends Controller
     /**
      * @param Beacon $beacon
      *
-     * @return \Illuminate\Http\JsonResponse
-     * @throws \Exception
+     * @return JsonResponse
+     * @throws Exception
      */
     public function destroy(Beacon $beacon)
     {
@@ -122,7 +125,7 @@ class BeaconsController extends Controller
     /**
      * @param BulkDeleteRequest $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function bulkDestroy(BulkDeleteRequest $request)
     {

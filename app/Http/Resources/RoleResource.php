@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class RoleResource extends JsonResource
@@ -9,7 +10,7 @@ class RoleResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param  Request $request
      *
      * @return array
      */
@@ -20,7 +21,7 @@ class RoleResource extends JsonResource
             'name' => $this->name,
             'created_at' => $this->created_at->toDateTimeString(),
             'updated_at' => $this->updated_at->toDateTimeString(),
-            'permissions' => $this->getPermissions()
+            'permissions' => $this->getPermissions(),
         ];
     }
 }

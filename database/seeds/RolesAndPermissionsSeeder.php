@@ -10,6 +10,8 @@ class RolesAndPermissionsSeeder extends Seeder
     {
         app()['cache']->forget('spatie.permission.cache');
 
+        Permission::firstOrCreate(['name' => 'activities.read', 'guard_name' => 'api']);
+
         Permission::firstOrCreate(['name' => 'tokens.create', 'guard_name' => 'api']);
         Permission::firstOrCreate(['name' => 'tokens.read', 'guard_name' => 'api']);
         Permission::firstOrCreate(['name' => 'tokens.update', 'guard_name' => 'api']);
@@ -59,6 +61,10 @@ class RolesAndPermissionsSeeder extends Seeder
         Permission::firstOrCreate(['name' => 'fixtures.read', 'guard_name' => 'api']);
         Permission::firstOrCreate(['name' => 'fixtures.update', 'guard_name' => 'api']);
         Permission::firstOrCreate(['name' => 'fixtures.delete', 'guard_name' => 'api']);
+
+        Permission::firstOrCreate(['name' => 'hits.create', 'guard_name' => 'api']);
+        Permission::firstOrCreate(['name' => 'hits.read', 'guard_name' => 'api']);
+        Permission::firstOrCreate(['name' => 'hits.delete', 'guard_name' => 'api']);
 
         Permission::firstOrCreate(['name' => 'searchables.create', 'guard_name' => 'api']);
         Permission::firstOrCreate(['name' => 'searchables.read', 'guard_name' => 'api']);
@@ -123,6 +129,8 @@ class RolesAndPermissionsSeeder extends Seeder
         $adminRole = Role::firstOrCreate(['name' => 'admin']);
 
         $adminRole->syncPermissions([
+            'activities.read',
+
             'tokens.create',
             'tokens.read',
             'tokens.update',
@@ -167,6 +175,10 @@ class RolesAndPermissionsSeeder extends Seeder
             'fixtures.read',
             'fixtures.update',
             'fixtures.delete',
+
+            'hits.create',
+            'hits.read',
+            'hits.delete',
 
             'searchables.create',
             'searchables.read',

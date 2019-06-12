@@ -29,7 +29,8 @@ class PoiResource extends JsonResource
             'fill_color' => $this->fill_color,
             'fill_opacity' => $this->fill_opacity,
             'image' => $this->getImageUrl(),
-            'creator' => $this->creator,
+            'created_at' => $this->created_at->toDateTimeString(),
+            'updated_at' => $this->updated_at->toDateTimeString(),
             'category' => new CategoryResource($this->category),
             'tags' => TagResource::collection($this->tags)
         ];

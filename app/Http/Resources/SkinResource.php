@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class SkinResource extends JsonResource
@@ -9,7 +10,7 @@ class SkinResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param  Request $request
      *
      * @return array
      */
@@ -22,7 +23,9 @@ class SkinResource extends JsonResource
             'mobile' => $this->mobile,
             'tablet' => $this->tablet,
             'desktop' => $this->desktop,
-            'valid' => $this->indexFileExists()
+            'valid' => $this->indexFileExists(),
+            'created_at' => $this->created_at->toDateTimeString(),
+            'updated_at' => $this->updated_at->toDateTimeString(),
         ];
     }
 }

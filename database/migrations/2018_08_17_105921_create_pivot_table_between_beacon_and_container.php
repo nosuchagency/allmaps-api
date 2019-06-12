@@ -27,6 +27,11 @@ class CreatePivotTableBetweenBeaconAndContainer extends Migration
                 ->references('id')
                 ->on('containers')
                 ->onDelete('cascade');
+
+            $table->unique(['beacon_id', 'container_id']);
+
+            $table->createdBy();
+            $table->timestamps();
         });
     }
 

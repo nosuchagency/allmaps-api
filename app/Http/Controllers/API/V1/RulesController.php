@@ -7,6 +7,7 @@ use App\Http\Requests\RuleRequest;
 use App\Http\Resources\RuleResource;
 use App\Models\Beacon;
 use App\Models\Container;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 
 class RulesController extends Controller
@@ -28,7 +29,7 @@ class RulesController extends Controller
      * @param Container $container
      * @param $beaconId
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function store(RuleRequest $request, Container $container, $beaconId)
     {
@@ -44,7 +45,7 @@ class RulesController extends Controller
      * @param $beaconId
      * @param $rule
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function show(Container $container, $beaconId, $rule)
     {
@@ -61,7 +62,7 @@ class RulesController extends Controller
      * @param $beaconId
      * @param $rule
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function update(RuleRequest $request, Container $container, $beaconId, $rule)
     {
@@ -79,7 +80,7 @@ class RulesController extends Controller
      * @param $beaconId
      * @param $rule
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function destroy(Container $container, $beaconId, $rule)
     {

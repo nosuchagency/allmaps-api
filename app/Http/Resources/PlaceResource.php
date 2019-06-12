@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class PlaceResource extends JsonResource
@@ -9,7 +10,7 @@ class PlaceResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param  Request $request
      *
      * @return array
      */
@@ -26,7 +27,6 @@ class PlaceResource extends JsonResource
             'longitude' => $this->longitude,
             'activated' => $this->activated,
             'menu' => new MenuResource($this->menu),
-            'creator' => $this->creator,
             'created_at' => $this->created_at->toDateTimeString(),
             'updated_at' => $this->updated_at->toDateTimeString(),
             'category' => new CategoryResource($this->category),

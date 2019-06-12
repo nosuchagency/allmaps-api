@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ContentResource extends JsonResource
@@ -9,7 +10,7 @@ class ContentResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param  Request $request
      *
      * @return array
      */
@@ -25,11 +26,10 @@ class ContentResource extends JsonResource
             'folder_id' => $this->folder_id,
             'content_id' => $this->content_id,
             'order' => $this->order,
+            'created_at' => $this->created_at->toDateTimeString(),
+            'updated_at' => $this->updated_at->toDateTimeString(),
             'category' => new CategoryResource($this->category),
             'tags' => TagResource::collection($this->whenLoaded('tags')),
-            'created_by' => $this->created_by,
-            'created_at' => $this->created_at->format('Y-m-d H:i:s'),
-            'updated_at' => $this->created_at->format('Y-m-d H:i:s'),
         ];
     }
 }

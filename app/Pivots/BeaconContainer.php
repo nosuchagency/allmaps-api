@@ -2,12 +2,19 @@
 
 namespace App\Pivots;
 
+use App\Models\Hit;
 use App\Models\Rule;
-use Askedio\SoftCascade\Traits\SoftCascadeTrait;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
 class BeaconContainer extends Pivot
 {
+
+    /**
+     * Indicates if the IDs are auto-incrementing.
+     *
+     * @var bool
+     */
+    public $incrementing = true;
 
     /**
      * The attributes that are mass assignable.
@@ -18,6 +25,14 @@ class BeaconContainer extends Pivot
         'beacon_id',
         'container_id',
     ];
+
+    /**
+     * Get all the hits
+     */
+    public function hits()
+    {
+        return $this->morphMany(Hit::class, 'hittable');
+    }
 
     /**
      * Get the rules for the beacon container

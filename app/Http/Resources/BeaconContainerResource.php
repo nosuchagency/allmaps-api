@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class BeaconContainerResource extends JsonResource
@@ -9,7 +10,7 @@ class BeaconContainerResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param Request $request
      *
      * @return array
      */
@@ -18,7 +19,9 @@ class BeaconContainerResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'hits' => rand(1, 30),
+            'hits' => $this->whenPivotLoaded('beacon_container', function () {
+                return $this->pivot->hits;
+            }),
             'rules' => $this->whenPivotLoaded('beacon_container', function () {
                 return RuleResource::collection($this->pivot->rules);
             })

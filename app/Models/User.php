@@ -104,7 +104,7 @@ class User extends Authenticatable implements JWTSubject
      *
      * @return \Illuminate\Database\Eloquent\Collection|Collection
      */
-    public function recentActions($count = 20)
+    public function recentActivities($count = 20)
     {
         return $this->actions()->orderBy('id', 'desc')->take($count)->get();
     }

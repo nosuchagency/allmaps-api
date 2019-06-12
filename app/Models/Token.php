@@ -8,6 +8,7 @@ use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\Access\Authorizable;
+use Illuminate\Support\Collection;
 use Spatie\Activitylog\Traits\CausesActivity;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Permission\Traits\HasRoles;
@@ -34,9 +35,9 @@ class Token extends Model implements AuthorizableContract
     /**
      * @param int $count
      *
-     * @return \Illuminate\Database\Eloquent\Collection|\Illuminate\Support\Collection
+     * @return \Illuminate\Database\Eloquent\Collection|Collection
      */
-    public function recentActions($count = 20)
+    public function recentActivities($count = 20)
     {
         return $this->actions()->orderBy('id', 'desc')->take($count)->get();
     }

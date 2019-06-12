@@ -42,6 +42,8 @@ class MenuItemResource extends JsonResource
             'shown' => $this->shown,
             'type' => $type,
             'menuable' => $menuable,
+            'created_at' => $this->created_at->toDateTimeString(),
+            'updated_at' => $this->updated_at->toDateTimeString(),
         ];
     }
 }

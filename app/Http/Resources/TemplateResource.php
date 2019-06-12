@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class TemplateResource extends JsonResource
@@ -9,7 +10,7 @@ class TemplateResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param  Request $request
      *
      * @return array
      */
@@ -23,6 +24,8 @@ class TemplateResource extends JsonResource
             'content' => $this->content,
             'hook' => $this->hook,
             'layout' => new LayoutResource($this->layout),
+            'created_at' => $this->created_at->toDateTimeString(),
+            'updated_at' => $this->updated_at->toDateTimeString(),
             'category' => new CategoryResource($this->category),
             'tags' => TagResource::collection($this->whenLoaded('tags'))
         ];

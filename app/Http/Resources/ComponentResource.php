@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ComponentResource extends JsonResource
@@ -9,7 +10,7 @@ class ComponentResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param  Request $request
      *
      * @return array
      */
@@ -32,7 +33,8 @@ class ComponentResource extends JsonResource
             'image' => $this->getImageUrl(),
             'image_width' => $this->image_width,
             'image_height' => $this->image_height,
-            'creator' => $this->creator,
+            'created_at' => $this->created_at->toDateTimeString(),
+            'updated_at' => $this->updated_at->toDateTimeString(),
             'category' => new CategoryResource($this->category),
             'tags' => TagResource::collection($this->whenLoaded('tags'))
         ];

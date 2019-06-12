@@ -69,6 +69,8 @@ class LocationResource extends JsonResource
             'searchables' => SearchableResource::collection($this->getSearchables()),
             'type' => $this->locatable_type,
             'locatable' => $locatable,
+            'created_at' => $this->created_at->toDateTimeString(),
+            'updated_at' => $this->updated_at->toDateTimeString(),
             'category' => new CategoryResource($this->category),
             'tags' => TagResource::collection($this->tags)
         ];

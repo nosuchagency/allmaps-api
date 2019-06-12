@@ -11,9 +11,11 @@ use App\Models\Poi;
 use App\Models\Skin;
 use App\Models\Tag;
 use App\Models\User;
+use App\MorphMap;
 use App\Observers\ContainerObserver;
 use App\Observers\SkinsObserver;
 use App\Observers\UserObserver;
+use App\Pivots\BeaconContainer;
 use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\Resources\Json\Resource;
@@ -34,14 +36,7 @@ class AppServiceProvider extends ServiceProvider
 
         Resource::withoutWrapping();
 
-        Relation::morphMap([
-            'beacon' => Beacon::class,
-            'fixture' => Fixture::class,
-            'poi' => Poi::class,
-            'location' => Location::class,
-            'tag' => Tag::class,
-            'category' => Category::class
-        ]);
+        Relation::morphMap(MorphMap::MAP);
     }
 
     /**
