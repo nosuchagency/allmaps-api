@@ -37,6 +37,13 @@ class FloorService implements ModelServiceContract
     public function update(Model $floor, Request $request)
     {
         $floor->fill($request->only($floor->getFillable()));
+
+        if ($request->has('building')) {
+            $floor->building()->associate(
+                $request->input('building.id')
+            );
+        }
+
         $floor->save();
 
         return $floor->refresh();

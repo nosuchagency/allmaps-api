@@ -2,7 +2,7 @@
 
 namespace App;
 
-class HitTypes
+class HitType
 {
     const TYPES = [
         'beacon_container' => 'beacon_container'

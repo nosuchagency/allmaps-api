@@ -36,6 +36,9 @@ class BuildingRequest extends FormRequest
         if ($this->method() === 'POST') {
             $rules['place'] = 'required';
             $rules['place.id'] = 'required|exists:places,id,deleted_at,NULL';
+        } else {
+            $rules['place'] = ['nullable', new RequiredIdRule];
+            $rules['place.id'] = 'exists:places,id,deleted_at,NULL';
         }
 
         return $rules;

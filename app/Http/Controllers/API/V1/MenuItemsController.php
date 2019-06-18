@@ -8,6 +8,8 @@ use App\Http\Requests\MenuItemRequest;
 use App\Http\Resources\MenuItemResource;
 use App\Models\MenuItem;
 use App\Services\Models\MenuItemService;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 
 class MenuItemsController extends Controller
@@ -34,7 +36,7 @@ class MenuItemsController extends Controller
     }
 
     /**
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function index()
     {
@@ -44,7 +46,7 @@ class MenuItemsController extends Controller
     }
 
     /**
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     * @return AnonymousResourceCollection
      */
     public function paginated()
     {
@@ -57,7 +59,7 @@ class MenuItemsController extends Controller
     /**
      * @param MenuItemRequest $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function store(MenuItemRequest $request)
     {
@@ -69,7 +71,7 @@ class MenuItemsController extends Controller
     /**
      * @param MenuItem $menuItem
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function show(MenuItem $menuItem)
     {
@@ -80,7 +82,7 @@ class MenuItemsController extends Controller
      * @param MenuItemRequest $request
      * @param MenuItem $menuItem
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function update(MenuItemRequest $request, MenuItem $menuItem)
     {
@@ -92,7 +94,7 @@ class MenuItemsController extends Controller
     /**
      * @param MenuItem $menuItem
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      * @throws \Exception
      */
     public function destroy(MenuItem $menuItem)
@@ -105,7 +107,7 @@ class MenuItemsController extends Controller
     /**
      * @param BulkDeleteRequest $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function bulkDestroy(BulkDeleteRequest $request)
     {

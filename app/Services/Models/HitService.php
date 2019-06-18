@@ -40,6 +40,12 @@ class HitService implements ModelServiceContract
         return $hit->refresh();
     }
 
+    /**
+     * @param $type
+     * @param $id
+     *
+     * @return Model|null
+     */
     protected function getModel($type, $id)
     {
         switch ($type) {

@@ -28,7 +28,7 @@ class TokenRequest extends FormRequest
         return [
             'name' => 'required',
             'role' => 'required',
-            'role.id' => 'required|exists:roles,id'
+            'role.id' => 'required|exists:roles,id',
         ];
     }
 }

@@ -8,7 +8,10 @@ use App\Http\Requests\BulkDeleteRequest;
 use App\Http\Resources\TokenResource;
 use App\Models\Token;
 use App\Services\Models\TokenService;
+use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 
 class TokensController extends Controller
@@ -37,7 +40,7 @@ class TokensController extends Controller
     /**
      * @param Request $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function index(Request $request)
     {
@@ -51,7 +54,7 @@ class TokensController extends Controller
     /**
      * @param Request $request
      *
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     * @return AnonymousResourceCollection
      */
     public function paginated(Request $request)
     {
@@ -65,7 +68,7 @@ class TokensController extends Controller
     /**
      * @param TokenRequest $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function store(TokenRequest $request)
     {
@@ -77,7 +80,7 @@ class TokensController extends Controller
     /**
      * @param Token $token
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function show(Token $token)
     {
@@ -88,7 +91,7 @@ class TokensController extends Controller
      * @param TokenRequest $request
      * @param Token $token
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function update(TokenRequest $request, Token $token)
     {
@@ -100,8 +103,8 @@ class TokensController extends Controller
     /**
      * @param Token $token
      *
-     * @return \Illuminate\Http\JsonResponse
-     * @throws \Exception
+     * @return JsonResponse
+     * @throws Exception
      */
     public function destroy(Token $token)
     {
@@ -113,7 +116,7 @@ class TokensController extends Controller
     /**
      * @param BulkDeleteRequest $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function bulkDestroy(BulkDeleteRequest $request)
     {

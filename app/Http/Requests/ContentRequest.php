@@ -46,6 +46,9 @@ class ContentRequest extends FormRequest
         if ($this->method() === 'POST') {
             $rules['folder'] = 'required';
             $rules['folder.id'] = 'required|exists:folders,id,deleted_at,NULL';
+        } else {
+            $rules['folder'] = ['nullable', new RequiredIdRule];
+            $rules['folder.id'] = 'exists:folders,id,deleted_at,NULL';
         }
 
         return $rules;

@@ -22,19 +22,9 @@ class MenuItemService implements ModelServiceContract
     {
         $menuItem = new MenuItem();
 
-        if ($request->filled('poi')) {
-            $menuable = Poi::find($request->input('poi.id'));
-        } else if ($request->filled('location')) {
-            $menuable = Location::find($request->input('location.id'));
-        } else if ($request->filled('tag')) {
-            $menuable = Tag::find($request->input('tag.id'));
-        } else if ($request->filled('category')) {
-            $menuable = Category::find($request->input('category.id'));
-        } else {
-            $menuable = null;
-        }
-
-        $menuItem->menuable()->associate($menuable);
+        $menuItem->menuable()->associate(
+            $this->getModel($request->get('type'), $request->input('model.id'))
+        );
 
         $menuId = $request->input('menu.id');
 
@@ -57,21 +47,9 @@ class MenuItemService implements ModelServiceContract
      */
     public function update(Model $menuItem, Request $request)
     {
-        $menuable = null;
-
-        if ($request->filled('poi')) {
-            $menuable = Poi::find($request->input('poi.id'));
-        } else if ($request->filled('location')) {
-            $menuable = Location::find($request->input('location.id'));
-        } else if ($request->filled('tag')) {
-            $menuable = Tag::find($request->input('tag.id'));
-        } else if ($request->filled('category')) {
-            $menuable = Category::find($request->input('category.id'));
-        }
-
-        if ($menuable) {
-            $menuItem->menuable()->associate($menuable);
-        }
+        $menuItem->menuable()->associate(
+            $this->getModel($request->get('type'), $request->input('model.id'))
+        );
 
         $menuItem->fill($request->only($menuItem->getFillable()))->save();
 
@@ -92,5 +70,27 @@ class MenuItemService implements ModelServiceContract
         }
 
         return ++$currentOrder;
+    }
+
+    /**
+     * @param $type
+     * @param $id
+     *
+     * @return Model|null
+     */
+    protected function getModel($type, $id)
+    {
+        switch ($type) {
+            case 'poi':
+                return Poi::find($id);
+            case 'location':
+                return Location::find($id);
+            case 'tag':
+                return Tag::find($id);
+            case 'category':
+                return Category::find($id);
+            default :
+                return null;
+        }
     }
 }

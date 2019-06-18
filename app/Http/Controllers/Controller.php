@@ -8,6 +8,7 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use App\Plugins\Search\SearchableResolver;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Collection;
 
 class Controller extends BaseController
 {
@@ -25,7 +26,7 @@ class Controller extends BaseController
      * @param $variants
      * @param Builder $query
      *
-     * @return \Illuminate\Support\Collection
+     * @return Collection
      */
     protected function searchForLocations($variants, Builder $query = null)
     {

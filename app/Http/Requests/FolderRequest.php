@@ -36,6 +36,9 @@ class FolderRequest extends FormRequest
         if ($this->method() === 'POST') {
             $rules['container'] = 'required';
             $rules['container.id'] = 'required|exists:containers,id,deleted_at,NULL';
+        } else {
+            $rules['container'] = ['nullable', new RequiredIdRule];
+            $rules['container.id'] = 'exists:containers,id,deleted_at,NULL';
         }
 
         return $rules;

@@ -5,10 +5,10 @@ namespace App;
 class MenuItemType
 {
     const TYPES = [
-        'header',
-        'poi',
-        'location',
-        'tag',
-        'category'
+        'header' => null,
+        'poi' => 'pois',
+        'location' => 'locations',
+        'tag' => 'tags',
+        'category' => 'categories'
     ];
 }

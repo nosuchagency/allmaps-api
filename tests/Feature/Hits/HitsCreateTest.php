@@ -34,6 +34,13 @@ class HitsCreateTest extends TestCase
         $this->assertCount(1, Hit::all());
     }
 
+    /** @test */
+    public function a_hit_requires_a_valid_type()
+    {
+        $this->create(['type' => null])->assertJsonValidationErrors('type');
+        $this->create(['type' => 'not-a-valid-type'])->assertJsonValidationErrors('type');
+    }
+
     /**
      * @param array $attributes
      *

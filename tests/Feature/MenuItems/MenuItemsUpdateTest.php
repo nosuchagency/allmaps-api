@@ -4,6 +4,7 @@ namespace Tests\Feature\MenuItems;
 
 use App\Models\MenuItem;
 use App\Models\Poi;
+use Illuminate\Foundation\Testing\TestResponse;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -46,7 +47,7 @@ class MenuItemsUpdateTest extends TestCase
      * @param $menuItem
      * @param array $attributes
      *
-     * @return \Illuminate\Foundation\Testing\TestResponse
+     * @return TestResponse
      */
     protected function update($menuItem, $attributes = [])
     {
@@ -67,7 +68,7 @@ class MenuItemsUpdateTest extends TestCase
         return array_merge([
             'name' => $this->faker->name,
             'type' => 'poi',
-            'poi' => factory(Poi::class)->create()
+            'model' => factory(Poi::class)->create()
         ], $overrides);
     }
 }

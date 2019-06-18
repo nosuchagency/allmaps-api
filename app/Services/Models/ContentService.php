@@ -50,6 +50,13 @@ class ContentService implements ModelServiceContract
     public function update(Model $content, Request $request)
     {
         $content->fill($request->only($content->getFillable()));
+
+        if ($request->has('folder')) {
+            $content->folder()->associate(
+                $request->input('folder.id')
+            );
+        }
+
         $content->save();
 
         return $content->refresh();

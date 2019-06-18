@@ -40,6 +40,13 @@ class FolderService implements ModelServiceContract
     public function update(Model $folder, Request $request)
     {
         $folder->fill($request->only($folder->getFillable()));
+
+        if ($request->has('container')) {
+            $folder->container()->associate(
+                $request->input('container.id')
+            );
+        }
+
         $folder->save();
 
         $folder->tags()->sync([]);

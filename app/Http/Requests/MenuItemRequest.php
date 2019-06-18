@@ -3,8 +3,10 @@
 namespace App\Http\Requests;
 
 use App\MenuItemType;
+use App\Models\MenuItem;
 use App\Rules\RequiredIdRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Arr;
 use Illuminate\Validation\Rule;
 
 class MenuItemRequest extends FormRequest
@@ -32,21 +34,21 @@ class MenuItemRequest extends FormRequest
             'shown' => 'boolean',
             'type' => [
                 'required',
-                Rule::in(MenuItemType::TYPES),
+                Rule::in(array_keys(MenuItemType::TYPES)),
             ],
-            'poi' => ['nullable', 'required_if:type,poi', new RequiredIdRule],
-            'poi.id' => 'exists:pois,id',
-            'location' => ['nullable', 'required_if:type,location', new RequiredIdRule],
-            'location.id' => 'exists:locations,id',
-            'tag' => ['nullable', 'required_if:type,tag', new RequiredIdRule],
-            'tag.id' => 'exists:tags,id',
-            'category' => ['nullable', 'required_if:type,category', new RequiredIdRule],
-            'category.id' => 'exists:categories,id',
         ];
+
+        if (Arr::has(MenuItemType::TYPES, $this->get('type'))) {
+            $rules['model'] = 'required';
+            $rules['model.id'] = ['required', 'exists:' . Arr::get(MenuItemType::TYPES, $this->get('type')) . ',id'];
+        }
 
         if ($this->method() === 'POST') {
             $rules['menu'] = 'required';
             $rules['menu.id'] = 'required|exists:menus,id,deleted_at,NULL';
+        } else {
+            $rules['menu'] = ['nullable', new RequiredIdRule];
+            $rules['menu.id'] = 'exists:menus,id,deleted_at,NULL';
         }
 
         return $rules;

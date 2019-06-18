@@ -2,8 +2,9 @@
 
 namespace App\Http\Requests;
 
-use App\HitTypes;
+use App\HitType;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Arr;
 use Illuminate\Validation\Rule;
 
 class HitRequest extends FormRequest
@@ -25,13 +26,18 @@ class HitRequest extends FormRequest
      */
     public function rules()
     {
-        return [
+        $rules = [
             'type' => [
                 'required',
-                Rule::in(array_keys(HitTypes::TYPES)),
+                Rule::in(array_keys(HitType::TYPES)),
             ],
-            'model' => 'required',
-            'model.id' => ['required', 'exists:' . HitTypes::TYPES[$this->get('type')] . ',id'],
         ];
+
+        if (Arr::has(HitType::TYPES, $this->get('type'))) {
+            $rules['model'] = 'required';
+            $rules['model.id'] = ['required', 'exists:' . Arr::get(HitType::TYPES, $this->get('type')) . ',id'];
+        }
+
+        return $rules;
     }
 }

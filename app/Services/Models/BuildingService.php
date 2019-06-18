@@ -56,6 +56,12 @@ class BuildingService implements ModelServiceContract
             $building->longitude = $building->place->longitude;
         }
 
+        if ($request->has('place')) {
+            $building->place()->associate(
+                $request->input('place.id')
+            );
+        }
+
         if ($request->has('menu')) {
             $building->menu()->associate(
                 $request->input('menu.id')

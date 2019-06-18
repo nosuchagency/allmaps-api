@@ -8,10 +8,11 @@ use Askedio\SoftCascade\Traits\SoftCascadeTrait;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Menu extends Model
 {
-    use HasRelations, SoftDeletes, SoftCascadeTrait;
+    use HasRelations, SoftDeletes, SoftCascadeTrait, LogsActivity;
 
     /**
      * @var array
