@@ -65,6 +65,7 @@ class LocationResource extends JsonResource
             'activated_at' => $this->activated_at,
             'publish_at' => $this->publish_at,
             'unpublish_at' => $this->unpublish_at,
+            'container' => new ContainerResource($this->container),
             'coordinates' => $this->coordinates,
             'searchables' => SearchableResource::collection($this->getSearchables()),
             'type' => $this->locatable_type,

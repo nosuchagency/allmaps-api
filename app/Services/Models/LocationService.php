@@ -27,6 +27,12 @@ class LocationService implements ModelServiceContract
             $request->input('floor.id')
         );
 
+        if ($request->filled('container')) {
+            $location->container()->associate(
+                $request->input('container.id')
+            );
+        }
+
         $location->fill($request->only($location->getFillable()));
         $location->setImage($request->get('image'));
 
@@ -69,6 +75,13 @@ class LocationService implements ModelServiceContract
     {
         $location->fill($request->only($location->getFillable()));
         $location->setImage($request->get('image'));
+
+        if ($request->filled('container')) {
+            $location->container()->associate(
+                $request->input('container.id')
+            );
+        }
+
         $location->save();
 
         $location->tags()->sync([]);

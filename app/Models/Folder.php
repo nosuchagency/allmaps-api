@@ -67,7 +67,7 @@ class Folder extends Model
     ];
 
     /**
-     * Get the content that owns the folder.
+     * Get the container that owns the folder.
      */
     public function container()
     {

@@ -55,6 +55,8 @@ class LocationRequest extends FormRequest
             'saturday_to' => 'nullable|date_format:H:i',
             'sunday_from' => 'nullable|date_format:H:i',
             'sunday_to' => 'nullable|date_format:H:i',
+            'container' => ['nullable', new RequiredIdRule],
+            'container.id' => 'exists:containers,id',
             'activated_at' => 'nullable|date',
             'publish_at' => 'nullable|date',
             'unpublish_at' => 'nullable|date',

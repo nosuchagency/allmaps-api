@@ -58,6 +58,12 @@ class CreateLocationsTable extends Migration
                 ->on('floors')
                 ->onDelete('cascade');
 
+            $table->unsignedBigInteger('container_id');
+            $table->foreign('container_id')
+                ->references('id')
+                ->on('containers')
+                ->onDelete('set null');
+
             $table->unsignedBigInteger('locatable_id');
             $table->string('locatable_type');
 

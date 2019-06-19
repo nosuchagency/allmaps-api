@@ -92,6 +92,14 @@ class Location extends Model
     ];
 
     /**
+     * Get the container
+     */
+    public function container()
+    {
+        return $this->belongsTo(Container::class);
+    }
+
+    /**
      * The tags that belong to the location
      */
     public function tags()
