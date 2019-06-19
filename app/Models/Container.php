@@ -67,9 +67,18 @@ class Container extends Model
         'tags',
         'folders',
         'folders.contents',
+        'locations',
         'contents',
         'beacons'
     ];
+
+    /**
+     * Get the locations for the container
+     */
+    public function locations()
+    {
+        return $this->hasMany(Location::class);
+    }
 
     /**
      * Get the contents for the container through the folder

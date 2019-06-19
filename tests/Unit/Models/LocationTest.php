@@ -3,6 +3,7 @@
 namespace Tests\Unit\Models;
 
 use App\Models\Beacon;
+use App\Models\Container;
 use App\Models\Fixture;
 use App\Models\Floor;
 use App\Models\Location;
@@ -19,6 +20,13 @@ class LocationTest extends TestCase
     {
         $location = factory(Location::class)->create();
         $this->assertInstanceOf(Floor::class, $location->floor);
+    }
+
+    /** @test */
+    public function it_belongs_to_a_container()
+    {
+        $location = factory(Location::class)->create();
+        $this->assertInstanceOf(Container::class, $location->container);
     }
 
     /** @test */

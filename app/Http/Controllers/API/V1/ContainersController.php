@@ -8,7 +8,9 @@ use App\Http\Requests\ContainerRequest;
 use App\Http\Resources\ContainerResource;
 use App\Models\Container;
 use App\Services\Models\ContainerService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 
 class ContainersController extends Controller
@@ -37,9 +39,9 @@ class ContainersController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param  Request $request
+     * @param Request $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function index(Request $request)
     {
@@ -56,7 +58,7 @@ class ContainersController extends Controller
      *
      * @param Request $request
      *
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+     * @return AnonymousResourceCollection;
      */
     public function paginated(Request $request)
     {
@@ -71,7 +73,7 @@ class ContainersController extends Controller
     /**
      * @param ContainerRequest $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function store(ContainerRequest $request)
     {
@@ -85,7 +87,7 @@ class ContainersController extends Controller
     /**
      * @param Container $container
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function show(Container $container)
     {
@@ -98,7 +100,7 @@ class ContainersController extends Controller
      * @param ContainerRequest $request
      * @param Container $container
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function update(ContainerRequest $request, Container $container)
     {
@@ -112,7 +114,7 @@ class ContainersController extends Controller
     /**
      * @param Container $container
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      * @throws \Exception
      */
     public function destroy(Container $container)
@@ -125,7 +127,7 @@ class ContainersController extends Controller
     /**
      * @param BulkDeleteRequest $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function bulkDestroy(BulkDeleteRequest $request)
     {

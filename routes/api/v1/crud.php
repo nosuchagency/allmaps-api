@@ -43,6 +43,8 @@ Route::get('/templates/paginated', ['as' => 'templates.paginated', 'uses' => 'Te
 Route::get('/skins/paginated', ['as' => 'skins.paginated', 'uses' => 'SkinsController@paginated']);
 Route::get('/structures/paginated', ['as' => 'structures.paginated', 'uses' => 'StructuresController@paginated']);
 
+Route::delete('/containers/{container}/relationships/locations', ['as' => 'containers.locations.destroy', 'uses' => 'ContainerLocationsController@destroy']);
+
 Route::apiResource('activities', 'ActivitiesController')->only(['index', 'paginated', 'show']);
 Route::apiResource('beacons', 'BeaconsController');
 Route::apiResource('buildings', 'BuildingsController');

@@ -21,6 +21,13 @@ class ContainerTest extends TestCase
     }
 
     /** @test */
+    public function a_container_has_locations()
+    {
+        $container = factory(Container::class)->create();
+        $this->assertInstanceOf(Collection::class, $container->locations);
+    }
+
+    /** @test */
     public function a_container_has_folders()
     {
         $container = factory(Container::class)->create();
