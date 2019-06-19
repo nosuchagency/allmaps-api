@@ -59,7 +59,7 @@ class UsersController extends Controller
         $users = User::query()
             ->withRelations($request)
             ->filter($request)
-            ->paginate($this->paginationNumber());
+            ->jsonPaginate($this->paginationNumber());
 
         return UserResource::collection($users);
     }

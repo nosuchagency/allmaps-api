@@ -59,7 +59,7 @@ class TemplatesController extends Controller
         $templates = Template::query()
             ->withRelations($request)
             ->filter($request)
-            ->paginate($this->paginationNumber());
+            ->jsonPaginate($this->paginationNumber());
 
         return TemplateResource::collection($templates);
     }

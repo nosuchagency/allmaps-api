@@ -58,7 +58,7 @@ class RolesController extends Controller
     {
         $roles = Role::query()
             ->filter($request)
-            ->paginate($this->paginationNumber());
+            ->jsonPaginate($this->paginationNumber());
 
         return RoleResource::collection($roles);
     }

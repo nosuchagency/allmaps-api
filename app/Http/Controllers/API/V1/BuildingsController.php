@@ -64,7 +64,7 @@ class BuildingsController extends Controller
         $buildings = Building::query()
             ->withRelations($request)
             ->filter($request)
-            ->paginate($this->paginationNumber());
+            ->jsonPaginate($this->paginationNumber());
 
         return BuildingResource::collection($buildings);
     }

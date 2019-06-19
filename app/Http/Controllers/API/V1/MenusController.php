@@ -59,7 +59,7 @@ class MenusController extends Controller
         $menus = Menu::query()
             ->filter($request)
             ->withRelations($request)
-            ->paginate($this->paginationNumber());
+            ->jsonPaginate($this->paginationNumber());
 
         return MenuResource::collection($menus);
     }

@@ -60,7 +60,7 @@ class FoldersController extends Controller
         $buildings = Folder::query()
             ->withRelations($request)
             ->filter($request)
-            ->paginate($this->paginationNumber());
+            ->jsonPaginate($this->paginationNumber());
 
         return FolderResource::collection($buildings);
     }

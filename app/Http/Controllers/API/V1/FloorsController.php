@@ -61,7 +61,7 @@ class FloorsController extends Controller
         $floors = Floor::query()
             ->withRelations($request)
             ->filter($request)
-            ->paginate($this->paginationNumber());
+            ->jsonPaginate($this->paginationNumber());
 
         return FloorResource::collection($floors);
     }

@@ -58,7 +58,7 @@ class TagsController extends Controller
     {
         $tags = Tag::query()
             ->filter($request)
-            ->paginate($this->paginationNumber());
+            ->jsonPaginate($this->paginationNumber());
 
         return TagResource::collection($tags);
     }

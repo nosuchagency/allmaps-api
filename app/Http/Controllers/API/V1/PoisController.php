@@ -61,7 +61,7 @@ class PoisController extends Controller
         $pois = Poi::query()
             ->withRelations($request)
             ->filter($request)
-            ->paginate($this->paginationNumber());
+            ->jsonPaginate($this->paginationNumber());
 
         return PoiResource::collection($pois);
     }

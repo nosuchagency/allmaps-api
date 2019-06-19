@@ -63,7 +63,7 @@ class ContainersController extends Controller
         $containers = Container::query()
             ->withRelations($request)
             ->filter($request)
-            ->paginate($this->paginationNumber());
+            ->jsonPaginate($this->paginationNumber());
 
         return ContainerResource::collection($containers);
     }

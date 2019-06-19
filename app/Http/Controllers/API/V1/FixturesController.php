@@ -59,7 +59,7 @@ class FixturesController extends Controller
         $fixtures = Fixture::query()
             ->withRelations($request)
             ->filter($request)
-            ->paginate($this->paginationNumber());
+            ->jsonPaginate($this->paginationNumber());
 
         return FixtureResource::collection($fixtures);
     }

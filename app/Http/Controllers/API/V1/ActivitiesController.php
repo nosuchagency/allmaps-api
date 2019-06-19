@@ -45,7 +45,7 @@ class ActivitiesController extends Controller
     {
         $activities = Activity::query()
             ->filter($request)
-            ->paginate($this->paginationNumber());
+            ->jsonPaginate($this->paginationNumber());
 
         return ActivityResource::collection($activities);
     }

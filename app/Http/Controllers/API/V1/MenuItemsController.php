@@ -51,7 +51,7 @@ class MenuItemsController extends Controller
     public function paginated()
     {
         $menuItems = MenuItem::query()
-            ->paginate($this->paginationNumber());
+            ->jsonPaginate($this->paginationNumber());
 
         return MenuItemResource::collection($menuItems);
     }

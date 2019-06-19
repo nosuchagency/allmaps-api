@@ -59,7 +59,7 @@ class SkinsController extends Controller
     {
         $skins = Skin::query()
             ->filter($request)
-            ->paginate($this->paginationNumber());
+            ->jsonPaginate($this->paginationNumber());
 
         return SkinResource::collection($skins);
     }

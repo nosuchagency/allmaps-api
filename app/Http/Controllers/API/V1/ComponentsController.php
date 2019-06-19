@@ -59,7 +59,7 @@ class ComponentsController extends Controller
         $components = Component::query()
             ->withRelations($request)
             ->filter($request)
-            ->paginate($this->paginationNumber());
+            ->jsonPaginate($this->paginationNumber());
 
         return ComponentResource::collection($components);
     }

@@ -63,7 +63,7 @@ class BeaconsController extends Controller
         $beacons = Beacon::query()
             ->withRelations($request)
             ->filter($request)
-            ->paginate($this->paginationNumber());
+            ->jsonPaginate($this->paginationNumber());
 
         return BeaconResource::collection($beacons);
     }

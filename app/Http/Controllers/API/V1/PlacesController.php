@@ -61,7 +61,7 @@ class PlacesController extends Controller
         $places = Place::query()
             ->withRelations($request)
             ->filter($request)
-            ->paginate($this->paginationNumber());
+            ->jsonPaginate($this->paginationNumber());
 
         return PlaceResource::collection($places);
     }

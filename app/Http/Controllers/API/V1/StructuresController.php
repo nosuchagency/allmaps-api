@@ -59,7 +59,7 @@ class StructuresController extends Controller
     {
         $structures = Structure::query()
             ->filter($request)
-            ->paginate($this->paginationNumber());
+            ->jsonPaginate($this->paginationNumber());
 
         return StructureResource::collection($structures);
     }

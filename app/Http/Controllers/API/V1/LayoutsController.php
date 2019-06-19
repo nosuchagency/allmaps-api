@@ -50,7 +50,7 @@ class LayoutsController extends Controller
         $layouts = Layout::query()
             ->withRelations($request)
             ->filter($request)
-            ->paginate($this->paginationNumber());
+            ->jsonPaginate($this->paginationNumber());
 
         return LayoutResource::collection($layouts);
     }

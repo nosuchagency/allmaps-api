@@ -54,7 +54,7 @@ class HitsController extends Controller
     public function paginated()
     {
         $hits = Hit::query()
-            ->paginate($this->paginationNumber());
+            ->jsonPaginate($this->paginationNumber());
 
         return HitResource::collection($hits);
     }

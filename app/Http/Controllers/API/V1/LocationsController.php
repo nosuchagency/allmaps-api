@@ -60,7 +60,7 @@ class LocationsController extends Controller
     {
         $locations = Location::query()
             ->filter($request)
-            ->paginate($this->paginationNumber());
+            ->jsonPaginate($this->paginationNumber());
 
         return LocationResource::collection($locations);
     }

@@ -60,7 +60,7 @@ class TokensController extends Controller
     {
         $tokens = Token::query()
             ->filter($request)
-            ->paginate($this->paginationNumber());
+            ->jsonPaginate($this->paginationNumber());
 
         return TokenResource::collection($tokens);
     }

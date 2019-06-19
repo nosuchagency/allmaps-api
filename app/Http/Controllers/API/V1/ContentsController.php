@@ -57,7 +57,7 @@ class ContentsController extends Controller
     {
         $contents = Content::query()
             ->filter($request)
-            ->paginate($this->paginationNumber());
+            ->jsonPaginate($this->paginationNumber());
 
         return ContentResource::collection($contents);
     }

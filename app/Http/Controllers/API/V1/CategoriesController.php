@@ -57,7 +57,7 @@ class CategoriesController extends Controller
     {
         $categories = Category::query()
             ->filter($request)
-            ->paginate($this->paginationNumber());
+            ->jsonPaginate($this->paginationNumber());
 
         return CategoryResource::collection($categories);
     }
