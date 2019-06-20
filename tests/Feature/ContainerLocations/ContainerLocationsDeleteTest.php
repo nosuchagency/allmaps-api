@@ -14,8 +14,6 @@ class ContainerLocationsDeleteTest extends TestCase
     /** @test */
     public function an_authenticated_user_with_delete_permission_can_unlink_location_from_container()
     {
-        $this->withoutExceptionHandling();
-
         $container = factory(Container::class)->create();
         $location = factory(Location::class)->create();
 
@@ -28,7 +26,7 @@ class ContainerLocationsDeleteTest extends TestCase
         );
 
         $this->deleteJson(route('containers.locations.destroy', ['container' => $container]), [
-            'items' => [
+            'data' => [
                 $container
             ]
         ])->assertOk();

@@ -31,9 +31,7 @@ class ContainerLocationsController extends Controller
             $container
                 ->locations()
                 ->find($item['id'])
-                ->container()
-                ->dissociate()
-                ->save();
+                ->dissociateFromContainer();
         });
 
         return $this->json(null, Response::HTTP_OK);

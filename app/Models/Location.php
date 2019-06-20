@@ -107,6 +107,16 @@ class Location extends Model
         return $this->belongsToMany(Tag::class, 'tag_location');
     }
 
+    /**
+     * Dissociate location from container
+     *
+     * @return void
+     */
+    public function dissociateFromContainer()
+    {
+        $this->container()->dissociate()->save();
+    }
+
     /**.
      * @param  $value
      *
