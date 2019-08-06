@@ -2,7 +2,7 @@
 
 namespace App;
 
-class ContentTypes
+class ContentType
 {
     const TYPES = [
         'image',

@@ -4,6 +4,7 @@ namespace App\Traits;
 
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 trait HasCreatedBy
 {
@@ -21,7 +22,8 @@ trait HasCreatedBy
 
     /**
      * Get the creator
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     *
+     * @return BelongsTo
      */
     public function creator()
     {

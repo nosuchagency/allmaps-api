@@ -1,0 +1,300 @@
+{
+    "meta": {
+        "total_count": 1,
+        "page": 1
+    },
+    "data": [
+        {
+            "identifier": "046618f76a44404af14a546e7a37ac3b",
+            "shadow": {
+                "id": 498,
+                "name": "white beacon",
+                "tags": [
+                    "cat"
+                ],
+                "organization_id": 4036,
+                "location": {
+                    "timezone": "America/Los_Angeles",
+                    "location_id": 2512,
+                    "country": "United States",
+                    "zipcode": null,
+                    "state": "Alaska",
+                    "state_code": "AK",
+                    "city": null,
+                    "street_name": null,
+                    "street_number": null,
+                    "formatted_address": "Devils Desk, Alaska, USA",
+                    "latitude": 58.4756,
+                    "longitude": -154.2981
+                },
+                "indoor_location": {
+                    "name": "test",
+                    "identifier": "indoor_test"
+                },
+                "development_mode": false
+            },
+            "alerts_configuration": {
+                "beacon_stolen_notifications": "off",
+                "beacon_fallen_notifications": "off",
+                "beacon_battery_notifications": "off",
+                "updated_at": "2017-01-30T12:26:10.777Z"
+            },
+            "alerts": [],
+            "hardware_type": "beacon",
+            "hardware_revision": "F2.2",
+            "hardware_footprint": "165562dd94797b6027cf920b5a1831cbc6a7f25c",
+            "color": "white",
+            "form_factor": "standard",
+            "status_report": {
+                "battery_percentage": 95,
+                "battery_voltage": 5526,
+                "estimated_battery_lifetime": 627,
+                "firmware_version": "4.7.0",
+                "last_synced": "2017-02-20T12:58:46.375Z",
+                "public": false,
+                "broken_motion": false,
+                "broken_temperature": false,
+                "missing_telemetry_data": false
+            },
+            "settings": {
+                "general": {
+                    "motion_detection_enabled": true,
+                    "motion_only_enabled": false,
+                    "dark_to_sleep_enabled": false,
+                    "dark_to_sleep_threshold": 300,
+                    "conditional_broadcasting": "off",
+                    "flip_to_sleep_enabled": false,
+                    "smart_power_mode_enabled": true,
+                    "temperature_offset": 0,
+                    "eddystone_configuration_service_enabled": false,
+                    "nfc_records": [
+                        {
+                            "data": "com.estimote.apps.main",
+                            "type": "android_package"
+                        }
+                    ],
+                    "automatic_firmware_update_enabled": false,
+                    "motion_only_delay": 0,
+                    "schedule": {
+                        "enabled": false,
+                        "start_time": 190,
+                        "stop_time": 1050
+                    },
+                    "wifi": {
+                        "enabled": true,
+                        "ssid": "exampleNetwork",
+                        "password": "aPassThrough"
+                    },
+                    "templates": {
+                        "default_template": "default",
+                        "lock_template": false
+                    },
+                    "estimote_secure_monitoring": {
+                        "enabled": false,
+                        "krps": 8,
+                        "prps": 16,
+                        "seed": "a7714d65d9f27e1116f3539764146cfc"
+                    }
+                },
+                "advertisers": {
+                    "connectivity": [
+                        {
+                            "index": 1,
+                            "name": "connectivity",
+                            "power": -12,
+                            "interval": 500,
+                            "shake_to_connect_enabled": false,
+                            "near_to_connect_enabled": true
+                        }
+                    ],
+                    "ibeacon": [
+                        {
+                            "index": 1,
+                            "name": "iBeacon",
+                            "enabled": true,
+                            "uuid": "AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAABB",
+                            "major": 48025,
+                            "minor": 15325,
+                            "power": -12,
+                            "interval": 950,
+                            "security": {
+                                "enabled": true,
+                                "real_id": 1034243,
+                                "interval_scaler": 10
+                            },
+                            "non_strict_mode_enabled": true
+                        }
+                    ],
+                    "eddystone_uid": [
+                        {
+                            "index": 1,
+                            "name": "Eddystone UID",
+                            "enabled": true,
+                            "interval": 950,
+                            "power": -12,
+                            "instance_id": "046618f76a44",
+                            "namespace_id": "eddd1ebeac04e5defa99"
+                        }
+                    ],
+                    "eddystone_eid": [
+                        {
+                            "index": 1,
+                            "name": "Eddystone EID",
+                            "enabled": true,
+                            "interval": 100,
+                            "power": -30,
+                            "identity_key": "0123456789abcdef0123456789abcdef",
+                            "interval_scaler": 10,
+                            "registered_namespace_id": null,
+                            "registered_instance_id": null
+                        }
+                    ],
+                    "eddystone_url": [
+                        {
+                            "index": 1,
+                            "name": "Eddystone URL",
+                            "enabled": false,
+                            "interval": 950,
+                            "power": -12,
+                            "url": "http://go.esti.be/"
+                        }
+                    ],
+                    "eddystone_telemetry": [
+                        {
+                            "index": 1,
+                            "name": "Eddystone Telemetry",
+                            "enabled": false,
+                            "interval": 950,
+                            "power": -12
+                        }
+                    ],
+                    "estimote_telemetry": [
+                        {
+                            "index": 1,
+                            "name": "Estimote Telemetry",
+                            "enabled": true,
+                            "interval": 950,
+                            "power": -12
+                        }
+                    ],
+                    "estimote_location": [
+                        {
+                            "index": 1,
+                            "name": "Estimote Location",
+                            "enabled": true,
+                            "interval": 500,
+                            "power": 0
+                        }
+                    ],
+                    "link_network": [
+                        {
+                            "index": 1,
+                            "name": "Here & Now",
+                            "enabled": false,
+                            "interval": 950,
+                            "power": -12,
+                            "link_id": null,
+                            "domain": null,
+                            "measurement_period": 60
+                        }
+                    ],
+                    "mesh": [
+                        {
+                            "index": 1,
+                            "name": "Mesh",
+                            "enabled": true,
+                            "settings_sync_enabled": false,
+                            "firmware_sync_enabled": false,
+                            "interval": 950,
+                            "settings_version": null,
+                            "mesh_identifier": 123,
+                            "mesh_key": "00000000000000000000000000000000",
+                            "synchronisation_list": [
+                                "00B0",
+                                "00B1",
+                                "00B8",
+                                "00B9",
+                                "0100",
+                                "0200",
+                                "0300",
+                                "0101",
+                                "0201",
+                                "0301",
+                                "0102",
+                                "0202",
+                                "0302",
+                                "0103",
+                                "0203",
+                                "0303",
+                                "2001",
+                                "2002",
+                                "2003",
+                                "2004",
+                                "2006"
+                            ]
+                        }
+                    ]
+                },
+                "gpio": {
+                    "config_0": 0,
+                    "config_1": 0,
+                    "config_2": 0,
+                    "config_3": 0,
+                    "port_data": 0,
+                    "interrupt_enabled": false,
+                    "gpio_0_state_led_indicator_enabled": false
+                }
+            },
+            "pending_settings": {
+                "advertisers": {
+                    "ibeacon": [
+                        {
+                            "index": 1,
+                            "name": "iBeacon",
+                            "enabled": true,
+                            "uuid": "AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAABB",
+                            "major": 48024,
+                            "minor": 15325,
+                            "power": -12,
+                            "interval": 950,
+                            "security": {
+                                "enabled": true,
+                                "real_id": 1034243,
+                                "interval_scaler": 10
+                            },
+                            "non_strict_mode_enabled": true
+                        }
+                    ],
+                    "eddystone_uid": [
+                        {
+                            "index": 1,
+                            "name": "Eddystone UID",
+                            "enabled": false,
+                            "interval": 950,
+                            "power": -12,
+                            "instance_id": "046618f76a44",
+                            "namespace_id": "eddd1ebeac04e5defa99"
+                        }
+                    ],
+                    "link_network": [
+                        {
+                            "index": 1,
+                            "name": "Here & Now",
+                            "enabled": true,
+                            "interval": 950,
+                            "power": -12,
+                            "link_id": 52476,
+                            "domain": "https://www.est1.net/",
+                            "measurement_period": 60
+                        }
+                    ]
+                }
+            },
+            "mesh": {
+                "name": null,
+                "type": null
+            },
+            "type": "device"
+        }
+    ]
+}

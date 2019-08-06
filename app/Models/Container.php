@@ -64,6 +64,7 @@ class Container extends Model
      * @var array
      */
     public $relationships = [
+        'category',
         'tags',
         'folders',
         'folders.contents',

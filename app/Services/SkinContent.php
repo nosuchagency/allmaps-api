@@ -5,7 +5,7 @@ namespace App\Services;
 use App\Models\Skin;
 use Illuminate\Support\Str;
 
-class SkinHandler
+class SkinContent
 {
     /**
      * @var Skin

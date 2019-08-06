@@ -8,7 +8,10 @@ use App\Http\Requests\UserRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use App\Services\Models\UserService;
+use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 
 class UsersController extends Controller
@@ -37,7 +40,7 @@ class UsersController extends Controller
     /**
      * @param Request $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function index(Request $request)
     {
@@ -52,7 +55,7 @@ class UsersController extends Controller
     /**
      * @param Request $request
      *
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     * @return AnonymousResourceCollection
      */
     public function paginated(Request $request)
     {
@@ -67,7 +70,7 @@ class UsersController extends Controller
     /**
      * @param UserRequest $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function store(UserRequest $request)
     {
@@ -81,7 +84,7 @@ class UsersController extends Controller
     /**
      * @param User $user
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function show(User $user)
     {
@@ -94,7 +97,7 @@ class UsersController extends Controller
      * @param UserRequest $request
      * @param User $user
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function update(UserRequest $request, User $user)
     {
@@ -108,8 +111,8 @@ class UsersController extends Controller
     /**
      * @param User $user
      *
-     * @return \Illuminate\Http\JsonResponse
-     * @throws \Exception
+     * @return JsonResponse
+     * @throws Exception
      */
     public function destroy(User $user)
     {
@@ -121,7 +124,7 @@ class UsersController extends Controller
     /**
      * @param BulkDeleteRequest $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function bulkDestroy(BulkDeleteRequest $request)
     {

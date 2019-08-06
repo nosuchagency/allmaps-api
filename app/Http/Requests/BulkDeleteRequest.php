@@ -24,7 +24,7 @@ class BulkDeleteRequest extends FormRequest
     public function rules()
     {
         return [
-            'items' => 'present|array'
+            'items' => 'required|array'
         ];
     }
 }

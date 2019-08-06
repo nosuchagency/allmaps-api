@@ -2,7 +2,7 @@
 
 namespace App;
 
-class PoiTypes
+class PoiType
 {
     const TYPES = [
         'image',

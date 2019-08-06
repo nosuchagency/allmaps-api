@@ -9,6 +9,7 @@ use App\Models\Content\ImageContent;
 use App\Models\Content\TextContent;
 use App\Models\Content\VideoContent;
 use App\Models\Content\WebContent;
+use InvalidArgumentException;
 
 class ContentFactory
 {
@@ -45,7 +46,9 @@ class ContentFactory
     /**
      * @param string $contentType
      *
-     * @return Content|null
+     * @return Content
+     *
+     * @throws InvalidArgumentException
      */
     public function make(string $contentType): ?Content
     {
@@ -63,7 +66,9 @@ class ContentFactory
             case self::WEB :
                 return new WebContent();
             default :
-                return null;
+                throw new InvalidArgumentException(
+                    "[{$contentType}] is not a valid content type"
+                );
         }
     }
 }

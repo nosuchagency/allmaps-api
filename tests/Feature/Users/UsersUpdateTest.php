@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\Role;
 use App\Models\Tag;
 use App\Models\User;
+use Illuminate\Foundation\Testing\TestResponse;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
@@ -78,7 +79,7 @@ class UsersUpdateTest extends TestCase
      * @param $user
      * @param array $attributes
      *
-     * @return \Illuminate\Foundation\Testing\TestResponse
+     * @return TestResponse
      */
     protected function update($user, $attributes = [])
     {

@@ -10,7 +10,7 @@ class MenuResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  Request $request
+     * @param Request $request
      *
      * @return array
      */
@@ -21,7 +21,7 @@ class MenuResource extends JsonResource
             'name' => $this->name,
             'created_at' => $this->created_at->toDateTimeString(),
             'updated_at' => $this->updated_at->toDateTimeString(),
-            'items' => MenuItemResource::collection($this->items)
+            'items' => MenuItemResource::collection($this->whenLoaded('items'))
         ];
     }
 }

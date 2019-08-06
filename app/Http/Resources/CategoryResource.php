@@ -10,7 +10,7 @@ class CategoryResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  Request $request
+     * @param Request $request
      *
      * @return array
      */
@@ -19,7 +19,9 @@ class CategoryResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'description' => $this->description
+            'description' => $this->description,
+            'created_at' => $this->created_at->toDateTimeString(),
+            'updated_at' => $this->updated_at->toDateTimeString(),
         ];
     }
 }

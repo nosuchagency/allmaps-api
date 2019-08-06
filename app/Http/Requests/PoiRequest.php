@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\PoiTypes;
+use App\PoiType;
 use App\Rules\RequiredIdRule;
 use App\StrokeType;
 use Illuminate\Foundation\Http\FormRequest;
@@ -31,7 +31,7 @@ class PoiRequest extends FormRequest
             'name' => 'required',
             'type' => [
                 'required',
-                Rule::in(PoiTypes::TYPES),
+                Rule::in(PoiType::TYPES),
             ],
             'stroke' => 'boolean',
             'stroke_type' => [

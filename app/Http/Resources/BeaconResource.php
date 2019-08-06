@@ -18,21 +18,21 @@ class BeaconResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'image' => url('/images/bullseye.png'),
             'name' => $this->name,
+            'identifier' => $this->identifier,
             'description' => $this->description,
             'proximity_uuid' => $this->proximity_uuid,
             'major' => $this->major,
             'minor' => $this->minor,
-            'eddystone_uid' => $this->eddystone_uid,
-            'eddystone_url' => $this->eddystone_url,
-            'eddystone_tlm' => $this->eddystone_tlm,
-            'eddystone_eid' => $this->eddystone_eid,
+            'namespace' => $this->namespace,
+            'instance_id' => $this->instance_id,
+            'url' => $this->url,
+            'image' => url('/images/bullseye.png'),
             'created_at' => $this->created_at->toDateTimeString(),
             'updated_at' => $this->updated_at->toDateTimeString(),
-            'category' => new CategoryResource($this->category),
+            'category' => new CategoryResource($this->whenLoaded('category')),
             'locations' => LocationResource::collection($this->whenLoaded('locations')),
-            'tags' => TagResource::collection($this->tags),
+            'tags' => TagResource::collection($this->whenLoaded('tags')),
             'containers' => BeaconContainerResource::collection($this->whenLoaded('containers'))
         ];
     }

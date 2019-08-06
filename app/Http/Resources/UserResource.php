@@ -21,11 +21,11 @@ class UserResource extends JsonResource
             'name' => $this->name,
             'email' => $this->email,
             'locale' => $this->locale,
-            'role' => $this->roles()->first(),
+            'role' => new RoleResource($this->roles()->first()),
             'permissions' => $this->getAllPermissions()->pluck('name'),
             'created_at' => $this->created_at->toDateTimeString(),
             'updated_at' => $this->updated_at->toDateTimeString(),
-            'category' => new CategoryResource($this->category),
+            'category' => new CategoryResource($this->whenLoaded('category')),
             'tags' => TagResource::collection($this->whenLoaded('tags')),
             'contents' => ContentResource::collection($this->whenLoaded('contents')),
             'activities' => ActivityResource::collection($this->recentActivities())

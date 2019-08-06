@@ -23,7 +23,7 @@ class LayoutResource extends JsonResource
             'content' => $this->content,
             'created_at' => $this->created_at->toDateTimeString(),
             'updated_at' => $this->updated_at->toDateTimeString(),
-            'category' => new CategoryResource($this->category),
+            'category' => new CategoryResource($this->whenLoaded('category')),
             'tags' => TagResource::collection($this->whenLoaded('tags')),
             'templates' => TemplateResource::collection($this->whenLoaded('templates'))
         ];

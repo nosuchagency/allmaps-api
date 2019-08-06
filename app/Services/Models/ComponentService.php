@@ -18,7 +18,6 @@ class ComponentService implements ModelServiceContract
     public function create(Request $request)
     {
         $component = new Component();
-
         $component->fill($request->only($component->getFillable()));
         $component->setImage($request->get('image'));
 

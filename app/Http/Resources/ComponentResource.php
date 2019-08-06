@@ -35,7 +35,7 @@ class ComponentResource extends JsonResource
             'image_height' => $this->image_height,
             'created_at' => $this->created_at->toDateTimeString(),
             'updated_at' => $this->updated_at->toDateTimeString(),
-            'category' => new CategoryResource($this->category),
+            'category' => new CategoryResource($this->whenLoaded('category')),
             'tags' => TagResource::collection($this->whenLoaded('tags'))
         ];
     }

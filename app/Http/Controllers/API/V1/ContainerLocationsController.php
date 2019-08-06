@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\API\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ContainerLocationDeleteRequest;
 use App\Models\Container;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class ContainerLocationsController extends Controller
@@ -20,12 +20,12 @@ class ContainerLocationsController extends Controller
     }
 
     /**
+     * @param ContainerLocationDeleteRequest $request
      * @param Container $container
-     * @param Request $request
      *
      * @return JsonResponse
      */
-    public function destroy(Container $container, Request $request)
+    public function destroy(ContainerLocationDeleteRequest $request, Container $container)
     {
         collect($request->get('data'))->each(function ($item) use ($container) {
             $container

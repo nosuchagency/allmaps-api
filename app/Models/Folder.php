@@ -62,6 +62,7 @@ class Folder extends Model
      * @var array
      */
     public $relationships = [
+        'category',
         'tags',
         'contents'
     ];

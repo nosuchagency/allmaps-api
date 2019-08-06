@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use App\Http\Requests\LoginRequest;
+use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
@@ -20,7 +21,9 @@ class AuthController extends Controller
         $credentials = $request->only('email', 'password');
 
         if (!$token = auth()->attempt($credentials)) {
-            return $this->json(['message' => 'Invalid credentials'], Response::HTTP_UNPROCESSABLE_ENTITY);
+            throw ValidationException::withMessages([
+                'meta' => ['The given credentials are invalid.'],
+            ]);
         }
 
         $this->logSuccessfulLogin();

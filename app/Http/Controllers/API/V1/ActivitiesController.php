@@ -14,7 +14,7 @@ class ActivitiesController extends Controller
 {
 
     /**
-     * ActionsController constructor.
+     * ActivitiesController constructor.
      */
     public function __construct()
     {

@@ -71,6 +71,7 @@ class Place extends Model
      * @var array
      */
     public $relationships = [
+        'category',
         'tags',
         'buildings',
         'buildings.floors',

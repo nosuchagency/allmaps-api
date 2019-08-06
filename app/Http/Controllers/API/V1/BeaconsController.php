@@ -4,9 +4,11 @@ namespace App\Http\Controllers\API\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\BeaconRequest;
+use App\Http\Requests\BeaconsImportRequest;
 use App\Http\Requests\BulkDeleteRequest;
 use App\Http\Resources\BeaconResource;
 use App\Models\Beacon;
+use App\Models\BeaconProvider;
 use App\Services\Models\BeaconService;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -29,7 +31,7 @@ class BeaconsController extends Controller
      */
     public function __construct(BeaconService $beaconService)
     {
-        $this->middleware('permission:beacons.create')->only(['store']);
+        $this->middleware('permission:beacons.create')->only(['store', 'import']);
         $this->middleware('permission:beacons.read')->only(['index', 'paginated', 'show']);
         $this->middleware('permission:beacons.update')->only(['update']);
         $this->middleware('permission:beacons.delete')->only(['destroy', 'bulkDestroy']);
@@ -134,6 +136,24 @@ class BeaconsController extends Controller
                 $beaconToDelete->delete();
             }
         });
+
+        return $this->json(null, Response::HTTP_OK);
+    }
+
+
+    /**
+     * @param BeaconsImportRequest $request
+     *
+     * @return JsonResponse
+     */
+    public function import(BeaconsImportRequest $request)
+    {
+        $provider = BeaconProvider::find($request->input('provider.id'));
+
+        $provider->importer()->import(
+            $request->get('override'),
+            $request->only('description')
+        );
 
         return $this->json(null, Response::HTTP_OK);
     }

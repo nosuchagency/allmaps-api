@@ -4,7 +4,7 @@ namespace App\Observers;
 
 use App\Models\Skin;
 
-class SkinsObserver
+class SkinObserver
 {
     /**
      * Handle the skin "deleted" event.

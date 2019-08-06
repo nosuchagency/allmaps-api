@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Filters\IndexFilter;
+use App\Services\SkinContent;
 use App\Traits\HasCreatedBy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -122,6 +123,14 @@ class Skin extends Model
     public function getDataKey()
     {
         return $this->dataKey;
+    }
+
+    /**
+     * @return SkinContent
+     */
+    public function handler()
+    {
+        return new SkinContent($this);
     }
 
     /**

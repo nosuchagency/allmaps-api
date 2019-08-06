@@ -10,6 +10,7 @@ use App\Models\Container;
 use App\Models\Fixture;
 use App\Models\Floor;
 use App\Models\Folder;
+use App\Models\Import;
 use App\Models\Layout;
 use App\Models\Location;
 use App\Models\Menu;
@@ -38,6 +39,7 @@ class MorphMap
         'fixture' => Fixture::class,
         'floor' => Floor::class,
         'folder' => Folder::class,
+        'import' => Import::class,
         'layout' => Layout::class,
         'location' => Location::class,
         'menu' => Menu::class,

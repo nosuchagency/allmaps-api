@@ -5,7 +5,7 @@ namespace Tests\Feature\Pois;
 use App\Models\Category;
 use App\Models\Poi;
 use App\Models\Tag;
-use App\PoiTypes;
+use App\PoiType;
 use App\StrokeType;
 use Illuminate\Foundation\Testing\TestResponse;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -70,7 +70,7 @@ class PoisUpdateTest extends TestCase
     {
         return array_merge([
             'name' => $this->faker->name,
-            'type' => $this->faker->randomElement(PoiTypes::TYPES),
+            'type' => $this->faker->randomElement(PoiType::TYPES),
             'stroke' => $this->faker->boolean,
             'stroke_type' => $this->faker->randomElement(StrokeType::TYPES),
             'stroke_color' => $this->faker->hexColor,

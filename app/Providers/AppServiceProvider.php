@@ -4,11 +4,9 @@ namespace App\Providers;
 
 use App\Models\Container;
 use App\Models\Skin;
-use App\Models\User;
 use App\MorphMap;
 use App\Observers\ContainerObserver;
-use App\Observers\SkinsObserver;
-use App\Observers\UserObserver;
+use App\Observers\SkinObserver;
 use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\Resources\Json\Resource;
@@ -24,8 +22,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Container::observe(ContainerObserver::class);
-        Skin::observe(SkinsObserver::class);
-        User::observe(UserObserver::class);
+        Skin::observe(SkinObserver::class);
 
         Resource::withoutWrapping();
 

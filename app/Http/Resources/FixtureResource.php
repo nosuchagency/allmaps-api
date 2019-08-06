@@ -10,7 +10,7 @@ class FixtureResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  Request $request
+     * @param Request $request
      *
      * @return array
      */
@@ -25,8 +25,8 @@ class FixtureResource extends JsonResource
             'image_height' => $this->image_height,
             'created_at' => $this->created_at->toDateTimeString(),
             'updated_at' => $this->updated_at->toDateTimeString(),
-            'category' => new CategoryResource($this->category),
-            'tags' => TagResource::collection($this->tags)
+            'category' => new CategoryResource($this->whenLoaded('category')),
+            'tags' => TagResource::collection($this->whenLoaded('tags'))
         ];
     }
 }

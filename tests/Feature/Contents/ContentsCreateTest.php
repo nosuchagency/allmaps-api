@@ -2,11 +2,12 @@
 
 namespace Tests\Feature\Contents;
 
-use App\ContentTypes;
+use App\ContentType;
 use App\Models\Category;
 use App\Models\Content\Content;
 use App\Models\Folder;
 use App\Models\Tag;
+use Illuminate\Foundation\Testing\TestResponse;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -84,7 +85,7 @@ class ContentsCreateTest extends TestCase
     /**
      * @param array $attributes
      *
-     * @return \Illuminate\Foundation\Testing\TestResponse
+     * @return TestResponse
      */
     protected function create($attributes = [])
     {
@@ -108,7 +109,7 @@ class ContentsCreateTest extends TestCase
             'image' => null,
             'url' => $this->faker->url,
             'yt_url' => $this->faker->url,
-            'type' => $this->faker->randomElement(ContentTypes::TYPES),
+            'type' => $this->faker->randomElement(ContentType::TYPES),
             'folder' => factory(Folder::class)->create(),
             'category' => factory(Category::class)->create(),
             'tags' => factory(Tag::class, 2)->create()

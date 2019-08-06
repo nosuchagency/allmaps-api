@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Container;
-use App\Services\SkinHandler;
 use Illuminate\Http\Request;
 
 class ContainerPlayersController extends Controller
@@ -22,12 +21,14 @@ class ContainerPlayersController extends Controller
             return response()->view('errors.404', [], 404);
         }
 
-        $skinHandler = new SkinHandler($skin);
-
-        if (!$skinHandler->hasContent() || !$skinHandler->hasDataKey()) {
+        if (!$skin->handler()->hasContent()) {
             return response()->view('errors.404', [], 404);
         }
 
-        return $skinHandler->injectContainerData($container);
+        if (!$skin->handler()->hasDataKey()) {
+            return response()->view('errors.404', [], 404);
+        }
+
+        return $skin->handler()->injectContainerData($container);
     }
 }

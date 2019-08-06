@@ -65,15 +65,15 @@ class LocationResource extends JsonResource
             'activated_at' => $this->activated_at,
             'publish_at' => $this->publish_at,
             'unpublish_at' => $this->unpublish_at,
-            'container' => new ContainerResource($this->container),
+            'container' => new ContainerResource($this->whenLoaded('container')),
             'coordinates' => $this->coordinates,
             'searchables' => SearchableResource::collection($this->getSearchables()),
             'type' => $this->locatable_type,
             'locatable' => $locatable,
             'created_at' => $this->created_at->toDateTimeString(),
             'updated_at' => $this->updated_at->toDateTimeString(),
-            'category' => new CategoryResource($this->category),
-            'tags' => TagResource::collection($this->tags)
+            'category' => new CategoryResource($this->whenLoaded('category')),
+            'tags' => TagResource::collection($this->whenLoaded('tags'))
         ];
     }
 }

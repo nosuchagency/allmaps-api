@@ -20,6 +20,7 @@ Route::put('/menu-items/reorder', ['as' => 'menu-items.reorder', 'uses' => 'Orde
 
 Route::get('/activities/paginated', ['as' => 'activities.paginated', 'uses' => 'ActivitiesController@paginated']);
 Route::get('/beacons/paginated', ['as' => 'beacons.paginated', 'uses' => 'BeaconsController@paginated']);
+Route::get('/beacon-providers/paginated', ['as' => 'beacon-providers.paginated', 'uses' => 'BeaconProvidersController@paginated']);
 Route::get('/buildings/paginated', ['as' => 'buildings.paginated', 'uses' => 'BuildingsController@paginated']);
 Route::get('/categories/paginated', ['as' => 'categories.paginated', 'uses' => 'CategoriesController@paginated']);
 Route::get('/components/paginated', ['as' => 'components.paginated', 'uses' => 'ComponentsController@paginated']);
@@ -29,6 +30,7 @@ Route::get('/fixtures/paginated', ['as' => 'fixtures.paginated', 'uses' => 'Fixt
 Route::get('/floors/paginated', ['as' => 'floors.paginated', 'uses' => 'FloorsController@paginated']);
 Route::get('/folders/paginated', ['as' => 'folders.paginated', 'uses' => 'FoldersController@paginated']);
 Route::get('/hits/paginated', ['as' => 'hits.paginated', 'uses' => 'HitsController@paginated']);
+Route::get('/imports/paginated', ['as' => 'imports.paginated', 'uses' => 'ImportsController@paginated']);
 Route::get('/menus/paginated', ['as' => 'menus.paginated', 'uses' => 'MenusController@paginated']);
 Route::get('/menu-items/paginated', ['as' => 'menu-items.paginated', 'uses' => 'MenuItemsController@paginated']);
 Route::get('/layouts/paginated', ['as' => 'layouts.paginated', 'uses' => 'LayoutsController@paginated']);
@@ -43,10 +45,13 @@ Route::get('/templates/paginated', ['as' => 'templates.paginated', 'uses' => 'Te
 Route::get('/skins/paginated', ['as' => 'skins.paginated', 'uses' => 'SkinsController@paginated']);
 Route::get('/structures/paginated', ['as' => 'structures.paginated', 'uses' => 'StructuresController@paginated']);
 
+Route::post('/beacons/import', ['as' => 'beacons.import', 'uses' => 'BeaconsController@import']);
+
 Route::delete('/containers/{container}/relationships/locations', ['as' => 'containers.locations.destroy', 'uses' => 'ContainerLocationsController@destroy']);
 
-Route::apiResource('activities', 'ActivitiesController')->only(['index', 'paginated', 'show']);
+Route::apiResource('activities', 'ActivitiesController')->only(['index', 'show']);
 Route::apiResource('beacons', 'BeaconsController');
+Route::apiResource('beacon-providers', 'BeaconProvidersController')->parameters(['beacon-providers' => 'provider']);
 Route::apiResource('buildings', 'BuildingsController');
 Route::apiResource('categories', 'CategoriesController');
 Route::apiResource('components', 'ComponentsController');
@@ -56,6 +61,7 @@ Route::apiResource('fixtures', 'FixturesController');
 Route::apiResource('floors', 'FloorsController');
 Route::apiResource('folders', 'FoldersController');
 Route::apiResource('hits', 'HitsController')->except(['update']);
+Route::apiResource('imports', 'ImportsController')->only(['index', 'show']);
 Route::apiResource('menus', 'MenusController');
 Route::apiResource('menu-items', 'MenuItemsController');
 Route::apiResource('layouts', 'LayoutsController');
@@ -73,6 +79,7 @@ Route::apiResource('tags', 'TagsController');
 Route::apiResource('templates', 'TemplatesController');
 
 Route::post('/beacons/bulk-destroy', ['as' => 'beacons.bulk-destroy', 'uses' => 'BeaconsController@bulkDestroy']);
+Route::post('/beacon-providers/bulk-destroy', ['as' => 'beacon-providers.bulk-destroy', 'uses' => 'BeaconProvidersController@bulkDestroy']);
 Route::post('/buildings/bulk-destroy', ['as' => 'buildings.bulk-destroy', 'uses' => 'BuildingsController@bulkDestroy']);
 Route::post('/categories/bulk-destroy', ['as' => 'categories.bulk-destroy', 'uses' => 'CategoriesController@bulkDestroy']);
 Route::post('/components/bulk-destroy', ['as' => 'components.bulk-destroy', 'uses' => 'ComponentsController@bulkDestroy']);

@@ -32,13 +32,13 @@ class Beacon extends Model
     protected $fillable = [
         'name',
         'description',
+        'identifier',
         'proximity_uuid',
         'major',
         'minor',
-        'eddystone_uid',
-        'eddystone_url',
-        'eddystone_tlm',
-        'eddystone_eid',
+        'namespace',
+        'instance_id',
+        'url',
         'category_id',
         'category',
         'created_by'
@@ -59,6 +59,7 @@ class Beacon extends Model
      * @var array
      */
     public $relationships = [
+        'category',
         'tags',
         'containers',
         'locations'

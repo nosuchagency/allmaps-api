@@ -10,7 +10,7 @@ class FloorResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  Request $request
+     * @param Request $request
      *
      * @return array
      */
@@ -20,8 +20,8 @@ class FloorResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'level' => $this->level,
-            'building' => $this->building,
-            'place' => $this->building->place,
+            'building' => new BuildingResource($this->whenLoaded('building')),
+            'place' => new PlaceResource($this->building->place),
             'created_at' => $this->created_at->toDateTimeString(),
             'updated_at' => $this->updated_at->toDateTimeString(),
             'structures' => StructureResource::collection($this->whenLoaded('structures')),

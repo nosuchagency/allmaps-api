@@ -10,7 +10,7 @@ class PoiResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  Request $request
+     * @param Request $request
      *
      * @return array
      */
@@ -31,8 +31,8 @@ class PoiResource extends JsonResource
             'image' => $this->getImageUrl(),
             'created_at' => $this->created_at->toDateTimeString(),
             'updated_at' => $this->updated_at->toDateTimeString(),
-            'category' => new CategoryResource($this->category),
-            'tags' => TagResource::collection($this->tags)
+            'category' => new CategoryResource($this->whenLoaded('category')),
+            'tags' => TagResource::collection($this->whenLoaded('tags'))
         ];
     }
 }

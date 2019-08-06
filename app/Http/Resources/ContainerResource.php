@@ -27,7 +27,7 @@ class ContainerResource extends JsonResource
             'primary_folder' => new FolderResource($this->primaryFolder()),
             'created_at' => $this->created_at->toDateTimeString(),
             'updated_at' => $this->updated_at->toDateTimeString(),
-            'category' => new CategoryResource($this->category),
+            'category' => new CategoryResource($this->whenLoaded('category')),
             'tags' => TagResource::collection($this->whenLoaded('tags')),
             'locations' => LocationResource::collection($this->whenLoaded('locations')),
             'contents' => ContentResource::collection($this->whenLoaded('contents')),

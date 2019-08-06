@@ -68,14 +68,14 @@ class BeaconsUpdateTest extends TestCase
     {
         return array_merge([
             'name' => $this->faker->name,
+            'identifier' => $this->faker->uuid,
             'description' => $this->faker->paragraph,
             'proximity_uuid' => $this->faker->uuid,
             'major' => $this->faker->numberBetween(0, 65535),
             'minor' => $this->faker->numberBetween(0, 65535),
-            'eddystone_uid' => $this->faker->uuid,
-            'eddystone_url' => $this->faker->url,
-            'eddystone_tlm' => $this->faker->name,
-            'eddystone_eid' => $this->faker->name,
+            'namespace' => $this->faker->uuid,
+            'instance_id' => $this->faker->uuid,
+            'url' => $this->faker->url,
             'category' => factory(Category::class)->create(),
             'tags' => factory(Tag::class, 2)->create()
         ], $overrides);

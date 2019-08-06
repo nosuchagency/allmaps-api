@@ -10,7 +10,7 @@ class BuildingResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  Request $request
+     * @param Request $request
      *
      * @return array
      */
@@ -22,8 +22,8 @@ class BuildingResource extends JsonResource
             'image' => $this->getImageUrl(),
             'latitude' => $this->latitude,
             'longitude' => $this->longitude,
-            'place' => $this->place,
-            'menu' => new MenuResource($this->menu),
+            'place' => new PlaceResource($this->whenLoaded('place')),
+            'menu' => new MenuResource($this->whenLoaded('menu')),
             'created_at' => $this->created_at->toDateTimeString(),
             'updated_at' => $this->updated_at->toDateTimeString(),
             'floors' => FloorResource::collection($this->whenLoaded('floors'))
