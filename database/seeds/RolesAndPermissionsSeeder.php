@@ -10,6 +10,15 @@ class RolesAndPermissionsSeeder extends Seeder
     {
         app()['cache']->forget('spatie.permission.cache');
 
+        Permission::firstOrCreate(['name' => 'activities.read', 'guard_name' => 'api']);
+
+        Permission::firstOrCreate(['name' => 'imports.read', 'guard_name' => 'api']);
+
+        Permission::firstOrCreate(['name' => 'configurations.create', 'guard_name' => 'api']);
+        Permission::firstOrCreate(['name' => 'configurations.read', 'guard_name' => 'api']);
+        Permission::firstOrCreate(['name' => 'configurations.update', 'guard_name' => 'api']);
+        Permission::firstOrCreate(['name' => 'configurations.delete', 'guard_name' => 'api']);
+
         Permission::firstOrCreate(['name' => 'tokens.create', 'guard_name' => 'api']);
         Permission::firstOrCreate(['name' => 'tokens.read', 'guard_name' => 'api']);
         Permission::firstOrCreate(['name' => 'tokens.update', 'guard_name' => 'api']);
@@ -50,6 +59,11 @@ class RolesAndPermissionsSeeder extends Seeder
         Permission::firstOrCreate(['name' => 'beacons.update', 'guard_name' => 'api']);
         Permission::firstOrCreate(['name' => 'beacons.delete', 'guard_name' => 'api']);
 
+        Permission::firstOrCreate(['name' => 'beacon-providers.create', 'guard_name' => 'api']);
+        Permission::firstOrCreate(['name' => 'beacon-providers.read', 'guard_name' => 'api']);
+        Permission::firstOrCreate(['name' => 'beacon-providers.update', 'guard_name' => 'api']);
+        Permission::firstOrCreate(['name' => 'beacon-providers.delete', 'guard_name' => 'api']);
+
         Permission::firstOrCreate(['name' => 'pois.create', 'guard_name' => 'api']);
         Permission::firstOrCreate(['name' => 'pois.read', 'guard_name' => 'api']);
         Permission::firstOrCreate(['name' => 'pois.update', 'guard_name' => 'api']);
@@ -60,15 +74,29 @@ class RolesAndPermissionsSeeder extends Seeder
         Permission::firstOrCreate(['name' => 'fixtures.update', 'guard_name' => 'api']);
         Permission::firstOrCreate(['name' => 'fixtures.delete', 'guard_name' => 'api']);
 
+        Permission::firstOrCreate(['name' => 'hits.create', 'guard_name' => 'api']);
+        Permission::firstOrCreate(['name' => 'hits.read', 'guard_name' => 'api']);
+        Permission::firstOrCreate(['name' => 'hits.delete', 'guard_name' => 'api']);
+
         Permission::firstOrCreate(['name' => 'searchables.create', 'guard_name' => 'api']);
         Permission::firstOrCreate(['name' => 'searchables.read', 'guard_name' => 'api']);
         Permission::firstOrCreate(['name' => 'searchables.update', 'guard_name' => 'api']);
         Permission::firstOrCreate(['name' => 'searchables.delete', 'guard_name' => 'api']);
 
+        Permission::firstOrCreate(['name' => 'settings.create', 'guard_name' => 'api']);
+        Permission::firstOrCreate(['name' => 'settings.read', 'guard_name' => 'api']);
+        Permission::firstOrCreate(['name' => 'settings.update', 'guard_name' => 'api']);
+        Permission::firstOrCreate(['name' => 'settings.delete', 'guard_name' => 'api']);
+
         Permission::firstOrCreate(['name' => 'plugins.create', 'guard_name' => 'api']);
         Permission::firstOrCreate(['name' => 'plugins.read', 'guard_name' => 'api']);
         Permission::firstOrCreate(['name' => 'plugins.update', 'guard_name' => 'api']);
         Permission::firstOrCreate(['name' => 'plugins.delete', 'guard_name' => 'api']);
+
+        Permission::firstOrCreate(['name' => 'skins.create', 'guard_name' => 'api']);
+        Permission::firstOrCreate(['name' => 'skins.read', 'guard_name' => 'api']);
+        Permission::firstOrCreate(['name' => 'skins.update', 'guard_name' => 'api']);
+        Permission::firstOrCreate(['name' => 'skins.delete', 'guard_name' => 'api']);
 
         Permission::firstOrCreate(['name' => 'components.create', 'guard_name' => 'api']);
         Permission::firstOrCreate(['name' => 'components.read', 'guard_name' => 'api']);
@@ -110,9 +138,23 @@ class RolesAndPermissionsSeeder extends Seeder
         Permission::firstOrCreate(['name' => 'layouts.update', 'guard_name' => 'api']);
         Permission::firstOrCreate(['name' => 'layouts.delete', 'guard_name' => 'api']);
 
+        Permission::firstOrCreate(['name' => 'menus.create', 'guard_name' => 'api']);
+        Permission::firstOrCreate(['name' => 'menus.read', 'guard_name' => 'api']);
+        Permission::firstOrCreate(['name' => 'menus.update', 'guard_name' => 'api']);
+        Permission::firstOrCreate(['name' => 'menus.delete', 'guard_name' => 'api']);
+
         $adminRole = Role::firstOrCreate(['name' => 'admin']);
 
         $adminRole->syncPermissions([
+            'activities.read',
+
+            'imports.read',
+
+            'configurations.create',
+            'configurations.read',
+            'configurations.update',
+            'configurations.delete',
+
             'tokens.create',
             'tokens.read',
             'tokens.update',
@@ -148,6 +190,11 @@ class RolesAndPermissionsSeeder extends Seeder
             'beacons.update',
             'beacons.delete',
 
+            'beacon-providers.create',
+            'beacon-providers.read',
+            'beacon-providers.update',
+            'beacon-providers.delete',
+
             'pois.create',
             'pois.read',
             'pois.update',
@@ -158,15 +205,29 @@ class RolesAndPermissionsSeeder extends Seeder
             'fixtures.update',
             'fixtures.delete',
 
+            'hits.create',
+            'hits.read',
+            'hits.delete',
+
             'searchables.create',
             'searchables.read',
             'searchables.update',
             'searchables.delete',
 
+            'settings.create',
+            'settings.read',
+            'settings.update',
+            'settings.delete',
+
             'plugins.create',
             'plugins.read',
             'plugins.update',
             'plugins.delete',
+
+            'skins.create',
+            'skins.read',
+            'skins.update',
+            'skins.delete',
 
             'components.create',
             'components.read',
@@ -206,7 +267,12 @@ class RolesAndPermissionsSeeder extends Seeder
             'layouts.create',
             'layouts.read',
             'layouts.update',
-            'layouts.delete'
+            'layouts.delete',
+
+            'menus.create',
+            'menus.read',
+            'menus.update',
+            'menus.delete'
         ]);
 
         $userRole = Role::firstOrCreate(['name' => 'user']);

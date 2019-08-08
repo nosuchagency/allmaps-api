@@ -9,7 +9,7 @@ class ContainerObserver
     /**
      * Handle to the container "created" event.
      *
-     * @param  \App\Models\Container $container
+     * @param Container $container
      *
      * @return void
      */

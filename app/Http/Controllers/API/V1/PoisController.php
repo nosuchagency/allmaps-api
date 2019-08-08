@@ -7,8 +7,10 @@ use App\Http\Requests\BulkDeleteRequest;
 use App\Http\Requests\PoiRequest;
 use App\Http\Resources\PoiResource;
 use App\Models\Poi;
-use App\Services\PoiService;
+use App\Services\Models\PoiService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 
 class PoisController extends Controller
@@ -37,23 +39,29 @@ class PoisController extends Controller
     /**
      * @param Request $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function index(Request $request)
     {
-        $pois = Poi::withRelations($request)->filter($request)->get();
+        $pois = Poi::query()
+            ->withRelations($request)
+            ->filter($request)
+            ->get();
 
-        return response()->json(PoiResource::collection($pois), Response::HTTP_OK);
+        return $this->json(PoiResource::collection($pois), Response::HTTP_OK);
     }
 
     /**
      * @param Request $request
      *
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     * @return AnonymousResourceCollection
      */
     public function paginated(Request $request)
     {
-        $pois = Poi::withRelations($request)->filter($request)->paginate($this->paginationNumber());
+        $pois = Poi::query()
+            ->withRelations($request)
+            ->filter($request)
+            ->jsonPaginate($this->paginationNumber());
 
         return PoiResource::collection($pois);
     }
@@ -61,7 +69,7 @@ class PoisController extends Controller
     /**
      * @param PoiRequest $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function store(PoiRequest $request)
     {
@@ -69,53 +77,53 @@ class PoisController extends Controller
 
         $poi->load($poi->relationships);
 
-        return response()->json(new PoiResource($poi), Response::HTTP_CREATED);
+        return $this->json(new PoiResource($poi), Response::HTTP_CREATED);
     }
 
     /**
      * @param Poi $poi
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function show(Poi $poi)
     {
         $poi->load($poi->relationships);
 
-        return response()->json(new PoiResource($poi), Response::HTTP_OK);
+        return $this->json(new PoiResource($poi), Response::HTTP_OK);
     }
 
     /**
      * @param PoiRequest $request
      * @param Poi $poi
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function update(PoiRequest $request, Poi $poi)
     {
-        $poi = $this->poiService->update($request, $poi);
+        $poi = $this->poiService->update($poi, $request);
 
         $poi->load($poi->relationships);
 
-        return response()->json(new PoiResource($poi), Response::HTTP_OK);
+        return $this->json(new PoiResource($poi), Response::HTTP_OK);
     }
 
     /**
      * @param Poi $poi
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      * @throws \Exception
      */
     public function destroy(Poi $poi)
     {
         $poi->delete();
 
-        return response()->json(null, Response::HTTP_OK);
+        return $this->json(null, Response::HTTP_OK);
     }
 
     /**
      * @param BulkDeleteRequest $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function bulkDestroy(BulkDeleteRequest $request)
     {
@@ -125,6 +133,6 @@ class PoisController extends Controller
             }
         });
 
-        return response()->json(null, Response::HTTP_OK);
+        return $this->json(null, Response::HTTP_OK);
     }
 }

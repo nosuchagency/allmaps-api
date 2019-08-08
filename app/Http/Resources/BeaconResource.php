@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class BeaconResource extends JsonResource
@@ -9,7 +10,7 @@ class BeaconResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param Request $request
      *
      * @return array
      */
@@ -17,18 +18,19 @@ class BeaconResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'image' => url('/img/bullseye.png'),
             'name' => $this->name,
+            'identifier' => $this->identifier,
             'description' => $this->description,
             'proximity_uuid' => $this->proximity_uuid,
             'major' => $this->major,
             'minor' => $this->minor,
-            'eddystone_uid' => $this->eddystone_uid,
-            'eddystone_url' => $this->eddystone_url,
-            'eddystone_tlm' => $this->eddystone_tlm,
-            'eddystone_eid' => $this->eddystone_eid,
-            'creator' => $this->creator,
-            'category' => new CategoryResource($this->category),
+            'namespace' => $this->namespace,
+            'instance_id' => $this->instance_id,
+            'url' => $this->url,
+            'image' => url('/images/bullseye.png'),
+            'created_at' => $this->created_at->toDateTimeString(),
+            'updated_at' => $this->updated_at->toDateTimeString(),
+            'category' => new CategoryResource($this->whenLoaded('category')),
             'locations' => LocationResource::collection($this->whenLoaded('locations')),
             'tags' => TagResource::collection($this->whenLoaded('tags')),
             'containers' => BeaconContainerResource::collection($this->whenLoaded('containers'))

@@ -36,10 +36,10 @@ return [
     */
 
     'guards' => [
-//        'web' => [
-//            'driver' => 'session',
-//            'provider' => 'users',
-//        ],
+        'token' => [
+            'driver' => 'token',
+            'provider' => 'tokens'
+        ],
         'api' => [
             'driver' => 'jwt',
             'provider' => 'users',
@@ -69,10 +69,10 @@ return [
             'model' => App\Models\User::class,
         ],
 
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
+        'tokens' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Token::class,
+        ],
     ],
 
     /*

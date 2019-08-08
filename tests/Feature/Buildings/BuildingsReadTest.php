@@ -35,7 +35,17 @@ class BuildingsReadTest extends TestCase
             $this->createRoleWithPermissions(['buildings.read'])
         );
 
-        $this->getJson(route('buildings.index'))->assertStatus(200);
+        $this->getJson(route('buildings.index'))->assertOk();
+    }
+
+    /** @test */
+    public function an_authenticated_user_with_read_permission_can_view_buildings_paginated()
+    {
+        $this->signIn()->assignRole(
+            $this->createRoleWithPermissions(['buildings.read'])
+        );
+
+        $this->getJson(route('buildings.paginated'))->assertOk();
     }
 
     /** @test */
@@ -47,6 +57,6 @@ class BuildingsReadTest extends TestCase
 
         $building = factory(Building::class)->create();
 
-        $this->getJson(route('buildings.show', ['building' => $building]))->assertStatus(200);
+        $this->getJson(route('buildings.show', ['building' => $building]))->assertOk();
     }
 }

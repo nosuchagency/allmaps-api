@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class TokenResource extends JsonResource
@@ -9,7 +10,7 @@ class TokenResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param Request $request
      *
      * @return array
      */
@@ -18,10 +19,11 @@ class TokenResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'token' => $this->token,
-            'creator' => $this->creator,
-            'role' => $this->getRoleNames()->first(),
-            'actions' => ActionResource::collection($this->recentActions())
+            'token' => $this->api_token,
+            'role' => new RoleResource($this->roles()->first()),
+            'created_at' => $this->created_at->toDateTimeString(),
+            'updated_at' => $this->updated_at->toDateTimeString(),
+            'activities' => ActivityResource::collection($this->recentActivities())
         ];
     }
 }

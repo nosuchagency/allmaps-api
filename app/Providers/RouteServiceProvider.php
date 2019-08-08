@@ -2,9 +2,9 @@
 
 namespace App\Providers;
 
+use App\Models\Beacon;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
-use Spatie\Permission\Models\Permission;
 
 class RouteServiceProvider extends ServiceProvider
 {
@@ -25,6 +25,8 @@ class RouteServiceProvider extends ServiceProvider
     public function boot()
     {
         parent::boot();
+
+        Route::model('beacon', Beacon::class);
     }
 
     /**
@@ -34,7 +36,8 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function map()
     {
-        $this->mapApiV1Routes();
+        $this->mapTokenRoutes();
+        $this->mapUserRoutes();
         $this->mapWebRoutes();
     }
 
@@ -48,26 +51,38 @@ class RouteServiceProvider extends ServiceProvider
     protected function mapWebRoutes()
     {
         Route::namespace($this->namespace)
+            ->middleware(['web'])
             ->group(base_path('routes/web.php'));
     }
 
     /**
-     * Define the "api" routes for the application.
-     *
-     * These routes are typically stateless.
+     * Define the "user" routes for the application.
      *
      * @return void
      */
-    protected function mapApiV1Routes()
+    protected function mapUserRoutes()
     {
-//        Route::prefix('json')
-//            ->middleware('web')
-//            ->namespace($this->namespace . '\API\V1')
-//            ->group(base_path('routes/api/v1/api.php'));
+        Route::prefix('v1/user')
+            ->middleware(['api', 'auth'])
+            ->namespace($this->namespace . '\API\V1')
+            ->group(base_path('routes/api/v1/crud.php'));
 
-        Route::prefix('api/v1')
+        Route::prefix('v1/user')
             ->middleware(['api'])
             ->namespace($this->namespace . '\API\V1')
-            ->group(base_path('routes/api/v1/api.php'));
+            ->group(base_path('routes/api/v1/misc.php'));
+    }
+
+    /**
+     * Define the "token" routes for the application.
+     *
+     * @return void
+     */
+    protected function mapTokenRoutes()
+    {
+        Route::prefix('v1/token')
+            ->middleware(['api', 'auth:token'])
+            ->namespace($this->namespace . '\API\V1')
+            ->group(base_path('routes/api/v1/crud.php'));
     }
 }

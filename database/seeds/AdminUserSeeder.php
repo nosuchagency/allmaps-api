@@ -8,13 +8,17 @@ class AdminUserSeeder extends Seeder
 {
     public function run()
     {
+        activity()->disableLogging();
+
         $user = User::firstOrCreate([
             'email' => 'webmaster@nosuchagency.dk'
         ], [
             'name' => 'webmaster',
-            'password' => bcrypt('password12')
+            'password' => 'password12'
         ]);
 
         $user->assignRole('admin');
+
+        activity()->enableLogging();
     }
 }

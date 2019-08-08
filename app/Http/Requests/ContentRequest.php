@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\ContentType;
 use App\Rules\RequiredIdRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -27,13 +28,14 @@ class ContentRequest extends FormRequest
     {
         $rules = [
             'name' => 'required',
+            'order' => 'nullable|integer',
             'text' => '',
             'image' => '',
             'yt_url' => 'nullable|url',
             'url' => 'nullable|url',
             'type' => [
                 'required',
-                Rule::in(['image', 'video', 'text', 'gallery', 'file', 'web']),
+                Rule::in(ContentType::TYPES),
             ],
             'category' => ['nullable', new RequiredIdRule],
             'category.id' => 'exists:categories,id',
@@ -44,6 +46,9 @@ class ContentRequest extends FormRequest
         if ($this->method() === 'POST') {
             $rules['folder'] = 'required';
             $rules['folder.id'] = 'required|exists:folders,id,deleted_at,NULL';
+        } else {
+            $rules['folder'] = ['nullable', new RequiredIdRule];
+            $rules['folder.id'] = 'exists:folders,id,deleted_at,NULL';
         }
 
         return $rules;

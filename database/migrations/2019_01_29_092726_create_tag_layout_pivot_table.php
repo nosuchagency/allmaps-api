@@ -16,7 +16,7 @@ class CreateTagLayoutPivotTable extends Migration
         Schema::create('tag_layout', function (Blueprint $table) {
             $table->tag();
 
-            $table->unsignedInteger('layout_id');
+            $table->unsignedBigInteger('layout_id');
             $table->foreign('layout_id')
                 ->references('id')
                 ->on('layouts')

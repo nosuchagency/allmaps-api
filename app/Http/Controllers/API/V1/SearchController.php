@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\API\V1;
 
-use App\Http\Controllers\BaseController;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\SearchRequest;
 use App\Http\Resources\LocationResource;
 use Illuminate\Http\Response;
 
-class SearchController extends BaseController
+class SearchController extends Controller
 {
+
     /**
      * @param SearchRequest $request
      *
@@ -18,6 +19,6 @@ class SearchController extends BaseController
     {
         $locations = $this->searchForLocations($request->all());
 
-        return response()->json(LocationResource::collection($locations), Response::HTTP_OK);
+        return $this->json(LocationResource::collection($locations), Response::HTTP_OK);
     }
 }

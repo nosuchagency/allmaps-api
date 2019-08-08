@@ -4,6 +4,7 @@ namespace Tests\Feature\Containers;
 
 use App\Models\Category;
 use App\Models\Container;
+use App\Models\Skin;
 use App\Models\Tag;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -36,9 +37,9 @@ class ContainersUpdateTest extends TestCase
     {
         $container = factory(Container::class)->create();
 
-        $attributes = ['id' => $container->id, 'name' => $this->faker->title];
+        $attributes = ['id' => $container->id, 'name' => $this->faker->name];
 
-        $this->update($container, $attributes)->assertStatus(200);
+        $this->update($container, $attributes)->assertOk();
 
         $this->assertDatabaseHas('containers', $attributes);
     }
@@ -66,9 +67,12 @@ class ContainersUpdateTest extends TestCase
     protected function validFields($overrides = [])
     {
         return array_merge([
-            'name' => $this->faker->title,
+            'name' => $this->faker->name,
             'description' => $this->faker->paragraph,
             'folders_enabled' => $this->faker->boolean,
+            'mobile_skin' => factory(Skin::class)->create(),
+            'tablet_skin' => factory(Skin::class)->create(),
+            'desktop_skin' => factory(Skin::class)->create(),
             'category' => factory(Category::class)->create(),
             'tags' => factory(Tag::class, 2)->create()
         ], $overrides);

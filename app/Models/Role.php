@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Filters\SearchFilter;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Permission\Models\Permission;
 
@@ -25,7 +26,7 @@ class Role extends \Spatie\Permission\Models\Role
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Collection|Permission[]
+     * @return Collection|Permission[]
      */
     public function getPermissions()
     {

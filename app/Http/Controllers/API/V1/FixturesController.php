@@ -7,13 +7,16 @@ use App\Http\Requests\BulkDeleteRequest;
 use App\Http\Requests\FixtureRequest;
 use App\Http\Resources\FixtureResource;
 use App\Models\Fixture;
-use App\Services\FixtureService;
+use App\Services\Models\FixtureService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class FixturesController extends Controller
 {
 
+    /**
+     * @var FixtureService
+     */
     protected $fixtureService;
 
     /**
@@ -24,7 +27,7 @@ class FixturesController extends Controller
     public function __construct(FixtureService $fixtureService)
     {
         $this->middleware('permission:fixtures.create')->only(['store']);
-        $this->middleware('permission:fixtures.read')->only(['index', 'show', 'paginated']);
+        $this->middleware('permission:fixtures.read')->only(['index', 'paginated', 'show']);
         $this->middleware('permission:fixtures.update')->only(['update']);
         $this->middleware('permission:fixtures.delete')->only(['destroy', 'bulkDestroy']);
 
@@ -43,7 +46,7 @@ class FixturesController extends Controller
             ->filter($request)
             ->get();
 
-        return response()->json(FixtureResource::collection($fixtures), Response::HTTP_OK);
+        return $this->json(FixtureResource::collection($fixtures), Response::HTTP_OK);
     }
 
     /**
@@ -56,7 +59,7 @@ class FixturesController extends Controller
         $fixtures = Fixture::query()
             ->withRelations($request)
             ->filter($request)
-            ->paginate($this->paginationNumber());
+            ->jsonPaginate($this->paginationNumber());
 
         return FixtureResource::collection($fixtures);
     }
@@ -72,7 +75,7 @@ class FixturesController extends Controller
 
         $fixture->load($fixture->relationships);
 
-        return response()->json(new FixtureResource($fixture), Response::HTTP_CREATED);
+        return $this->json(new FixtureResource($fixture), Response::HTTP_CREATED);
     }
 
     /**
@@ -84,7 +87,7 @@ class FixturesController extends Controller
     {
         $fixture->load($fixture->relationships);
 
-        return response()->json(new FixtureResource($fixture), Response::HTTP_OK);
+        return $this->json(new FixtureResource($fixture), Response::HTTP_OK);
     }
 
     /**
@@ -95,11 +98,11 @@ class FixturesController extends Controller
      */
     public function update(FixtureRequest $request, Fixture $fixture)
     {
-        $fixture = $this->fixtureService->update($request, $fixture);
+        $fixture = $this->fixtureService->update($fixture, $request);
 
         $fixture->load($fixture->relationships);
 
-        return response()->json(new FixtureResource($fixture), Response::HTTP_OK);
+        return $this->json(new FixtureResource($fixture), Response::HTTP_OK);
     }
 
     /**
@@ -112,7 +115,7 @@ class FixturesController extends Controller
     {
         $fixture->delete();
 
-        return response()->json(null, Response::HTTP_OK);
+        return $this->json(null, Response::HTTP_OK);
     }
 
     /**
@@ -128,6 +131,6 @@ class FixturesController extends Controller
             }
         });
 
-        return response()->json(null, Response::HTTP_OK);
+        return $this->json(null, Response::HTTP_OK);
     }
 }

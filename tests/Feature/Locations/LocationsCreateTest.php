@@ -3,8 +3,11 @@
 namespace Tests\Feature\Locations;
 
 use App\Models\Beacon;
+use App\Models\Category;
 use App\Models\Floor;
 use App\Models\Location;
+use App\Models\Tag;
+use Illuminate\Foundation\Testing\TestResponse;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -43,7 +46,7 @@ class LocationsCreateTest extends TestCase
     /**
      * @param array $attributes
      *
-     * @return \Illuminate\Foundation\Testing\TestResponse
+     * @return TestResponse
      */
     protected function create($attributes = [])
     {
@@ -62,9 +65,11 @@ class LocationsCreateTest extends TestCase
     protected function validFields($overrides = [])
     {
         return array_merge([
-            'name' => $this->faker->title,
+            'name' => $this->faker->name,
             'floor' => factory(Floor::class)->create(),
-            'beacon' => factory(Beacon::class)->create()
+            'beacon' => factory(Beacon::class)->create(),
+            'category' => factory(Category::class)->create(),
+            'tags' => factory(Tag::class, 2)->create()
         ], $overrides);
     }
 }

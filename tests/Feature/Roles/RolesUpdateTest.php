@@ -35,9 +35,9 @@ class RolesUpdateTest extends TestCase
     {
         $role = factory(Role::class)->create();
 
-        $attributes = ['id' => $role->id, 'name' => $this->faker->title];
+        $attributes = ['id' => $role->id, 'name' => $this->faker->name];
 
-        $this->update($role, $attributes)->assertStatus(200);
+        $this->update($role, $attributes)->assertOk();
 
         $this->assertDatabaseHas('roles', $attributes);
     }
@@ -65,7 +65,7 @@ class RolesUpdateTest extends TestCase
     protected function validFields($overrides = [])
     {
         return array_merge([
-            'name' => $this->faker->title,
+            'name' => $this->faker->name,
             'permissions' => factory(Permission::class, 2)->create()
         ], $overrides);
     }

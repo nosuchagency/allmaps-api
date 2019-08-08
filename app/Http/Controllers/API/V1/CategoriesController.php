@@ -7,6 +7,7 @@ use App\Http\Requests\BulkDeleteRequest;
 use App\Http\Requests\CategoryRequest;
 use App\Http\Resources\CategoryResource;
 use App\Models\Category;
+use App\Services\Models\CategoryService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -14,16 +15,23 @@ class CategoriesController extends Controller
 {
 
     /**
-     * Instantiate controller
-     *
-     * @return void
+     * @var CategoryService
      */
-    public function __construct()
+    protected $categoryService;
+
+    /**
+     * CategoriesController constructor.
+     *
+     * @param CategoryService $categoryService
+     */
+    public function __construct(CategoryService $categoryService)
     {
         $this->middleware('permission:categories.create')->only(['store']);
-        $this->middleware('permission:categories.read')->only(['index', 'show', 'paginated']);
+        $this->middleware('permission:categories.read')->only(['index', 'paginated', 'show']);
         $this->middleware('permission:categories.update')->only(['update']);
         $this->middleware('permission:categories.delete')->only(['destroy', 'bulkDestroy']);
+
+        $this->categoryService = $categoryService;
     }
 
     /**
@@ -37,7 +45,7 @@ class CategoriesController extends Controller
             ->filter($request)
             ->get();
 
-        return response()->json(CategoryResource::collection($categories), Response::HTTP_OK);
+        return $this->json(CategoryResource::collection($categories), Response::HTTP_OK);
     }
 
     /**
@@ -49,7 +57,7 @@ class CategoriesController extends Controller
     {
         $categories = Category::query()
             ->filter($request)
-            ->paginate($this->paginationNumber());
+            ->jsonPaginate($this->paginationNumber());
 
         return CategoryResource::collection($categories);
     }
@@ -61,9 +69,9 @@ class CategoriesController extends Controller
      */
     public function store(CategoryRequest $request)
     {
-        $category = Category::create($request->validated());
+        $category = $this->categoryService->create($request);
 
-        return response()->json(new CategoryResource($category), Response::HTTP_CREATED);
+        return $this->json(new CategoryResource($category), Response::HTTP_CREATED);
     }
 
     /**
@@ -73,7 +81,7 @@ class CategoriesController extends Controller
      */
     public function show(Category $category)
     {
-        return response()->json(new CategoryResource($category), Response::HTTP_OK);
+        return $this->json(new CategoryResource($category), Response::HTTP_OK);
     }
 
     /**
@@ -84,9 +92,9 @@ class CategoriesController extends Controller
      */
     public function update(CategoryRequest $request, Category $category)
     {
-        $category->fill($request->validated())->save();
+        $category = $this->categoryService->update($category, $request);
 
-        return response()->json(new CategoryResource($category), Response::HTTP_OK);
+        return $this->json(new CategoryResource($category), Response::HTTP_OK);
     }
 
     /**
@@ -99,7 +107,7 @@ class CategoriesController extends Controller
     {
         $category->delete();
 
-        return response()->json(null, Response::HTTP_OK);
+        return $this->json(null, Response::HTTP_OK);
     }
 
     /**
@@ -115,6 +123,6 @@ class CategoriesController extends Controller
             }
         });
 
-        return response()->json(null, Response::HTTP_OK);
+        return $this->json(null, Response::HTTP_OK);
     }
 }

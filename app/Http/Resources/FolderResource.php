@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class FolderResource extends JsonResource
@@ -9,7 +10,7 @@ class FolderResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param Request $request
      *
      * @return array
      */
@@ -20,8 +21,10 @@ class FolderResource extends JsonResource
             'name' => $this->name,
             'order' => $this->order,
             'primary' => $this->primary,
-            'container' => $this->container,
-            'category' => new CategoryResource($this->category),
+            'container' => new ContainerResource($this->whenLoaded('container')),
+            'created_at' => $this->created_at->toDateTimeString(),
+            'updated_at' => $this->updated_at->toDateTimeString(),
+            'category' => new CategoryResource($this->whenLoaded('category')),
             'tags' => TagResource::collection($this->whenLoaded('tags')),
             'contents' => ContentResource::collection($this->whenLoaded('contents'))
         ];

@@ -35,7 +35,17 @@ class TagsReadTest extends TestCase
             $this->createRoleWithPermissions(['tags.read'])
         );
 
-        $this->getJson(route('tags.index'))->assertStatus(200);
+        $this->getJson(route('tags.index'))->assertOk();
+    }
+
+    /** @test */
+    public function an_authenticated_user_with_read_permission_can_view_tags_paginated()
+    {
+        $this->signIn()->assignRole(
+            $this->createRoleWithPermissions(['tags.read'])
+        );
+
+        $this->getJson(route('tags.paginated'))->assertOk();
     }
 
     /** @test */
@@ -47,6 +57,6 @@ class TagsReadTest extends TestCase
 
         $tag = factory(Tag::class)->create();
 
-        $this->getJson(route('tags.show', ['tag' => $tag]))->assertStatus(200);
+        $this->getJson(route('tags.show', ['tag' => $tag]))->assertOk();
     }
 }

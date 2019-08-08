@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class FloorResource extends JsonResource
@@ -9,7 +10,7 @@ class FloorResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param Request $request
      *
      * @return array
      */
@@ -19,11 +20,10 @@ class FloorResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'level' => $this->level,
-            'building' => $this->building,
-            'place' => $this->building->place,
+            'building' => new BuildingResource($this->whenLoaded('building')),
+            'place' => new PlaceResource($this->building->place),
             'created_at' => $this->created_at->toDateTimeString(),
             'updated_at' => $this->updated_at->toDateTimeString(),
-            'creator' => $this->creator,
             'structures' => StructureResource::collection($this->whenLoaded('structures')),
             'locations' => LocationResource::collection($this->whenLoaded('locations'))
         ];

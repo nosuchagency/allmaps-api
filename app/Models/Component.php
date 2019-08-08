@@ -34,15 +34,19 @@ class Component extends Model
     protected $fillable = [
         'name',
         'type',
-        'description',
         'shape',
-        'color',
-        'opacity',
-        'weight',
-        'curved',
-        'width',
-        'height',
+        'description',
+        'stroke',
+        'stroke_type',
+        'stroke_color',
+        'stroke_width',
+        'stroke_opacity',
+        'fill',
+        'fill_color',
+        'fill_opacity',
         'image',
+        'image_width',
+        'image_height',
         'category_id',
         'created_by',
         'category'
@@ -54,7 +58,10 @@ class Component extends Model
      * @var array
      */
     protected $casts = [
-        'curved' => 'boolean',
+        'stroke' => 'boolean',
+        'stroke_opacity' => 'double',
+        'fill' => 'boolean',
+        'fill_opacity' => 'double',
     ];
 
     /**
@@ -72,6 +79,7 @@ class Component extends Model
      * @var array
      */
     public $relationships = [
+        'category',
         'tags',
         'structures'
     ];

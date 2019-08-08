@@ -14,19 +14,24 @@ class CreatePivotTableBetweenBeaconAndContainer extends Migration
     public function up()
     {
         Schema::create('beacon_container', function (Blueprint $table) {
-            $table->increments('id');
+            $table->bigIncrements('id');
 
-            $table->unsignedInteger('beacon_id');
+            $table->unsignedBigInteger('beacon_id');
             $table->foreign('beacon_id')
                 ->references('id')
                 ->on('beacons')
                 ->onDelete('cascade');
 
-            $table->unsignedInteger('container_id');
+            $table->unsignedBigInteger('container_id');
             $table->foreign('container_id')
                 ->references('id')
                 ->on('containers')
                 ->onDelete('cascade');
+
+            $table->unique(['beacon_id', 'container_id']);
+
+            $table->createdBy();
+            $table->timestamps();
         });
     }
 

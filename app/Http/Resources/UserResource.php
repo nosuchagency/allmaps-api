@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class UserResource extends JsonResource
@@ -9,7 +10,7 @@ class UserResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param Request $request
      *
      * @return array
      */
@@ -20,12 +21,14 @@ class UserResource extends JsonResource
             'name' => $this->name,
             'email' => $this->email,
             'locale' => $this->locale,
-            'role' => $this->roles()->first(),
-            'category' => new CategoryResource($this->category),
+            'role' => new RoleResource($this->roles()->first()),
             'permissions' => $this->getAllPermissions()->pluck('name'),
+            'created_at' => $this->created_at->toDateTimeString(),
+            'updated_at' => $this->updated_at->toDateTimeString(),
+            'category' => new CategoryResource($this->whenLoaded('category')),
             'tags' => TagResource::collection($this->whenLoaded('tags')),
             'contents' => ContentResource::collection($this->whenLoaded('contents')),
-            'actions' => ActionResource::collection($this->recentActions())
+            'activities' => ActivityResource::collection($this->recentActivities())
         ];
     }
 }

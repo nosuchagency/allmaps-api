@@ -64,12 +64,22 @@ class Container extends Model
      * @var array
      */
     public $relationships = [
+        'category',
         'tags',
         'folders',
         'folders.contents',
+        'locations',
         'contents',
         'beacons'
     ];
+
+    /**
+     * Get the locations for the container
+     */
+    public function locations()
+    {
+        return $this->hasMany(Location::class);
+    }
 
     /**
      * Get the contents for the container through the folder
@@ -102,6 +112,49 @@ class Container extends Model
     {
         return $this->belongsToMany(Beacon::class)
             ->using(BeaconContainer::class)->withPivot(['id']);
+    }
+
+    /**
+     * @param $type
+     *
+     * @return Skin
+     */
+    public function getSkin($type)
+    {
+        switch ($type) {
+            case 'mobile' :
+                return $this->mobileSkin;
+            case 'tablet' :
+                return $this->tabletSkin;
+            case 'desktop' :
+                return $this->desktopSkin;
+            default :
+                return $this->mobileSkin;
+        }
+    }
+
+    /**
+     * Get the mobile skin
+     */
+    public function mobileSkin()
+    {
+        return $this->belongsTo(Skin::class);
+    }
+
+    /**
+     * Get the tablet skin
+     */
+    public function tabletSkin()
+    {
+        return $this->belongsTo(Skin::class);
+    }
+
+    /**
+     * Get the desktop skin
+     */
+    public function desktopSkin()
+    {
+        return $this->belongsTo(Skin::class);
     }
 
     /**

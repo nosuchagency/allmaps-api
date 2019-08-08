@@ -3,6 +3,7 @@
 namespace Tests\Unit\Models;
 
 use App\Models\Beacon;
+use App\Models\Container;
 use App\Models\Fixture;
 use App\Models\Floor;
 use App\Models\Location;
@@ -22,36 +23,40 @@ class LocationTest extends TestCase
     }
 
     /** @test */
+    public function it_belongs_to_a_container()
+    {
+        $location = factory(Location::class)->create();
+        $this->assertInstanceOf(Container::class, $location->container);
+    }
+
+    /** @test */
     public function it_belongs_to_a_poi()
     {
         $location = factory(Location::class)->create([
-            'poi_id' => factory(Poi::class)->create()
+            'locatable_id' => factory(Poi::class)->create()->id,
+            'locatable_type' => 'poi'
         ]);
-        $this->assertInstanceOf(Poi::class, $location->poi);
-
-        $this->assertEquals('poi', $location->getType());
+        $this->assertInstanceOf(Poi::class, $location->locatable);
     }
 
     /** @test */
     public function it_belongs_to_a_fixture()
     {
         $location = factory(Location::class)->create([
-            'fixture_id' => factory(Fixture::class)->create()
+            'locatable_id' => factory(Fixture::class)->create()->id,
+            'locatable_type' => 'fixture'
         ]);
-        $this->assertInstanceOf(Fixture::class, $location->fixture);
-
-        $this->assertEquals('fixture', $location->getType());
+        $this->assertInstanceOf(Fixture::class, $location->locatable);
     }
 
     /** @test */
     public function it_belongs_to_a_beacon()
     {
         $location = factory(Location::class)->create([
-            'beacon_id' => factory(Beacon::class)->create()
+            'locatable_id' => factory(Beacon::class)->create()->id,
+            'locatable_type' => 'beacon'
         ]);
-        $this->assertInstanceOf(Beacon::class, $location->beacon);
-
-        $this->assertEquals('beacon', $location->getType());
+        $this->assertInstanceOf(Beacon::class, $location->locatable);
     }
 
     /** @test */

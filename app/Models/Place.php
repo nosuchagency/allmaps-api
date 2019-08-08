@@ -71,10 +71,12 @@ class Place extends Model
      * @var array
      */
     public $relationships = [
+        'category',
         'tags',
         'buildings',
         'buildings.floors',
-        'buildings.floors.locations'
+        'buildings.floors.locations',
+        'buildings.floors.structures',
     ];
 
     /**
@@ -99,6 +101,14 @@ class Place extends Model
     public function locations()
     {
         return $this->hasManyDeep(Location::class, [Building::class, Floor::class]);
+    }
+
+    /**
+     * Get the menu that owns the place
+     */
+    public function menu()
+    {
+        return $this->belongsTo(Menu::class);
     }
 
     /**

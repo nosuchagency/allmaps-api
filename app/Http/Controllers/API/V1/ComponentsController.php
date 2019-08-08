@@ -7,7 +7,7 @@ use App\Http\Requests\BulkDeleteRequest;
 use App\Http\Requests\ComponentRequest;
 use App\Http\Resources\ComponentResource;
 use App\Models\Component;
-use App\Services\ComponentService;
+use App\Services\Models\ComponentService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -27,7 +27,7 @@ class ComponentsController extends Controller
     public function __construct(ComponentService $componentService)
     {
         $this->middleware('permission:components.create')->only(['store']);
-        $this->middleware('permission:components.read')->only(['index', 'show', 'paginated']);
+        $this->middleware('permission:components.read')->only(['index', 'paginated', 'show']);
         $this->middleware('permission:components.update')->only(['update']);
         $this->middleware('permission:components.delete')->only(['destroy', 'bulkDestroy']);
 
@@ -41,9 +41,12 @@ class ComponentsController extends Controller
      */
     public function index(Request $request)
     {
-        $components = Component::withRelations($request)->get();
+        $components = Component::query()
+            ->withRelations($request)
+            ->filter($request)
+            ->get();
 
-        return response()->json(ComponentResource::collection($components), Response::HTTP_OK);
+        return $this->json(ComponentResource::collection($components), Response::HTTP_OK);
     }
 
     /**
@@ -53,7 +56,10 @@ class ComponentsController extends Controller
      */
     public function paginated(Request $request)
     {
-        $components = Component::withRelations($request)->filter($request)->paginate($this->paginationNumber());
+        $components = Component::query()
+            ->withRelations($request)
+            ->filter($request)
+            ->jsonPaginate($this->paginationNumber());
 
         return ComponentResource::collection($components);
     }
@@ -69,7 +75,7 @@ class ComponentsController extends Controller
 
         $component->load($component->relationships);
 
-        return response()->json(new ComponentResource($component), Response::HTTP_CREATED);
+        return $this->json(new ComponentResource($component), Response::HTTP_CREATED);
     }
 
     /**
@@ -81,7 +87,7 @@ class ComponentsController extends Controller
     {
         $component->load($component->relationships);
 
-        return response()->json(new ComponentResource($component), Response::HTTP_OK);
+        return $this->json(new ComponentResource($component), Response::HTTP_OK);
     }
 
     /**
@@ -92,11 +98,11 @@ class ComponentsController extends Controller
      */
     public function update(ComponentRequest $request, Component $component)
     {
-        $component = $this->componentService->update($request, $component);
+        $component = $this->componentService->update($component, $request);
 
         $component->load($component->relationships);
 
-        return response()->json(new ComponentResource($component), Response::HTTP_OK);
+        return $this->json(new ComponentResource($component), Response::HTTP_OK);
     }
 
     /**
@@ -109,7 +115,7 @@ class ComponentsController extends Controller
     {
         $component->delete();
 
-        return response()->json(null, Response::HTTP_OK);
+        return $this->json(null, Response::HTTP_OK);
     }
 
     /**
@@ -125,6 +131,6 @@ class ComponentsController extends Controller
             }
         });
 
-        return response()->json(null, Response::HTTP_OK);
+        return $this->json(null, Response::HTTP_OK);
     }
 }

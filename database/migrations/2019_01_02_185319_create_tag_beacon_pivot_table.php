@@ -16,7 +16,7 @@ class CreateTagBeaconPivotTable extends Migration
         Schema::create('tag_beacon', function (Blueprint $table) {
             $table->tag();
 
-            $table->unsignedInteger('beacon_id');
+            $table->unsignedBigInteger('beacon_id');
             $table->foreign('beacon_id')
                 ->references('id')
                 ->on('beacons')

@@ -5,6 +5,7 @@ namespace Tests\Feature\Beacons;
 use App\Models\Beacon;
 use App\Models\Category;
 use App\Models\Tag;
+use Illuminate\Foundation\Testing\TestResponse;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -36,9 +37,9 @@ class BeaconsUpdateTest extends TestCase
     {
         $beacon = factory(Beacon::class)->create();
 
-        $attributes = ['id' => $beacon->id, 'name' => $this->faker->title];
+        $attributes = ['id' => $beacon->id, 'name' => $this->faker->name];
 
-        $this->update($beacon, $attributes)->assertStatus(200);
+        $this->update($beacon, $attributes)->assertOk();
 
         $this->assertDatabaseHas('beacons', $attributes);
     }
@@ -47,7 +48,7 @@ class BeaconsUpdateTest extends TestCase
      * @param $beacon
      * @param array $attributes
      *
-     * @return \Illuminate\Foundation\Testing\TestResponse
+     * @return TestResponse
      */
     protected function update($beacon, $attributes = [])
     {
@@ -66,15 +67,15 @@ class BeaconsUpdateTest extends TestCase
     protected function validFields($overrides = [])
     {
         return array_merge([
-            'name' => $this->faker->title,
+            'name' => $this->faker->name,
+            'identifier' => $this->faker->uuid,
             'description' => $this->faker->paragraph,
             'proximity_uuid' => $this->faker->uuid,
             'major' => $this->faker->numberBetween(0, 65535),
             'minor' => $this->faker->numberBetween(0, 65535),
-            'eddystone_uid' => $this->faker->uuid,
-            'eddystone_url' => $this->faker->url,
-            'eddystone_tlm' => $this->faker->title,
-            'eddystone_eid' => $this->faker->title,
+            'namespace' => $this->faker->uuid,
+            'instance_id' => $this->faker->uuid,
+            'url' => $this->faker->url,
             'category' => factory(Category::class)->create(),
             'tags' => factory(Tag::class, 2)->create()
         ], $overrides);

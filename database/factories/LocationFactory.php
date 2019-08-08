@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Container;
+use App\Models\Poi;
 use Faker\Generator as Faker;
 use App\Models\Floor;
 
@@ -18,8 +20,8 @@ $factory->define(App\Models\Location::class, function (Faker $faker) {
     return [
         'name' => $faker->title,
         'floor_id' => factory(Floor::class)->create(),
-        'poi_id' => null,
-        'fixture_id' => null,
-        'beacon_id' => null
+        'container_id' => factory(Container::class)->create(),
+        'locatable_type' => 'poi',
+        'locatable_id' => factory(Poi::class)->create()
     ];
 });

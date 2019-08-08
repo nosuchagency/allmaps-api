@@ -7,8 +7,10 @@ use App\Http\Requests\BulkDeleteRequest;
 use App\Http\Requests\StructureRequest;
 use App\Http\Resources\StructureResource;
 use App\Models\Structure;
-use App\Services\StructureService;
+use App\Services\Models\StructureService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 
 class StructuresController extends Controller
@@ -18,7 +20,6 @@ class StructuresController extends Controller
      * @var StructureService
      */
     protected $structureService;
-
 
     /**
      * StructuresController constructor.
@@ -38,7 +39,7 @@ class StructuresController extends Controller
     /**
      * @param Request $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function index(Request $request)
     {
@@ -46,19 +47,19 @@ class StructuresController extends Controller
             ->filter($request)
             ->get();
 
-        return response()->json(StructureResource::collection($structures), Response::HTTP_OK);
+        return $this->json(StructureResource::collection($structures), Response::HTTP_OK);
     }
 
     /**
      * @param Request $request
      *
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     * @return AnonymousResourceCollection
      */
     public function paginated(Request $request)
     {
         $structures = Structure::query()
             ->filter($request)
-            ->paginate($this->paginationNumber());
+            ->jsonPaginate($this->paginationNumber());
 
         return StructureResource::collection($structures);
     }
@@ -66,55 +67,55 @@ class StructuresController extends Controller
     /**
      * @param StructureRequest $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function store(StructureRequest $request)
     {
         $structure = $this->structureService->create($request);
 
-        return response()->json(new StructureResource($structure), Response::HTTP_CREATED);
+        return $this->json(new StructureResource($structure), Response::HTTP_CREATED);
     }
 
     /**
      * @param Structure $structure
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function show(Structure $structure)
     {
-        return response()->json(new StructureResource($structure), Response::HTTP_OK);
+        return $this->json(new StructureResource($structure), Response::HTTP_OK);
     }
 
     /**
      * @param StructureRequest $request
      * @param Structure $structure
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function update(StructureRequest $request, Structure $structure)
     {
         $structure = $this->structureService->update($structure, $request);
 
-        return response()->json(new StructureResource($structure), Response::HTTP_OK);
+        return $this->json(new StructureResource($structure), Response::HTTP_OK);
     }
 
     /**
      * @param Structure $structure
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      * @throws \Exception
      */
     public function destroy(Structure $structure)
     {
         $structure->delete();
 
-        return response()->json(null, Response::HTTP_OK);
+        return $this->json(null, Response::HTTP_OK);
     }
 
     /**
      * @param BulkDeleteRequest $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function bulkDestroy(BulkDeleteRequest $request)
     {
@@ -124,6 +125,6 @@ class StructuresController extends Controller
             }
         });
 
-        return response()->json(null, Response::HTTP_OK);
+        return $this->json(null, Response::HTTP_OK);
     }
 }

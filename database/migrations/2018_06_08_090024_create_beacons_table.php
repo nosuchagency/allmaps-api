@@ -14,18 +14,18 @@ class CreateBeaconsTable extends Migration
     public function up()
     {
         Schema::create('beacons', function (Blueprint $table) {
-            $table->increments('id');
+            $table->bigIncrements('id');
             $table->string('name');
+            $table->string('identifier')->unique()->nullable();
             $table->text('description')->nullable();
 
             $table->string('proximity_uuid')->nullable();
             $table->integer('major')->nullable();
             $table->integer('minor')->nullable();
 
-            $table->string('eddystone_uid')->nullable();
-            $table->string('eddystone_url')->nullable();
-            $table->string('eddystone_tlm')->nullable();
-            $table->string('eddystone_eid')->nullable();
+            $table->string('namespace')->nullable();
+            $table->string('instance_id')->nullable();
+            $table->string('url')->nullable();
 
             $table->category();
             $table->createdBy();

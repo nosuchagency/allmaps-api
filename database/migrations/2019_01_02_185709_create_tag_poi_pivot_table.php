@@ -16,7 +16,7 @@ class CreateTagPoiPivotTable extends Migration
         Schema::create('tag_poi', function (Blueprint $table) {
             $table->tag();
 
-            $table->unsignedInteger('poi_id');
+            $table->unsignedBigInteger('poi_id');
             $table->foreign('poi_id')
                 ->references('id')
                 ->on('pois')

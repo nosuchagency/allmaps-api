@@ -7,30 +7,41 @@ use App\Http\Requests\BulkDeleteRequest;
 use App\Http\Requests\ContainerRequest;
 use App\Http\Resources\ContainerResource;
 use App\Models\Container;
-use App\Models\Tag;
+use App\Services\Models\ContainerService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 
 class ContainersController extends Controller
 {
 
     /**
-     * ContainersController constructor.
+     * @var ContainerService
      */
-    public function __construct()
+    protected $containerService;
+
+    /**
+     * ContainersController constructor.
+     *
+     * @param ContainerService $containerService
+     */
+    public function __construct(ContainerService $containerService)
     {
         $this->middleware('permission:containers.create')->only(['store']);
-        $this->middleware('permission:containers.read')->only(['index', 'show', 'paginated']);
+        $this->middleware('permission:containers.read')->only(['index', 'paginated', 'show']);
         $this->middleware('permission:containers.update')->only(['update']);
         $this->middleware('permission:containers.delete')->only(['destroy', 'bulkDestroy']);
+
+        $this->containerService = $containerService;
     }
 
     /**
      * Display a listing of the resource.
      *
-     * @param  Request $request
+     * @param Request $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function index(Request $request)
     {
@@ -39,7 +50,7 @@ class ContainersController extends Controller
             ->filter($request)
             ->get();
 
-        return response()->json(ContainerResource::collection($containers), Response::HTTP_OK);
+        return $this->json(ContainerResource::collection($containers), Response::HTTP_OK);
     }
 
     /**
@@ -47,14 +58,14 @@ class ContainersController extends Controller
      *
      * @param Request $request
      *
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+     * @return AnonymousResourceCollection;
      */
     public function paginated(Request $request)
     {
         $containers = Container::query()
             ->withRelations($request)
             ->filter($request)
-            ->paginate($this->paginationNumber());
+            ->jsonPaginate($this->paginationNumber());
 
         return ContainerResource::collection($containers);
     }
@@ -62,71 +73,61 @@ class ContainersController extends Controller
     /**
      * @param ContainerRequest $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function store(ContainerRequest $request)
     {
-        $container = Container::create($request->validated());
-
-        foreach ($request->get('tags', []) as $tag) {
-            $container->tags()->attach(Tag::find($tag['id']));
-        }
+        $container = $this->containerService->create($request);
 
         $container->load($container->relationships);
 
-        return response()->json(new ContainerResource($container), Response::HTTP_CREATED);
+        return $this->json(new ContainerResource($container), Response::HTTP_CREATED);
     }
 
     /**
      * @param Container $container
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function show(Container $container)
     {
         $container->load($container->relationships);
 
-        return response()->json(new ContainerResource($container), Response::HTTP_OK);
+        return $this->json(new ContainerResource($container), Response::HTTP_OK);
     }
 
     /**
      * @param ContainerRequest $request
      * @param Container $container
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function update(ContainerRequest $request, Container $container)
     {
-        $container->fill($request->validated())->save();
-
-        $container->tags()->sync([]);
-
-        foreach ($request->get('tags', []) as $tag) {
-            $container->tags()->attach(Tag::find($tag['id']));
-        }
+        $container = $this->containerService->update($container, $request);
 
         $container->load($container->relationships);
 
-        return response()->json(new ContainerResource($container), Response::HTTP_OK);
+        return $this->json(new ContainerResource($container), Response::HTTP_OK);
     }
 
     /**
      * @param Container $container
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      * @throws \Exception
      */
     public function destroy(Container $container)
     {
         $container->delete();
 
-        return response()->json(null, Response::HTTP_OK);
+        return $this->json(null, Response::HTTP_OK);
     }
 
     /**
      * @param BulkDeleteRequest $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function bulkDestroy(BulkDeleteRequest $request)
     {
@@ -136,6 +137,6 @@ class ContainersController extends Controller
             }
         });
 
-        return response()->json(null, Response::HTTP_OK);
+        return $this->json(null, Response::HTTP_OK);
     }
 }

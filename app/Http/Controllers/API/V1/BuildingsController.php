@@ -2,19 +2,23 @@
 
 namespace App\Http\Controllers\API\V1;
 
-use App\Http\Controllers\BaseController;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\BuildingRequest;
 use App\Http\Requests\BulkDeleteRequest;
 use App\Http\Requests\SearchRequest;
 use App\Http\Resources\BuildingResource;
 use App\Http\Resources\LocationResource;
 use App\Models\Building;
-use App\Services\BuildingService;
+use App\Services\Models\BuildingService;
+use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 
-class BuildingsController extends BaseController
+class BuildingsController extends Controller
 {
+
     /**
      * @var BuildingService
      */
@@ -38,7 +42,7 @@ class BuildingsController extends BaseController
     /**
      * @param Request $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function index(Request $request)
     {
@@ -47,20 +51,20 @@ class BuildingsController extends BaseController
             ->filter($request)
             ->get();
 
-        return response()->json(BuildingResource::collection($buildings), Response::HTTP_OK);
+        return $this->json(BuildingResource::collection($buildings), Response::HTTP_OK);
     }
 
     /**
      * @param Request $request
      *
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     * @return AnonymousResourceCollection
      */
     public function paginated(Request $request)
     {
         $buildings = Building::query()
             ->withRelations($request)
             ->filter($request)
-            ->paginate($this->paginationNumber());
+            ->jsonPaginate($this->paginationNumber());
 
         return BuildingResource::collection($buildings);
     }
@@ -68,7 +72,7 @@ class BuildingsController extends BaseController
     /**
      * @param BuildingRequest $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function store(BuildingRequest $request)
     {
@@ -76,26 +80,26 @@ class BuildingsController extends BaseController
 
         $building->load($building->relationships);
 
-        return response()->json(new BuildingResource($building), Response::HTTP_CREATED);
+        return $this->json(new BuildingResource($building), Response::HTTP_CREATED);
     }
 
     /**
      * @param Building $building
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function show(Building $building)
     {
         $building->load($building->relationships);
 
-        return response()->json(new BuildingResource($building), Response::HTTP_OK);
+        return $this->json(new BuildingResource($building), Response::HTTP_OK);
     }
 
     /**
      * @param BuildingRequest $request
      * @param Building $building
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function update(BuildingRequest $request, Building $building)
     {
@@ -103,26 +107,26 @@ class BuildingsController extends BaseController
 
         $building->load($building->relationships);
 
-        return response()->json(new BuildingResource($building), Response::HTTP_OK);
+        return $this->json(new BuildingResource($building), Response::HTTP_OK);
     }
 
     /**
      * @param Building $building
      *
-     * @return \Illuminate\Http\JsonResponse
-     * @throws \Exception
+     * @return JsonResponse
+     * @throws Exception
      */
     public function destroy(Building $building)
     {
         $building->delete();
 
-        return response()->json(null, Response::HTTP_OK);
+        return $this->json(null, Response::HTTP_OK);
     }
 
     /**
      * @param BulkDeleteRequest $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function bulkDestroy(BulkDeleteRequest $request)
     {
@@ -132,19 +136,19 @@ class BuildingsController extends BaseController
             }
         });
 
-        return response()->json(null, Response::HTTP_OK);
+        return $this->json(null, Response::HTTP_OK);
     }
 
     /**
      * @param SearchRequest $request
      * @param Building $building
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function search(SearchRequest $request, Building $building)
     {
         $locations = $this->searchForLocations($request->all(), $building->locations()->getQuery());
 
-        return response()->json(LocationResource::collection($locations), Response::HTTP_OK);
+        return $this->json(LocationResource::collection($locations), Response::HTTP_OK);
     }
 }

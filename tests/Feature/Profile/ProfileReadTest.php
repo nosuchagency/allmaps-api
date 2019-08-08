@@ -21,6 +21,6 @@ class ProfileReadTest extends TestCase
     {
         $this->signIn();
 
-        $this->getJson(route('profile'))->assertStatus(200);
+        $this->getJson(route('profile'))->assertOk();
     }
 }

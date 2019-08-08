@@ -7,6 +7,7 @@ use App\Http\Requests\BulkDeleteRequest;
 use App\Http\Requests\RoleRequest;
 use App\Http\Resources\RoleResource;
 use App\Models\Role;
+use App\Services\Models\RoleService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -14,24 +15,38 @@ class RolesController extends Controller
 {
 
     /**
-     * RolesController constructor.
+     * @var RoleService
      */
-    public function __construct()
+    protected $roleService;
+
+    /**
+     * RolesController constructor.
+     *
+     * @param RoleService $roleService
+     */
+    public function __construct(RoleService $roleService)
     {
         $this->middleware('permission:roles.create')->only(['store']);
         $this->middleware('permission:roles.read')->only(['index', 'show', 'paginated']);
         $this->middleware('permission:roles.update')->only(['update', 'grantPermission']);
         $this->middleware('permission:roles.delete')->only(['destroy', 'bulkDestroy', 'revokePermission']);
+
+        $this->roleService = $roleService;
     }
 
+
     /**
+     * @param Request $request
+     *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function index()
+    public function index(Request $request)
     {
-        $roles = Role::all();
+        $roles = Role::query()
+            ->filter($request)
+            ->get();
 
-        return response()->json(RoleResource::collection($roles), Response::HTTP_OK);
+        return $this->json(RoleResource::collection($roles), Response::HTTP_OK);
     }
 
     /**
@@ -41,7 +56,9 @@ class RolesController extends Controller
      */
     public function paginated(Request $request)
     {
-        $roles = Role::filter($request)->paginate($this->paginationNumber());
+        $roles = Role::query()
+            ->filter($request)
+            ->jsonPaginate($this->paginationNumber());
 
         return RoleResource::collection($roles);
     }
@@ -53,11 +70,9 @@ class RolesController extends Controller
      */
     public function store(RoleRequest $request)
     {
-        $role = Role::create($request->only('name'));
+        $role = $this->roleService->create($request);
 
-        $role->setPermissions($request->get('permissions', []));
-
-        return response()->json(new RoleResource($role), Response::HTTP_CREATED);
+        return $this->json(new RoleResource($role), Response::HTTP_CREATED);
     }
 
     /**
@@ -67,7 +82,7 @@ class RolesController extends Controller
      */
     public function show(Role $role)
     {
-        return response()->json(new RoleResource($role), Response::HTTP_OK);
+        return $this->json(new RoleResource($role), Response::HTTP_OK);
     }
 
     /**
@@ -78,11 +93,9 @@ class RolesController extends Controller
      */
     public function update(RoleRequest $request, Role $role)
     {
-        $role->fill($request->only('name'))->save();
+        $role = $this->roleService->update($role, $request);
 
-        $role->setPermissions($request->get('permissions', []));
-
-        return response()->json(new RoleResource($role), Response::HTTP_OK);
+        return $this->json(new RoleResource($role), Response::HTTP_OK);
     }
 
     /**
@@ -95,7 +108,7 @@ class RolesController extends Controller
     {
         $role->delete();
 
-        return response()->json(null, Response::HTTP_OK);
+        return $this->json(null, Response::HTTP_OK);
     }
 
     /**
@@ -111,6 +124,6 @@ class RolesController extends Controller
             }
         });
 
-        return response()->json(null, Response::HTTP_OK);
+        return $this->json(null, Response::HTTP_OK);
     }
 }

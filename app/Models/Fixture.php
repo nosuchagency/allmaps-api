@@ -35,8 +35,8 @@ class Fixture extends Model
         'name',
         'description',
         'image',
-        'width',
-        'height',
+        'image_width',
+        'image_height',
         'category_id',
         'created_by',
         'category'
@@ -57,6 +57,7 @@ class Fixture extends Model
      * @var array
      */
     public $relationships = [
+        'category',
         'tags',
         'locations'
     ];
@@ -70,11 +71,11 @@ class Fixture extends Model
     }
 
     /**
-     * Get the locations for the Fixture.
+     * Get the locations for the Poi.
      */
     public function locations()
     {
-        return $this->hasMany(Location::class);
+        return $this->morphMany(Location::class, 'locatable');
     }
 
     /**

@@ -2,19 +2,20 @@
 
 namespace App\Http\Controllers\API\V1;
 
-use App\Http\Controllers\BaseController;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\BulkDeleteRequest;
 use App\Http\Requests\PlaceRequest;
 use App\Http\Requests\SearchRequest;
 use App\Http\Resources\LocationResource;
 use App\Http\Resources\PlaceResource;
 use App\Models\Place;
-use App\Services\PlaceService;
+use App\Services\Models\PlaceService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
-class PlacesController extends BaseController
+class PlacesController extends Controller
 {
+
     /**
      * @var PlaceService
      */
@@ -44,9 +45,10 @@ class PlacesController extends BaseController
     {
         $places = Place::query()
             ->withRelations($request)
+            ->filter($request)
             ->get();
 
-        return response()->json(PlaceResource::collection($places), Response::HTTP_OK);
+        return $this->json(PlaceResource::collection($places), Response::HTTP_OK);
     }
 
     /**
@@ -59,7 +61,7 @@ class PlacesController extends BaseController
         $places = Place::query()
             ->withRelations($request)
             ->filter($request)
-            ->paginate($this->paginationNumber());
+            ->jsonPaginate($this->paginationNumber());
 
         return PlaceResource::collection($places);
     }
@@ -75,7 +77,7 @@ class PlacesController extends BaseController
 
         $place->load($place->relationships);
 
-        return response()->json(new PlaceResource($place), Response::HTTP_CREATED);
+        return $this->json(new PlaceResource($place), Response::HTTP_CREATED);
     }
 
     /**
@@ -87,7 +89,7 @@ class PlacesController extends BaseController
     {
         $place->load($place->relationships);
 
-        return response()->json(new PlaceResource($place), Response::HTTP_OK);
+        return $this->json(new PlaceResource($place), Response::HTTP_OK);
     }
 
     /**
@@ -102,7 +104,7 @@ class PlacesController extends BaseController
 
         $place->load($place->relationships);
 
-        return response()->json(new PlaceResource($place), Response::HTTP_OK);
+        return $this->json(new PlaceResource($place), Response::HTTP_OK);
     }
 
     /**
@@ -115,7 +117,7 @@ class PlacesController extends BaseController
     {
         $place->delete();
 
-        return response()->json(null, Response::HTTP_OK);
+        return $this->json(null, Response::HTTP_OK);
     }
 
     /**
@@ -131,7 +133,7 @@ class PlacesController extends BaseController
             }
         });
 
-        return response()->json(null, Response::HTTP_OK);
+        return $this->json(null, Response::HTTP_OK);
     }
 
     /**
@@ -144,6 +146,6 @@ class PlacesController extends BaseController
     {
         $locations = $this->searchForLocations($request->all(), $place->locations()->getQuery());
 
-        return response()->json(LocationResource::collection($locations), Response::HTTP_OK);
+        return $this->json(LocationResource::collection($locations), Response::HTTP_OK);
     }
 }

@@ -28,19 +28,19 @@ class FixturesDeleteTest extends TestCase
     }
 
     /** @test */
-    public function an_authenticated_user_with_delete_permission_may_delete_specific_fixture()
+    public function an_authenticated_user_with_delete_permission_can_delete_specific_fixture()
     {
         $this->signIn()->assignRole(
             $this->createRoleWithPermissions(['fixtures.delete'])
         );
 
         $fixture = factory(Fixture::class)->create();
-        $this->deleteJson(route('fixtures.destroy', ['fixture' => $fixture]))->assertStatus(200);
+        $this->deleteJson(route('fixtures.destroy', ['fixture' => $fixture]))->assertOk();
         $this->assertSoftDeleted('fixtures', ['id' => $fixture->id]);
     }
 
     /** @test */
-    public function an_authenticated_user_with_delete_permission_may_delete_fixtures_in_bulk()
+    public function an_authenticated_user_with_delete_permission_can_delete_fixtures_in_bulk()
     {
         $this->signIn()->assignRole(
             $this->createRoleWithPermissions(['fixtures.delete'])
@@ -48,7 +48,7 @@ class FixturesDeleteTest extends TestCase
 
         $fixtures = factory(Fixture::class, 5)->create();
         $this->assertCount(5, Fixture::all());
-        $this->postJson(route('fixtures.bulk-destroy'), ['items' => $fixtures])->assertStatus(200);
+        $this->postJson(route('fixtures.bulk-destroy'), ['items' => $fixtures])->assertOk();
         $this->assertCount(0, Fixture::all());
     }
 }

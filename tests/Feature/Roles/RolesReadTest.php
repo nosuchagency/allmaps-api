@@ -35,7 +35,17 @@ class RolesReadTest extends TestCase
             $this->createRoleWithPermissions(['roles.read'])
         );
 
-        $this->getJson(route('roles.index'))->assertStatus(200);
+        $this->getJson(route('roles.index'))->assertOk();
+    }
+
+    /** @test */
+    public function an_authenticated_user_with_read_permission_can_view_roles_paginated()
+    {
+        $this->signIn()->assignRole(
+            $this->createRoleWithPermissions(['roles.read'])
+        );
+
+        $this->getJson(route('roles.paginated'))->assertOk();
     }
 
     /** @test */
@@ -47,6 +57,6 @@ class RolesReadTest extends TestCase
 
         $role = factory(Role::class)->create();
 
-        $this->getJson(route('roles.show', ['role' => $role]))->assertStatus(200);
+        $this->getJson(route('roles.show', ['role' => $role]))->assertOk();
     }
 }

@@ -3,7 +3,6 @@
 namespace Tests\Feature\Beacons;
 
 use App\Models\Beacon;
-use App\Models\Category;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -36,7 +35,17 @@ class BeaconsReadTest extends TestCase
             $this->createRoleWithPermissions(['beacons.read'])
         );
 
-        $this->getJson(route('beacons.index'))->assertStatus(200);
+        $this->getJson(route('beacons.index'))->assertOk();
+    }
+
+    /** @test */
+    public function an_authenticated_user_with_read_permission_can_view_beacons_paginated()
+    {
+        $this->signIn()->assignRole(
+            $this->createRoleWithPermissions(['beacons.read'])
+        );
+
+        $this->getJson(route('beacons.paginated'))->assertOk();
     }
 
     /** @test */
@@ -48,6 +57,6 @@ class BeaconsReadTest extends TestCase
 
         $beacon = factory(Beacon::class)->create();
 
-        $this->getJson(route('beacons.show', ['beacon' => $beacon]))->assertStatus(200);
+        $this->getJson(route('beacons.show', ['beacon' => $beacon]))->assertOk();
     }
 }

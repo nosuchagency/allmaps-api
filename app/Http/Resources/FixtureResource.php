@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class FixtureResource extends JsonResource
@@ -9,7 +10,7 @@ class FixtureResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param Request $request
      *
      * @return array
      */
@@ -20,10 +21,11 @@ class FixtureResource extends JsonResource
             'name' => $this->name,
             'description' => $this->description,
             'image' => $this->getImageUrl(),
-            'width' => $this->width,
-            'height' => $this->height,
-            'creator' => $this->creator,
-            'category' => new CategoryResource($this->category),
+            'image_width' => $this->image_width,
+            'image_height' => $this->image_height,
+            'created_at' => $this->created_at->toDateTimeString(),
+            'updated_at' => $this->updated_at->toDateTimeString(),
+            'category' => new CategoryResource($this->whenLoaded('category')),
             'tags' => TagResource::collection($this->whenLoaded('tags'))
         ];
     }

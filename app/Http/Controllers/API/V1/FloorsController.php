@@ -2,19 +2,20 @@
 
 namespace App\Http\Controllers\API\V1;
 
-use App\Http\Controllers\BaseController;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\BulkDeleteRequest;
 use App\Http\Requests\FloorRequest;
 use App\Http\Requests\SearchRequest;
 use App\Http\Resources\FloorResource;
 use App\Http\Resources\LocationResource;
 use App\Models\Floor;
-use App\Services\FloorService;
+use App\Services\Models\FloorService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
-class FloorsController extends BaseController
+class FloorsController extends Controller
 {
+
     /**
      * @var FloorService
      */
@@ -47,7 +48,7 @@ class FloorsController extends BaseController
             ->filter($request)
             ->get();
 
-        return response()->json(FloorResource::collection($floors), Response::HTTP_OK);
+        return $this->json(FloorResource::collection($floors), Response::HTTP_OK);
     }
 
     /**
@@ -60,7 +61,7 @@ class FloorsController extends BaseController
         $floors = Floor::query()
             ->withRelations($request)
             ->filter($request)
-            ->paginate($this->paginationNumber());
+            ->jsonPaginate($this->paginationNumber());
 
         return FloorResource::collection($floors);
     }
@@ -76,7 +77,7 @@ class FloorsController extends BaseController
 
         $floor->load($floor->relationships);
 
-        return response()->json(new FloorResource($floor), Response::HTTP_CREATED);
+        return $this->json(new FloorResource($floor), Response::HTTP_CREATED);
     }
 
     /**
@@ -88,7 +89,7 @@ class FloorsController extends BaseController
     {
         $floor->load($floor->relationships);
 
-        return response()->json(new FloorResource($floor), Response::HTTP_OK);
+        return $this->json(new FloorResource($floor), Response::HTTP_OK);
     }
 
     /**
@@ -103,7 +104,7 @@ class FloorsController extends BaseController
 
         $floor->load($floor->relationships);
 
-        return response()->json(new FloorResource($floor), Response::HTTP_OK);
+        return $this->json(new FloorResource($floor), Response::HTTP_OK);
     }
 
     /**
@@ -116,7 +117,7 @@ class FloorsController extends BaseController
     {
         $floor->delete();
 
-        return response()->json(null, Response::HTTP_OK);
+        return $this->json(null, Response::HTTP_OK);
     }
 
     /**
@@ -132,7 +133,7 @@ class FloorsController extends BaseController
             }
         });
 
-        return response()->json(null, Response::HTTP_OK);
+        return $this->json(null, Response::HTTP_OK);
     }
 
     /**
@@ -145,6 +146,6 @@ class FloorsController extends BaseController
     {
         $locations = $this->searchForLocations($request->all(), $floor->locations()->getQuery());
 
-        return response()->json(LocationResource::collection($locations), Response::HTTP_OK);
+        return $this->json(LocationResource::collection($locations), Response::HTTP_OK);
     }
 }

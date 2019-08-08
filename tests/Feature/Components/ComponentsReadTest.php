@@ -35,7 +35,17 @@ class ComponentsReadTest extends TestCase
             $this->createRoleWithPermissions(['components.read'])
         );
 
-        $this->getJson(route('components.index'))->assertStatus(200);
+        $this->getJson(route('components.index'))->assertOk();
+    }
+
+    /** @test */
+    public function an_authenticated_user_with_read_permission_can_view_components_paginated()
+    {
+        $this->signIn()->assignRole(
+            $this->createRoleWithPermissions(['components.read'])
+        );
+
+        $this->getJson(route('components.paginated'))->assertOk();
     }
 
     /** @test */
@@ -47,6 +57,6 @@ class ComponentsReadTest extends TestCase
 
         $component = factory(Component::class)->create();
 
-        $this->getJson(route('components.show', ['component' => $component]))->assertStatus(200);
+        $this->getJson(route('components.show', ['component' => $component]))->assertOk();
     }
 }

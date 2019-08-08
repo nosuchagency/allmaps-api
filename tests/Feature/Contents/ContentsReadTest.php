@@ -35,7 +35,17 @@ class ContentsReadTest extends TestCase
             $this->createRoleWithPermissions(['contents.read'])
         );
 
-        $this->getJson(route('contents.index'))->assertStatus(200);
+        $this->getJson(route('contents.index'))->assertOk();
+    }
+
+    /** @test */
+    public function an_authenticated_user_with_read_permission_can_view_contents_paginated()
+    {
+        $this->signIn()->assignRole(
+            $this->createRoleWithPermissions(['contents.read'])
+        );
+
+        $this->getJson(route('contents.paginated'))->assertOk();
     }
 
     /** @test */
@@ -47,6 +57,6 @@ class ContentsReadTest extends TestCase
 
         $content = factory(Content::class)->create();
 
-        $this->getJson(route('contents.show', ['content' => $content]))->assertStatus(200);
+        $this->getJson(route('contents.show', ['content' => $content]))->assertOk();
     }
 }

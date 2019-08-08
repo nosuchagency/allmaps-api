@@ -10,6 +10,7 @@ use App\Traits\HasRelations;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Activitylog\Traits\CausesActivity;
 use Spatie\Activitylog\Traits\LogsActivity;
@@ -41,8 +42,6 @@ class User extends Authenticatable implements JWTSubject
     protected $fillable = [
         'name',
         'email',
-        'password',
-        'avatar',
         'category_id',
         'locale',
         'category'
@@ -64,6 +63,7 @@ class User extends Authenticatable implements JWTSubject
      * @var array
      */
     public $relationships = [
+        'category',
         'tags',
         'contents'
     ];
@@ -103,9 +103,9 @@ class User extends Authenticatable implements JWTSubject
     /**
      * @param int $count
      *
-     * @return \Illuminate\Database\Eloquent\Collection|\Illuminate\Support\Collection
+     * @return \Illuminate\Database\Eloquent\Collection|Collection
      */
-    public function recentActions($count = 20)
+    public function recentActivities($count = 20)
     {
         return $this->actions()->orderBy('id', 'desc')->take($count)->get();
     }
@@ -134,7 +134,6 @@ class User extends Authenticatable implements JWTSubject
     {
         $this->notify(new ResetPasswordNotification($token));
     }
-
 
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.

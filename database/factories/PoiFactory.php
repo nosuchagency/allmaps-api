@@ -17,6 +17,5 @@ $factory->define(App\Models\Poi::class, function (Faker $faker) {
     return [
         'name' => $faker->title,
         'type' => $faker->randomElement(['area', 'image']),
-        'color' => $faker->hexColor
     ];
 });

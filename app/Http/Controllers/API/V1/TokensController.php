@@ -7,44 +7,60 @@ use App\Http\Requests\TokenRequest;
 use App\Http\Requests\BulkDeleteRequest;
 use App\Http\Resources\TokenResource;
 use App\Models\Token;
+use App\Services\Models\TokenService;
+use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
-use Illuminate\Support\Str;
 
 class TokensController extends Controller
 {
 
     /**
-     * Instantiate controller
-     *
-     * @return void
+     * @var TokenService
      */
-    public function __construct()
+    protected $tokenService;
+
+    /**
+     * TokensController constructor.
+     *
+     * @param TokenService $tokenService
+     */
+    public function __construct(TokenService $tokenService)
     {
         $this->middleware('permission:tokens.create')->only(['store']);
         $this->middleware('permission:tokens.read')->only(['index', 'show', 'paginated']);
         $this->middleware('permission:tokens.update')->only(['update']);
         $this->middleware('permission:tokens.delete')->only(['destroy', 'bulkDestroy']);
-    }
 
-    /**
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function index()
-    {
-        $tokens = Token::all();
-
-        return response()->json(TokenResource::collection($tokens), Response::HTTP_OK);
+        $this->tokenService = $tokenService;
     }
 
     /**
      * @param Request $request
      *
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     * @return JsonResponse
+     */
+    public function index(Request $request)
+    {
+        $tokens = Token::query()
+            ->filter($request)
+            ->get();
+
+        return $this->json(TokenResource::collection($tokens), Response::HTTP_OK);
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return AnonymousResourceCollection
      */
     public function paginated(Request $request)
     {
-        $tokens = Token::filter($request)->paginate($this->paginationNumber());
+        $tokens = Token::query()
+            ->filter($request)
+            ->jsonPaginate($this->paginationNumber());
 
         return TokenResource::collection($tokens);
     }
@@ -52,62 +68,55 @@ class TokensController extends Controller
     /**
      * @param TokenRequest $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function store(TokenRequest $request)
     {
-        $token = Token::create([
-            'name' => $request->get('name'),
-            'token' => Str::random(60)
-        ]);
+        $token = $this->tokenService->create($request);
 
-        $token->syncRoles($request->get('role'));
-
-        return response()->json(new TokenResource($token), Response::HTTP_CREATED);
+        return $this->json(new TokenResource($token), Response::HTTP_CREATED);
     }
 
     /**
      * @param Token $token
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function show(Token $token)
     {
-        return response()->json(new TokenResource($token), Response::HTTP_OK);
+        return $this->json(new TokenResource($token), Response::HTTP_OK);
     }
 
     /**
      * @param TokenRequest $request
      * @param Token $token
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function update(TokenRequest $request, Token $token)
     {
-        $token->fill($request->only('name'))->save();
+        $token = $this->tokenService->update($token, $request);
 
-        $token->syncRoles($request->get('role'));
-
-        return response()->json(new TokenResource($token), Response::HTTP_OK);
+        return $this->json(new TokenResource($token), Response::HTTP_OK);
     }
 
     /**
      * @param Token $token
      *
-     * @return \Illuminate\Http\JsonResponse
-     * @throws \Exception
+     * @return JsonResponse
+     * @throws Exception
      */
     public function destroy(Token $token)
     {
         $token->delete();
 
-        return response()->json(null, Response::HTTP_OK);
+        return $this->json(null, Response::HTTP_OK);
     }
 
     /**
      * @param BulkDeleteRequest $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function bulkDestroy(BulkDeleteRequest $request)
     {
@@ -117,6 +126,6 @@ class TokensController extends Controller
             }
         });
 
-        return response()->json(null, Response::HTTP_OK);
+        return $this->json(null, Response::HTTP_OK);
     }
 }

@@ -28,19 +28,19 @@ class TokensDeleteTest extends TestCase
     }
 
     /** @test */
-    public function an_authenticated_user_with_delete_permission_may_delete_specific_token()
+    public function an_authenticated_user_with_delete_permission_can_delete_specific_token()
     {
         $this->signIn()->assignRole(
             $this->createRoleWithPermissions(['tokens.delete'])
         );
 
         $token = factory(Token::class)->create();
-        $this->deleteJson(route('tokens.destroy', ['token' => $token]))->assertStatus(200);
+        $this->deleteJson(route('tokens.destroy', ['token' => $token]))->assertOk();
         $this->assertDatabaseMissing('tokens', ['id' => $token->id]);
     }
 
     /** @test */
-    public function an_authenticated_user_with_delete_permission_may_delete_tokens_in_bulk()
+    public function an_authenticated_user_with_delete_permission_can_delete_tokens_in_bulk()
     {
         $this->signIn()->assignRole(
             $this->createRoleWithPermissions(['tokens.delete'])
@@ -48,7 +48,7 @@ class TokensDeleteTest extends TestCase
 
         $tokens = factory(Token::class, 5)->create();
         $this->assertCount(5, Token::all());
-        $this->postJson(route('tokens.bulk-destroy'), ['items' => $tokens])->assertStatus(200);
+        $this->postJson(route('tokens.bulk-destroy'), ['items' => $tokens])->assertOk();
         $this->assertCount(0, Token::all());
     }
 }

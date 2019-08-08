@@ -16,7 +16,7 @@ class CreateTagComponentPivotTable extends Migration
         Schema::create('tag_component', function (Blueprint $table) {
             $table->tag();
 
-            $table->unsignedInteger('component_id');
+            $table->unsignedBigInteger('component_id');
             $table->foreign('component_id')
                 ->references('id')
                 ->on('components')

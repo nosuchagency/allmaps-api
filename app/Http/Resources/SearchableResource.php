@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class SearchableResource extends JsonResource
@@ -9,7 +10,7 @@ class SearchableResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param  Request $request
      *
      * @return array
      */
@@ -20,7 +21,9 @@ class SearchableResource extends JsonResource
             'name' => $this->name,
             'identifier' => $this->identifier,
             'activated' => $this->activated,
-            'fields' => $this->fields
+            'fields' => $this->fields,
+            'created_at' => $this->created_at->toDateTimeString(),
+            'updated_at' => $this->updated_at->toDateTimeString(),
         ];
     }
 }

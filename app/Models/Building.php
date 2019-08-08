@@ -32,8 +32,19 @@ class Building extends Model
      */
     protected $fillable = [
         'name',
-        'place_id',
-        'created_by'
+        'latitude',
+        'longitude',
+        'created_by',
+    ];
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'latitude' => 'float',
+        'longitude' => 'float',
     ];
 
     /**
@@ -61,6 +72,14 @@ class Building extends Model
     public function place()
     {
         return $this->belongsTo(Place::class);
+    }
+
+    /**
+     * Get the menu that owns the building
+     */
+    public function menu()
+    {
+        return $this->belongsTo(Menu::class);
     }
 
     /**

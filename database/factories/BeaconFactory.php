@@ -16,6 +16,7 @@ use Faker\Generator as Faker;
 $factory->define(App\Models\Beacon::class, function (Faker $faker) {
     return [
         'name' => $faker->title,
+        'identifier' => $faker->uuid,
         'description' => $faker->paragraph,
         'category' => null
     ];

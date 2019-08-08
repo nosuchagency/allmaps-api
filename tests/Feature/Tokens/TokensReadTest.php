@@ -35,7 +35,17 @@ class TokensReadTest extends TestCase
             $this->createRoleWithPermissions(['tokens.read'])
         );
 
-        $this->getJson(route('tokens.index'))->assertStatus(200);
+        $this->getJson(route('tokens.index'))->assertOk();
+    }
+
+    /** @test */
+    public function an_authenticated_user_with_read_permission_can_view_tokens_paginated()
+    {
+        $this->signIn()->assignRole(
+            $this->createRoleWithPermissions(['tokens.read'])
+        );
+
+        $this->getJson(route('tokens.paginated'))->assertOk();
     }
 
     /** @test */
@@ -47,6 +57,6 @@ class TokensReadTest extends TestCase
 
         $token = factory(Token::class)->create();
 
-        $this->getJson(route('tokens.show', ['token' => $token]))->assertStatus(200);
+        $this->getJson(route('tokens.show', ['token' => $token]))->assertOk();
     }
 }

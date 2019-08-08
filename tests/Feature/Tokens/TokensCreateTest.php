@@ -29,8 +29,14 @@ class TokensCreateTest extends TestCase
     /** @test */
     public function an_authenticated_user_with_create_permission_can_create_tokens()
     {
+        $this->withoutExceptionHandling();
+
         $this->create()->assertStatus(201);
-        $this->assertCount(1, Token::all());
+        $tokens = Token::all();
+        $this->assertCount(1, $tokens);
+
+        $token = $tokens->first();
+        $this->assertNotEmpty($token->api_token);
     }
 
     /** @test */
@@ -43,7 +49,8 @@ class TokensCreateTest extends TestCase
     public function it_requires_a_valid_role()
     {
         $this->create(['role' => null])->assertJsonValidationErrors('role');
-        $this->create(['role' => 'not-a-valid-role'])->assertJsonValidationErrors('role');
+        $this->create(['role' => 'not-a-valid-role'])->assertJsonValidationErrors('role.id');
+        $this->create(['role' => ['not-a-valid-role-object']])->assertJsonValidationErrors('role.id');
     }
 
     /**
@@ -69,7 +76,7 @@ class TokensCreateTest extends TestCase
     {
         return array_merge([
             'name' => $this->faker->name,
-            'role' => factory(Role::class)->create()->name
+            'role' => factory(Role::class)->create()
         ], $overrides);
     }
 }

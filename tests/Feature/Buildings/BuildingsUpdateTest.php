@@ -3,6 +3,8 @@
 namespace Tests\Feature\Buildings;
 
 use App\Models\Building;
+use App\Models\Menu;
+use Illuminate\Foundation\Testing\TestResponse;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -34,9 +36,9 @@ class BuildingsUpdateTest extends TestCase
     {
         $building = factory(Building::class)->create();
 
-        $attributes = ['id' => $building->id, 'name' => $this->faker->title];
+        $attributes = ['id' => $building->id, 'name' => $this->faker->name];
 
-        $this->update($building, $attributes)->assertStatus(200);
+        $this->update($building, $attributes)->assertOk();
 
         $this->assertDatabaseHas('buildings', $attributes);
     }
@@ -45,7 +47,7 @@ class BuildingsUpdateTest extends TestCase
      * @param $building
      * @param array $attributes
      *
-     * @return \Illuminate\Foundation\Testing\TestResponse
+     * @return TestResponse
      */
     protected function update($building, $attributes = [])
     {
@@ -64,8 +66,11 @@ class BuildingsUpdateTest extends TestCase
     protected function validFields($overrides = [])
     {
         return array_merge([
-            'name' => $this->faker->title,
+            'name' => $this->faker->name,
+            'latitude' => $this->faker->latitude,
+            'longitude' => $this->faker->longitude,
             'image' => null,
+            'menu' => factory(Menu::class)->create(),
         ], $overrides);
     }
 }

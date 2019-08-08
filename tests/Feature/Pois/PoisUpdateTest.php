@@ -5,6 +5,9 @@ namespace Tests\Feature\Pois;
 use App\Models\Category;
 use App\Models\Poi;
 use App\Models\Tag;
+use App\PoiType;
+use App\StrokeType;
+use Illuminate\Foundation\Testing\TestResponse;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -36,9 +39,9 @@ class PoisUpdateTest extends TestCase
     {
         $poi = factory(Poi::class)->create();
 
-        $attributes = ['id' => $poi->id, 'name' => $this->faker->title];
+        $attributes = ['id' => $poi->id, 'name' => $this->faker->name];
 
-        $this->update($poi, $attributes)->assertStatus(200);
+        $this->update($poi, $attributes)->assertOk();
 
         $this->assertDatabaseHas('pois', $attributes);
     }
@@ -47,7 +50,7 @@ class PoisUpdateTest extends TestCase
      * @param $poi
      * @param array $attributes
      *
-     * @return \Illuminate\Foundation\Testing\TestResponse
+     * @return TestResponse
      */
     protected function update($poi, $attributes = [])
     {
@@ -66,9 +69,16 @@ class PoisUpdateTest extends TestCase
     protected function validFields($overrides = [])
     {
         return array_merge([
-            'name' => $this->faker->title,
-            'type' => $this->faker->randomElement(['area', 'image']),
-            'color' => $this->faker->hexColor,
+            'name' => $this->faker->name,
+            'type' => $this->faker->randomElement(PoiType::TYPES),
+            'stroke' => $this->faker->boolean,
+            'stroke_type' => $this->faker->randomElement(StrokeType::TYPES),
+            'stroke_color' => $this->faker->hexColor,
+            'stroke_width' => $this->faker->numberBetween(1, 10),
+            'stroke_opacity' => rand(0, 10) / 10,
+            'fill' => $this->faker->boolean,
+            'fill_color' => $this->faker->hexColor,
+            'fill_opacity' => rand(0, 10) / 10,
             'image' => null,
             'category' => factory(Category::class)->create(),
             'tags' => factory(Tag::class, 2)->create()

@@ -14,7 +14,7 @@ class CreateRulesTable extends Migration
     public function up()
     {
         Schema::create('rules', function (Blueprint $table) {
-            $table->increments('id');
+            $table->bigIncrements('id');
             $table->timestamps();
 
             $table->string('distance')->default('close');
@@ -28,7 +28,7 @@ class CreateRulesTable extends Migration
             $table->date('date_from')->nullable();
             $table->date('date_to')->nullable();
 
-            $table->unsignedInteger('beacon_container_id');
+            $table->unsignedBigInteger('beacon_container_id');
             $table->foreign('beacon_container_id')
                 ->references('id')
                 ->on('beacon_container')

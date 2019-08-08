@@ -1,11 +1,7 @@
 <?php
 
-namespace Tests\Feature\Beacons;
+namespace Tests\Feature\Auth;
 
-use App\Models\Beacon;
-use App\Models\Category;
-use App\Models\Tag;
-use App\Models\User;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -15,11 +11,11 @@ class LogoutTest extends TestCase
     use RefreshDatabase, WithFaker;
 
     /** @test */
-    public function an_authenticated_can_logout()
+    public function an_authenticated_user_can_logout()
     {
         $this->signIn();
 
-        $this->postJson(route('logout'))->assertStatus(200);
+        $this->postJson(route('logout'))->assertOk();
     }
 
     /** @test */

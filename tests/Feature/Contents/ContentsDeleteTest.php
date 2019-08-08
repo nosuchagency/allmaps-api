@@ -28,19 +28,19 @@ class ContentsDeleteTest extends TestCase
     }
 
     /** @test */
-    public function an_authenticated_user_with_delete_permission_may_delete_specific_content()
+    public function an_authenticated_user_with_delete_permission_can_delete_specific_content()
     {
         $this->signIn()->assignRole(
             $this->createRoleWithPermissions(['contents.delete'])
         );
 
         $content = factory(Content::class)->create();
-        $this->deleteJson(route('contents.destroy', ['content' => $content]))->assertStatus(200);
+        $this->deleteJson(route('contents.destroy', ['content' => $content]))->assertOk();
         $this->assertSoftDeleted('contents', ['id' => $content->id]);
     }
 
     /** @test */
-    public function an_authenticated_user_with_delete_permission_may_delete_contents_in_bulk()
+    public function an_authenticated_user_with_delete_permission_can_delete_contents_in_bulk()
     {
         $this->signIn()->assignRole(
             $this->createRoleWithPermissions(['contents.delete'])
@@ -48,7 +48,7 @@ class ContentsDeleteTest extends TestCase
 
         $contents = factory(Content::class, 5)->create();
         $this->assertCount(5, Content::all());
-        $this->postJson(route('contents.bulk-destroy'), ['items' => $contents])->assertStatus(200);
+        $this->postJson(route('contents.bulk-destroy'), ['items' => $contents])->assertOk();
         $this->assertCount(0, Content::all());
     }
 }

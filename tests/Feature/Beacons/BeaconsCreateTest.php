@@ -5,6 +5,7 @@ namespace Tests\Feature\Beacons;
 use App\Models\Beacon;
 use App\Models\Category;
 use App\Models\Tag;
+use Illuminate\Foundation\Testing\TestResponse;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -41,6 +42,13 @@ class BeaconsCreateTest extends TestCase
     }
 
     /** @test */
+    public function identifier_needs_to_be_unique()
+    {
+        factory(Beacon::class)->create(['identifier' => 'unique']);
+        $this->create(['identifier' => 'unique'])->assertJsonValidationErrors('identifier');
+    }
+
+    /** @test */
     public function major_needs_to_be_an_integer_between_0_and_65535()
     {
         $this->create(['major' => 'not-a-valid-major'])->assertJsonValidationErrors(['major']);
@@ -57,28 +65,22 @@ class BeaconsCreateTest extends TestCase
     }
 
     /** @test */
+    public function url_needs_to_be_a_valid_url()
+    {
+        $this->create(['url' => 'not-a-valid-url'])->assertJsonValidationErrors(['url']);
+    }
+
+    /** @test */
     public function proximity_uuid_needs_to_be_a_valid_uuid()
     {
         $this->create(['proximity_uuid' => 'not-a-valid-uuid'])->assertJsonValidationErrors(['proximity_uuid']);
     }
 
     /** @test */
-    public function eddystone_uid_needs_to_be_a_valid_uuid()
-    {
-        $this->create(['eddystone_uid' => 'not-a-valid-uuid'])->assertJsonValidationErrors(['eddystone_uid']);
-    }
-
-    /** @test */
-    public function eddystone_url_needs_to_be_a_valid_url()
-    {
-        $this->create(['eddystone_url' => 'not-a-valid-url'])->assertJsonValidationErrors(['eddystone_url']);
-    }
-
-    /** @test */
     public function category_needs_to_be_a_valid_category_object()
     {
         $this->create(['category' => ['id' => 2]])->assertJsonValidationErrors(['category.id']);
-        $this->create(['category' => []])->assertJsonValidationErrors(['category']);
+        $this->create(['category' => ['not-a-valid-category-object']])->assertJsonValidationErrors(['category']);
     }
 
     /** @test */
@@ -91,7 +93,7 @@ class BeaconsCreateTest extends TestCase
     /**
      * @param array $attributes
      *
-     * @return \Illuminate\Foundation\Testing\TestResponse
+     * @return TestResponse
      */
     protected function create($attributes = [])
     {
@@ -110,15 +112,15 @@ class BeaconsCreateTest extends TestCase
     protected function validFields($overrides = [])
     {
         return array_merge([
-            'name' => $this->faker->title,
+            'name' => $this->faker->name,
+            'identifier' => $this->faker->uuid,
             'description' => $this->faker->paragraph,
             'proximity_uuid' => $this->faker->uuid,
             'major' => $this->faker->numberBetween(0, 65535),
             'minor' => $this->faker->numberBetween(0, 65535),
-            'eddystone_uid' => $this->faker->uuid,
-            'eddystone_url' => $this->faker->url,
-            'eddystone_tlm' => $this->faker->title,
-            'eddystone_eid' => $this->faker->title,
+            'namespace' => $this->faker->uuid,
+            'instance_id' => $this->faker->uuid,
+            'url' => $this->faker->url,
             'category' => factory(Category::class)->create(),
             'tags' => factory(Tag::class, 2)->create()
         ], $overrides);

@@ -14,13 +14,13 @@ class CreateFixturesTable extends Migration
     public function up()
     {
         Schema::create('fixtures', function (Blueprint $table) {
-            $table->increments('id');
+            $table->bigIncrements('id');
             $table->string('name');
             $table->text('description')->nullable();
 
             $table->string('image')->nullable();
-            $table->unsignedInteger('width')->nullable();
-            $table->unsignedInteger('height')->nullable();
+            $table->unsignedInteger('image_width')->nullable();
+            $table->unsignedInteger('image_height')->nullable();
 
             $table->category();
             $table->createdBy();

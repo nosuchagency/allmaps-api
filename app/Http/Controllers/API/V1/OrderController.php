@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\OrderRequest;
 use App\Models\Content\Content;
 use App\Models\Folder;
+use App\Models\MenuItem;
 use Illuminate\Http\Response;
 
 class OrderController extends Controller
@@ -18,6 +19,7 @@ class OrderController extends Controller
     {
         $this->middleware('permission:folders.update')->only(['folders']);
         $this->middleware('permission:contents.update')->only(['contents']);
+        $this->middleware('permission:menus.update')->only(['menuItems']);
     }
 
     /**
@@ -31,7 +33,7 @@ class OrderController extends Controller
             Folder::find($value)->update(['order' => $key]);
         });
 
-        return response()->json(null, Response::HTTP_OK);
+        return $this->json(null, Response::HTTP_OK);
     }
 
     /**
@@ -45,6 +47,20 @@ class OrderController extends Controller
             Content::find($value)->update(['order' => $key]);
         });
 
-        return response()->json(null, Response::HTTP_OK);
+        return $this->json(null, Response::HTTP_OK);
+    }
+
+    /**
+     * @param OrderRequest $request
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function menuItems(OrderRequest $request)
+    {
+        collect($request->get('items'))->each(function ($value, $key) {
+            MenuItem::find($value)->update(['order' => $key]);
+        });
+
+        return $this->json(null, Response::HTTP_OK);
     }
 }

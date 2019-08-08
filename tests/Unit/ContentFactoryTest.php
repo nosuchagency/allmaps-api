@@ -1,7 +1,10 @@
 <?php
 
-namespace Tests\Unit\Models;
+namespace Tests\Unit;
 
+use App\Services\Beacons\Providers\Kontakt;
+use InvalidArgumentException;
+use Tests\TestCase;
 use App\Factories\ContentFactory;
 use App\Models\Content\FileContent;
 use App\Models\Content\GalleryContent;
@@ -9,7 +12,6 @@ use App\Models\Content\ImageContent;
 use App\Models\Content\TextContent;
 use App\Models\Content\VideoContent;
 use App\Models\Content\WebContent;
-use Tests\TestCase;
 
 class ContentFactoryTest extends TestCase
 {
@@ -58,7 +60,8 @@ class ContentFactoryTest extends TestCase
     /** @test */
     public function it_returns_null_if_type_is_invalid()
     {
+        $this->expectException(InvalidArgumentException::class);
         $contentFactory = new ContentFactory();
-        $this->assertNull($contentFactory->make('invalid-type'));
+        $contentFactory->make('invalid-type');
     }
 }

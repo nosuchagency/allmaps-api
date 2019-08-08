@@ -28,19 +28,19 @@ class CategoriesDeleteTest extends TestCase
     }
 
     /** @test */
-    public function an_authenticated_user_with_delete_permission_may_delete_specific_category()
+    public function an_authenticated_user_with_delete_permission_can_delete_specific_category()
     {
         $this->signIn()->assignRole(
             $this->createRoleWithPermissions(['categories.delete'])
         );
 
         $category = factory(Category::class)->create();
-        $this->deleteJson(route('categories.destroy', ['category' => $category]))->assertStatus(200);
+        $this->deleteJson(route('categories.destroy', ['category' => $category]))->assertOk();
         $this->assertDatabaseMissing('categories', ['id' => $category->id]);
     }
 
     /** @test */
-    public function an_authenticated_user_with_delete_permission_may_delete_categories_in_bulk()
+    public function an_authenticated_user_with_delete_permission_can_delete_categories_in_bulk()
     {
         $this->signIn()->assignRole(
             $this->createRoleWithPermissions(['categories.delete'])
@@ -48,7 +48,7 @@ class CategoriesDeleteTest extends TestCase
 
         $categories = factory(Category::class, 5)->create();
         $this->assertCount(5, Category::all());
-        $this->postJson(route('categories.bulk-destroy'), ['items' => $categories])->assertStatus(200);
+        $this->postJson(route('categories.bulk-destroy'), ['items' => $categories])->assertOk();
         $this->assertCount(0, Category::all());
     }
 }

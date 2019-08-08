@@ -36,9 +36,9 @@ class FoldersUpdateTest extends TestCase
     {
         $folder = factory(Folder::class)->create();
 
-        $attributes = ['id' => $folder->id, 'name' => $this->faker->title];
+        $attributes = ['id' => $folder->id, 'name' => $this->faker->name];
 
-        $this->update($folder, $attributes)->assertStatus(200);
+        $this->update($folder, $attributes)->assertOk();
 
         $this->assertDatabaseHas('folders', $attributes);
     }
@@ -66,7 +66,7 @@ class FoldersUpdateTest extends TestCase
     protected function validFields($overrides = [])
     {
         return array_merge([
-            'name' => $this->faker->title,
+            'name' => $this->faker->name,
             'category' => factory(Category::class)->create(),
             'tags' => factory(Tag::class, 2)->create()
         ], $overrides);

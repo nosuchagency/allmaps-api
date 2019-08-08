@@ -3,6 +3,7 @@
 namespace Tests\Feature\Structures;
 
 use App\Models\Structure;
+use Illuminate\Foundation\Testing\TestResponse;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -34,9 +35,9 @@ class StructuresUpdateTest extends TestCase
     {
         $structure = factory(Structure::class)->create();
 
-        $attributes = ['id' => $structure->id, 'name' => $this->faker->title];
+        $attributes = ['id' => $structure->id, 'name' => $this->faker->name];
 
-        $this->update($structure, $attributes)->assertStatus(200);
+        $this->update($structure, $attributes)->assertOk();
 
         $this->assertDatabaseHas('structures', $attributes);
     }
@@ -45,7 +46,7 @@ class StructuresUpdateTest extends TestCase
      * @param $structure
      * @param array $attributes
      *
-     * @return \Illuminate\Foundation\Testing\TestResponse
+     * @return TestResponse
      */
     protected function update($structure, $attributes = [])
     {
@@ -64,10 +65,10 @@ class StructuresUpdateTest extends TestCase
     protected function validFields($overrides = [])
     {
         return array_merge([
-            'name' => $this->faker->title,
+            'name' => $this->faker->name,
             'coordinates' => [],
             'markers' => [],
-            'radius' => ''
+            'radius' => 5
         ], $overrides);
     }
 }

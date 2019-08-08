@@ -23,8 +23,6 @@ class Structure extends Model
         'coordinates',
         'markers',
         'radius',
-        'component_id',
-        'floor_id',
         'created_by'
     ];
 
@@ -43,6 +41,7 @@ class Structure extends Model
      * @var array
      */
     protected $casts = [
+        'radius' => 'double',
         'coordinates' => 'array',
         'markers' => 'array',
     ];

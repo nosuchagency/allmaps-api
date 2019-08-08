@@ -35,7 +35,17 @@ class FoldersReadTest extends TestCase
             $this->createRoleWithPermissions(['folders.read'])
         );
 
-        $this->getJson(route('folders.index'))->assertStatus(200);
+        $this->getJson(route('folders.index'))->assertOk();
+    }
+
+    /** @test */
+    public function an_authenticated_user_with_read_permission_can_view_folders_paginated()
+    {
+        $this->signIn()->assignRole(
+            $this->createRoleWithPermissions(['folders.read'])
+        );
+
+        $this->getJson(route('folders.paginated'))->assertOk();
     }
 
     /** @test */
@@ -47,6 +57,6 @@ class FoldersReadTest extends TestCase
 
         $folder = factory(Folder::class)->create();
 
-        $this->getJson(route('folders.show', ['folder' => $folder]))->assertStatus(200);
+        $this->getJson(route('folders.show', ['folder' => $folder]))->assertOk();
     }
 }

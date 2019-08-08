@@ -16,7 +16,7 @@ class CreateTagContentPivotTable extends Migration
         Schema::create('tag_content', function (Blueprint $table) {
             $table->tag();
 
-            $table->unsignedInteger('content_id');
+            $table->unsignedBigInteger('content_id');
             $table->foreign('content_id')
                 ->references('id')
                 ->on('contents')

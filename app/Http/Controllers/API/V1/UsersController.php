@@ -6,30 +6,41 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\BulkDeleteRequest;
 use App\Http\Requests\UserRequest;
 use App\Http\Resources\UserResource;
-use App\Models\Tag;
 use App\Models\User;
+use App\Services\Models\UserService;
+use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Hash;
 
 class UsersController extends Controller
 {
 
     /**
-     * UsersController constructor.
+     * @var UserService
      */
-    public function __construct()
+    protected $userService;
+
+    /**
+     * UsersController constructor.
+     *
+     * @param UserService $userService
+     */
+    public function __construct(UserService $userService)
     {
         $this->middleware('permission:users.create')->only(['store']);
         $this->middleware('permission:users.read')->only(['index', 'show', 'paginated']);
         $this->middleware('permission:users.update')->only(['update']);
         $this->middleware('permission:users.delete')->only(['destroy', 'bulkDestroy']);
+
+        $this->userService = $userService;
     }
 
     /**
      * @param Request $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function index(Request $request)
     {
@@ -38,20 +49,20 @@ class UsersController extends Controller
             ->filter($request)
             ->get();
 
-        return response()->json(UserResource::collection($users), Response::HTTP_OK);
+        return $this->json(UserResource::collection($users), Response::HTTP_OK);
     }
 
     /**
      * @param Request $request
      *
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     * @return AnonymousResourceCollection
      */
     public function paginated(Request $request)
     {
         $users = User::query()
             ->withRelations($request)
             ->filter($request)
-            ->paginate($this->paginationNumber());
+            ->jsonPaginate($this->paginationNumber());
 
         return UserResource::collection($users);
     }
@@ -59,84 +70,61 @@ class UsersController extends Controller
     /**
      * @param UserRequest $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function store(UserRequest $request)
     {
-        $user = new User($request->only('name', 'email', 'locale', 'category'));
-        $user->assignRole($request->get('role'));
-
-        if ($password = $request->get('password')) {
-            $user->password = Hash::make($password);
-        }
-
-        $user->save();
-
-        foreach ($request->get('tags', []) as $tag) {
-            $user->tags()->attach(Tag::find($tag['id']));
-        }
+        $user = $this->userService->create($request);
 
         $user->load($user->relationships);
 
-        return response()->json(new UserResource($user), Response::HTTP_CREATED);
+        return $this->json(new UserResource($user), Response::HTTP_CREATED);
     }
 
     /**
      * @param User $user
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function show(User $user)
     {
         $user->load($user->relationships);
 
-        return response()->json(new UserResource($user), Response::HTTP_OK);
+        return $this->json(new UserResource($user), Response::HTTP_OK);
     }
 
     /**
      * @param UserRequest $request
      * @param User $user
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function update(UserRequest $request, User $user)
     {
-        $user->fill($request->only('name', 'email', 'locale', 'category'));
-
-        if ($password = $request->get('password')) {
-            $user->password = Hash::make($password);
-        }
-        $user->syncRoles($request->get('role'));
-        $user->save();
-
-        $user->tags()->sync([]);
-
-        foreach ($request->get('tags', []) as $tag) {
-            $user->tags()->attach(Tag::find($tag['id']));
-        }
+        $user = $this->userService->update($user, $request);
 
         $user->load($user->relationships);
 
-        return response()->json(new UserResource($user), Response::HTTP_OK);
+        return $this->json(new UserResource($user), Response::HTTP_OK);
     }
 
     /**
      * @param User $user
      *
-     * @return \Illuminate\Http\JsonResponse
-     * @throws \Exception
+     * @return JsonResponse
+     * @throws Exception
      */
     public function destroy(User $user)
     {
         $user->delete();
 
-        return response()->json(null, Response::HTTP_OK);
+        return $this->json(null, Response::HTTP_OK);
     }
 
     /**
      * @param BulkDeleteRequest $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function bulkDestroy(BulkDeleteRequest $request)
     {
@@ -146,6 +134,6 @@ class UsersController extends Controller
             }
         });
 
-        return response()->json(null, Response::HTTP_OK);
+        return $this->json(null, Response::HTTP_OK);
     }
 }

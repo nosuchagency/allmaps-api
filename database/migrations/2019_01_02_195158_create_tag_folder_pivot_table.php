@@ -16,7 +16,7 @@ class CreateTagFolderPivotTable extends Migration
         Schema::create('tag_folder', function (Blueprint $table) {
             $table->tag();
 
-            $table->unsignedInteger('folder_id');
+            $table->unsignedBigInteger('folder_id');
             $table->foreign('folder_id')
                 ->references('id')
                 ->on('folders')

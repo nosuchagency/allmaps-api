@@ -4,9 +4,12 @@ namespace App\Http\Controllers\API\V1;
 
 use App\Http\Requests\BulkDeleteRequest;
 use App\Models\Location;
+use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
-use App\Services\LocationService;
+use App\Services\Models\LocationService;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LocationRequest;
 use App\Http\Resources\LocationResource;
@@ -37,7 +40,7 @@ class LocationsController extends Controller
     /**
      * @param Request $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function index(Request $request)
     {
@@ -45,19 +48,19 @@ class LocationsController extends Controller
             ->filter($request)
             ->get();
 
-        return response()->json(LocationResource::collection($locations), Response::HTTP_OK);
+        return $this->json(LocationResource::collection($locations), Response::HTTP_OK);
     }
 
     /**
      * @param Request $request
      *
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     * @return AnonymousResourceCollection
      */
     public function paginated(Request $request)
     {
         $locations = Location::query()
             ->filter($request)
-            ->paginate($this->paginationNumber());
+            ->jsonPaginate($this->paginationNumber());
 
         return LocationResource::collection($locations);
     }
@@ -65,55 +68,55 @@ class LocationsController extends Controller
     /**
      * @param LocationRequest $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function store(LocationRequest $request)
     {
         $location = $this->locationService->create($request);
 
-        return response()->json(new LocationResource($location), Response::HTTP_CREATED);
+        return $this->json(new LocationResource($location), Response::HTTP_CREATED);
     }
 
     /**
      * @param Location $location
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function show(Location $location)
     {
-        return response()->json(new LocationResource($location), Response::HTTP_OK);
+        return $this->json(new LocationResource($location), Response::HTTP_OK);
     }
 
     /**
      * @param LocationRequest $request
      * @param Location $location
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function update(LocationRequest $request, Location $location)
     {
         $location = $this->locationService->update($location, $request);
 
-        return response()->json(new LocationResource($location), Response::HTTP_OK);
+        return $this->json(new LocationResource($location), Response::HTTP_OK);
     }
 
     /**
      * @param Location $location
      *
-     * @return \Illuminate\Http\JsonResponse
-     * @throws \Exception
+     * @return JsonResponse
+     * @throws Exception
      */
     public function destroy(Location $location)
     {
         $location->delete();
 
-        return response()->json(null, Response::HTTP_OK);
+        return $this->json(null, Response::HTTP_OK);
     }
 
     /**
      * @param BulkDeleteRequest $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function bulkDestroy(BulkDeleteRequest $request)
     {
@@ -123,6 +126,6 @@ class LocationsController extends Controller
             }
         });
 
-        return response()->json(null, Response::HTTP_OK);
+        return $this->json(null, Response::HTTP_OK);
     }
 }

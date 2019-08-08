@@ -41,22 +41,22 @@ class FixturesCreateTest extends TestCase
     }
 
     /** @test */
-    public function a_fixture_requires_width_to_be_an_integer()
+    public function a_fixture_requires_image_width_to_be_an_integer()
     {
-        $this->create(['width' => 'not-a-valid-width'])->assertJsonValidationErrors('width');
+        $this->create(['image_width' => 'not-a-valid-width'])->assertJsonValidationErrors('image_width');
     }
 
     /** @test */
-    public function a_fixture_requires_height_to_be_an_integer()
+    public function a_fixture_requires_image_height_to_be_an_integer()
     {
-        $this->create(['height' => 'not-a-valid-width'])->assertJsonValidationErrors('height');
+        $this->create(['image_height' => 'not-a-valid-width'])->assertJsonValidationErrors('image_height');
     }
 
     /** @test */
     public function category_needs_to_be_a_valid_category_object()
     {
         $this->create(['category' => ['id' => 2]])->assertJsonValidationErrors(['category.id']);
-        $this->create(['category' => []])->assertJsonValidationErrors(['category']);
+        $this->create(['category' => ['not-a-valid-category-object']])->assertJsonValidationErrors(['category']);
     }
 
     /** @test */
@@ -88,11 +88,11 @@ class FixturesCreateTest extends TestCase
     protected function validFields($overrides = [])
     {
         return array_merge([
-            'name' => $this->faker->title,
+            'name' => $this->faker->name,
             'description' => $this->faker->paragraph,
             'image' => null,
-            'width' => rand(0, 10),
-            'height' => rand(0, 10),
+            'image_width' => rand(0, 10),
+            'image_height' => rand(0, 10),
             'category' => factory(Category::class)->create(),
             'tags' => factory(Tag::class, 2)->create()
         ], $overrides);

@@ -35,7 +35,17 @@ class LocationsReadTest extends TestCase
             $this->createRoleWithPermissions(['floors.read'])
         );
 
-        $this->getJson(route('locations.index'))->assertStatus(200);
+        $this->getJson(route('locations.index'))->assertOk();
+    }
+
+    /** @test */
+    public function an_authenticated_user_with_read_permission_can_view_locations_paginated()
+    {
+        $this->signIn()->assignRole(
+            $this->createRoleWithPermissions(['floors.read'])
+        );
+
+        $this->getJson(route('locations.paginated'))->assertOk();
     }
 
     /** @test */
@@ -47,6 +57,6 @@ class LocationsReadTest extends TestCase
 
         $location = factory(Location::class)->create();
 
-        $this->getJson(route('locations.show', ['locations' => $location]))->assertStatus(200);
+        $this->getJson(route('locations.show', ['locations' => $location]))->assertOk();
     }
 }

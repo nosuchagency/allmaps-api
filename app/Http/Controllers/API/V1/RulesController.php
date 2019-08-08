@@ -3,79 +3,91 @@
 namespace App\Http\Controllers\API\V1;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\ContainerBeaconRuleRequest;
+use App\Http\Requests\RuleRequest;
 use App\Http\Resources\RuleResource;
 use App\Models\Beacon;
 use App\Models\Container;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 
 class RulesController extends Controller
 {
 
     /**
-     * @param Container $container
-     * @param Beacon $beacon
-     * @param $rule
-     *
-     * @return \Illuminate\Http\JsonResponse
+     * BeaconsController constructor.
      */
-    public function show(Container $container, Beacon $beacon, $rule)
+    public function __construct()
     {
-        $beacon = $container->beacons()->findOrFail($beacon->id);
-
-        $rule = $beacon->pivot->rules()->findOrFail($rule);
-
-        return response()->json(new RuleResource($rule), Response::HTTP_OK);
+        $this->middleware(['permission:beacons.create', 'permission:containers.create'])->only(['store']);
+        $this->middleware(['permission:beacons.read', 'permission:containers.read'])->only(['show']);
+        $this->middleware(['permission:beacons.update', 'permission:containers.update'])->only(['update']);
+        $this->middleware(['permission:beacons.delete', 'permission:containers.delete'])->only(['destroy']);
     }
 
     /**
-     * @param ContainerBeaconRuleRequest $request
+     * @param RuleRequest $request
      * @param Container $container
-     * @param Beacon $beacon
+     * @param $beaconId
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function store(ContainerBeaconRuleRequest $request, Container $container, Beacon $beacon)
+    public function store(RuleRequest $request, Container $container, $beaconId)
     {
-        $beacon = $container->beacons()->findOrFail($beacon->id);
+        $beacon = $container->beacons()->findOrFail($beaconId);
 
         $rule = $beacon->pivot->rules()->create($request->validated());
 
-        return response()->json(new RuleResource ($rule), Response::HTTP_CREATED);
+        return $this->json(new RuleResource ($rule), Response::HTTP_CREATED);
     }
 
     /**
-     * @param ContainerBeaconRuleRequest $request
      * @param Container $container
-     * @param Beacon $beacon
+     * @param $beaconId
      * @param $rule
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function update(ContainerBeaconRuleRequest $request, Container $container, Beacon $beacon, $rule)
+    public function show(Container $container, $beaconId, $rule)
     {
-        $beacon = $container->beacons()->findOrFail($beacon->id);
+        $beacon = $container->beacons()->findOrFail($beaconId);
+
+        $rule = $beacon->pivot->rules()->findOrFail($rule);
+
+        return $this->json(new RuleResource($rule), Response::HTTP_OK);
+    }
+
+    /**
+     * @param RuleRequest $request
+     * @param Container $container
+     * @param $beaconId
+     * @param $rule
+     *
+     * @return JsonResponse
+     */
+    public function update(RuleRequest $request, Container $container, $beaconId, $rule)
+    {
+        $beacon = $container->beacons()->findOrFail($beaconId);
 
         $rule = $beacon->pivot->rules()->findOrFail($rule);
 
         $rule->fill($request->validated())->save();
 
-        return response()->json(new RuleResource ($rule), Response::HTTP_OK);
+        return $this->json(new RuleResource($rule), Response::HTTP_OK);
     }
 
     /**
      * @param Container $container
-     * @param Beacon $beacon
+     * @param $beaconId
      * @param $rule
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function destroy(Container $container, Beacon $beacon, $rule)
+    public function destroy(Container $container, $beaconId, $rule)
     {
-        $beacon = $container->beacons()->findOrFail($beacon->id);
+        $beacon = $container->beacons()->findOrFail($beaconId);
 
         $beacon->pivot->rules()->findOrFail($rule)->delete();
 
-        return response()->json(null, Response::HTTP_OK);
+        return $this->json(null, Response::HTTP_OK);
     }
 }

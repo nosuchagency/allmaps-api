@@ -28,19 +28,19 @@ class TagsDeleteTest extends TestCase
     }
 
     /** @test */
-    public function an_authenticated_user_with_delete_permission_may_delete_specific_tag()
+    public function an_authenticated_user_with_delete_permission_can_delete_specific_tag()
     {
         $this->signIn()->assignRole(
             $this->createRoleWithPermissions(['tags.delete'])
         );
 
         $tag = factory(Tag::class)->create();
-        $this->deleteJson(route('tags.destroy', ['tag' => $tag]))->assertStatus(200);
+        $this->deleteJson(route('tags.destroy', ['tag' => $tag]))->assertOk();
         $this->assertDatabaseMissing('tags', ['id' => $tag->id]);
     }
 
     /** @test */
-    public function an_authenticated_user_with_delete_permission_may_delete_tags_in_bulk()
+    public function an_authenticated_user_with_delete_permission_can_delete_tags_in_bulk()
     {
         $this->signIn()->assignRole(
             $this->createRoleWithPermissions(['tags.delete'])
@@ -48,7 +48,7 @@ class TagsDeleteTest extends TestCase
 
         $tags = factory(Tag::class, 5)->create();
         $this->assertCount(5, Tag::all());
-        $this->postJson(route('tags.bulk-destroy'), ['items' => $tags])->assertStatus(200);
+        $this->postJson(route('tags.bulk-destroy'), ['items' => $tags])->assertOk();
         $this->assertCount(0, Tag::all());
     }
 }

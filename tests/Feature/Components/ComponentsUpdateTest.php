@@ -2,9 +2,12 @@
 
 namespace Tests\Feature\Components;
 
+use App\ComponentType;
 use App\Models\Category;
 use App\Models\Component;
 use App\Models\Tag;
+use App\Shape;
+use App\StrokeType;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -36,9 +39,9 @@ class ComponentsUpdateTest extends TestCase
     {
         $component = factory(Component::class)->create();
 
-        $attributes = ['id' => $component->id, 'name' => $this->faker->title];
+        $attributes = ['id' => $component->id, 'name' => $this->faker->name];
 
-        $this->update($component, $attributes)->assertStatus(200);
+        $this->update($component, $attributes)->assertOk();
 
         $this->assertDatabaseHas('components', $attributes);
     }
@@ -66,17 +69,21 @@ class ComponentsUpdateTest extends TestCase
     protected function validFields($overrides = [])
     {
         return array_merge([
-            'name' => $this->faker->title,
+            'name' => $this->faker->name,
+            'type' => $this->faker->randomElement(ComponentType::TYPES),
+            'shape' => $this->faker->randomElement(Shape::SHAPES),
             'description' => $this->faker->paragraph,
-            'type' => $this->faker->randomElement(['plan', 'wall', 'room', 'decor']),
-            'shape' => $this->faker->randomElement(['polyline', 'polygon', 'rectangle', 'circle', 'image']),
-            'color' => $this->faker->hexColor,
-            'opacity' => rand(0, 10) / 10,
-            'weight' => $this->faker->numberBetween(1, 10),
-            'curved' => $this->faker->boolean,
-            'width' => $this->faker->numberBetween(0, 10),
-            'height' => $this->faker->numberBetween(0, 10),
+            'stroke' => $this->faker->boolean,
+            'stroke_type' => $this->faker->randomElement(StrokeType::TYPES),
+            'stroke_color' => $this->faker->hexColor,
+            'stroke_width' => $this->faker->numberBetween(1, 10),
+            'stroke_opacity' => rand(0, 10) / 10,
+            'fill' => $this->faker->boolean,
+            'fill_color' => $this->faker->hexColor,
+            'fill_opacity' => rand(0, 10) / 10,
             'image' => null,
+            'image_width' => $this->faker->numberBetween(0, 10),
+            'image_height' => $this->faker->numberBetween(0, 10),
             'category' => factory(Category::class)->create(),
             'tags' => factory(Tag::class, 2)->create()
         ], $overrides);

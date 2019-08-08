@@ -3,6 +3,7 @@
 namespace Tests\Feature\Places;
 
 use App\Models\Category;
+use App\Models\Menu;
 use App\Models\Place;
 use App\Models\Tag;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -59,10 +60,17 @@ class PlacesCreateTest extends TestCase
     }
 
     /** @test */
+    public function menu_needs_to_be_a_valid_menu_object()
+    {
+        $this->create(['menu' => ['id' => 2]])->assertJsonValidationErrors(['menu.id']);
+        $this->create(['menu' => ['not-a-valid-menu-object']])->assertJsonValidationErrors(['menu']);
+    }
+
+    /** @test */
     public function category_needs_to_be_a_valid_category_object()
     {
         $this->create(['category' => ['id' => 2]])->assertJsonValidationErrors(['category.id']);
-        $this->create(['category' => []])->assertJsonValidationErrors(['category']);
+        $this->create(['category' => ['not-a-valid-category-object']])->assertJsonValidationErrors(['category']);
     }
 
     /** @test */
@@ -94,7 +102,7 @@ class PlacesCreateTest extends TestCase
     protected function validFields($overrides = [])
     {
         return array_merge([
-            'name' => $this->faker->title,
+            'name' => $this->faker->name,
             'address' => $this->faker->address,
             'postcode' => $this->faker->postcode,
             'city' => $this->faker->city,
@@ -102,6 +110,7 @@ class PlacesCreateTest extends TestCase
             'latitude' => $this->faker->latitude,
             'longitude' => $this->faker->longitude,
             'activated' => $this->faker->boolean,
+            'menu' => factory(Menu::class)->create(),
             'category' => factory(Category::class)->create(),
             'tags' => factory(Tag::class, 2)->create()
         ], $overrides);

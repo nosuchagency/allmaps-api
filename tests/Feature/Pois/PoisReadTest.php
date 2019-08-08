@@ -35,7 +35,17 @@ class PoisReadTest extends TestCase
             $this->createRoleWithPermissions(['pois.read'])
         );
 
-        $this->getJson(route('pois.index'))->assertStatus(200);
+        $this->getJson(route('pois.index'))->assertOk();
+    }
+
+    /** @test */
+    public function an_authenticated_user_with_read_permission_can_view_pois_paginated()
+    {
+        $this->signIn()->assignRole(
+            $this->createRoleWithPermissions(['pois.read'])
+        );
+
+        $this->getJson(route('pois.paginated'))->assertOk();
     }
 
     /** @test */
@@ -47,6 +57,6 @@ class PoisReadTest extends TestCase
 
         $poi = factory(Poi::class)->create();
 
-        $this->getJson(route('pois.show', ['poi' => $poi]))->assertStatus(200);
+        $this->getJson(route('pois.show', ['poi' => $poi]))->assertOk();
     }
 }

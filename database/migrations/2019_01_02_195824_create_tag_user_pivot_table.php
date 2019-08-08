@@ -16,7 +16,7 @@ class CreateTagUserPivotTable extends Migration
         Schema::create('tag_user', function (Blueprint $table) {
             $table->tag();
 
-            $table->unsignedInteger('user_id');
+            $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')
                 ->references('id')
                 ->on('users')

@@ -3,6 +3,7 @@
 namespace Tests\Feature\Places;
 
 use App\Models\Category;
+use App\Models\Menu;
 use App\Models\Place;
 use App\Models\Tag;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -36,9 +37,9 @@ class PlacesUpdateTest extends TestCase
     {
         $place = factory(Place::class)->create();
 
-        $attributes = ['id' => $place->id, 'name' => $this->faker->title];
+        $attributes = ['id' => $place->id, 'name' => $this->faker->name];
 
-        $this->update($place, $attributes)->assertStatus(200);
+        $this->update($place, $attributes)->assertOk();
 
         $this->assertDatabaseHas('places', $attributes);
     }
@@ -66,7 +67,7 @@ class PlacesUpdateTest extends TestCase
     protected function validFields($overrides = [])
     {
         return array_merge([
-            'name' => $this->faker->title,
+            'name' => $this->faker->name,
             'address' => $this->faker->address,
             'postcode' => $this->faker->postcode,
             'city' => $this->faker->city,
@@ -74,6 +75,7 @@ class PlacesUpdateTest extends TestCase
             'latitude' => $this->faker->latitude,
             'longitude' => $this->faker->longitude,
             'activated' => $this->faker->boolean,
+            'menu' => factory(Menu::class)->create(),
             'category' => factory(Category::class)->create(),
             'tags' => factory(Tag::class, 2)->create()
         ], $overrides);

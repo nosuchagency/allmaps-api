@@ -32,7 +32,6 @@ class Folder extends Model
     protected $fillable = [
         'name',
         'primary',
-        'container_id',
         'order',
         'created_by',
         'category_id',
@@ -63,12 +62,13 @@ class Folder extends Model
      * @var array
      */
     public $relationships = [
+        'category',
         'tags',
         'contents'
     ];
 
     /**
-     * Get the content that owns the folder.
+     * Get the container that owns the folder.
      */
     public function container()
     {

@@ -11,6 +11,7 @@ use Illuminate\Http\Response;
 
 class SearchablesController extends Controller
 {
+
     /**
      * @var SearchableResolver
      */
@@ -38,7 +39,7 @@ class SearchablesController extends Controller
     {
         $searchables = Searchable::active()->get();
 
-        return response()->json(SearchableResource::collection($searchables), Response::HTTP_OK);
+        return $this->json(SearchableResource::collection($searchables), Response::HTTP_OK);
     }
 
     /**
@@ -50,7 +51,7 @@ class SearchablesController extends Controller
     {
         $searchable = Searchable::create($request->validated());
 
-        return response()->json(new SearchableResource($searchable), Response::HTTP_CREATED);
+        return $this->json(new SearchableResource($searchable), Response::HTTP_CREATED);
     }
 
     /**
@@ -60,7 +61,7 @@ class SearchablesController extends Controller
      */
     public function show(Searchable $searchable)
     {
-        return response()->json(new SearchableResource($searchable), Response::HTTP_OK);
+        return $this->json(new SearchableResource($searchable), Response::HTTP_OK);
     }
 
     /**
@@ -73,7 +74,7 @@ class SearchablesController extends Controller
     {
         $searchable->fill($request->validated())->save();
 
-        return response()->json(new SearchableResource($searchable), Response::HTTP_OK);
+        return $this->json(new SearchableResource($searchable), Response::HTTP_OK);
     }
 
     /**
@@ -86,6 +87,6 @@ class SearchablesController extends Controller
     {
         $searchable->delete();
 
-        return response()->json(null, Response::HTTP_OK);
+        return $this->json(null, Response::HTTP_OK);
     }
 }

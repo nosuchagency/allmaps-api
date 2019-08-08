@@ -17,6 +17,6 @@ use Illuminate\Support\Str;
 $factory->define(App\Models\Token::class, function (Faker $faker) {
     return [
         'name' => 'Token',
-        'token' => Str::random(60)
+        'api_token' => Str::random(60)
     ];
 });

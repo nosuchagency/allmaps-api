@@ -35,7 +35,17 @@ class CategoriesReadTest extends TestCase
             $this->createRoleWithPermissions(['categories.read'])
         );
 
-        $this->getJson(route('categories.index'))->assertStatus(200);
+        $this->getJson(route('categories.index'))->assertOk();
+    }
+
+    /** @test */
+    public function an_authenticated_user_with_read_permission_can_view_categories_paginated()
+    {
+        $this->signIn()->assignRole(
+            $this->createRoleWithPermissions(['categories.read'])
+        );
+
+        $this->getJson(route('categories.paginated'))->assertOk();
     }
 
     /** @test */
@@ -47,6 +57,6 @@ class CategoriesReadTest extends TestCase
 
         $category = factory(Category::class)->create();
 
-        $this->getJson(route('categories.show', ['category' => $category]))->assertStatus(200);
+        $this->getJson(route('categories.show', ['category' => $category]))->assertOk();
     }
 }

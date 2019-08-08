@@ -28,19 +28,19 @@ class RolesDeleteTest extends TestCase
     }
 
     /** @test */
-    public function an_authenticated_user_with_delete_permission_may_delete_specific_role()
+    public function an_authenticated_user_with_delete_permission_can_delete_specific_role()
     {
         $this->signIn()->assignRole(
             $this->createRoleWithPermissions(['roles.delete'])
         );
 
         $role = factory(Role::class)->create();
-        $this->deleteJson(route('roles.destroy', ['role' => $role]))->assertStatus(200);
+        $this->deleteJson(route('roles.destroy', ['role' => $role]))->assertOk();
         $this->assertDatabaseMissing('roles', ['id' => $role->id]);
     }
 
     /** @test */
-    public function an_authenticated_user_with_delete_permission_may_delete_roles_in_bulk()
+    public function an_authenticated_user_with_delete_permission_can_delete_roles_in_bulk()
     {
         $this->signIn()->assignRole(
             $this->createRoleWithPermissions(['roles.delete'])
@@ -48,7 +48,7 @@ class RolesDeleteTest extends TestCase
 
         $roles = factory(Role::class, 5)->create();
         $this->assertCount(6, Role::all());
-        $this->postJson(route('roles.bulk-destroy'), ['items' => $roles])->assertStatus(200);
+        $this->postJson(route('roles.bulk-destroy'), ['items' => $roles])->assertOk();
         $this->assertCount(1, Role::all());
     }
 }

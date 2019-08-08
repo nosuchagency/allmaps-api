@@ -28,19 +28,19 @@ class PlacesDeleteTest extends TestCase
     }
 
     /** @test */
-    public function an_authenticated_user_with_delete_permission_may_delete_specific_place()
+    public function an_authenticated_user_with_delete_permission_can_delete_specific_place()
     {
         $this->signIn()->assignRole(
             $this->createRoleWithPermissions(['places.delete'])
         );
 
         $place = factory(Place::class)->create();
-        $this->deleteJson(route('places.destroy', ['place' => $place]))->assertStatus(200);
+        $this->deleteJson(route('places.destroy', ['place' => $place]))->assertOk();
         $this->assertSoftDeleted('places', ['id' => $place->id]);
     }
 
     /** @test */
-    public function an_authenticated_user_with_delete_permission_may_delete_places_in_bulk()
+    public function an_authenticated_user_with_delete_permission_can_delete_places_in_bulk()
     {
         $this->signIn()->assignRole(
             $this->createRoleWithPermissions(['places.delete'])
@@ -48,7 +48,7 @@ class PlacesDeleteTest extends TestCase
 
         $places = factory(Place::class, 5)->create();
         $this->assertCount(5, Place::all());
-        $this->postJson(route('places.bulk-destroy'), ['items' => $places])->assertStatus(200);
+        $this->postJson(route('places.bulk-destroy'), ['items' => $places])->assertOk();
         $this->assertCount(0, Place::all());
     }
 }

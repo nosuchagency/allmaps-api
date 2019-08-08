@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\RequiredIdRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class FloorRequest extends FormRequest
@@ -31,6 +32,9 @@ class FloorRequest extends FormRequest
         if ($this->method() === 'POST') {
             $rules['building'] = 'required';
             $rules['building.id'] = 'required|exists:buildings,id,deleted_at,NULL';
+        } else {
+            $rules['building'] = ['nullable', new RequiredIdRule];
+            $rules['building.id'] = 'exists:buildings,id,deleted_at,NULL';
         }
 
         return $rules;

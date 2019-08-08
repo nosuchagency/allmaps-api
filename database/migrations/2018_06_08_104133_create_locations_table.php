@@ -14,7 +14,7 @@ class CreateLocationsTable extends Migration
     public function up()
     {
         Schema::create('locations', function (Blueprint $table) {
-            $table->increments('id');
+            $table->bigIncrements('id');
 
             $table->string('name')->nullable();
             $table->unsignedInteger('zoom_from')->default(0);
@@ -52,32 +52,24 @@ class CreateLocationsTable extends Migration
             $table->dateTime('publish_at')->nullable();
             $table->dateTime('unpublish_at')->nullable();
 
-            $table->unsignedInteger('floor_id');
+            $table->unsignedBigInteger('floor_id');
             $table->foreign('floor_id')
                 ->references('id')
                 ->on('floors')
                 ->onDelete('cascade');
 
-            $table->unsignedInteger('poi_id')->nullable();
-            $table->foreign('poi_id')
+            $table->unsignedBigInteger('container_id')->nullable();
+            $table->foreign('container_id')
                 ->references('id')
-                ->on('pois')
-                ->onDelete('cascade');
+                ->on('containers')
+                ->onDelete('set null');
 
-            $table->unsignedInteger('fixture_id')->nullable();
-            $table->foreign('fixture_id')
-                ->references('id')
-                ->on('fixtures')
-                ->onDelete('cascade');
-
-            $table->unsignedInteger('beacon_id')->nullable();
-            $table->foreign('beacon_id')
-                ->references('id')
-                ->on('beacons')
-                ->onDelete('cascade');
+            $table->unsignedBigInteger('locatable_id');
+            $table->string('locatable_type');
 
             $table->longText('coordinates')->nullable();
 
+            $table->category();
             $table->createdBy();
             $table->timestamps();
             $table->softDeletes();
