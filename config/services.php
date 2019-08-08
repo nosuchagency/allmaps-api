@@ -30,13 +30,21 @@ return [
     ],
 
     'stripe' => [
-        'model' => App\User::class,
+        'model' => App\Models\User::class,
         'key' => env('STRIPE_KEY'),
         'secret' => env('STRIPE_SECRET'),
     ],
 
     'google' => [
         'api_key' => env('GOOGLE_API_KEY')
+    ],
+
+    'kontakt' => [
+        'url' => env('KONTAKT_URL')
+    ],
+
+    'estimote' => [
+        'url' => env('ESTIMOTE_URL')
     ]
 
 ];

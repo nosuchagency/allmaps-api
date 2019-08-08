@@ -19,7 +19,7 @@ class Estimote implements BeaconProviderClient
     protected $provider;
 
     /**
-     * Kontakt constructor.
+     * Estimote constructor.
      *
      * @param BeaconProvider $provider
      *
@@ -80,7 +80,7 @@ class Estimote implements BeaconProviderClient
     }
 
     /**
-     * Make an HTTP request to DigitalOcean.
+     * Make an HTTP request to Estimote.
      *
      * @param string $method
      * @param string $path
@@ -90,7 +90,7 @@ class Estimote implements BeaconProviderClient
      */
     protected function request($method, $path, array $parameters = [])
     {
-        $response = (new Client)->{$method}('https://cloud.estimote.com/v3/' . ltrim($path, '/'), [
+        $response = (new Client)->{$method}($this->getUrl() . ltrim($path, '/'), [
             'headers' => [
                 'Accept' => 'application/json'
             ],
@@ -128,5 +128,15 @@ class Estimote implements BeaconProviderClient
         } while ($response->meta->page < intval(ceil($response->meta->total_count / 100)));
 
         return $results;
+    }
+
+    /**
+     * Get the Estimote api url
+     *
+     * @return string
+     */
+    protected function getUrl()
+    {
+        return config('services.estimote.url');
     }
 }

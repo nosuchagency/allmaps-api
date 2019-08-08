@@ -42,7 +42,6 @@ class Kernel extends HttpKernel
         'api' => [
             'throttle:240,1',
             'bindings',
-            'auth.token'
         ],
     ];
 
@@ -56,7 +55,6 @@ class Kernel extends HttpKernel
     protected $routeMiddleware = [
         'auth' => \Illuminate\Auth\Middleware\Authenticate::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
-        'auth.token' => \App\Http\Middleware\ApiAuthentication::class,
         'bindings' => \Illuminate\Routing\Middleware\SubstituteBindings::class,
         'cache.headers' => \Illuminate\Http\Middleware\SetCacheHeaders::class,
         'can' => \Illuminate\Auth\Middleware\Authorize::class,

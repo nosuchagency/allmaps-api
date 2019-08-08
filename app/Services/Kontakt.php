@@ -82,7 +82,7 @@ class Kontakt implements BeaconProviderClient
     }
 
     /**
-     * Make an HTTP request to DigitalOcean.
+     * Make an HTTP request to Kontakt.
      *
      * @param string $method
      * @param string $path
@@ -92,16 +92,26 @@ class Kontakt implements BeaconProviderClient
      */
     protected function request($method, $path, array $parameters = [])
     {
-        $response = (new Client)->{$method}('https://api.kontakt.io/' . ltrim($path, '/'), [
+        $response = (new Client)->{$method}($this->getUrl() . ltrim($path, '/'), [
             'Content-Type' => 'application/json',
             'headers' => [
                 'Accept' => 'application/vnd.com.kontakt+json;version=10',
                 'Api-Key' => $this->provider->meta['api_key'],
-                'User-Agent' => 'BBv2'
+                'User-Agent' => 'AllMaps'
             ],
             'json' => $parameters,
         ]);
 
         return json_decode((string)$response->getBody());
+    }
+
+    /**
+     * Get the Kontakt api url
+     *
+     * @return string
+     */
+    protected function getUrl()
+    {
+        return config('services.kontakt.url');
     }
 }

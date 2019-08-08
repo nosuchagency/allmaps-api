@@ -8,6 +8,8 @@ class AdminUserSeeder extends Seeder
 {
     public function run()
     {
+        activity()->disableLogging();
+
         $user = User::firstOrCreate([
             'email' => 'webmaster@nosuchagency.dk'
         ], [
@@ -16,5 +18,7 @@ class AdminUserSeeder extends Seeder
         ]);
 
         $user->assignRole('admin');
+
+        activity()->enableLogging();
     }
 }
