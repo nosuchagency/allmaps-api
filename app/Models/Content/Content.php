@@ -6,6 +6,8 @@ use App\Filters\IndexFilter;
 use App\Models\Container;
 use App\Models\Folder;
 use App\Models\Tag;
+use App\Scopes\HasContentParentScope;
+use App\Scopes\OrderScope;
 use App\Traits\HasCategory;
 use App\Traits\HasCreatedBy;
 use App\Traits\HasRelations;
@@ -113,16 +115,16 @@ class Content extends Model
      */
     public function contents()
     {
-        return $this->hasMany(Content::class);
+        return $this->hasMany(Content::class)
+            ->withoutGlobalScope(new HasContentParentScope());
     }
 
     protected static function boot()
     {
         parent::boot();
 
-        static::addGlobalScope('order', function (Builder $builder) {
-            $builder->orderBy('order');
-        });
+        static::addGlobalScope(new OrderScope());
+        static::addGlobalScope(new HasContentParentScope());
     }
 
     /**

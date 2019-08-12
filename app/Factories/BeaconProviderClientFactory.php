@@ -15,8 +15,10 @@ class BeaconProviderClientFactory
      * @param BeaconProvider $provider
      *
      * @return BeaconProviderClient
+     *
+     * @throws InvalidArgumentException
      */
-    public function make(BeaconProvider $provider)
+    public function make(BeaconProvider $provider): BeaconProviderClient
     {
         switch ($provider->type) {
             case 'kontakt' :
