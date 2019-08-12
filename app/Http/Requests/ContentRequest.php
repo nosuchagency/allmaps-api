@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\ContentType;
+use App\Rules\FileExists;
 use App\Rules\RequiredIdRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -31,6 +32,7 @@ class ContentRequest extends FormRequest
             'order' => 'nullable|integer',
             'text' => '',
             'image' => '',
+            'file' => ['nullable', new FileExists()],
             'yt_url' => 'nullable|url',
             'url' => 'nullable|url',
             'type' => [

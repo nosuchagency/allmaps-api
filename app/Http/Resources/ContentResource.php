@@ -20,6 +20,8 @@ class ContentResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'type' => $this->type,
+            'image' => $this->getImageUrl(),
+            'file' => $this->file ? url($this->file) : null,
             'url' => $this->url,
             'text' => $this->text,
             'yt_url' => $this->yt_url,

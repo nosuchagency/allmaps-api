@@ -88,7 +88,7 @@ class BeaconProvidersController extends Controller
      * @param BeaconProvider $provider
      *
      * @return JsonResponse
-     * @throws Exception
+     * @throws ValidationException
      */
     public function update(Request $request, BeaconProvider $provider)
     {

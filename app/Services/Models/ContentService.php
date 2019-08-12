@@ -37,6 +37,7 @@ class ContentService implements ModelServiceContract
         );
 
         $content->fill($request->only($content->getFillable()));
+        $content->setImage($request->get('image'));
         $content->save();
 
         foreach ($request->get('tags', []) as $tag) {
@@ -55,6 +56,7 @@ class ContentService implements ModelServiceContract
     public function update(Model $content, Request $request)
     {
         $content->fill($request->only($content->getFillable()));
+        $content->setImage($request->get('image'));
 
         if ($request->has('folder')) {
             $content->folder()->associate(

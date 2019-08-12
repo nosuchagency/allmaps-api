@@ -14,6 +14,9 @@
 Route::get('/search', ['as' => 'search', 'uses' => 'SearchController']);
 Route::get('/plugins', ['as' => 'plugins.index', 'uses' => 'PluginsController']);
 
+Route::post('/files', ['as' => 'files.store', 'uses' => 'FilesController@store']);
+Route::get('/files/{file}', ['as' => 'files.download', 'uses' => 'FilesController@download']);
+
 Route::put('/folders/reorder', ['as' => 'folders.reorder', 'uses' => 'OrderController@folders']);
 Route::put('/contents/reorder', ['as' => 'contents.reorder', 'uses' => 'OrderController@contents']);
 Route::put('/menu-items/reorder', ['as' => 'menu-items.reorder', 'uses' => 'OrderController@menuItems']);
