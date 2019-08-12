@@ -4,6 +4,7 @@ namespace App\Services\Models;
 
 use App\Contracts\ModelServiceContract;
 use App\Factories\ContentFactory;
+use App\Models\Tag;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 
@@ -38,6 +39,10 @@ class ContentService implements ModelServiceContract
         $content->fill($request->only($content->getFillable()));
         $content->save();
 
+        foreach ($request->get('tags', []) as $tag) {
+            $content->tags()->attach(Tag::find($tag['id']));
+        }
+
         return $content->refresh();
     }
 
@@ -58,6 +63,12 @@ class ContentService implements ModelServiceContract
         }
 
         $content->save();
+
+        $content->tags()->sync([]);
+
+        foreach ($request->get('tags', []) as $tag) {
+            $content->tags()->attach(Tag::find($tag['id']));
+        }
 
         return $content->refresh();
     }

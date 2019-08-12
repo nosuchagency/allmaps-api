@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Filters\IndexFilter;
 use App\Models\Content\Content;
+use App\Scopes\OrderScope;
 use App\Traits\HasCategory;
 use App\Traits\HasCreatedBy;
 use App\Traits\HasRelations;
@@ -105,9 +106,7 @@ class Folder extends Model
     {
         parent::boot();
 
-        static::addGlobalScope('order', function (Builder $builder) {
-            $builder->orderBy('order');
-        });
+        static::addGlobalScope(new OrderScope());
     }
 
     /**

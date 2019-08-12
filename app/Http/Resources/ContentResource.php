@@ -10,7 +10,7 @@ class ContentResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  Request $request
+     * @param Request $request
      *
      * @return array
      */
@@ -25,11 +25,12 @@ class ContentResource extends JsonResource
             'yt_url' => $this->yt_url,
             'folder_id' => $this->folder_id,
             'content_id' => $this->content_id,
+            'contents' => $this->contents,
             'order' => $this->order,
             'created_at' => $this->created_at->toDateTimeString(),
             'updated_at' => $this->updated_at->toDateTimeString(),
-            'category' => new CategoryResource($this->whenLoaded('category')),
-            'tags' => TagResource::collection($this->whenLoaded('tags')),
+            'category' => new CategoryResource($this->category),
+            'tags' => TagResource::collection($this->tags),
         ];
     }
 }

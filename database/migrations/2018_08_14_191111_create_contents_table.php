@@ -18,6 +18,7 @@ class CreateContentsTable extends Migration
             $table->string('name');
             $table->string('type');
             $table->string('image')->nullable();
+            $table->string('file')->nullable();
             $table->longText('text')->nullable();
             $table->text('url')->nullable();
             $table->text('yt_url')->nullable();

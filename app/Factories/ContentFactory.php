@@ -50,7 +50,7 @@ class ContentFactory
      *
      * @throws InvalidArgumentException
      */
-    public function make(string $contentType): ?Content
+    public function make(string $contentType): Content
     {
         switch ($contentType) {
             case self::FILE :

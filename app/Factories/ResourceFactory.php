@@ -63,7 +63,7 @@ class ResourceFactory
      *
      * @throws InvalidArgumentException
      */
-    public function make(string $resourceType, $model): ?JsonResource
+    public function make(string $resourceType, $model): JsonResource
     {
         switch ($resourceType) {
             case self::POI :

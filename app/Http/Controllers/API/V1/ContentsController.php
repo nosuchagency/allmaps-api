@@ -8,7 +8,10 @@ use App\Http\Requests\ContentRequest;
 use App\Http\Resources\ContentResource;
 use App\Models\Content\Content;
 use App\Services\Models\ContentService;
+use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 
 class ContentsController extends Controller
@@ -37,7 +40,7 @@ class ContentsController extends Controller
     /**
      * @param Request $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function index(Request $request)
     {
@@ -51,7 +54,7 @@ class ContentsController extends Controller
     /**
      * @param Request $request
      *
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     * @return AnonymousResourceCollection
      */
     public function paginated(Request $request)
     {
@@ -65,19 +68,19 @@ class ContentsController extends Controller
     /**
      * @param ContentRequest $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function store(ContentRequest $request)
     {
         $content = $this->contentService->create($request);
 
-        return $this->json($content, Response::HTTP_CREATED);
+        return $this->json(new ContentResource($content), Response::HTTP_CREATED);
     }
 
     /**
      * @param Content $content
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function show(Content $content)
     {
@@ -88,20 +91,20 @@ class ContentsController extends Controller
      * @param ContentRequest $request
      * @param Content $content
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function update(ContentRequest $request, Content $content)
     {
         $content = $this->contentService->update($content, $request);
 
-        return $this->json($content, Response::HTTP_OK);
+        return $this->json(new ContentResource($content), Response::HTTP_OK);
     }
 
     /**
      * @param Content $content
      *
-     * @return \Illuminate\Http\JsonResponse
-     * @throws \Exception
+     * @return JsonResponse
+     * @throws Exception
      */
     public function destroy(Content $content)
     {
@@ -113,7 +116,7 @@ class ContentsController extends Controller
     /**
      * @param BulkDeleteRequest $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function bulkDestroy(BulkDeleteRequest $request)
     {
