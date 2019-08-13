@@ -33,11 +33,11 @@ return [
         ],
 
         'allow_headers' => [
+            'Accept',
             'Content-Type',
             'X-Auth-Token',
             'X-Requested-With',
             'Origin',
-            'Api-Key',
             'X-CSRF-Token',
             'Authorization',
         ],
