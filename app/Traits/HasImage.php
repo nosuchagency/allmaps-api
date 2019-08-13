@@ -62,6 +62,6 @@ trait HasImage
      */
     public function getImageUrl()
     {
-        return $this->image ? url($this->image) : null;
+        return $this->image ? asset($this->image) : null;
     }
 }

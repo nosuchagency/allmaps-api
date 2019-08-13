@@ -18,7 +18,7 @@ class Place extends Model
 {
     use HasRelations, HasCategory, SoftDeletes, HasCreatedBy, LogsActivity, HasImage, HasRelationships, SoftCascadeTrait;
 
-    const IMAGE_DIRECTORY_PATH = '/uploads/places';
+    const IMAGE_DIRECTORY_PATH = 'uploads/places';
 
     /**
      * @var array

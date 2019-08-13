@@ -17,7 +17,7 @@ class Location extends Model
 {
     use HasRelations, HasCategory, SoftDeletes, HasCreatedBy, HasImage, LogsActivity;
 
-    const IMAGE_DIRECTORY_PATH = '/uploads/locations';
+    const IMAGE_DIRECTORY_PATH = 'uploads/locations';
 
     /**
      * The attributes that are mass assignable.

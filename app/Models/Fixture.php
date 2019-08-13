@@ -17,7 +17,7 @@ class Fixture extends Model
 {
     use HasRelations, HasCategory, SoftDeletes, HasCreatedBy, HasImage, LogsActivity, SoftCascadeTrait;
 
-    const IMAGE_DIRECTORY_PATH = '/uploads/fixtures';
+    const IMAGE_DIRECTORY_PATH = 'uploads/fixtures';
 
     /**
      * @var array

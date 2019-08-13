@@ -15,6 +15,7 @@ use App\Traits\HasRelations;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Storage;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Tightenco\Parental\HasChildren;
 
@@ -22,7 +23,7 @@ class Content extends Model
 {
     use HasRelations, HasCategory, SoftDeletes, HasCreatedBy, LogsActivity, HasChildren, HasImage;
 
-    const IMAGE_DIRECTORY_PATH = '/uploads/contents';
+    const IMAGE_DIRECTORY_PATH = 'uploads/contents';
 
     /**
      * @var array
@@ -141,5 +142,13 @@ class Content extends Model
     public function scopeFilter(Builder $builder, $request)
     {
         return (new IndexFilter($request))->filter($builder);
+    }
+
+    /**
+     * @return string
+     */
+    public function getFileUrl()
+    {
+        return $this->file ? asset($this->file) : null;
     }
 }
