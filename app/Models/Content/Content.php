@@ -149,6 +149,6 @@ class Content extends Model
      */
     public function getFileUrl()
     {
-        return $this->file ? asset($this->file) : null;
+        return $this->file ? url('/storage' . $this->file) : null;
     }
 }
