@@ -22,8 +22,8 @@ class StructureResource extends JsonResource
             'coordinates' => $this->coordinates,
             'markers' => $this->markers,
             'radius' => $this->radius,
-            'floor' => new FloorResource($this->whenLoaded('floor')),
-            'component' => new ComponentResource($this->whenLoaded('component')),
+            'floor' => new FloorResource($this->floor),
+            'component' => new ComponentResource($this->component),
             'created_at' => $this->created_at->toDateTimeString(),
             'updated_at' => $this->updated_at->toDateTimeString(),
         ];
