@@ -23,9 +23,10 @@ class HitService implements ModelServiceContract
         $hit->hittable()->associate(
             $this->getModel($request->get('type'), $request->input('model.id'))
         );
-        $hit->fill($request->only($hit->getFillable()))->save();
 
-        return $hit->refresh();
+        $hit->save();
+
+        return $hit;
     }
 
     /**
