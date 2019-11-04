@@ -12,10 +12,10 @@ jobs:
       - run: sudo apt update
       - run: sudo docker-php-ext-install zip
 
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "composer.json" }}
-            - v1-dependencies-
+#      - restore_cache:
+#          keys:
+#            - v1-dependencies-{{ checksum "composer.json" }}
+#            - v1-dependencies-
 
       - run: cp .env.circle .env
       - run: sudo composer self-update
@@ -23,11 +23,11 @@ jobs:
       - run: php artisan key:generate
       - run: php artisan jwt:secret
 
-      - save_cache:
-          key: v1-dependencies-{{ checksum "composer.json" }}
-          paths:
-            - ./vendor
+#      - save_cache:
+#          key: v1-dependencies-{{ checksum "composer.json" }}
+#          paths:
+#            - /vendor
 
-      - run: ./vendor/bin/phpunit
+      - run: /vendor/bin/phpunit
       - run: if [ $CIRCLE_BRANCH == "development" ]; curl https://envoyer.io/deploy/idSBkB5kYPYg29VgMsX0ARYlkXd5wIvVH0tWiITY; fi
       - run: if [ $CIRCLE_BRANCH == "master" ]; curl https://envoyer.io/deploy/540CO2nGSKOMMpWUlD1hNCLIWZhXLSdynzd5r8X3; fi
