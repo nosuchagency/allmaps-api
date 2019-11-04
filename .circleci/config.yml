@@ -18,7 +18,7 @@ jobs:
             - v1-dependencies-
 
       - run: cp .env.circle .env
-      - run: composer self-update
+      - run: sudo composer self-update
       - run: composer install --no-interaction --no-dev --prefer-dist
       - run: php artisan key:generate
       - run: php artisan jwt:secret
