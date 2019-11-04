@@ -17,7 +17,7 @@ class Poi extends Model
 {
     use HasRelations, HasCategory, SoftDeletes, HasCreatedBy, HasImage, LogsActivity, SoftCascadeTrait;
 
-    const IMAGE_DIRECTORY_PATH = '/uploads/pois';
+    const IMAGE_DIRECTORY_PATH = 'uploads/pois';
 
     /**
      * @var array

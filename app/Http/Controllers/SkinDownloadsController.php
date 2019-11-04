@@ -38,7 +38,7 @@ class SkinDownloadsController extends Controller
 
         $files = glob($skin->getBasePath());
 
-        $path = storage_path(config('bb.skins.download_directory') . $skin->identifier . '.zip');
+        $path = storage_path(config('all-maps.skins.download_directory') . $skin->identifier . '.zip');
 
         try {
             $this->zipper->make($path)->add($files)->close();

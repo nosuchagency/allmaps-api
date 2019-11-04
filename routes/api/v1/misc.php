@@ -1,5 +1,10 @@
 <?php
 
+use App\Http\Controllers\API\V1\Auth\ForgotPasswordController;
+use App\Http\Controllers\API\V1\Auth\ResetPasswordController;
+use App\Http\Controllers\API\V1\AuthController;
+use App\Http\Controllers\API\V1\ProfileController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -11,13 +16,13 @@
 |
 */
 
-Route::post('login', ['as' => 'login', 'uses' => 'AuthController@login']);
+Route::post('login', [AuthController::class, 'login'])->name('login');
 
-Route::post('/password/email', ['as' => 'password.email', 'uses' => 'Auth\ForgotPasswordController']);
-Route::post('/password/reset', ['as' => 'password.reset', 'uses' => 'Auth\ResetPasswordController']);
+Route::post('/password/email', ForgotPasswordController::class)->name('password.email');
+Route::post('/password/reset', ResetPasswordController::class)->name('password.reset');
 
 Route::group(['middleware' => 'auth'], function () {
-    Route::post('/refresh', ['as' => 'refresh', 'uses' => 'AuthController@refresh']);
-    Route::post('/logout', ['as' => 'logout', 'uses' => 'AuthController@logout']);
-    Route::get('/profile', ['as' => 'profile', 'uses' => 'ProfileController@show']);
+    Route::post('/refresh', [AuthController::class, 'refresh'])->name('refresh');
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
 });

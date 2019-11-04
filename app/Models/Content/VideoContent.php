@@ -2,7 +2,7 @@
 
 namespace App\Models\Content;
 
-use Tightenco\Parental\HasParent;
+use Parental\HasParent;
 
 class VideoContent extends Content
 {

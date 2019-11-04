@@ -29,7 +29,7 @@ class SearchableResolver
      */
     private function instantiatePlugin(string $variant): ?Search
     {
-        $class = config('bb.plugins.namespace') . $variant;
+        $class = config('all-maps.plugins.namespace') . $variant;
 
         if (!class_exists($class)) {
             return null;

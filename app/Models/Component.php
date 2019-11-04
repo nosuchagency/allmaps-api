@@ -17,7 +17,7 @@ class Component extends Model
 {
     use HasRelations, HasCategory, SoftDeletes, HasCreatedBy, HasImage, LogsActivity, SoftCascadeTrait;
 
-    const IMAGE_DIRECTORY_PATH = '/uploads/components';
+    const IMAGE_DIRECTORY_PATH = 'uploads/components';
 
     /**
      * @var array

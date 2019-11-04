@@ -1,5 +1,9 @@
 <?php
 
+use App\Http\Controllers\ContainerPlayersController;
+use App\Http\Controllers\SkinDownloadsController;
+use App\Http\Controllers\WelcomeController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -11,7 +15,7 @@
 |
  */
 
-Route::get('/', ['uses' => 'WelcomeController@index']);
-Route::get('/skins/{skin}/download', ['uses' => 'SkinDownloadsController@download']);
-Route::get('/containers/{container}/player', ['as' => 'container.players.show', 'uses' => 'ContainerPlayersController@show']);
+Route::get('/', [WelcomeController::class, 'index']);
+Route::get('/skins/{skin}/download', [SkinDownloadsController::class, 'download']);
+Route::get('/containers/{container}/player', [ContainerPlayersController::class, 'show'])->name('container.players.show');
 

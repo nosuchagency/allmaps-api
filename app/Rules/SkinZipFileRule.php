@@ -39,7 +39,7 @@ class SkinZipFileRule implements Rule
             return false;
         }
 
-        return $result ? Str::contains($result, config('bb.skins.data_key')) : false;
+        return $result ? Str::contains($result, config('all-maps.skins.data_key')) : false;
     }
 
     /**
@@ -49,6 +49,6 @@ class SkinZipFileRule implements Rule
      */
     public function message()
     {
-        return 'The zip file is either missing the index.html or the data key ' . config('bb.skins.data_key');
+        return 'The zip file is either missing the index.html or the data key ' . config('all-maps.skins.data_key');
     }
 }

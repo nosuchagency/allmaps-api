@@ -16,7 +16,7 @@ class PluginExists implements Rule
      */
     public function passes($attribute, $value)
     {
-        $filepath = config('bb.plugins.directory') . $value . '.php';
+        $filepath = config('all-maps.plugins.directory') . $value . '.php';
 
         if (file_exists($filepath)) {
             return true;

@@ -10,16 +10,19 @@ use App\Scopes\HasContentParentScope;
 use App\Scopes\OrderScope;
 use App\Traits\HasCategory;
 use App\Traits\HasCreatedBy;
+use App\Traits\HasImage;
 use App\Traits\HasRelations;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Parental\HasChildren;
 use Spatie\Activitylog\Traits\LogsActivity;
-use Tightenco\Parental\HasChildren;
 
 class Content extends Model
 {
-    use HasRelations, HasCategory, SoftDeletes, HasCreatedBy, LogsActivity, HasChildren;
+    use HasRelations, HasCategory, SoftDeletes, HasCreatedBy, LogsActivity, HasChildren, HasImage;
+
+    const IMAGE_DIRECTORY_PATH = 'uploads/contents';
 
     /**
      * @var array
@@ -41,7 +44,7 @@ class Content extends Model
     protected $fillable = [
         'name',
         'type',
-        'image',
+        'file',
         'url',
         'text',
         'yt_url',
@@ -138,5 +141,13 @@ class Content extends Model
     public function scopeFilter(Builder $builder, $request)
     {
         return (new IndexFilter($request))->filter($builder);
+    }
+
+    /**
+     * @return string
+     */
+    public function getFileUrl()
+    {
+        return $this->file ? url('/storage/' . $this->file) : null;
     }
 }

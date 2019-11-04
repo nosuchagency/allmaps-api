@@ -19,7 +19,7 @@ class Controller extends BaseController
      */
     protected function paginationNumber()
     {
-        return intval(config('bb.pagination.number'));
+        return intval(config('all-maps.pagination.number'));
     }
 
     /**

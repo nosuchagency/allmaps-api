@@ -2,6 +2,7 @@
 
 namespace App\Traits;
 
+use Exception;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
 
@@ -22,7 +23,7 @@ trait HasImage
 
         try {
             $img = Image::make($image);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return;
         }
 
@@ -62,6 +63,6 @@ trait HasImage
      */
     public function getImageUrl()
     {
-        return $this->image ? url('/storage' . $this->image) : null;
+        return $this->image ? url('/storage/' . $this->image) : null;
     }
 }

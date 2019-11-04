@@ -16,7 +16,7 @@ class Building extends Model
 {
     use HasRelations, SoftDeletes, HasCreatedBy, LogsActivity, HasImage, SoftCascadeTrait;
 
-    const IMAGE_DIRECTORY_PATH = '/uploads/buildings';
+    const IMAGE_DIRECTORY_PATH = 'uploads/buildings';
 
     /**
      * @var array
