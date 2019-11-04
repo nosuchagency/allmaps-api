@@ -46,6 +46,7 @@ class SendEmailFromTemplate implements ShouldQueue
         } catch (FileNotFoundException $exception) {
             Log::error($this->layoutDirectory . 'layout.html could not be found on the file system');
             return;
+                
         }
 
         $email = EmailTemplate::where('name', $this->emailName)->first();
