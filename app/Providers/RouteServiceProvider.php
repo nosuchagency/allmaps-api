@@ -2,33 +2,11 @@
 
 namespace App\Providers;
 
-use App\Models\Beacon;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 
 class RouteServiceProvider extends ServiceProvider
 {
-    /**
-     * This namespace is applied to your controller routes.
-     *
-     * In addition, it is set as the URL generator's root namespace.
-     *
-     * @var string
-     */
-    protected $namespace = 'App\Http\Controllers';
-
-    /**
-     * Define your route model bindings, pattern filters, etc.
-     *
-     * @return void
-     */
-    public function boot()
-    {
-        parent::boot();
-
-        Route::model('beacon', Beacon::class);
-    }
-
     /**
      * Define the routes for the application.
      *
@@ -64,12 +42,10 @@ class RouteServiceProvider extends ServiceProvider
     {
         Route::prefix('v1/user')
             ->middleware(['api', 'auth'])
-            ->namespace($this->namespace . '\API\V1')
             ->group(base_path('routes/api/v1/crud.php'));
 
         Route::prefix('v1/user')
             ->middleware(['api'])
-            ->namespace($this->namespace . '\API\V1')
             ->group(base_path('routes/api/v1/misc.php'));
     }
 
@@ -82,7 +58,6 @@ class RouteServiceProvider extends ServiceProvider
     {
         Route::prefix('v1/token')
             ->middleware(['api', 'auth:token'])
-            ->namespace($this->namespace . '\API\V1')
             ->group(base_path('routes/api/v1/crud.php'));
     }
 }

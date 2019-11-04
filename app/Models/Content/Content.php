@@ -15,9 +15,8 @@ use App\Traits\HasRelations;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\Storage;
+use Parental\HasChildren;
 use Spatie\Activitylog\Traits\LogsActivity;
-use Tightenco\Parental\HasChildren;
 
 class Content extends Model
 {

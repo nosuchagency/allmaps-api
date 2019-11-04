@@ -33,7 +33,7 @@ class PluginsController extends Controller
      */
     public function __invoke()
     {
-        $plugins = collect(glob(config('bb.plugins.directory') . '*.php'))->map(function ($fileName) {
+        $plugins = collect(glob(config('all-maps.plugins.directory') . '*.php'))->map(function ($fileName) {
             $className = basename($fileName, '.php');
 
             $searchable = Searchable::select('id', 'activated')->whereIdentifier($className)->first();

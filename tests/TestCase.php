@@ -79,7 +79,7 @@ abstract class TestCase extends BaseTestCase
 
     protected function createSkinsDirectory()
     {
-        $this->skinsDirectory = public_path(config('bb.skins.directory'));
+        $this->skinsDirectory = public_path(config('all-maps.skins.directory'));
 
         if (!File::isDirectory($this->skinsDirectory)) {
             File::makeDirectory($this->skinsDirectory, 0755, true);

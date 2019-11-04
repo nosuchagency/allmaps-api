@@ -27,7 +27,7 @@ class Skin extends Model
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
-        $this->dataKey = config('bb.skins.data_key');
+        $this->dataKey = config('all-maps.skins.data_key');
     }
 
     /**
@@ -58,7 +58,7 @@ class Skin extends Model
      */
     public function getBasePath()
     {
-        return public_path(config('bb.skins.directory') . $this->identifier);
+        return public_path(config('all-maps.skins.directory') . $this->identifier);
     }
 
     /**

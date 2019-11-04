@@ -69,7 +69,7 @@ class SkinService implements ModelServiceContract
      */
     private function handleZipFile($file, $directory)
     {
-        $path = public_path(config('bb.skins.directory') . $directory);
+        $path = public_path(config('all-maps.skins.directory') . $directory);
         $this->zipper->make($file)->extractTo($path, []);
     }
 }
