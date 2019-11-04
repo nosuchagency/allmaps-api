@@ -1,7 +1,3 @@
-# PHP CircleCI 2.0 configuration file
-#
-# Check https://circleci.com/docs/2.0/language-php/ for more details
-#
 version: 2
 jobs:
   build:
@@ -22,8 +18,8 @@ jobs:
             - v1-dependencies-
 
       - run: cp .env.circle .env
-      - run: composer self-update
-      - run: composer install --no-interaction --no-dev --prefer-dist
+      - run: sudo composer self-update
+      - run: composer install --no-interaction --prefer-dist
       - run: php artisan key:generate
       - run: php artisan jwt:secret
 
@@ -31,16 +27,9 @@ jobs:
           key: v1-dependencies-{{ checksum "composer.json" }}
           paths:
             - ./vendor
-      - restore_cache:
-          keys:
-            - node-v1-{{ checksum "package.json" }}
-            - node-v1-
-      - run: npm install && npm run production
-      - save_cache:
-          key: node-v1-{{ checksum "package.json" }}
-          paths:
-            - node_modules
 
       - run: ./vendor/bin/phpunit
-      - run: if [ $CIRCLE_BRANCH == "development" ]; curl https://envoyer.io/deploy/idSBkB5kYPYg29VgMsX0ARYlkXd5wIvVH0tWiITY; fi
-      - run: if [ $CIRCLE_BRANCH == "master" ]; curl https://envoyer.io/deploy/540CO2nGSKOMMpWUlD1hNCLIWZhXLSdynzd5r8X3; fi
+      - run: if [ $CIRCLE_BRANCH == "development" ]; then curl $DEVELOPMENT_DEPLOY_URL; fi
+      - run: if [ $CIRCLE_BRANCH == "master" ]; then curl $PRODUCTION_DEPLOY_URL; fi
+
+
