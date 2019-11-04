@@ -6,7 +6,7 @@ jobs:
         - development
         - master
     docker:
-      - image: circleci/php:7.2-stretch-node-browsers
+      - image: circleci/php:7.3-stretch-node-browsers
     steps:
       - checkout
       - run: sudo apt update
@@ -29,4 +29,5 @@ jobs:
             - ./vendor
 
       - run: ./vendor/bin/phpunit
+
 
