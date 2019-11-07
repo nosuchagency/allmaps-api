@@ -1,1 +1,1 @@
-# AllMaps
+# AllMaps API
