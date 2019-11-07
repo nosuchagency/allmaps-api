@@ -23,7 +23,7 @@ class TagService
 
         $tag->fill($fields)->save();
 
-        return $tag;
+        return $tag->refresh();
     }
 
     /**
@@ -41,6 +41,6 @@ class TagService
 
         $tag->fill($fields)->save();
 
-        return $tag;
+        return $tag->refresh();
     }
 }

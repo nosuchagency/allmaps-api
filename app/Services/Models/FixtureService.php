@@ -32,9 +32,11 @@ class FixtureService
             $fixture->setImage(Arr::get($attributes, 'image'));
         }
 
-        $fixture->category()->associate(
-            Category::find(Arr::get($attributes, 'category.id'))
-        );
+        if (Arr::has($attributes, 'category')) {
+            $fixture->category()->associate(
+                Category::find(Arr::get($attributes, 'category.id'))
+            );
+        }
 
         $fixture->save();
 
@@ -69,7 +71,7 @@ class FixtureService
             $fixture->setImage(Arr::get($attributes, 'image'));
         }
 
-        if (Arr::has($attributes, 'category.id')) {
+        if (Arr::has($attributes, 'category')) {
             $fixture->category()->associate(
                 Category::find(Arr::get($attributes, 'category.id'))
             );

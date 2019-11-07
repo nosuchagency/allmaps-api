@@ -78,7 +78,7 @@ class BuildingsController extends Controller
      */
     public function store(BuildingRequest $request)
     {
-        $building = $this->buildingService->create($request);
+        $building = $this->buildingService->create($request->validated());
 
         $building->load($building->relationships);
 
@@ -109,7 +109,7 @@ class BuildingsController extends Controller
      */
     public function update(BuildingRequest $request, Building $building)
     {
-        $building = $this->buildingService->update($building, $request);
+        $building = $this->buildingService->update($building, $request->validated());
 
         $building->load($building->relationships);
 

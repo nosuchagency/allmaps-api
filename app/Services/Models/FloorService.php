@@ -48,7 +48,7 @@ class FloorService
 
         $floor->fill($fields);
 
-        if (Arr::has($attributes, 'building.id')) {
+        if (Arr::has($attributes, 'building')) {
             $floor->building()->associate(
                 Building::find(Arr::get($attributes, 'building.id'))
             );

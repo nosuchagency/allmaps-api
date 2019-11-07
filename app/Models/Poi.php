@@ -27,27 +27,11 @@ class Poi extends Model
     ];
 
     /**
-     * The attributes that are mass assignable.
+     * The attributes that aren't mass assignable.
      *
      * @var array
      */
-    protected $fillable = [
-        'name',
-        'description',
-        'image',
-        'type',
-        'stroke',
-        'stroke_type',
-        'stroke_color',
-        'stroke_width',
-        'stroke_opacity',
-        'fill',
-        'fill_color',
-        'fill_opacity',
-        'category_id',
-        'created_by',
-        'category'
-    ];
+    protected $guarded = [];
 
     /**
      * The attributes that should be cast to native types.

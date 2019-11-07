@@ -80,7 +80,7 @@ class ContainersController extends Controller
      */
     public function store(ContainerRequest $request)
     {
-        $container = $this->containerService->create($request);
+        $container = $this->containerService->create($request->validated());
 
         $container->load($container->relationships);
 
@@ -111,7 +111,7 @@ class ContainersController extends Controller
      */
     public function update(ContainerRequest $request, Container $container)
     {
-        $container = $this->containerService->update($container, $request);
+        $container = $this->containerService->update($container, $request->validated());
 
         $container->load($container->relationships);
 

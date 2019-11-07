@@ -3,9 +3,11 @@
 namespace App\Services\Models;
 
 use App\Factories\ContentFactory;
+use App\Models\Category;
 use App\Models\Content\Content;
+use App\Models\Folder;
 use App\Models\Tag;
-use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 
 class ContentService
 {
@@ -23,24 +25,46 @@ class ContentService
     }
 
     /**
-     * @param Request $request
+     * @param array $attributes
      *
      * @return Content
      */
-    public function create(Request $request): Content
+    public function create(array $attributes): Content
     {
-        $content = $this->contentFactory->make($request->get('type'));
+        $content = $this->contentFactory->make(Arr::get($attributes, 'type'));
+
+        $fields = Arr::only($attributes, [
+            'name',
+            'type',
+            'file',
+            'url',
+            'text',
+            'yt_url',
+            'order',
+        ]);
+
+        $content->fill($fields);
 
         $content->folder()->associate(
-            $request->input('folder.id')
+            Folder::find(Arr::get($attributes, 'folder.id'))
         );
 
-        $content->fill($request->only($content->getFillable()));
-        $content->setImage($request->get('image'));
+        if (Arr::has($attributes, 'image')) {
+            $content->setImage(Arr::get($attributes, 'image'));
+        }
+
+        if (Arr::has($attributes, 'category')) {
+            $content->category()->associate(
+                Category::find(Arr::get($attributes, 'category.id'))
+            );
+        }
+
         $content->save();
 
-        foreach ($request->get('tags', []) as $tag) {
-            $content->tags()->attach(Tag::find($tag['id']));
+        if (Arr::has($attributes, 'tags')) {
+            foreach ($attributes['tags'] as $tag) {
+                $content->tags()->attach(Tag::find($tag['id']));
+            }
         }
 
         return $content->refresh();
@@ -48,27 +72,48 @@ class ContentService
 
     /**
      * @param Content $content
-     * @param Request $request
+     * @param array $attributes
      *
      * @return Content
      */
-    public function update(Content $content, Request $request): Content
+    public function update(Content $content, array $attributes): Content
     {
-        $content->fill($request->only($content->getFillable()));
-        $content->setImage($request->get('image'));
+        $fields = Arr::only($attributes, [
+            'name',
+            'type',
+            'file',
+            'url',
+            'text',
+            'yt_url',
+            'order',
+        ]);
 
-        if ($request->has('folder')) {
+        $content->fill($fields);
+
+        if (Arr::has($attributes, 'image')) {
+            $content->setImage(Arr::get($attributes, 'image'));
+        }
+
+        if (Arr::has($attributes, 'folder')) {
             $content->folder()->associate(
-                $request->input('folder.id')
+                Folder::find(Arr::get($attributes, 'folder.id'))
+            );
+        }
+
+        if (Arr::has($attributes, 'category')) {
+            $content->category()->associate(
+                Category::find(Arr::get($attributes, 'category.id'))
             );
         }
 
         $content->save();
 
-        $content->tags()->sync([]);
+        if (Arr::has($attributes, 'tags')) {
+            $content->tags()->sync([]);
 
-        foreach ($request->get('tags', []) as $tag) {
-            $content->tags()->attach(Tag::find($tag['id']));
+            foreach ($attributes['tags'] as $tag) {
+                $content->tags()->attach(Tag::find($tag['id']));
+            }
         }
 
         return $content->refresh();

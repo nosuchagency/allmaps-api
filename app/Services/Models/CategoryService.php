@@ -23,7 +23,7 @@ class CategoryService
 
         $category->fill($fields)->save();
 
-        return $category;
+        return $category->refresh();
     }
 
     /**
@@ -41,6 +41,6 @@ class CategoryService
 
         $category->fill($fields)->save();
 
-        return $category;
+        return $category->refresh();
     }
 }

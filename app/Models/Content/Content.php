@@ -37,24 +37,11 @@ class Content extends Model
     ];
 
     /**
-     * The attributes that are mass assignable.
+     * The attributes that aren't mass assignable.
      *
      * @var array
      */
-    protected $fillable = [
-        'name',
-        'type',
-        'file',
-        'url',
-        'text',
-        'yt_url',
-        'order',
-        'folder_id',
-        'content_id',
-        'created_by',
-        'category_id',
-        'category'
-    ];
+    protected $guarded = [];
 
     /**
      * The attributes that should be mutated to dates.

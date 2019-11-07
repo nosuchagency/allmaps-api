@@ -28,22 +28,11 @@ class Place extends Model
     ];
 
     /**
-     * The attributes that are mass assignable.
+     * The attributes that aren't mass assignable.
      *
      * @var array
      */
-    protected $fillable = [
-        'name',
-        'address',
-        'postcode',
-        'city',
-        'latitude',
-        'longitude',
-        'category_id',
-        'created_by',
-        'category',
-        'activated'
-    ];
+    protected $guarded = [];
 
     /**
      * The attributes that should be cast to native types.
