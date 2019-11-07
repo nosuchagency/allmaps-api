@@ -60,9 +60,9 @@ class RulesDeleteTest extends TestCase
     /** @test */
     public function an_authenticated_user_with_delete_permission_can_delete_rules()
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['beacons.delete', 'containers.delete'])
-        );
+        $role = $this->createRoleWithPermissions(['rule:delete']);
+
+        $this->signIn(null, $role);
 
         $this->deleteJson(route('rules.destroy', [
             'container' => $this->container,

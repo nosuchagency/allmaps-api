@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Rules\RequiredIdRule;
+use App\Models\Menu;
 use Illuminate\Foundation\Http\FormRequest;
 
 class MenuRequest extends FormRequest
@@ -14,7 +14,11 @@ class MenuRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        if ($this->method() === 'POST') {
+            return $this->user()->can('create', Menu::class);
+        }
+
+        return $this->user()->can('update', Menu::class);
     }
 
     /**
@@ -25,7 +29,7 @@ class MenuRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required'
+            'name' => ['required', 'max:255'],
         ];
     }
 }

@@ -29,11 +29,6 @@ class TokensController extends Controller
      */
     public function __construct(TokenService $tokenService)
     {
-        $this->middleware('permission:tokens.create')->only(['store']);
-        $this->middleware('permission:tokens.read')->only(['index', 'show', 'paginated']);
-        $this->middleware('permission:tokens.update')->only(['update']);
-        $this->middleware('permission:tokens.delete')->only(['destroy', 'bulkDestroy']);
-
         $this->tokenService = $tokenService;
     }
 
@@ -41,9 +36,12 @@ class TokensController extends Controller
      * @param Request $request
      *
      * @return JsonResponse
+     * @throws Exception
      */
     public function index(Request $request)
     {
+        $this->authorize('viewAny', Token::class);
+
         $tokens = Token::query()
             ->filter($request)
             ->get();
@@ -55,9 +53,12 @@ class TokensController extends Controller
      * @param Request $request
      *
      * @return AnonymousResourceCollection
+     * @throws Exception
      */
     public function paginated(Request $request)
     {
+        $this->authorize('viewAny', Token::class);
+
         $tokens = Token::query()
             ->filter($request)
             ->jsonPaginate($this->paginationNumber());
@@ -69,10 +70,11 @@ class TokensController extends Controller
      * @param TokenRequest $request
      *
      * @return JsonResponse
+     * @throws Exception
      */
     public function store(TokenRequest $request)
     {
-        $token = $this->tokenService->create($request);
+        $token = $this->tokenService->create($request->validated());
 
         return $this->json(new TokenResource($token), Response::HTTP_CREATED);
     }
@@ -81,9 +83,12 @@ class TokensController extends Controller
      * @param Token $token
      *
      * @return JsonResponse
+     * @throws Exception
      */
     public function show(Token $token)
     {
+        $this->authorize('view', Token::class);
+
         return $this->json(new TokenResource($token), Response::HTTP_OK);
     }
 
@@ -92,10 +97,11 @@ class TokensController extends Controller
      * @param Token $token
      *
      * @return JsonResponse
+     * @throws Exception
      */
     public function update(TokenRequest $request, Token $token)
     {
-        $token = $this->tokenService->update($token, $request);
+        $token = $this->tokenService->update($token, $request->validated());
 
         return $this->json(new TokenResource($token), Response::HTTP_OK);
     }
@@ -108,6 +114,8 @@ class TokensController extends Controller
      */
     public function destroy(Token $token)
     {
+        $this->authorize('delete', Token::class);
+
         $token->delete();
 
         return $this->json(null, Response::HTTP_OK);
@@ -117,9 +125,12 @@ class TokensController extends Controller
      * @param BulkDeleteRequest $request
      *
      * @return JsonResponse
+     * @throws Exception
      */
     public function bulkDestroy(BulkDeleteRequest $request)
     {
+        $this->authorize('delete', Token::class);
+
         collect($request->get('items'))->each(function ($token) {
             if ($tokenToDelete = Token::find($token['id'])) {
                 $tokenToDelete->delete();

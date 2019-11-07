@@ -2,53 +2,90 @@
 
 namespace App\Services\Models;
 
-use App\Contracts\ModelServiceContract;
+use App\Models\Category;
+use App\Models\Role;
 use App\Models\Tag;
 use App\Models\User;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 
-class UserService implements ModelServiceContract
+class UserService
 {
     /**
-     * @param Request $request
+     * @param array $attributes
      *
-     * @return Model
+     * @return user
      */
-    public function create(Request $request)
+    public function create(array $attributes): User
     {
         $user = new User();
-        $user->fill($request->only($user->getFillable()));
-        $user->password = $request->get('password');
-        $user->syncRoles($request->input('role.id'));
+
+        $fields = Arr::only($attributes, [
+            'name',
+            'email',
+            'password',
+            'locale',
+            'description'
+        ]);
+
+        $user->fill($fields);
+
+        $user->role()->associate(
+            Role::find(Arr::get($attributes, 'role.id'))
+        );
+
+        $user->category()->associate(
+            Category::find(Arr::get($attributes, 'category.id'))
+        );
+
         $user->save();
 
-        foreach ($request->get('tags', []) as $tag) {
-            $user->tags()->attach(Tag::find($tag['id']));
+        if (Arr::has($attributes, 'tags')) {
+            foreach ($attributes['tags'] as $tag) {
+                $user->tags()->attach(Tag::find($tag['id']));
+            }
         }
 
         return $user->refresh();
     }
 
     /**
-     * @param Request $request
-     * @param Model $user
+     * @param User $user
+     * @param array $attributes
      *
-     * @return Model
+     * @return User
      */
-    public function update(Model $user, Request $request)
+    public function update(User $user, array $attributes): User
     {
-        $user->fill($request->only($user->getFillable()));
-        $user->syncRoles($request->input('role.id'));
+        $fields = Arr::only($attributes, [
+            'name',
+            'email',
+            'password',
+            'locale',
+            'description'
+        ]);
 
-        if ($request->filled('password')) {
-            $user->password = $request->get('password');
+        $user->fill($fields);
+
+        if (Arr::has($attributes, 'role.id')) {
+            $user->role()->associate(
+                Role::find(Arr::get($attributes, 'role.id'))
+            );
+        }
+
+        if (Arr::has($attributes, 'category.id')) {
+            $user->category()->associate(
+                Category::find(Arr::get($attributes, 'category.id'))
+            );
         }
 
         $user->save();
 
-        foreach ($request->get('tags', []) as $tag) {
-            $user->tags()->attach(Tag::find($tag['id']));
+        if (Arr::has($attributes, 'tags')) {
+            $user->tags()->sync([]);
+
+            foreach ($attributes['tags'] as $tag) {
+                $user->tags()->attach(Tag::find($tag['id']));
+            }
         }
 
         return $user->refresh();

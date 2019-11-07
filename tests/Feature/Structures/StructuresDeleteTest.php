@@ -24,15 +24,15 @@ class StructuresDeleteTest extends TestCase
         $structure = factory(Structure::class)->create();
         $this->deleteJson(route('structures.destroy', ['structure' => $structure]))->assertStatus(403);
 
-        $this->postJson(route('structures.bulk-destroy', ['items' => []]))->assertStatus(403);
+        $this->postJson(route('structures.bulk-destroy'), ['items' => []])->assertStatus(403);
     }
 
     /** @test */
     public function an_authenticated_user_with_delete_permission_can_delete_specific_structure()
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['floors.delete'])
-        );
+        $role = $this->createRoleWithPermissions(['structure:delete']);
+
+        $this->signIn(null, $role);
 
         $structure = factory(Structure::class)->create();
         $this->deleteJson(route('structures.destroy', ['structure' => $structure]))->assertOk();
@@ -42,9 +42,9 @@ class StructuresDeleteTest extends TestCase
     /** @test */
     public function an_authenticated_user_with_delete_permission_can_delete_structures_in_bulk()
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['floors.delete'])
-        );
+        $role = $this->createRoleWithPermissions(['structure:delete']);
+
+        $this->signIn(null, $role);
 
         $structures = factory(Structure::class, 5)->create();
         $this->assertCount(5, Structure::all());

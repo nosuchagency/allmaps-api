@@ -51,9 +51,9 @@ class MenuItemsUpdateTest extends TestCase
      */
     protected function update($menuItem, $attributes = [])
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['menus.update'])
-        );
+        $role = $this->createRoleWithPermissions(['menu-item:update']);
+
+        $this->signIn(null, $role);
 
         return $this->putJson(route('menu-items.update', ['menu_item' => $menuItem]), $this->validFields($attributes));
     }

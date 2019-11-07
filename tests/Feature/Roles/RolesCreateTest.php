@@ -3,8 +3,8 @@
 namespace Tests\Feature\Roles;
 
 use App\Models\Role;
+use Illuminate\Foundation\Testing\TestResponse;
 use Illuminate\Foundation\Testing\WithFaker;
-use Spatie\Permission\Models\Permission;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -49,13 +49,13 @@ class RolesCreateTest extends TestCase
     /**
      * @param array $attributes
      *
-     * @return \Illuminate\Foundation\Testing\TestResponse
+     * @return TestResponse
      */
     protected function create($attributes = [])
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['roles.create'])
-        );
+        $role = $this->createRoleWithPermissions(['role:create']);
+
+        $this->signIn(null, $role);
 
         return $this->postJson(route('roles.store'), $this->validFields($attributes));
     }
@@ -69,7 +69,7 @@ class RolesCreateTest extends TestCase
     {
         return array_merge([
             'name' => $this->faker->name,
-            'permissions' => factory(Permission::class, 2)->create()
+            'permissions' => []
         ], $overrides);
     }
 }

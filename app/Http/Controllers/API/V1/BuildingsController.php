@@ -31,11 +31,6 @@ class BuildingsController extends Controller
      */
     public function __construct(BuildingService $buildingService)
     {
-        $this->middleware('permission:buildings.create')->only(['store']);
-        $this->middleware('permission:buildings.read')->only(['index', 'paginated', 'show']);
-        $this->middleware('permission:buildings.update')->only(['update']);
-        $this->middleware('permission:buildings.delete')->only(['destroy', 'bulkDestroy']);
-
         $this->buildingService = $buildingService;
     }
 
@@ -43,9 +38,12 @@ class BuildingsController extends Controller
      * @param Request $request
      *
      * @return JsonResponse
+     * @throws Exception
      */
     public function index(Request $request)
     {
+        $this->authorize('viewAny', Building::class);
+
         $buildings = Building::query()
             ->withRelations($request)
             ->filter($request)
@@ -58,9 +56,12 @@ class BuildingsController extends Controller
      * @param Request $request
      *
      * @return AnonymousResourceCollection
+     * @throws Exception
      */
     public function paginated(Request $request)
     {
+        $this->authorize('viewAny', Building::class);
+
         $buildings = Building::query()
             ->withRelations($request)
             ->filter($request)
@@ -73,6 +74,7 @@ class BuildingsController extends Controller
      * @param BuildingRequest $request
      *
      * @return JsonResponse
+     * @throws Exception
      */
     public function store(BuildingRequest $request)
     {
@@ -87,9 +89,12 @@ class BuildingsController extends Controller
      * @param Building $building
      *
      * @return JsonResponse
+     * @throws Exception
      */
     public function show(Building $building)
     {
+        $this->authorize('view', Building::class);
+
         $building->load($building->relationships);
 
         return $this->json(new BuildingResource($building), Response::HTTP_OK);
@@ -100,6 +105,7 @@ class BuildingsController extends Controller
      * @param Building $building
      *
      * @return JsonResponse
+     * @throws Exception
      */
     public function update(BuildingRequest $request, Building $building)
     {
@@ -118,6 +124,8 @@ class BuildingsController extends Controller
      */
     public function destroy(Building $building)
     {
+        $this->authorize('delete', Building::class);
+
         $building->delete();
 
         return $this->json(null, Response::HTTP_OK);
@@ -127,9 +135,12 @@ class BuildingsController extends Controller
      * @param BulkDeleteRequest $request
      *
      * @return JsonResponse
+     * @throws Exception
      */
     public function bulkDestroy(BulkDeleteRequest $request)
     {
+        $this->authorize('delete', Building::class);
+
         collect($request->get('items'))->each(function ($building) {
             if ($buildingToDelete = Building::find($building['id'])) {
                 $buildingToDelete->delete();

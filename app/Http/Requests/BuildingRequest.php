@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Building;
 use App\Rules\RequiredIdRule;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -14,7 +15,11 @@ class BuildingRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        if ($this->method() === 'POST') {
+            return $this->user()->can('create', Building::class);
+        }
+
+        return $this->user()->can('update', Building::class);
     }
 
     /**
@@ -25,10 +30,10 @@ class BuildingRequest extends FormRequest
     public function rules()
     {
         $rules = [
-            'name' => 'required',
-            'image' => '',
-            'latitude' => 'nullable|numeric',
-            'longitude' => 'nullable|numeric',
+            'name' => ['required', 'max:255'],
+            'image' => [],
+            'latitude' => ['nullable', 'numeric'],
+            'longitude' => ['nullable', 'numeric'],
             'menu' => ['nullable', new RequiredIdRule],
             'menu.id' => 'exists:menus,id',
         ];

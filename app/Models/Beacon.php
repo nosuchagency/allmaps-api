@@ -25,24 +25,11 @@ class Beacon extends Model
     ];
 
     /**
-     * The attributes that are mass assignable.
+     * The attributes that aren't mass assignable.
      *
      * @var array
      */
-    protected $fillable = [
-        'name',
-        'description',
-        'identifier',
-        'proximity_uuid',
-        'major',
-        'minor',
-        'namespace',
-        'instance_id',
-        'url',
-        'category_id',
-        'category',
-        'created_by'
-    ];
+    protected $guarded = [];
 
     /**
      * The attributes that should be mutated to dates.

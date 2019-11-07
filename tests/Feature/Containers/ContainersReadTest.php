@@ -31,9 +31,9 @@ class ContainersReadTest extends TestCase
     /** @test */
     public function an_authenticated_user_with_read_permission_can_view_containers()
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['containers.read'])
-        );
+        $role = $this->createRoleWithPermissions(['container:read']);
+
+        $this->signIn(null, $role);
 
         $this->getJson(route('containers.index'))->assertOk();
     }
@@ -41,9 +41,9 @@ class ContainersReadTest extends TestCase
     /** @test */
     public function an_authenticated_user_with_read_permission_can_view_containers_paginated()
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['containers.read'])
-        );
+        $role = $this->createRoleWithPermissions(['container:read']);
+
+        $this->signIn(null, $role);
 
         $this->getJson(route('containers.paginated'))->assertOk();
     }
@@ -51,9 +51,9 @@ class ContainersReadTest extends TestCase
     /** @test */
     public function an_authenticated_user_with_read_permission_can_view_a_specific_container()
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['containers.read'])
-        );
+        $role = $this->createRoleWithPermissions(['container:read']);
+
+        $this->signIn(null, $role);
 
         $container = factory(Container::class)->create();
 

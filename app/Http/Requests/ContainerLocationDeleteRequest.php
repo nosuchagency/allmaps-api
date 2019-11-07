@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Container;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ContainerLocationDeleteRequest extends FormRequest
@@ -13,7 +14,7 @@ class ContainerLocationDeleteRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return $this->user()->can('delete', Container::class);
     }
 
     /**

@@ -50,9 +50,9 @@ class StructuresUpdateTest extends TestCase
      */
     protected function update($structure, $attributes = [])
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['floors.update'])
-        );
+        $role = $this->createRoleWithPermissions(['structure:update']);
+
+        $this->signIn(null, $role);
 
         return $this->putJson(route('structures.update', ['structure' => $structure]), $this->validFields($attributes));
     }

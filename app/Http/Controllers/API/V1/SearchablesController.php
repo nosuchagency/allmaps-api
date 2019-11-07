@@ -7,36 +7,21 @@ use App\Http\Requests\SearchableRequest;
 use App\Http\Resources\SearchableResource;
 use App\Models\Searchable;
 use App\Plugins\Search\SearchableResolver;
+use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 
 class SearchablesController extends Controller
 {
 
     /**
-     * @var SearchableResolver
-     */
-    protected $resolver;
-
-    /**
-     * SearchablesController constructor.
-     *
-     * @param SearchableResolver $resolver
-     */
-    public function __construct(SearchableResolver $resolver)
-    {
-        $this->middleware('permission:searchables.create')->only(['store']);
-        $this->middleware('permission:searchables.read')->only(['index', 'show']);
-        $this->middleware('permission:searchables.update')->only(['update']);
-        $this->middleware('permission:searchables.delete')->only(['destroy']);
-
-        $this->resolver = $resolver;
-    }
-
-    /**
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
+     * @throws Exception
      */
     public function index()
     {
+        $this->authorize('viewAny', Searchable::class);
+
         $searchables = Searchable::active()->get();
 
         return $this->json(SearchableResource::collection($searchables), Response::HTTP_OK);
@@ -45,7 +30,8 @@ class SearchablesController extends Controller
     /**
      * @param SearchableRequest $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
+     * @throws Exception
      */
     public function store(SearchableRequest $request)
     {
@@ -57,10 +43,13 @@ class SearchablesController extends Controller
     /**
      * @param Searchable $searchable
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
+     * @throws Exception
      */
     public function show(Searchable $searchable)
     {
+        $this->authorize('view', Searchable::class);
+
         return $this->json(new SearchableResource($searchable), Response::HTTP_OK);
     }
 
@@ -68,7 +57,8 @@ class SearchablesController extends Controller
      * @param SearchableRequest $request
      * @param Searchable $searchable
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
+     * @throws Exception
      */
     public function update(SearchableRequest $request, Searchable $searchable)
     {
@@ -80,11 +70,13 @@ class SearchablesController extends Controller
     /**
      * @param Searchable $searchable
      *
-     * @return \Illuminate\Http\JsonResponse
-     * @throws \Exception
+     * @return JsonResponse
+     * @throws Exception
      */
     public function destroy(Searchable $searchable)
     {
+        $this->authorize('delete', Searchable::class);
+
         $searchable->delete();
 
         return $this->json(null, Response::HTTP_OK);

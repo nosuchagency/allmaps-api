@@ -24,15 +24,15 @@ class HitsDeleteTest extends TestCase
         $hit = factory(Hit::class)->create();
         $this->deleteJson(route('hits.destroy', ['hit' => $hit]))->assertStatus(403);
 
-        $this->postJson(route('hits.bulk-destroy', ['items' => []]))->assertStatus(403);
+        $this->postJson(route('hits.bulk-destroy'), ['items' => []])->assertStatus(403);
     }
 
     /** @test */
     public function an_authenticated_user_with_delete_permission_can_delete_specific_hit()
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['hits.delete'])
-        );
+        $role = $this->createRoleWithPermissions(['hit:delete']);
+
+        $this->signIn(null, $role);
 
         $hit = factory(Hit::class)->create();
         $this->deleteJson(route('hits.destroy', ['hit' => $hit]))->assertOk();
@@ -42,9 +42,9 @@ class HitsDeleteTest extends TestCase
     /** @test */
     public function an_authenticated_user_with_delete_permission_can_delete_hits_in_bulk()
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['hits.delete'])
-        );
+        $role = $this->createRoleWithPermissions(['hit:delete']);
+
+        $this->signIn(null, $role);
 
         $hits = factory(Hit::class, 5)->create();
         $this->assertCount(5, Hit::all());

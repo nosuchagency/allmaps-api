@@ -6,6 +6,7 @@ use App\Models\Beacon;
 use App\Models\Container;
 use App\Models\Rule;
 use App\Weekday;
+use Illuminate\Foundation\Testing\TestResponse;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -50,8 +51,9 @@ class RulesCreateTest extends TestCase
     /** @test */
     public function an_authenticated_user_with_create_permission_can_create_rules()
     {
-        $this->create()->assertStatus(201);
+        $this->withoutExceptionHandling();
 
+        $this->create()->assertStatus(201);
         $this->assertCount(1, Rule::all());
     }
 
@@ -84,13 +86,13 @@ class RulesCreateTest extends TestCase
     /**
      * @param array $attributes
      *
-     * @return \Illuminate\Foundation\Testing\TestResponse
+     * @return TestResponse
      */
     protected function create($attributes = [])
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['beacons.create', 'containers.create'])
-        );
+        $role = $this->createRoleWithPermissions(['rule:create']);
+
+        $this->signIn(null, $role);
 
         return $this->postJson(route('rules.store', [
             'container' => $this->container,

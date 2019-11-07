@@ -8,7 +8,10 @@ use App\Http\Requests\ComponentRequest;
 use App\Http\Resources\ComponentResource;
 use App\Models\Component;
 use App\Services\Models\ComponentService;
+use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 
 class ComponentsController extends Controller
@@ -26,21 +29,19 @@ class ComponentsController extends Controller
      */
     public function __construct(ComponentService $componentService)
     {
-        $this->middleware('permission:components.create')->only(['store']);
-        $this->middleware('permission:components.read')->only(['index', 'paginated', 'show']);
-        $this->middleware('permission:components.update')->only(['update']);
-        $this->middleware('permission:components.delete')->only(['destroy', 'bulkDestroy']);
-
         $this->componentService = $componentService;
     }
 
     /**
      * @param Request $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
+     * @throws Exception
      */
     public function index(Request $request)
     {
+        $this->authorize('viewAny', Component::class);
+
         $components = Component::query()
             ->withRelations($request)
             ->filter($request)
@@ -52,10 +53,13 @@ class ComponentsController extends Controller
     /**
      * @param Request $request
      *
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     * @return AnonymousResourceCollection
+     * @throws Exception
      */
     public function paginated(Request $request)
     {
+        $this->authorize('viewAny', Component::class);
+
         $components = Component::query()
             ->withRelations($request)
             ->filter($request)
@@ -67,11 +71,12 @@ class ComponentsController extends Controller
     /**
      * @param ComponentRequest $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
+     * @throws Exception
      */
     public function store(ComponentRequest $request)
     {
-        $component = $this->componentService->create($request);
+        $component = $this->componentService->create($request->validated());
 
         $component->load($component->relationships);
 
@@ -81,10 +86,13 @@ class ComponentsController extends Controller
     /**
      * @param Component $component
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
+     * @throws Exception
      */
     public function show(Component $component)
     {
+        $this->authorize('view', Component::class);
+
         $component->load($component->relationships);
 
         return $this->json(new ComponentResource($component), Response::HTTP_OK);
@@ -94,11 +102,12 @@ class ComponentsController extends Controller
      * @param ComponentRequest $request
      * @param Component $component
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
+     * @throws Exception
      */
     public function update(ComponentRequest $request, Component $component)
     {
-        $component = $this->componentService->update($component, $request);
+        $component = $this->componentService->update($component, $request->validated());
 
         $component->load($component->relationships);
 
@@ -108,11 +117,13 @@ class ComponentsController extends Controller
     /**
      * @param Component $component
      *
-     * @return \Illuminate\Http\JsonResponse
-     * @throws \Exception
+     * @return JsonResponse
+     * @throws Exception
      */
     public function destroy(Component $component)
     {
+        $this->authorize('delete', Component::class);
+
         $component->delete();
 
         return $this->json(null, Response::HTTP_OK);
@@ -121,10 +132,13 @@ class ComponentsController extends Controller
     /**
      * @param BulkDeleteRequest $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
+     * @throws Exception
      */
     public function bulkDestroy(BulkDeleteRequest $request)
     {
+        $this->authorize('delete', Component::class);
+
         collect($request->get('items'))->each(function ($component) {
             if ($componentToDelete = Component::find($component['id'])) {
                 $componentToDelete->delete();

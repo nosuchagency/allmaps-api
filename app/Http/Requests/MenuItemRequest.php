@@ -18,7 +18,11 @@ class MenuItemRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        if ($this->method() === 'POST') {
+            return $this->user()->can('create', MenuItem::class);
+        }
+
+        return $this->user()->can('update', MenuItem::class);
     }
 
     /**
@@ -29,7 +33,7 @@ class MenuItemRequest extends FormRequest
     public function rules()
     {
         $rules = [
-            'name' => 'required',
+            'name' => ['required', 'max:255'],
             'order' => 'nullable|integer',
             'shown' => 'boolean',
             'type' => [

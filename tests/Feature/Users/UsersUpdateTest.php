@@ -64,15 +64,27 @@ class UsersUpdateTest extends TestCase
     }
 
     /** @test */
-    public function it_does_not_require_a_password()
+    public function the_role_cant_be_empty_if_present()
     {
-        $user = factory(User::class)->create([
-            'password' => $this->password
-        ]);
+        $user = factory(User::class)->create();
 
-        $this->update($user, ['password' => null])->assertOk();
+        $this->update($user, ['role' => []])->assertJsonValidationErrors('role');
+    }
 
-        $this->assertTrue(Hash::check($this->password, $user->password));
+    /** @test */
+    public function the_role_id_is_required_if_role_object_is_filled()
+    {
+        $user = factory(User::class)->create();
+
+        $this->update($user, ['role' => ['name' => 'test']])->assertJsonValidationErrors('role.id');
+    }
+
+    /** @test */
+    public function the_role_id_needs_to_belong_to_an_existing_role()
+    {
+        $user = factory(User::class)->create();
+
+        $this->update($user, ['role' => ['id' => 10]])->assertJsonValidationErrors('role.id');
     }
 
     /**
@@ -83,9 +95,9 @@ class UsersUpdateTest extends TestCase
      */
     protected function update($user, $attributes = [])
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['users.update'])
-        );
+        $role = $this->createRoleWithPermissions(['user:update']);
+
+        $this->signIn(null, $role);
 
         return $this->putJson(route('users.update', ['user' => $user]), $this->validFields($attributes));
     }
@@ -100,6 +112,7 @@ class UsersUpdateTest extends TestCase
         return array_merge([
             'name' => $this->faker->name,
             'password' => $this->password,
+            'password_confirmation' => $this->password,
             'locale' => $this->faker->randomElement(Locale::LOCALES),
             'email' => $this->faker->email,
             'role' => factory(Role::class)->create(),

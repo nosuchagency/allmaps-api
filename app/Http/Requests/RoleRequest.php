@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Role;
 use Illuminate\Foundation\Http\FormRequest;
 
 class RoleRequest extends FormRequest
@@ -13,7 +14,11 @@ class RoleRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        if ($this->method() === 'POST') {
+            return $this->user()->can('create', Role::class);
+        }
+
+        return $this->user()->can('update', Role::class);
     }
 
     /**
@@ -24,13 +29,13 @@ class RoleRequest extends FormRequest
     public function rules()
     {
         $rules = [
-            'name' => 'sometimes|required',
+            'name' => ['sometimes', 'required', 'max:255'],
             'permissions' => 'array',
             'permissions.*.id' => 'required|exists:permissions,id'
         ];
 
         if ($this->method() === 'POST') {
-            $rules['name'] = 'required';
+            $rules['name'] = ['required', 'max:255'];
         }
 
         return $rules;

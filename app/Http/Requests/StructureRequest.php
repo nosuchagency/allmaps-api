@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Structure;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StructureRequest extends FormRequest
@@ -13,7 +14,11 @@ class StructureRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        if ($this->method() === 'POST') {
+            return $this->user()->can('create', Structure::class);
+        }
+
+        return $this->user()->can('update', Structure::class);
     }
 
     /**

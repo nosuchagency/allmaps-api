@@ -12,7 +12,7 @@ class TokenTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function a_token_has_actions()
+    public function a_token_have_actions()
     {
         $token = factory(Token::class)->create();
         $this->assertInstanceOf(Collection::class, $token->actions);

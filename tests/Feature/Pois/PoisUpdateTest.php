@@ -54,9 +54,9 @@ class PoisUpdateTest extends TestCase
      */
     protected function update($poi, $attributes = [])
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['pois.update'])
-        );
+        $role = $this->createRoleWithPermissions(['poi:update']);
+
+        $this->signIn(null, $role);
 
         return $this->putJson(route('pois.update', ['poi' => $poi]), $this->validFields($attributes));
     }

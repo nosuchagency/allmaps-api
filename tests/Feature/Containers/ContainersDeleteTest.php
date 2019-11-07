@@ -24,15 +24,15 @@ class ContainersDeleteTest extends TestCase
         $container = factory(Container::class)->create();
         $this->deleteJson(route('containers.destroy', ['container' => $container]))->assertStatus(403);
 
-        $this->postJson(route('containers.bulk-destroy', ['items' => []]))->assertStatus(403);
+        $this->postJson(route('containers.bulk-destroy'), ['items' => []])->assertStatus(403);
     }
 
     /** @test */
     public function an_authenticated_user_with_delete_permission_can_delete_specific_container()
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['containers.delete'])
-        );
+        $role = $this->createRoleWithPermissions(['container:delete']);
+
+        $this->signIn(null, $role);
 
         $container = factory(Container::class)->create();
         $this->deleteJson(route('containers.destroy', ['container' => $container]))->assertOk();
@@ -42,9 +42,9 @@ class ContainersDeleteTest extends TestCase
     /** @test */
     public function an_authenticated_user_with_delete_permission_can_delete_containers_in_bulk()
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['containers.delete'])
-        );
+        $role = $this->createRoleWithPermissions(['container:delete']);
+
+        $this->signIn(null, $role);
 
         $containers = factory(Container::class, 5)->create();
         $this->assertCount(5, Container::all());

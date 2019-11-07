@@ -3,6 +3,7 @@
 namespace Tests\Feature\Floors;
 
 use App\Models\Floor;
+use Illuminate\Foundation\Testing\TestResponse;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -45,13 +46,13 @@ class FloorsUpdateTest extends TestCase
      * @param $floor
      * @param array $attributes
      *
-     * @return \Illuminate\Foundation\Testing\TestResponse
+     * @return TestResponse
      */
     protected function update($floor, $attributes = [])
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['floors.update'])
-        );
+        $role = $this->createRoleWithPermissions(['floor:update']);
+
+        $this->signIn(null, $role);
 
         return $this->putJson(route('floors.update', ['floor' => $floor]), $this->validFields($attributes));
     }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\BeaconProvider;
 use Illuminate\Foundation\Http\FormRequest;
 
 class BeaconProviderRequest extends FormRequest
@@ -13,7 +14,11 @@ class BeaconProviderRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        if ($this->method() === 'POST') {
+            return $this->user()->can('create', BeaconProvider::class);
+        }
+
+        return $this->user()->can('update', BeaconProvider::class);
     }
 
     /**
@@ -23,12 +28,34 @@ class BeaconProviderRequest extends FormRequest
      */
     public function rules()
     {
+        if ($this->method() === 'POST') {
+            return $this->rulesForCreating();
+        }
+
+        return $this->rulesForUpdating();
+    }
+
+    /**
+     * @return array
+     */
+    public function rulesForCreating()
+    {
         return [
-            'name' => 'required|max:255',
-            'type' => 'required|in:kontakt,estimote',
-            'meta.api_key' => 'required_if:type,kontakt',
-            'meta.app_id' => 'required_if:type,estimote',
-            'meta.app_token' => 'required_if:type,estimote'
+            'name' => ['required', 'max:255'],
+            'type' => ['required', 'in:kontakt,estimote'],
+            'meta.api_key' => ['required_if:type,kontakt'],
+            'meta.app_id' => ['required_if:type,estimote'],
+            'meta.app_token' => ['required_if:type,estimote']
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function rulesForUpdating()
+    {
+        return [
+            'name' => ['filled', 'max:255'],
         ];
     }
 }

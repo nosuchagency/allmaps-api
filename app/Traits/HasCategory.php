@@ -3,13 +3,12 @@
 namespace App\Traits;
 
 use App\Models\Category;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 trait HasCategory
 {
     /**
-     * Set the category.
-     *
-     * @param  mixed $value
+     * @param mixed $value
      *
      * @return void
      */
@@ -19,7 +18,7 @@ trait HasCategory
     }
 
     /**
-     * Get the category that owns the beacon
+     * @return BelongsTo
      */
     public function category()
     {

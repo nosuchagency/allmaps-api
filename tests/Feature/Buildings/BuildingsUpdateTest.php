@@ -22,7 +22,7 @@ class BuildingsUpdateTest extends TestCase
     }
 
     /** @test */
-    public function an_authenticated_user_without_create_permission_cannot_update_buildings()
+    public function an_authenticated_user_without_update_permission_cannot_update_buildings()
     {
         $this->signIn();
 
@@ -51,9 +51,9 @@ class BuildingsUpdateTest extends TestCase
      */
     protected function update($building, $attributes = [])
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['buildings.update'])
-        );
+        $role = $this->createRoleWithPermissions(['building:update']);
+
+        $this->signIn(null, $role);
 
         return $this->putJson(route('buildings.update', ['building' => $building]), $this->validFields($attributes));
     }

@@ -28,20 +28,17 @@ class HitsController extends Controller
      */
     public function __construct(HitService $hitService)
     {
-        $this->middleware('permission:hits.create')->only(['store']);
-        $this->middleware('permission:hits.read')->only(['index', 'paginated', 'show']);
-        $this->middleware('permission:hits.update')->only(['update']);
-        $this->middleware('permission:hits.delete')->only(['destroy', 'bulkDestroy']);
-
         $this->hitService = $hitService;
     }
 
     /**
-     *
      * @return JsonResponse
+     * @throws Exception
      */
     public function index()
     {
+        $this->authorize('viewAny', Hit::class);
+
         $hits = Hit::query()
             ->get();
 
@@ -50,9 +47,12 @@ class HitsController extends Controller
 
     /**
      * @return AnonymousResourceCollection
+     * @throws Exception
      */
     public function paginated()
     {
+        $this->authorize('viewAny', Hit::class);
+
         $hits = Hit::query()
             ->jsonPaginate($this->paginationNumber());
 
@@ -63,6 +63,7 @@ class HitsController extends Controller
      * @param HitRequest $request
      *
      * @return JsonResponse
+     * @throws Exception
      */
     public function store(HitRequest $request)
     {
@@ -75,9 +76,12 @@ class HitsController extends Controller
      * @param Hit $hit
      *
      * @return JsonResponse
+     * @throws Exception
      */
     public function show(Hit $hit)
     {
+        $this->authorize('view', Hit::class);
+
         return $this->json(new HitResource($hit), Response::HTTP_OK);
     }
 
@@ -89,6 +93,8 @@ class HitsController extends Controller
      */
     public function destroy(Hit $hit)
     {
+        $this->authorize('delete', Hit::class);
+
         $hit->delete();
 
         return $this->json(null, Response::HTTP_OK);
@@ -98,9 +104,12 @@ class HitsController extends Controller
      * @param BulkDeleteRequest $request
      *
      * @return JsonResponse
+     * @throws Exception
      */
     public function bulkDestroy(BulkDeleteRequest $request)
     {
+        $this->authorize('delete', Hit::class);
+
         collect($request->get('items'))->each(function ($hit) {
             if ($hitToDelete = Hit::find($hit['id'])) {
                 $hitToDelete->delete();

@@ -24,15 +24,15 @@ class RolesDeleteTest extends TestCase
         $role = factory(Role::class)->create();
         $this->deleteJson(route('roles.destroy', ['role' => $role]))->assertStatus(403);
 
-        $this->postJson(route('roles.bulk-destroy', ['items' => []]))->assertStatus(403);
+        $this->postJson(route('roles.bulk-destroy'), ['items' => []])->assertStatus(403);
     }
 
     /** @test */
     public function an_authenticated_user_with_delete_permission_can_delete_specific_role()
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['roles.delete'])
-        );
+        $role = $this->createRoleWithPermissions(['role:delete']);
+
+        $this->signIn(null, $role);
 
         $role = factory(Role::class)->create();
         $this->deleteJson(route('roles.destroy', ['role' => $role]))->assertOk();
@@ -42,9 +42,9 @@ class RolesDeleteTest extends TestCase
     /** @test */
     public function an_authenticated_user_with_delete_permission_can_delete_roles_in_bulk()
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['roles.delete'])
-        );
+        $role = $this->createRoleWithPermissions(['role:delete']);
+
+        $this->signIn(null, $role);
 
         $roles = factory(Role::class, 5)->create();
         $this->assertCount(6, Role::all());

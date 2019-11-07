@@ -2,35 +2,45 @@
 
 namespace App\Services\Models;
 
-use App\Contracts\ModelServiceContract;
 use App\Models\Category;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 
-class CategoryService implements ModelServiceContract
+class CategoryService
 {
     /**
-     * @param Request $request
+     * @param array $attributes
      *
-     * @return Model
+     * @return Category
      */
-    public function create(Request $request)
+    public function create(array $attributes): Category
     {
         $category = new Category();
-        $category->fill($request->only($category->getFillable()))->save();
-        return $category->refresh();
+
+        $fields = Arr::only($attributes, [
+            'name',
+            'description'
+        ]);
+
+        $category->fill($fields)->save();
+
+        return $category;
     }
 
     /**
-     * @param Model $category
-     * @param Request $request
+     * @param Category $category
+     * @param array $attributes
      *
-     * @return Model
+     * @return Category
      */
-    public function update(Model $category, Request $request)
+    public function update(Category $category, array $attributes): Category
     {
-        $category->fill($request->only($category->getFillable()))->save();
+        $fields = Arr::only($attributes, [
+            'name',
+            'description'
+        ]);
 
-        return $category->refresh();
+        $category->fill($fields)->save();
+
+        return $category;
     }
 }

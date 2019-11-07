@@ -8,7 +8,10 @@ use App\Http\Requests\TemplateRequest;
 use App\Http\Resources\TemplateResource;
 use App\Models\Template;
 use App\Services\Models\TemplateService;
+use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 
 class TemplatesController extends Controller
@@ -26,21 +29,19 @@ class TemplatesController extends Controller
      */
     public function __construct(TemplateService $templateService)
     {
-        $this->middleware('permission:templates.create')->only(['store']);
-        $this->middleware('permission:templates.read')->only(['index', 'show', 'paginated']);
-        $this->middleware('permission:templates.update')->only(['update']);
-        $this->middleware('permission:templates.delete')->only(['destroy', 'bulkDestroy']);
-
         $this->templateService = $templateService;
     }
 
     /**
      * @param Request $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
+     * @throws Exception
      */
     public function index(Request $request)
     {
+        $this->authorize('viewAny', Template::class);
+
         $templates = Template::query()
             ->withRelations($request)
             ->filter($request)
@@ -52,10 +53,13 @@ class TemplatesController extends Controller
     /**
      * @param Request $request
      *
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     * @return AnonymousResourceCollection
+     * @throws Exception
      */
     public function paginated(Request $request)
     {
+        $this->authorize('viewAny', Template::class);
+
         $templates = Template::query()
             ->withRelations($request)
             ->filter($request)
@@ -67,7 +71,8 @@ class TemplatesController extends Controller
     /**
      * @param TemplateRequest $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
+     * @throws Exception
      */
     public function store(TemplateRequest $request)
     {
@@ -81,10 +86,13 @@ class TemplatesController extends Controller
     /**
      * @param Template $template
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
+     * @throws Exception
      */
     public function show(Template $template)
     {
+        $this->authorize('view', Template::class);
+
         $template->load($template->relationships);
 
         return $this->json(new TemplateResource($template), Response::HTTP_OK);
@@ -94,7 +102,8 @@ class TemplatesController extends Controller
      * @param TemplateRequest $request
      * @param Template $template
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
+     * @throws Exception
      */
     public function update(TemplateRequest $request, Template $template)
     {
@@ -108,11 +117,13 @@ class TemplatesController extends Controller
     /**
      * @param Template $template
      *
-     * @return \Illuminate\Http\JsonResponse
-     * @throws \Exception
+     * @return JsonResponse
+     * @throws Exception
      */
     public function destroy(Template $template)
     {
+        $this->authorize('delete', Template::class);
+
         $template->delete();
 
         return $this->json(null, Response::HTTP_OK);
@@ -121,10 +132,13 @@ class TemplatesController extends Controller
     /**
      * @param BulkDeleteRequest $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
+     * @throws Exception
      */
     public function bulkDestroy(BulkDeleteRequest $request)
     {
+        $this->authorize('delete', Template::class);
+
         collect($request->get('items'))->each(function ($template) {
             if ($templateToDelete = Template::find($template['id'])) {
                 $templateToDelete->delete();

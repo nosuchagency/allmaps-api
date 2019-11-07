@@ -13,17 +13,17 @@ class BeaconTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function a_beacon_has_tags()
-    {
-        $beacon = factory(Beacon::class)->create();
-        $this->assertInstanceOf(Collection::class, $beacon->tags);
-    }
-
-    /** @test */
     public function a_beacon_has_locations()
     {
         $beacon = factory(Beacon::class)->create();
         $this->assertInstanceOf(Collection::class, $beacon->locations);
+    }
+
+    /** @test */
+    public function a_beacon_has_tags()
+    {
+        $beacon = factory(Beacon::class)->create();
+        $this->assertInstanceOf(Collection::class, $beacon->tags);
     }
 
     /** @test */

@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Template;
 use App\Rules\RequiredIdRule;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -14,7 +15,11 @@ class TemplateRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        if ($this->method() === 'POST') {
+            return $this->user()->can('create', Template::class);
+        }
+
+        return $this->user()->can('update', Template::class);
     }
 
     /**
@@ -24,18 +29,50 @@ class TemplateRequest extends FormRequest
      */
     public function rules()
     {
+        if ($this->method() === 'POST') {
+            return $this->rulesForCreating();
+        }
+
+        return $this->rulesForUpdating();
+    }
+
+    /**
+     * @return array
+     */
+    public function rulesForCreating()
+    {
         return [
-            'name' => 'required',
-            'description' => '',
-            'content' => '',
-            'activated' => 'boolean',
-            'hook' => '',
+            'name' => ['required', 'max:255'],
+            'description' => ['max:65535'],
+            'content' => ['nullable', 'string'],
+            'activated' => ['boolean'],
+            'hook' => ['nullable'],
             'layout' => ['nullable', new RequiredIdRule],
             'layout.id' => 'exists:layouts,id',
             'category' => ['nullable', new RequiredIdRule],
-            'category.id' => 'exists:categories,id',
-            'tags' => 'array',
-            'tags.*.id' => 'required|exists:tags,id'
+            'category.id' => ['exists:categories,id'],
+            'tags' => ['array'],
+            'tags.*.id' => ['required', 'exists:tags,id']
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function rulesForUpdating()
+    {
+        return [
+            'name' => ['filled', 'max:255'],
+            'description' => ['max:65535'],
+            'content' => [],
+            'activated' => ['boolean'],
+            'hook' => ['nullable'],
+            'layout' => ['nullable', new RequiredIdRule],
+            'layout.id' => 'exists:layouts,id',
+            'category' => ['nullable', new RequiredIdRule],
+            'category.id' => ['exists:categories,id'],
+            'tags' => ['array'],
+            'tags.*.id' => ['required', 'exists:tags,id']
         ];
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Place;
 use App\Rules\RequiredIdRule;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -14,7 +15,11 @@ class PlaceRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        if ($this->method() === 'POST') {
+            return $this->user()->can('create', Place::class);
+        }
+
+        return $this->user()->can('update', Place::class);
     }
 
     /**
@@ -25,7 +30,7 @@ class PlaceRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required',
+            'name' => ['required', 'max:255'],
             'address' => '',
             'postcode' => '',
             'city' => '',
@@ -36,9 +41,9 @@ class PlaceRequest extends FormRequest
             'menu' => ['nullable', new RequiredIdRule],
             'menu.id' => 'exists:menus,id',
             'category' => ['nullable', new RequiredIdRule],
-            'category.id' => 'exists:categories,id',
-            'tags' => 'array',
-            'tags.*.id' => 'required|exists:tags,id'
+            'category.id' => ['exists:categories,id'],
+            'tags' => ['array'],
+            'tags.*.id' => ['required', 'exists:tags,id']
         ];
     }
 }

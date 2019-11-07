@@ -31,9 +31,9 @@ class MenuItemsReadTest extends TestCase
     /** @test */
     public function an_authenticated_user_with_read_permission_can_view_menu_items()
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['menus.read'])
-        );
+        $role = $this->createRoleWithPermissions(['menu-item:read']);
+
+        $this->signIn(null, $role);
 
         $this->getJson(route('menu-items.index'))->assertOk();
     }
@@ -41,9 +41,9 @@ class MenuItemsReadTest extends TestCase
     /** @test */
     public function an_authenticated_user_with_read_permission_can_view_menu_items_paginated()
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['menus.read'])
-        );
+        $role = $this->createRoleWithPermissions(['menu-item:read']);
+
+        $this->signIn(null, $role);
 
         $this->getJson(route('menu-items.paginated'))->assertOk();
     }
@@ -51,9 +51,9 @@ class MenuItemsReadTest extends TestCase
     /** @test */
     public function an_authenticated_user_with_read_permission_can_view_a_specific_menu_item()
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['menus.read'])
-        );
+        $role = $this->createRoleWithPermissions(['menu-item:read']);
+
+        $this->signIn(null, $role);
 
         $menuItem = factory(MenuItem::class)->create();
 

@@ -31,8 +31,6 @@ class StructuresCreateTest extends TestCase
     /** @test */
     public function an_authenticated_user_with_create_permission_can_create_structures()
     {
-        $this->withoutExceptionHandling();
-
         $this->create()->assertStatus(201);
         $this->assertCount(1, Structure::all());
     }
@@ -68,9 +66,9 @@ class StructuresCreateTest extends TestCase
      */
     protected function create($attributes = [])
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['floors.create'])
-        );
+        $role = $this->createRoleWithPermissions(['structure:create']);
+
+        $this->signIn(null, $role);
 
         return $this->postJson(route('structures.store'), $this->validFields($attributes));
     }

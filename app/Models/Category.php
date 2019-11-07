@@ -12,14 +12,11 @@ class Category extends Model
     use LogsActivity;
 
     /**
-     * The attributes that are mass assignable.
+     * The attributes that aren't mass assignable.
      *
      * @var array
      */
-    protected $fillable = [
-        'name',
-        'description'
-    ];
+    protected $guarded = [];
 
     /**
      * Process filters

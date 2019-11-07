@@ -31,9 +31,9 @@ class ComponentsReadTest extends TestCase
     /** @test */
     public function an_authenticated_user_with_read_permission_can_view_components()
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['components.read'])
-        );
+        $role = $this->createRoleWithPermissions(['component:read']);
+
+        $this->signIn(null, $role);
 
         $this->getJson(route('components.index'))->assertOk();
     }
@@ -41,9 +41,9 @@ class ComponentsReadTest extends TestCase
     /** @test */
     public function an_authenticated_user_with_read_permission_can_view_components_paginated()
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['components.read'])
-        );
+        $role = $this->createRoleWithPermissions(['component:read']);
+
+        $this->signIn(null, $role);
 
         $this->getJson(route('components.paginated'))->assertOk();
     }
@@ -51,9 +51,9 @@ class ComponentsReadTest extends TestCase
     /** @test */
     public function an_authenticated_user_with_read_permission_can_view_a_specific_component()
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['components.read'])
-        );
+        $role = $this->createRoleWithPermissions(['component:read']);
+
+        $this->signIn(null, $role);
 
         $component = factory(Component::class)->create();
 

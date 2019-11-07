@@ -10,7 +10,10 @@ use App\Http\Resources\FloorResource;
 use App\Http\Resources\LocationResource;
 use App\Models\Floor;
 use App\Services\Models\FloorService;
+use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 
 class FloorsController extends Controller
@@ -28,21 +31,19 @@ class FloorsController extends Controller
      */
     public function __construct(FloorService $floorService)
     {
-        $this->middleware('permission:floors.create')->only(['store']);
-        $this->middleware('permission:floors.read')->only(['index', 'paginated', 'show']);
-        $this->middleware('permission:floors.update')->only(['update']);
-        $this->middleware('permission:floors.delete')->only(['destroy', 'bulkDestroy']);
-
         $this->floorService = $floorService;
     }
 
     /**
      * @param Request $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
+     * @throws Exception
      */
     public function index(Request $request)
     {
+        $this->authorize('viewAny', Floor::class);
+
         $floors = Floor::query()
             ->withRelations($request)
             ->filter($request)
@@ -54,10 +55,13 @@ class FloorsController extends Controller
     /**
      * @param Request $request
      *
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     * @return AnonymousResourceCollection
+     * @throws Exception
      */
     public function paginated(Request $request)
     {
+        $this->authorize('viewAny', Floor::class);
+
         $floors = Floor::query()
             ->withRelations($request)
             ->filter($request)
@@ -69,11 +73,12 @@ class FloorsController extends Controller
     /**
      * @param FloorRequest $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
+     * @throws Exception
      */
     public function store(FloorRequest $request)
     {
-        $floor = $this->floorService->create($request);
+        $floor = $this->floorService->create($request->validated());
 
         $floor->load($floor->relationships);
 
@@ -83,10 +88,13 @@ class FloorsController extends Controller
     /**
      * @param Floor $floor
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
+     * @throws Exception
      */
     public function show(Floor $floor)
     {
+        $this->authorize('view', Floor::class);
+
         $floor->load($floor->relationships);
 
         return $this->json(new FloorResource($floor), Response::HTTP_OK);
@@ -96,11 +104,12 @@ class FloorsController extends Controller
      * @param FloorRequest $request
      * @param Floor $floor
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
+     * @throws Exception
      */
     public function update(FloorRequest $request, Floor $floor)
     {
-        $floor = $this->floorService->update($floor, $request);
+        $floor = $this->floorService->update($floor, $request->validated());
 
         $floor->load($floor->relationships);
 
@@ -110,11 +119,13 @@ class FloorsController extends Controller
     /**
      * @param Floor $floor
      *
-     * @return \Illuminate\Http\JsonResponse
-     * @throws \Exception
+     * @return JsonResponse
+     * @throws Exception
      */
     public function destroy(Floor $floor)
     {
+        $this->authorize('delete', Floor::class);
+
         $floor->delete();
 
         return $this->json(null, Response::HTTP_OK);
@@ -123,10 +134,13 @@ class FloorsController extends Controller
     /**
      * @param BulkDeleteRequest $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
+     * @throws Exception
      */
     public function bulkDestroy(BulkDeleteRequest $request)
     {
+        $this->authorize('delete', Floor::class);
+
         collect($request->get('items'))->each(function ($floor) {
             if ($floorToDelete = Floor::find($floor['id'])) {
                 $floorToDelete->delete();
@@ -140,7 +154,7 @@ class FloorsController extends Controller
      * @param SearchRequest $request
      * @param Floor $floor
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function search(SearchRequest $request, Floor $floor)
     {

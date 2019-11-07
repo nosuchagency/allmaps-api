@@ -7,15 +7,6 @@ use Intervention\Image\Facades\Image;
 
 class Imageable implements Rule
 {
-    /**
-     * Create a new rule instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        //
-    }
 
     /**
      * Determine if the validation rule passes.

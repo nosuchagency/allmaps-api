@@ -2,40 +2,59 @@
 
 namespace App\Services\Models;
 
-use App\Contracts\ModelServiceContract;
+use App\Models\Role;
 use App\Models\Token;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
-class TokenService implements ModelServiceContract
+class TokenService
 {
     /**
-     * @param Request $request
+     * @param array $attributes
      *
-     * @return Model
+     * @return Token
      */
-    public function create(Request $request)
+    public function create(array $attributes): Token
     {
         $token = new Token();
-        $token->fill($request->only($token->getFillable()));
-        $token->syncRoles($request->input('role.id'));
-        $token->api_token = Str::random(60);
+
+        $fields = Arr::only($attributes, [
+            'name',
+        ]);
+
+        $token->fill(
+            Arr::add($fields, 'api_token', Str::random(60))
+        );
+
+        $token->role()->associate(
+            Role::find(Arr::get($attributes, 'role.id'))
+        );
+
         $token->save();
 
         return $token->refresh();
     }
 
     /**
-     * @param Request $request
-     * @param Model $token
+     * @param array $attributes
+     * @param Token $token
      *
-     * @return Model
+     * @return Token
      */
-    public function update(Model $token, Request $request)
+    public function update(Token $token, array $attributes): Token
     {
-        $token->fill($request->only($token->getFillable()));
-        $token->syncRoles($request->input('role.id'));
+        $fields = Arr::only($attributes, [
+            'name',
+        ]);
+
+        $token->fill($fields);
+
+        if (Arr::has($attributes, 'role.id')) {
+            $token->role()->associate(
+                Role::find(Arr::get($attributes, 'role.id'))
+            );
+        }
+
         $token->save();
 
         return $token->refresh();

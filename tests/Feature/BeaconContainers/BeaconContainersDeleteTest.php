@@ -41,9 +41,9 @@ class BeaconContainersDeleteTest extends TestCase
     /** @test */
     public function an_authenticated_user_with_delete_permission_can_detach_a_container_from_a_beacon()
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['beacons.delete', 'containers.delete'])
-        );
+        $role = $this->createRoleWithPermissions(['beacon:delete', 'container:delete']);
+
+        $this->signIn(null, $role);
 
         $beacon = factory(Beacon::class)->create();
         $container = factory(Container::class)->create();

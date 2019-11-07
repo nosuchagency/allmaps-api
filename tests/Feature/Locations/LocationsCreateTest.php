@@ -50,9 +50,9 @@ class LocationsCreateTest extends TestCase
      */
     protected function create($attributes = [])
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['floors.create'])
-        );
+        $role = $this->createRoleWithPermissions(['location:create']);
+
+        $this->signIn(null, $role);
 
         return $this->postJson(route('locations.store'), $this->validFields($attributes));
     }

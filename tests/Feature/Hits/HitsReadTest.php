@@ -31,9 +31,9 @@ class HitsReadTest extends TestCase
     /** @test */
     public function an_authenticated_user_with_read_permission_can_view_hits()
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['hits.read'])
-        );
+        $role = $this->createRoleWithPermissions(['hit:read']);
+
+        $this->signIn(null, $role);
 
         $this->getJson(route('hits.index'))->assertOk();
     }
@@ -41,9 +41,9 @@ class HitsReadTest extends TestCase
     /** @test */
     public function an_authenticated_user_with_read_permission_can_view_hits_paginated()
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['hits.read'])
-        );
+        $role = $this->createRoleWithPermissions(['hit:read']);
+
+        $this->signIn(null, $role);
 
         $this->getJson(route('hits.paginated'))->assertOk();
     }
@@ -51,9 +51,9 @@ class HitsReadTest extends TestCase
     /** @test */
     public function an_authenticated_user_with_read_permission_can_view_a_specific_hit()
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['hits.read'])
-        );
+        $role = $this->createRoleWithPermissions(['hit:read']);
+
+        $this->signIn(null, $role);
 
         $hit = factory(Hit::class)->create();
 

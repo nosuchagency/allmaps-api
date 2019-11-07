@@ -5,6 +5,7 @@ namespace Tests\Feature\Fixtures;
 use App\Models\Category;
 use App\Models\Fixture;
 use App\Models\Tag;
+use Illuminate\Foundation\Testing\TestResponse;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -47,13 +48,13 @@ class FixturesUpdateTest extends TestCase
      * @param $fixture
      * @param array $attributes
      *
-     * @return \Illuminate\Foundation\Testing\TestResponse
+     * @return TestResponse
      */
     protected function update($fixture, $attributes = [])
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['fixtures.update'])
-        );
+        $role = $this->createRoleWithPermissions(['fixture:update']);
+
+        $this->signIn(null, $role);
 
         return $this->putJson(route('fixtures.update', ['fixture' => $fixture]), $this->validFields($attributes));
     }

@@ -10,6 +10,7 @@ use App\Http\Resources\LocationResource;
 use App\Http\Resources\PoiResource;
 use App\Http\Resources\BeaconResource;
 use App\Http\Resources\TagResource;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Resources\Json\JsonResource;
 use InvalidArgumentException;
 
@@ -57,7 +58,7 @@ class ResourceFactory
 
     /**
      * @param string $resourceType
-     * @param $model
+     * @param Model $model
      *
      * @return JsonResource
      *

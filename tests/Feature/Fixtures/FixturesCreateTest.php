@@ -5,6 +5,7 @@ namespace Tests\Feature\Fixtures;
 use App\Models\Category;
 use App\Models\Fixture;
 use App\Models\Tag;
+use Illuminate\Foundation\Testing\TestResponse;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -69,13 +70,13 @@ class FixturesCreateTest extends TestCase
     /**
      * @param array $attributes
      *
-     * @return \Illuminate\Foundation\Testing\TestResponse
+     * @return TestResponse
      */
     protected function create($attributes = [])
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['fixtures.create'])
-        );
+        $role = $this->createRoleWithPermissions(['fixture:create']);
+
+        $this->signIn(null, $role);
 
         return $this->postJson(route('fixtures.store'), $this->validFields($attributes));
     }

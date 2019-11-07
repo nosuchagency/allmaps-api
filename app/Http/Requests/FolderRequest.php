@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Folder;
 use App\Rules\RequiredIdRule;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -14,7 +15,11 @@ class FolderRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        if ($this->method() === 'POST') {
+            return $this->user()->can('create', Folder::class);
+        }
+
+        return $this->user()->can('update', Folder::class);
     }
 
     /**
@@ -25,12 +30,12 @@ class FolderRequest extends FormRequest
     public function rules()
     {
         $rules = [
-            'name' => 'required',
+            'name' => ['required', 'max:255'],
             'order' => 'nullable|integer',
             'category' => ['nullable', new RequiredIdRule],
-            'category.id' => 'exists:categories,id',
-            'tags' => 'array',
-            'tags.*.id' => 'required|exists:tags,id'
+            'category.id' => ['exists:categories,id'],
+            'tags' => ['array'],
+            'tags.*.id' => ['required', 'exists:tags,id']
         ];
 
         if ($this->method() === 'POST') {

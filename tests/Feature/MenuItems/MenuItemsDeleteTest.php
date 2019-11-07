@@ -25,15 +25,15 @@ class MenuItemsDeleteTest extends TestCase
         $menuItem = factory(MenuItem::class)->create();
         $this->deleteJson(route('menu-items.destroy', ['menu_item' => $menuItem]))->assertStatus(403);
 
-        $this->postJson(route('menu-items.bulk-destroy', ['items' => []]))->assertStatus(403);
+        $this->postJson(route('menu-items.bulk-destroy'), ['items' => []])->assertStatus(403);
     }
 
     /** @test */
     public function an_authenticated_user_with_delete_permission_can_delete_specific_menu_item()
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['menus.delete'])
-        );
+        $role = $this->createRoleWithPermissions(['menu-item:delete']);
+
+        $this->signIn(null, $role);
 
         $menuItem = factory(MenuItem::class)->create();
         $this->deleteJson(route('menu-items.destroy', ['menu_item' => $menuItem]))->assertOk();
@@ -43,13 +43,13 @@ class MenuItemsDeleteTest extends TestCase
     /** @test */
     public function an_authenticated_user_with_delete_permission_can_delete_menu_items_in_bulk()
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['menus.delete'])
-        );
+        $role = $this->createRoleWithPermissions(['menu-item:delete']);
 
-        $menus = factory(Menu::class, 5)->create();
-        $this->assertCount(5, Menu::all());
-        $this->postJson(route('menus.bulk-destroy'), ['items' => $menus])->assertOk();
-        $this->assertCount(0, Menu::all());
+        $this->signIn(null, $role);
+
+        $menuItems = factory(MenuItem::class, 5)->create();
+        $this->assertCount(5, MenuItem::all());
+        $this->postJson(route('menu-items.bulk-destroy'), ['items' => $menuItems])->assertOk();
+        $this->assertCount(0, MenuItem::all());
     }
 }

@@ -24,15 +24,15 @@ class FloorsDeleteTest extends TestCase
         $floor = factory(Floor::class)->create();
         $this->deleteJson(route('floors.destroy', ['floor' => $floor]))->assertStatus(403);
 
-        $this->postJson(route('floors.bulk-destroy', ['items' => []]))->assertStatus(403);
+        $this->postJson(route('floors.bulk-destroy'), ['items' => []])->assertStatus(403);
     }
 
     /** @test */
     public function an_authenticated_user_with_delete_permission_can_delete_specific_floor()
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['floors.delete'])
-        );
+        $role = $this->createRoleWithPermissions(['floor:delete']);
+
+        $this->signIn(null, $role);
 
         $floor = factory(Floor::class)->create();
         $this->deleteJson(route('floors.destroy', ['floor' => $floor]))->assertOk();
@@ -42,9 +42,9 @@ class FloorsDeleteTest extends TestCase
     /** @test */
     public function an_authenticated_user_with_delete_permission_can_delete_floors_in_bulk()
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['floors.delete'])
-        );
+        $role = $this->createRoleWithPermissions(['floor:delete']);
+
+        $this->signIn(null, $role);
 
         $floors = factory(Floor::class, 5)->create();
         $this->assertCount(5, Floor::all());

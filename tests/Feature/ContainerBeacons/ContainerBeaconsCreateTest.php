@@ -35,9 +35,9 @@ class ContainerBeaconsCreateTest extends TestCase
     /** @test */
     public function an_authenticated_user_with_create_permission_can_attach_a_beacon_to_a_container()
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['containers.create', 'beacons.create'])
-        );
+        $role = $this->createRoleWithPermissions(['container:create', 'beacon:create']);
+
+        $this->signIn(null, $role);
 
         $container = factory(Container::class)->create();
         $beacon = factory(Beacon::class)->create();

@@ -59,8 +59,6 @@ class ContainerDefaultSkinTest extends TestCase
     /** @test */
     public function it_returns_404_if_data_key_does_not_exist_in_index_file()
     {
-        $this->withoutExceptionHandling();
-
         $skin = factory(Skin::class)->create();
         $this->addDirectory('/' . $skin->identifier);
         $this->addFile('index-without-data-key.html', '/' . $skin->identifier);

@@ -18,6 +18,12 @@ class CreateTokensTable extends Migration
             $table->string('name');
             $table->string('api_token', 60)->unique();
 
+            $table->unsignedBigInteger('role_id');
+            $table->foreign('role_id')
+                ->references('id')
+                ->on('roles')
+                ->onDelete('cascade');
+
             $table->createdBy();
             $table->timestamps();
         });

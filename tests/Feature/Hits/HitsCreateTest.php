@@ -48,9 +48,9 @@ class HitsCreateTest extends TestCase
      */
     protected function create($attributes = [])
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['hits.create'])
-        );
+        $role = $this->createRoleWithPermissions(['hit:create']);
+
+        $this->signIn(null, $role);
 
         return $this->postJson(route('hits.store'), $this->validFields($attributes));
     }

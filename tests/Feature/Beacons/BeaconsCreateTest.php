@@ -97,9 +97,9 @@ class BeaconsCreateTest extends TestCase
      */
     protected function create($attributes = [])
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['beacons.create'])
-        );
+        $role = $this->createRoleWithPermissions(['beacon:create']);
+
+        $this->signIn(null, $role);
 
         return $this->postJson(route('beacons.store'), $this->validFields($attributes));
     }

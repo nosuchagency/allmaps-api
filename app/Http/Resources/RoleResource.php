@@ -10,7 +10,7 @@ class RoleResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  Request $request
+     * @param Request $request
      *
      * @return array
      */
@@ -21,7 +21,7 @@ class RoleResource extends JsonResource
             'name' => $this->name,
             'created_at' => $this->created_at->toDateTimeString(),
             'updated_at' => $this->updated_at->toDateTimeString(),
-            'permissions' => $this->getPermissions(),
+            'permissions' => PermissionResource::collection($this->permissions),
         ];
     }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Role;
 use Faker\Generator as Faker;
 use Illuminate\Support\Str;
 use App\Locale;
@@ -21,6 +22,7 @@ $factory->define(App\Models\User::class, function (Faker $faker) {
         'email' => $faker->unique()->safeEmail,
         'locale' => $faker->randomElement(Locale::LOCALES),
         'password' => 'secret',
+        'role_id' => factory(Role::class),
         'remember_token' => Str::random(10),
     ];
 });

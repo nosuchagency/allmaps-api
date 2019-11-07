@@ -9,8 +9,8 @@ use Intervention\Image\Facades\Image;
 trait HasImage
 {
     /**
-     * @param  $image
-     * @param  $removeExistingImage
+     * @param mixed $image
+     * @param bool $removeExistingImage
      *
      * @return void
      */

@@ -49,7 +49,7 @@ abstract class AbstractFilter
     }
 
     /**
-     * @param $filter
+     * @param string $filter
      *
      * @return mixed
      */

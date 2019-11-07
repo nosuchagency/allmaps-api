@@ -2,7 +2,6 @@
 
 namespace App\Services\Models;
 
-use App\Contracts\ModelServiceContract;
 use App\Models\Category;
 use App\Models\Location;
 use App\Models\MenuItem;
@@ -11,14 +10,14 @@ use App\Models\Tag;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 
-class MenuItemService implements ModelServiceContract
+class MenuItemService
 {
     /**
      * @param Request $request
      *
-     * @return Model
+     * @return MenuItem
      */
-    public function create(Request $request)
+    public function create(Request $request): MenuItem
     {
         $menuItem = new MenuItem();
 
@@ -40,12 +39,12 @@ class MenuItemService implements ModelServiceContract
     }
 
     /**
-     * @param Model $menuItem
+     * @param MenuItem $menuItem
      * @param Request $request
      *
-     * @return Model
+     * @return MenuItem
      */
-    public function update(Model $menuItem, Request $request)
+    public function update(MenuItem $menuItem, Request $request): MenuItem
     {
         $menuItem->menuable()->associate(
             $this->getModel($request->get('type'), $request->input('model.id'))

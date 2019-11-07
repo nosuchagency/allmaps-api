@@ -3,6 +3,7 @@
 namespace Tests\Feature\Menus;
 
 use App\Models\Menu;
+use Illuminate\Foundation\Testing\TestResponse;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -45,13 +46,13 @@ class MenusUpdateTest extends TestCase
      * @param $menu
      * @param array $attributes
      *
-     * @return \Illuminate\Foundation\Testing\TestResponse
+     * @return TestResponse
      */
     protected function update($menu, $attributes = [])
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['menus.update'])
-        );
+        $role = $this->createRoleWithPermissions(['menu:update']);
+
+        $this->signIn(null, $role);
 
         return $this->putJson(route('menus.update', ['menu' => $menu]), $this->validFields($attributes));
     }

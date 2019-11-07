@@ -31,9 +31,9 @@ class FixturesReadTest extends TestCase
     /** @test */
     public function an_authenticated_user_with_read_permission_can_view_fixtures()
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['fixtures.read'])
-        );
+        $role = $this->createRoleWithPermissions(['fixture:read']);
+
+        $this->signIn(null, $role);
 
         $this->getJson(route('fixtures.index'))->assertOk();
     }
@@ -41,9 +41,9 @@ class FixturesReadTest extends TestCase
     /** @test */
     public function an_authenticated_user_with_read_permission_can_view_fixtures_paginated()
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['fixtures.read'])
-        );
+        $role = $this->createRoleWithPermissions(['fixture:read']);
+
+        $this->signIn(null, $role);
 
         $this->getJson(route('fixtures.paginated'))->assertOk();
     }
@@ -51,9 +51,9 @@ class FixturesReadTest extends TestCase
     /** @test */
     public function an_authenticated_user_with_read_permission_can_view_a_specific_fixture()
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['fixtures.read'])
-        );
+        $role = $this->createRoleWithPermissions(['fixture:read']);
+
+        $this->signIn(null, $role);
 
         $fixture = factory(Fixture::class)->create();
 

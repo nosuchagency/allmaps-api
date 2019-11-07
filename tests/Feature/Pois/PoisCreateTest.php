@@ -118,9 +118,9 @@ class PoisCreateTest extends TestCase
      */
     protected function create($attributes = [])
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['pois.create'])
-        );
+        $role = $this->createRoleWithPermissions(['poi:create']);
+
+        $this->signIn(null, $role);
 
         return $this->postJson(route('pois.store'), $this->validFields($attributes));
     }

@@ -2,44 +2,87 @@
 
 namespace App\Services\Models;
 
-use App\Contracts\ModelServiceContract;
 use App\Models\Beacon;
+use App\Models\Category;
 use App\Models\Tag;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 
-class BeaconService implements ModelServiceContract
+class BeaconService
 {
     /**
-     * @param Request $request
+     * @param array $attributes
      *
-     * @return Model
+     * @return Beacon
      */
-    public function create(Request $request)
+    public function create(array $attributes): Beacon
     {
         $beacon = new Beacon();
-        $beacon->fill($request->only($beacon->getFillable()))->save();
 
-        foreach ($request->get('tags', []) as $tag) {
-            $beacon->tags()->attach(Tag::find($tag['id']));
+        $fields = Arr::only($attributes, [
+            'name',
+            'description',
+            'identifier',
+            'proximity_uuid',
+            'major',
+            'minor',
+            'namespace',
+            'instance_id',
+            'url',
+        ]);
+
+        $beacon->fill($fields);
+
+        $beacon->category()->associate(
+            Category::find(Arr::get($attributes, 'category.id'))
+        );
+
+        $beacon->save();
+
+        if (Arr::has($attributes, 'tags')) {
+            foreach ($attributes['tags'] as $tag) {
+                $beacon->tags()->attach(Tag::find($tag['id']));
+            }
         }
 
         return $beacon->refresh();
     }
 
     /**
-     * @param Model $beacon
-     * @param Request $request
+     * @param Beacon $beacon
+     * @param array $attributes
      *
-     * @return Model
+     * @return Beacon
      */
-    public function update(Model $beacon, Request $request)
+    public function update(Beacon $beacon, array $attributes): Beacon
     {
-        $beacon->fill($request->only($beacon->getFillable()))->save();
-        $beacon->tags()->sync([]);
+        $fields = Arr::only($attributes, [
+            'name',
+            'description',
+            'identifier',
+            'proximity_uuid',
+            'major',
+            'minor',
+            'namespace',
+            'instance_id',
+            'url',
+        ]);
 
-        foreach ($request->get('tags', []) as $tag) {
-            $beacon->tags()->attach(Tag::find($tag['id']));
+        $beacon->fill($fields);
+
+        if (Arr::has($attributes, 'category.id')) {
+            $beacon->category()->associate(
+                Category::find(Arr::get($attributes, 'category.id'))
+            );
+        }
+
+        $beacon->save();
+
+        if (Arr::has($attributes, 'tags')) {
+            $beacon->tags()->sync([]);
+
+            foreach ($attributes['tags'] as $tag) {
+                $beacon->tags()->attach(Tag::find($tag['id']));
+            }
         }
 
         return $beacon->refresh();

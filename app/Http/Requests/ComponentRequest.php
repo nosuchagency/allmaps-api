@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\ComponentType;
+use App\Models\Component;
 use App\Rules\RequiredIdRule;
 use App\Shape;
 use App\StrokeType;
@@ -18,7 +19,11 @@ class ComponentRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        if ($this->method() === 'POST') {
+            return $this->user()->can('create', Component::class);
+        }
+
+        return $this->user()->can('update', Component::class);
     }
 
     /**
@@ -29,8 +34,8 @@ class ComponentRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required',
-            'description' => '',
+            'name' => ['required', 'max:255'],
+            'description' => ['max:65535'],
             'type' => [
                 'required',
                 Rule::in(ComponentType::TYPES),
@@ -54,9 +59,9 @@ class ComponentRequest extends FormRequest
             'image_width' => 'nullable|integer|min:0',
             'image_height' => 'nullable|integer|min:0',
             'category' => ['nullable', new RequiredIdRule],
-            'category.id' => 'exists:categories,id',
-            'tags' => 'array',
-            'tags.*.id' => 'required|exists:tags,id'
+            'category.id' => ['exists:categories,id'],
+            'tags' => ['array'],
+            'tags.*.id' => ['required', 'exists:tags,id']
         ];
     }
 }

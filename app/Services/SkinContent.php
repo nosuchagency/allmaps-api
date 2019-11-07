@@ -53,7 +53,7 @@ class SkinContent
     }
 
     /**
-     * @param $content
+     * @param mixed $content
      *
      * @return string
      */
@@ -63,7 +63,7 @@ class SkinContent
     }
 
     /**
-     * @param $content
+     * @param mixed $content
      *
      * @return string
      */

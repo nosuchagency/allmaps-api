@@ -24,15 +24,15 @@ class PoisDeleteTest extends TestCase
         $poi = factory(Poi::class)->create();
         $this->deleteJson(route('pois.destroy', ['poi' => $poi]))->assertStatus(403);
 
-        $this->postJson(route('pois.bulk-destroy', ['items' => []]))->assertStatus(403);
+        $this->postJson(route('pois.bulk-destroy'), ['items' => []])->assertStatus(403);
     }
 
     /** @test */
     public function an_authenticated_user_with_delete_permission_can_delete_specific_poi()
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['pois.delete'])
-        );
+        $role = $this->createRoleWithPermissions(['poi:delete']);
+
+        $this->signIn(null, $role);
 
         $poi = factory(Poi::class)->create();
         $this->deleteJson(route('pois.destroy', ['poi' => $poi]))->assertOk();
@@ -42,9 +42,9 @@ class PoisDeleteTest extends TestCase
     /** @test */
     public function an_authenticated_user_with_delete_permission_can_delete_pois_in_bulk()
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['pois.delete'])
-        );
+        $role = $this->createRoleWithPermissions(['poi:delete']);
+
+        $this->signIn(null, $role);
 
         $pois = factory(Poi::class, 5)->create();
         $this->assertCount(5, Poi::all());

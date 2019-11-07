@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Permission;
+use App\Models\Role;
 use Faker\Generator as Faker;
 
 /*
@@ -13,8 +15,10 @@ use Faker\Generator as Faker;
 |
 */
 
-$factory->define(\Spatie\Permission\Models\Permission::class, function (Faker $faker) {
+$factory->define(Permission::class, function (Faker $faker) {
     return [
-        'name' => $faker->title
+        'name' => $faker->title,
+        'identifier' => $faker->title,
+        'role_id' => factory(Role::class)->create()
     ];
 });

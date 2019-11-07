@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Floor;
 use App\Rules\RequiredIdRule;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -14,7 +15,11 @@ class FloorRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        if ($this->method() === 'POST') {
+            return $this->user()->can('create', Floor::class);
+        }
+
+        return $this->user()->can('update', Floor::class);
     }
 
     /**
@@ -25,7 +30,7 @@ class FloorRequest extends FormRequest
     public function rules()
     {
         $rules = [
-            'name' => 'required',
+            'name' => ['required', 'max:255'],
             'level' => 'nullable|integer'
         ];
 

@@ -24,15 +24,15 @@ class FoldersDeleteTest extends TestCase
         $folder = factory(Folder::class)->create();
         $this->deleteJson(route('folders.destroy', ['folder' => $folder]))->assertStatus(403);
 
-        $this->postJson(route('folders.bulk-destroy', ['items' => []]))->assertStatus(403);
+        $this->postJson(route('folders.bulk-destroy'), ['items' => []])->assertStatus(403);
     }
 
     /** @test */
     public function an_authenticated_user_with_delete_permission_can_delete_specific_folder()
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['folders.delete'])
-        );
+        $role = $this->createRoleWithPermissions(['folder:delete']);
+
+        $this->signIn(null, $role);
 
         $folder = factory(Folder::class)->create();
         $this->deleteJson(route('folders.destroy', ['folder' => $folder]))->assertOk();
@@ -42,9 +42,9 @@ class FoldersDeleteTest extends TestCase
     /** @test */
     public function an_authenticated_user_with_delete_permission_can_delete_folders_in_bulk()
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['folders.delete'])
-        );
+        $role = $this->createRoleWithPermissions(['folder:delete']);
+
+        $this->signIn(null, $role);
 
         $folders = factory(Folder::class, 5)->create();
         $this->assertCount(10, Folder::all());

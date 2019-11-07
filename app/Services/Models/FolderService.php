@@ -2,20 +2,18 @@
 
 namespace App\Services\Models;
 
-use App\Contracts\ModelServiceContract;
 use App\Models\Folder;
 use App\Models\Tag;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 
-class FolderService implements ModelServiceContract
+class FolderService
 {
     /**
      * @param Request $request
      *
-     * @return Model
+     * @return Folder
      */
-    public function create(Request $request)
+    public function create(Request $request): Folder
     {
         $folder = new Folder();
         $folder->container()->associate(
@@ -32,12 +30,12 @@ class FolderService implements ModelServiceContract
     }
 
     /**
-     * @param Model $folder
+     * @param Folder $folder
      * @param Request $request
      *
-     * @return Model
+     * @return Folder
      */
-    public function update(Model $folder, Request $request)
+    public function update(Folder $folder, Request $request): Folder
     {
         $folder->fill($request->only($folder->getFillable()));
 

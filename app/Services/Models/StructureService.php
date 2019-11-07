@@ -2,19 +2,17 @@
 
 namespace App\Services\Models;
 
-use App\Contracts\ModelServiceContract;
 use App\Models\Structure;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 
-class StructureService implements ModelServiceContract
+class StructureService
 {
     /**
      * @param Request $request
      *
-     * @return Model
+     * @return Structure
      */
-    public function create(Request $request)
+    public function create(Request $request): Structure
     {
         $structure = new Structure();
         $structure->floor()->associate(
@@ -37,16 +35,16 @@ class StructureService implements ModelServiceContract
     }
 
     /**
-     * @param Model $floor
+     * @param Structure $structure
      * @param Request $request
      *
-     * @return Model
+     * @return Structure
      */
-    public function update(Model $floor, Request $request)
+    public function update(Structure $structure, Request $request): Structure
     {
-        $floor->fill($request->only($floor->getFillable()));
-        $floor->save();
+        $structure->fill($request->only($structure->getFillable()));
+        $structure->save();
 
-        return $floor->refresh();
+        return $structure->refresh();
     }
 }

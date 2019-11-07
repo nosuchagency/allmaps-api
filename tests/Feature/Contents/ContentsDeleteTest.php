@@ -24,15 +24,15 @@ class ContentsDeleteTest extends TestCase
         $content = factory(Content::class)->create();
         $this->deleteJson(route('contents.destroy', ['content' => $content]))->assertStatus(403);
 
-        $this->postJson(route('contents.bulk-destroy', ['items' => []]))->assertStatus(403);
+        $this->postJson(route('contents.bulk-destroy'), ['items' => []])->assertStatus(403);
     }
 
     /** @test */
     public function an_authenticated_user_with_delete_permission_can_delete_specific_content()
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['contents.delete'])
-        );
+        $role = $this->createRoleWithPermissions(['content:delete']);
+
+        $this->signIn(null, $role);
 
         $content = factory(Content::class)->create();
         $this->deleteJson(route('contents.destroy', ['content' => $content]))->assertOk();
@@ -42,9 +42,9 @@ class ContentsDeleteTest extends TestCase
     /** @test */
     public function an_authenticated_user_with_delete_permission_can_delete_contents_in_bulk()
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['contents.delete'])
-        );
+        $role = $this->createRoleWithPermissions(['content:delete']);
+
+        $this->signIn(null, $role);
 
         $contents = factory(Content::class, 5)->create();
         $this->assertCount(5, Content::all());

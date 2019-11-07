@@ -8,7 +8,7 @@ interface FilterInterface
 {
     /**
      * @param Builder $builder
-     * @param $value
+     * @param mixed $value
      *
      * @return Builder
      */

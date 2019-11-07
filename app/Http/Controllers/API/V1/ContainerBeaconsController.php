@@ -5,8 +5,9 @@ namespace App\Http\Controllers\API\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ContainerBeaconRequest;
 use App\Http\Resources\ContainerBeaconResource;
-use App\Models\Beacon;
 use App\Models\Container;
+use App\Pivots\BeaconContainer;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 
@@ -14,24 +15,16 @@ class ContainerBeaconsController extends Controller
 {
 
     /**
-     * BeaconsController constructor.
-     */
-    public function __construct()
-    {
-        $this->middleware(['permission:containers.create', 'permission:beacons.create'])->only(['store']);
-        $this->middleware(['permission:containers.read', 'permission:beacons.read'])->only(['show']);
-        $this->middleware(['permission:containers.update', 'permission:beacons.update'])->only(['update']);
-        $this->middleware(['permission:containers.delete', 'permission:beacons.delete'])->only(['destroy']);
-    }
-
-    /**
      * @param Container $container
      * @param $beaconId
      *
      * @return JsonResponse
+     * @throws Exception
      */
     public function store(Container $container, $beaconId)
     {
+        $this->authorize('create', BeaconContainer::class);
+
         $container->beacons()->attach($beaconId);
 
         $beacon = $container->beacons()->find($beaconId);
@@ -44,9 +37,12 @@ class ContainerBeaconsController extends Controller
      * @param $beaconId
      *
      * @return JsonResponse
+     * @throws Exception
      */
     public function show(Container $container, $beaconId)
     {
+        $this->authorize('view', BeaconContainer::class);
+
         $beacon = $container->beacons()->findOrFail($beaconId);
 
         return $this->json(new ContainerBeaconResource($beacon), Response::HTTP_OK);
@@ -58,6 +54,7 @@ class ContainerBeaconsController extends Controller
      * @param $beaconId
      *
      * @return JsonResponse
+     * @throws Exception
      */
     public function update(ContainerBeaconRequest $request, Container $container, $beaconId)
     {
@@ -78,9 +75,12 @@ class ContainerBeaconsController extends Controller
      * @param $beaconId
      *
      * @return JsonResponse
+     * @throws Exception
      */
     public function destroy(Container $container, $beaconId)
     {
+        $this->authorize('delete', BeaconContainer::class);
+
         $container->beacons()->detach($beaconId);
 
         return $this->json(null, Response::HTTP_OK);

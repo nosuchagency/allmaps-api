@@ -25,10 +25,10 @@ class BeaconsImportRequest extends FormRequest
     public function rules()
     {
         return [
-            'provider' => 'required',
-            'provider.id' => 'required|exists:beacon_providers,id',
-            'override' => 'required|boolean',
-            'description' => '',
+            'provider' => ['required'],
+            'provider.id' => ['required', 'exists:beacon_providers,id'],
+            'override' => ['required', 'boolean'],
+            'description' => ['max:65535'],
         ];
     }
 }

@@ -31,9 +31,9 @@ class FoldersReadTest extends TestCase
     /** @test */
     public function an_authenticated_user_with_read_permission_can_view_folders()
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['folders.read'])
-        );
+        $role = $this->createRoleWithPermissions(['folder:read']);
+
+        $this->signIn(null, $role);
 
         $this->getJson(route('folders.index'))->assertOk();
     }
@@ -41,9 +41,9 @@ class FoldersReadTest extends TestCase
     /** @test */
     public function an_authenticated_user_with_read_permission_can_view_folders_paginated()
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['folders.read'])
-        );
+        $role = $this->createRoleWithPermissions(['folder:read']);
+
+        $this->signIn(null, $role);
 
         $this->getJson(route('folders.paginated'))->assertOk();
     }
@@ -51,9 +51,9 @@ class FoldersReadTest extends TestCase
     /** @test */
     public function an_authenticated_user_with_read_permission_can_view_a_specific_folder()
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['folders.read'])
-        );
+        $role = $this->createRoleWithPermissions(['folder:read']);
+
+        $this->signIn(null, $role);
 
         $folder = factory(Folder::class)->create();
 

@@ -11,26 +11,25 @@ use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Support\Collection;
 use Spatie\Activitylog\Traits\CausesActivity;
 use Spatie\Activitylog\Traits\LogsActivity;
-use Spatie\Permission\Traits\HasRoles;
 
 class Token extends Model implements AuthorizableContract
 {
-    use HasRoles, Authorizable, HasCreatedBy, CausesActivity, LogsActivity;
+    use Authorizable, HasCreatedBy, CausesActivity, LogsActivity;
 
     /**
-     * @var string
-     */
-    protected $guard_name = 'api';
-
-    /**
-     * The attributes that are mass assignable.
+     * The attributes that aren't mass assignable.
      *
      * @var array
      */
-    protected $fillable = [
-        'name',
-        'created_by'
-    ];
+    protected $guarded = [];
+
+    /**
+     * Get the role of the token
+     */
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
+    }
 
     /**
      * @param int $count

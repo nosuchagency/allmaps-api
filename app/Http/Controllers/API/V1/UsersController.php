@@ -29,11 +29,6 @@ class UsersController extends Controller
      */
     public function __construct(UserService $userService)
     {
-        $this->middleware('permission:users.create')->only(['store']);
-        $this->middleware('permission:users.read')->only(['index', 'show', 'paginated']);
-        $this->middleware('permission:users.update')->only(['update']);
-        $this->middleware('permission:users.delete')->only(['destroy', 'bulkDestroy']);
-
         $this->userService = $userService;
     }
 
@@ -41,9 +36,12 @@ class UsersController extends Controller
      * @param Request $request
      *
      * @return JsonResponse
+     * @throws Exception
      */
     public function index(Request $request)
     {
+        $this->authorize('viewAny', User::class);
+
         $users = User::query()
             ->withRelations($request)
             ->filter($request)
@@ -56,9 +54,12 @@ class UsersController extends Controller
      * @param Request $request
      *
      * @return AnonymousResourceCollection
+     * @throws Exception
      */
     public function paginated(Request $request)
     {
+        $this->authorize('viewAny', User::class);
+
         $users = User::query()
             ->withRelations($request)
             ->filter($request)
@@ -71,10 +72,11 @@ class UsersController extends Controller
      * @param UserRequest $request
      *
      * @return JsonResponse
+     * @throws Exception
      */
     public function store(UserRequest $request)
     {
-        $user = $this->userService->create($request);
+        $user = $this->userService->create($request->validated());
 
         $user->load($user->relationships);
 
@@ -85,9 +87,12 @@ class UsersController extends Controller
      * @param User $user
      *
      * @return JsonResponse
+     * @throws Exception
      */
     public function show(User $user)
     {
+        $this->authorize('view', User::class);
+
         $user->load($user->relationships);
 
         return $this->json(new UserResource($user), Response::HTTP_OK);
@@ -98,10 +103,11 @@ class UsersController extends Controller
      * @param User $user
      *
      * @return JsonResponse
+     * @throws Exception
      */
     public function update(UserRequest $request, User $user)
     {
-        $user = $this->userService->update($user, $request);
+        $user = $this->userService->update($user, $request->validated());
 
         $user->load($user->relationships);
 
@@ -116,6 +122,8 @@ class UsersController extends Controller
      */
     public function destroy(User $user)
     {
+        $this->authorize('delete', User::class);
+
         $user->delete();
 
         return $this->json(null, Response::HTTP_OK);
@@ -125,9 +133,12 @@ class UsersController extends Controller
      * @param BulkDeleteRequest $request
      *
      * @return JsonResponse
+     * @throws Exception
      */
     public function bulkDestroy(BulkDeleteRequest $request)
     {
+        $this->authorize('delete', User::class);
+
         collect($request->get('items'))->each(function ($user) {
             if ($userToDelete = User::find($user['id'])) {
                 $userToDelete->delete();

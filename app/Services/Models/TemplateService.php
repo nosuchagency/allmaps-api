@@ -2,21 +2,18 @@
 
 namespace App\Services\Models;
 
-use App\Contracts\ModelServiceContract;
 use App\Models\Tag;
 use App\Models\Template;
-use App\Models\Token;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 
-class TemplateService implements ModelServiceContract
+class TemplateService
 {
     /**
      * @param Request $request
      *
-     * @return Model
+     * @return Template
      */
-    public function create(Request $request)
+    public function create(Request $request): Template
     {
         $template = new Template();
         $template->layout()->associate(
@@ -34,11 +31,11 @@ class TemplateService implements ModelServiceContract
 
     /**
      * @param Request $request
-     * @param Model $template
+     * @param Template $template
      *
-     * @return Model
+     * @return Template
      */
-    public function update(Model $template, Request $request)
+    public function update(Template $template, Request $request): Template
     {
         $template->fill($request->only($template->getFillable()));
 

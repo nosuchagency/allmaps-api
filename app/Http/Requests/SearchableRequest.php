@@ -34,7 +34,7 @@ class SearchableRequest extends FormRequest
 
         if ($this->method() === 'POST') {
             $rules['identifier'][] = 'required';
-            $rules['name'] = 'required';
+            $rules['name'] = ['required', 'max:255'];
         }
 
         return $rules;

@@ -14,18 +14,12 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Activitylog\Traits\CausesActivity;
 use Spatie\Activitylog\Traits\LogsActivity;
-use Spatie\Permission\Traits\HasRoles;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Support\Str;
 
 class User extends Authenticatable implements JWTSubject
 {
-    use HasRelations, HasCategory, Notifiable, HasRoles, CausesActivity, LogsActivity;
-
-    /**
-     * @var string
-     */
-    protected $guard_name = 'api';
+    use HasRelations, HasCategory, Notifiable, CausesActivity, LogsActivity;
 
     /**
      * @var array
@@ -35,17 +29,11 @@ class User extends Authenticatable implements JWTSubject
     ];
 
     /**
-     * The attributes that are mass assignable.
+     * The attributes that aren't mass assignable.
      *
      * @var array
      */
-    protected $fillable = [
-        'name',
-        'email',
-        'category_id',
-        'locale',
-        'category'
-    ];
+    protected $guarded = [];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -65,8 +53,17 @@ class User extends Authenticatable implements JWTSubject
     public $relationships = [
         'category',
         'tags',
-        'contents'
+        'contents',
+        'locations'
     ];
+
+    /**
+     * Get the role of the user
+     */
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
+    }
 
     /**
      * The tags that belong to the user
@@ -84,6 +81,14 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany(Content::class, 'created_by');
     }
 
+    /**s
+     * Get the locations that the user has created
+     */
+    public function locations()
+    {
+        return $this->hasMany(Location::class, 'created_by');
+    }
+
     /**
      * @return string
      */
@@ -98,6 +103,18 @@ class User extends Authenticatable implements JWTSubject
     public function setPasswordAttribute($password)
     {
         $this->attributes['password'] = Hash::make($password);
+    }
+
+    /**
+     * @param $tags
+     */
+    public function addTags($tags)
+    {
+        $this->tags()->sync([]);
+
+        foreach ($tags as $tag) {
+            $this->tags()->attach(Tag::find($tag['id']));
+        }
     }
 
     /**
@@ -126,7 +143,7 @@ class User extends Authenticatable implements JWTSubject
     /**
      * Send the password reset notification.
      *
-     * @param  string $token
+     * @param string $token
      *
      * @return void
      */

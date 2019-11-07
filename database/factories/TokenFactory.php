@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Role;
 use Faker\Generator as Faker;
 use Illuminate\Support\Str;
 
@@ -17,6 +18,7 @@ use Illuminate\Support\Str;
 $factory->define(App\Models\Token::class, function (Faker $faker) {
     return [
         'name' => 'Token',
-        'api_token' => Str::random(60)
+        'api_token' => Str::random(60),
+        'role_id' => factory(Role::class),
     ];
 });

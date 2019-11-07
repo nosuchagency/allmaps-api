@@ -3,6 +3,7 @@
 namespace Tests\Feature\Tags;
 
 use App\Models\Tag;
+use Illuminate\Foundation\Testing\TestResponse;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -41,13 +42,13 @@ class TagsCreateTest extends TestCase
     /**
      * @param array $attributes
      *
-     * @return \Illuminate\Foundation\Testing\TestResponse
+     * @return TestResponse
      */
     protected function create($attributes = [])
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['tags.create'])
-        );
+        $role = $this->createRoleWithPermissions(['tag:create']);
+
+        $this->signIn(null, $role);
 
         return $this->postJson(route('tags.store'), $this->validFields($attributes));
     }

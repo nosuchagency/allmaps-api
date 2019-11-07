@@ -8,6 +8,7 @@ use App\Models\Role;
 use App\Models\Tag;
 use App\Models\Token;
 use App\Models\User;
+use Illuminate\Foundation\Testing\TestResponse;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -50,13 +51,13 @@ class TokensUpdateTest extends TestCase
      * @param $token
      * @param array $attributes
      *
-     * @return \Illuminate\Foundation\Testing\TestResponse
+     * @return TestResponse
      */
     protected function update($token, $attributes = [])
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['tokens.update'])
-        );
+        $role = $this->createRoleWithPermissions(['token:update']);
+
+        $this->signIn(null, $role);
 
         return $this->putJson(route('tokens.update', ['token' => $token]), $this->validFields($attributes));
     }

@@ -2,7 +2,6 @@
 
 namespace Tests\Unit;
 
-use App\Services\Beacons\Providers\Kontakt;
 use InvalidArgumentException;
 use Tests\TestCase;
 use App\Factories\ContentFactory;
@@ -58,7 +57,7 @@ class ContentFactoryTest extends TestCase
     }
 
     /** @test */
-    public function it_returns_null_if_type_is_invalid()
+    public function it_returns_throws_exception_if_type_is_invalid()
     {
         $this->expectException(InvalidArgumentException::class);
         $contentFactory = new ContentFactory();

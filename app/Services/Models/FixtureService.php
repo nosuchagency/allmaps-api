@@ -2,49 +2,87 @@
 
 namespace App\Services\Models;
 
-use App\Contracts\ModelServiceContract;
+use App\Models\Category;
 use App\Models\Fixture;
 use App\Models\Tag;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 
-class FixtureService implements ModelServiceContract
+class FixtureService
 {
     /**
-     * @param Request $request
+     * @param array $attributes
      *
-     * @return Model
+     * @return Fixture
      */
-    public function create(Request $request)
+    public function create(array $attributes): Fixture
     {
         $fixture = new Fixture();
-        $fixture->fill($request->only($fixture->getFillable()));
-        $fixture->setImage($request->get('image'));
+
+        $fields = Arr::only($attributes, [
+            'name',
+            'description',
+            'image',
+            'image_width',
+            'image_height',
+        ]);
+
+        $fixture->fill($fields);
+
+        if (Arr::has($attributes, 'image')) {
+            $fixture->setImage(Arr::get($attributes, 'image'));
+        }
+
+        $fixture->category()->associate(
+            Category::find(Arr::get($attributes, 'category.id'))
+        );
+
         $fixture->save();
 
-        foreach ($request->get('tags', []) as $tag) {
-            $fixture->tags()->attach(Tag::find($tag['id']));
+        if (Arr::has($attributes, 'tags')) {
+            foreach ($attributes['tags'] as $tag) {
+                $fixture->tags()->attach(Tag::find($tag['id']));
+            }
         }
 
         return $fixture->refresh();
     }
 
     /**
-     * @param Model $fixture
-     * @param Request $request
+     * @param Fixture $fixture
+     * @param array $attributes
      *
-     * @return Model
+     * @return Fixture
      */
-    public function update(Model $fixture, Request $request)
+    public function update(Fixture $fixture, array $attributes): Fixture
     {
-        $fixture->fill($request->only($fixture->getFillable()));
-        $fixture->setImage($request->get('image'));
+        $fields = Arr::only($attributes, [
+            'name',
+            'description',
+            'image',
+            'image_width',
+            'image_height',
+        ]);
+
+        $fixture->fill($fields);
+
+        if (Arr::has($attributes, 'image')) {
+            $fixture->setImage(Arr::get($attributes, 'image'));
+        }
+
+        if (Arr::has($attributes, 'category.id')) {
+            $fixture->category()->associate(
+                Category::find(Arr::get($attributes, 'category.id'))
+            );
+        }
+
         $fixture->save();
 
-        $fixture->tags()->sync([]);
+        if (Arr::has($attributes, 'tags')) {
+            $fixture->tags()->sync([]);
 
-        foreach ($request->get('tags', []) as $tag) {
-            $fixture->tags()->attach(Tag::find($tag['id']));
+            foreach ($attributes['tags'] as $tag) {
+                $fixture->tags()->attach(Tag::find($tag['id']));
+            }
         }
 
         return $fixture->refresh();

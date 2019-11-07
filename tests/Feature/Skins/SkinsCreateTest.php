@@ -3,6 +3,7 @@
 namespace Tests\Feature\Skins;
 
 use App\Models\Skin;
+use Illuminate\Foundation\Testing\TestResponse;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -55,13 +56,13 @@ class SkinsCreateTest extends TestCase
     /**
      * @param array $attributes
      *
-     * @return \Illuminate\Foundation\Testing\TestResponse
+     * @return TestResponse
      */
     protected function create($attributes = [])
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['skins.create'])
-        );
+        $role = $this->createRoleWithPermissions(['skin:create']);
+
+        $this->signIn(null, $role);
 
         return $this->postJson(route('skins.store'), $this->validFields($attributes));
     }

@@ -8,7 +8,10 @@ use App\Http\Requests\RoleRequest;
 use App\Http\Resources\RoleResource;
 use App\Models\Role;
 use App\Services\Models\RoleService;
+use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 
 class RolesController extends Controller
@@ -26,22 +29,19 @@ class RolesController extends Controller
      */
     public function __construct(RoleService $roleService)
     {
-        $this->middleware('permission:roles.create')->only(['store']);
-        $this->middleware('permission:roles.read')->only(['index', 'show', 'paginated']);
-        $this->middleware('permission:roles.update')->only(['update', 'grantPermission']);
-        $this->middleware('permission:roles.delete')->only(['destroy', 'bulkDestroy', 'revokePermission']);
-
         $this->roleService = $roleService;
     }
-
 
     /**
      * @param Request $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
+     * @throws Exception
      */
     public function index(Request $request)
     {
+        $this->authorize('viewAny', Role::class);
+
         $roles = Role::query()
             ->filter($request)
             ->get();
@@ -52,10 +52,13 @@ class RolesController extends Controller
     /**
      * @param Request $request
      *
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     * @return AnonymousResourceCollection
+     * @throws Exception
      */
     public function paginated(Request $request)
     {
+        $this->authorize('viewAny', Role::class);
+
         $roles = Role::query()
             ->filter($request)
             ->jsonPaginate($this->paginationNumber());
@@ -66,11 +69,12 @@ class RolesController extends Controller
     /**
      * @param RoleRequest $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
+     * @throws Exception
      */
     public function store(RoleRequest $request)
     {
-        $role = $this->roleService->create($request);
+        $role = $this->roleService->create($request->validated());
 
         return $this->json(new RoleResource($role), Response::HTTP_CREATED);
     }
@@ -78,10 +82,13 @@ class RolesController extends Controller
     /**
      * @param Role $role
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
+     * @throws Exception
      */
     public function show(Role $role)
     {
+        $this->authorize('view', Role::class);
+
         return $this->json(new RoleResource($role), Response::HTTP_OK);
     }
 
@@ -89,11 +96,12 @@ class RolesController extends Controller
      * @param RoleRequest $request
      * @param Role $role
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
+     * @throws Exception
      */
     public function update(RoleRequest $request, Role $role)
     {
-        $role = $this->roleService->update($role, $request);
+        $role = $this->roleService->update($role, $request->validated());
 
         return $this->json(new RoleResource($role), Response::HTTP_OK);
     }
@@ -101,11 +109,13 @@ class RolesController extends Controller
     /**
      * @param Role $role
      *
-     * @return \Illuminate\Http\JsonResponse
-     * @throws \Exception
+     * @return JsonResponse
+     * @throws Exception
      */
     public function destroy(Role $role)
     {
+        $this->authorize('delete', Role::class);
+
         $role->delete();
 
         return $this->json(null, Response::HTTP_OK);
@@ -114,10 +124,13 @@ class RolesController extends Controller
     /**
      * @param BulkDeleteRequest $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
+     * @throws Exception
      */
     public function bulkDestroy(BulkDeleteRequest $request)
     {
+        $this->authorize('delete', Role::class);
+
         collect($request->get('items'))->each(function ($role) {
             if ($roleToDelete = Role::find($role['id'])) {
                 $roleToDelete->delete();

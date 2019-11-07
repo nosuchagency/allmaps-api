@@ -46,9 +46,9 @@ class CategoriesCreateTest extends TestCase
      */
     protected function create($attributes = [])
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['categories.create'])
-        );
+        $role = $this->createRoleWithPermissions(['category:create']);
+
+        $this->signIn(null, $role);
 
         return $this->postJson(route('categories.store'), $this->validFields($attributes));
     }

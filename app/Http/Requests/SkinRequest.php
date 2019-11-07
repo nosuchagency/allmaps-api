@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Skin;
 use App\Rules\SkinZipFileRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -15,7 +16,11 @@ class SkinRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        if ($this->method() === 'POST') {
+            return $this->user()->can('create', Skin::class);
+        }
+
+        return $this->user()->can('update', Skin::class);
     }
 
     /**
@@ -28,6 +33,7 @@ class SkinRequest extends FormRequest
         $rules = [
             'name' => [
                 'required',
+                'max:255',
                 Rule::unique('skins')->ignore($this->route('skin')),
             ],
             'file' => ['file', 'mimes:zip', new SkinZipFileRule],

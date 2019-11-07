@@ -2,13 +2,12 @@
 
 namespace App\Services\Models;
 
-use App\Contracts\ModelServiceContract;
 use App\Factories\ContentFactory;
+use App\Models\Content\Content;
 use App\Models\Tag;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 
-class ContentService implements ModelServiceContract
+class ContentService
 {
     /**
      * @var ContentFactory
@@ -26,9 +25,9 @@ class ContentService implements ModelServiceContract
     /**
      * @param Request $request
      *
-     * @return Model
+     * @return Content
      */
-    public function create(Request $request)
+    public function create(Request $request): Content
     {
         $content = $this->contentFactory->make($request->get('type'));
 
@@ -48,12 +47,12 @@ class ContentService implements ModelServiceContract
     }
 
     /**
-     * @param Model $content
+     * @param Content $content
      * @param Request $request
      *
-     * @return Model
+     * @return Content
      */
-    public function update(Model $content, Request $request)
+    public function update(Content $content, Request $request): Content
     {
         $content->fill($request->only($content->getFillable()));
         $content->setImage($request->get('image'));

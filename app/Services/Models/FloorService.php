@@ -2,26 +2,31 @@
 
 namespace App\Services\Models;
 
-use App\Contracts\ModelServiceContract;
+use App\Models\Building;
 use App\Models\Floor;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 
-class FloorService implements ModelServiceContract
+class FloorService
 {
     /**
-     * @param Request $request
+     * @param array $attributes
      *
-     * @return Model
+     * @return Floor
      */
-    public function create(Request $request)
+    public function create(array $attributes): Floor
     {
         $floor = new Floor();
-        $floor->building()->associate(
-            $request->input('building.id')
-        );
 
-        $floor->fill($request->only($floor->getFillable()));
+        $fields = Arr::only($attributes, [
+            'name',
+            'level',
+        ]);
+
+        $floor->fill($fields);
+
+        $floor->building()->associate(
+            Building::find(Arr::get($attributes, 'building.id'))
+        );
 
         $floor->save();
 
@@ -29,18 +34,23 @@ class FloorService implements ModelServiceContract
     }
 
     /**
-     * @param Model $floor
-     * @param Request $request
+     * @param Floor $floor
+     * @param array $attributes
      *
-     * @return Model
+     * @return Floor
      */
-    public function update(Model $floor, Request $request)
+    public function update(Floor $floor, array $attributes): Floor
     {
-        $floor->fill($request->only($floor->getFillable()));
+        $fields = Arr::only($attributes, [
+            'name',
+            'level',
+        ]);
 
-        if ($request->has('building')) {
+        $floor->fill($fields);
+
+        if (Arr::has($attributes, 'building.id')) {
             $floor->building()->associate(
-                $request->input('building.id')
+                Building::find(Arr::get($attributes, 'building.id'))
             );
         }
 

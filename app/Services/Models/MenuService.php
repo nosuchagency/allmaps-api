@@ -2,34 +2,43 @@
 
 namespace App\Services\Models;
 
-use App\Contracts\ModelServiceContract;
 use App\Models\Menu;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 
-class MenuService implements ModelServiceContract
+class MenuService
 {
     /**
-     * @param Request $request
+     * @param array $attributes
      *
-     * @return Model
+     * @return Menu
      */
-    public function create(Request $request)
+    public function create(array $attributes): Menu
     {
         $menu = new Menu();
-        $menu->fill($request->only($menu->getFillable()))->save();
+
+        $fields = Arr::only($attributes, [
+            'name',
+        ]);
+
+        $menu->fill($fields)->save();
+
         return $menu->refresh();
     }
 
     /**
-     * @param Model $menu
-     * @param Request $request
+     * @param Menu $menu
+     * @param array $attributes
      *
-     * @return Model
+     * @return Menu
      */
-    public function update(Model $menu, Request $request)
+    public function update(Menu $menu, array $attributes): Menu
     {
-        $menu->fill($request->only($menu->getFillable()))->save();
+        $fields = Arr::only($attributes, [
+            'name',
+        ]);
+
+        $menu->fill($fields)->save();
+
         return $menu->refresh();
     }
 }

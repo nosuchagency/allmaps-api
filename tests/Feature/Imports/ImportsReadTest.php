@@ -31,9 +31,9 @@ class ImportsReadTest extends TestCase
     /** @test */
     public function an_authenticated_user_with_read_permission_can_view_imports()
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['imports.read'])
-        );
+        $role = $this->createRoleWithPermissions(['import:read']);
+
+        $this->signIn(null, $role);
 
         $this->getJson(route('imports.index'))->assertOk();
     }
@@ -41,9 +41,9 @@ class ImportsReadTest extends TestCase
     /** @test */
     public function an_authenticated_user_with_read_permission_can_view_activities_paginated()
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['imports.read'])
-        );
+        $role = $this->createRoleWithPermissions(['import:read']);
+
+        $this->signIn(null, $role);
 
         $this->getJson(route('imports.paginated'))->assertOk();
     }
@@ -51,9 +51,9 @@ class ImportsReadTest extends TestCase
     /** @test */
     public function an_authenticated_user_with_read_permission_can_view_a_specific_import()
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['imports.read'])
-        );
+        $role = $this->createRoleWithPermissions(['import:read']);
+
+        $this->signIn(null, $role);
 
         $import = factory(Import::class)->create();
 

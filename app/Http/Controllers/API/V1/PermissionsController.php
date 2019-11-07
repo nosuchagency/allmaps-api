@@ -3,15 +3,16 @@
 namespace App\Http\Controllers\API\V1;
 
 use App\Http\Controllers\Controller;
+use App\Models\Permission;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
-use Spatie\Permission\Models\Permission;
 
 class PermissionsController extends Controller
 {
 
     /**
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function index()
     {

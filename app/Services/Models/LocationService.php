@@ -2,24 +2,22 @@
 
 namespace App\Services\Models;
 
-use App\Contracts\ModelServiceContract;
 use App\Models\Beacon;
 use App\Models\Fixture;
 use App\Models\Location;
 use App\Models\LocationField;
 use App\Models\Poi;
 use App\Models\Tag;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 
-class LocationService implements ModelServiceContract
+class LocationService
 {
     /**
      * @param Request $request
      *
-     * @return Model
+     * @return Location
      */
-    public function create(Request $request)
+    public function create(Request $request): Location
     {
         $location = new Location();
 
@@ -66,12 +64,12 @@ class LocationService implements ModelServiceContract
     }
 
     /**
-     * @param Model $location
+     * @param Location $location
      * @param Request $request
      *
-     * @return Model
+     * @return Location
      */
-    public function update(Model $location, Request $request)
+    public function update(Location $location, Request $request): Location
     {
         $location->fill($request->only($location->getFillable()));
         $location->setImage($request->get('image'));
@@ -99,9 +97,9 @@ class LocationService implements ModelServiceContract
 
     /**
      * @param array $searchables
-     * @param Model $location
+     * @param Location $location
      */
-    protected function setPluginFields(array $searchables, Model $location)
+    protected function setPluginFields(array $searchables, Location $location)
     {
         foreach ($searchables as $searchable) {
             foreach ($searchable['fields'] as $field) {

@@ -4,6 +4,7 @@ namespace Tests\Feature\Floors;
 
 use App\Models\Building;
 use App\Models\Floor;
+use Illuminate\Foundation\Testing\TestResponse;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -48,13 +49,13 @@ class FloorsCreateTest extends TestCase
     /**
      * @param array $attributes
      *
-     * @return \Illuminate\Foundation\Testing\TestResponse
+     * @return TestResponse
      */
     protected function create($attributes = [])
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['floors.create'])
-        );
+        $role = $this->createRoleWithPermissions(['floor:create']);
+
+        $this->signIn(null, $role);
 
         return $this->postJson(route('floors.store'), $this->validFields($attributes));
     }
