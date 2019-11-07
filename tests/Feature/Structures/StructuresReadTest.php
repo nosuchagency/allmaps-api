@@ -31,9 +31,9 @@ class StructuresReadTest extends TestCase
     /** @test */
     public function an_authenticated_user_with_read_permission_can_view_structures()
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['floors.read'])
-        );
+        $role = $this->createRoleWithPermissions(['structure:read']);
+
+        $this->signIn(null, $role);
 
         $this->getJson(route('structures.index'))->assertOk();
     }
@@ -41,9 +41,9 @@ class StructuresReadTest extends TestCase
     /** @test */
     public function an_authenticated_user_with_read_permission_can_view_structures_paginated()
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['floors.read'])
-        );
+        $role = $this->createRoleWithPermissions(['structure:read']);
+
+        $this->signIn(null, $role);
 
         $this->getJson(route('structures.paginated'))->assertOk();
     }
@@ -51,9 +51,9 @@ class StructuresReadTest extends TestCase
     /** @test */
     public function an_authenticated_user_with_read_permission_can_view_a_specific_structure()
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['floors.read'])
-        );
+        $role = $this->createRoleWithPermissions(['structure:read']);
+
+        $this->signIn(null, $role);
 
         $structure = factory(Structure::class)->create();
 

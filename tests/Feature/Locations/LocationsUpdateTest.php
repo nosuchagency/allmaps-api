@@ -52,9 +52,9 @@ class LocationsUpdateTest extends TestCase
      */
     protected function update($location, $attributes = [])
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['floors.update'])
-        );
+        $role = $this->createRoleWithPermissions(['location:update']);
+
+        $this->signIn(null, $role);
 
         return $this->putJson(route('locations.update', ['location' => $location]), $this->validFields($attributes));
     }

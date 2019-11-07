@@ -24,15 +24,15 @@ class SkinsDeleteTest extends TestCase
         $skin = factory(Skin::class)->create();
         $this->deleteJson(route('skins.destroy', ['skin' => $skin]))->assertStatus(403);
 
-        $this->postJson(route('skins.bulk-destroy', ['items' => []]))->assertStatus(403);
+        $this->postJson(route('skins.bulk-destroy'), ['items' => []])->assertStatus(403);
     }
 
     /** @test */
     public function an_authenticated_user_with_delete_permission_can_delete_specific_skin()
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['skins.delete'])
-        );
+        $role = $this->createRoleWithPermissions(['skin:delete']);
+
+        $this->signIn(null, $role);
 
         $skin = factory(Skin::class)->create();
         $this->deleteJson(route('skins.destroy', ['skin' => $skin]))->assertOk();
@@ -42,9 +42,9 @@ class SkinsDeleteTest extends TestCase
     /** @test */
     public function an_authenticated_user_with_delete_permission_can_delete_beacons_in_bulk()
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['skins.delete'])
-        );
+        $role = $this->createRoleWithPermissions(['skin:delete']);
+
+        $this->signIn(null, $role);
 
         $skins = factory(Skin::class, 5)->create();
         $this->assertCount(5, Skin::all());

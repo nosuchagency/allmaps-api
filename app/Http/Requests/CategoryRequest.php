@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Category;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CategoryRequest extends FormRequest
@@ -13,7 +14,11 @@ class CategoryRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        if ($this->method() === 'POST') {
+            return $this->user()->can('create', Category::class);
+        }
+
+        return $this->user()->can('update', Category::class);
     }
 
     /**
@@ -24,8 +29,8 @@ class CategoryRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required',
-            'description' => ''
+            'name' => ['required', 'max:255'],
+            'description' => ['max:65535'],
         ];
     }
 }

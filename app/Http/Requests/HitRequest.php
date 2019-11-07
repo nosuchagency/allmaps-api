@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\HitType;
+use App\Models\Hit;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Arr;
 use Illuminate\Validation\Rule;
@@ -16,7 +17,11 @@ class HitRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        if ($this->method() === 'POST') {
+            return $this->user()->can('create', Hit::class);
+        }
+
+        return $this->user()->can('update', Hit::class);
     }
 
     /**

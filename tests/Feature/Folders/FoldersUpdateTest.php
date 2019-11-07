@@ -5,6 +5,7 @@ namespace Tests\Feature\Folders;
 use App\Models\Category;
 use App\Models\Folder;
 use App\Models\Tag;
+use Illuminate\Foundation\Testing\TestResponse;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -47,13 +48,13 @@ class FoldersUpdateTest extends TestCase
      * @param $folder
      * @param array $attributes
      *
-     * @return \Illuminate\Foundation\Testing\TestResponse
+     * @return TestResponse
      */
     protected function update($folder, $attributes = [])
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['folders.update'])
-        );
+        $role = $this->createRoleWithPermissions(['folder:update']);
+
+        $this->signIn(null, $role);
 
         return $this->putJson(route('folders.update', ['folder' => $folder]), $this->validFields($attributes));
     }

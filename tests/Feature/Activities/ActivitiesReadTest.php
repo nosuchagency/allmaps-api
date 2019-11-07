@@ -30,9 +30,9 @@ class ActivitiesReadTest extends TestCase
     /** @test */
     public function an_authenticated_user_with_read_permission_can_view_activities()
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['activities.read'])
-        );
+        $role = $this->createRoleWithPermissions(['activity:read']);
+
+        $this->signIn(null, $role);
 
         $this->getJson(route('activities.index'))->assertOk();
     }
@@ -40,9 +40,9 @@ class ActivitiesReadTest extends TestCase
     /** @test */
     public function an_authenticated_user_with_read_permission_can_view_activities_paginated()
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['activities.read'])
-        );
+        $role = $this->createRoleWithPermissions(['activity:read']);
+
+        $this->signIn(null, $role);
 
         $this->getJson(route('activities.paginated'))->assertOk();
     }
@@ -50,9 +50,9 @@ class ActivitiesReadTest extends TestCase
     /** @test */
     public function an_authenticated_user_with_read_permission_can_view_a_specific_activity()
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['activities.read'])
-        );
+        $role = $this->createRoleWithPermissions(['activity:read']);
+
+        $this->signIn(null, $role);
 
         $activity = activity()->log('Look mum, I logged something');
 

@@ -140,9 +140,9 @@ class ComponentsCreateTest extends TestCase
      */
     protected function create($attributes = [])
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['components.create'])
-        );
+        $role = $this->createRoleWithPermissions(['component:create']);
+
+        $this->signIn(null, $role);
 
         return $this->postJson(route('components.store'), $this->validFields($attributes));
     }

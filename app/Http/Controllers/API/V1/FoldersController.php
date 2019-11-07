@@ -8,7 +8,10 @@ use App\Http\Requests\FolderRequest;
 use App\Http\Resources\FolderResource;
 use App\Models\Folder;
 use App\Services\Models\FolderService;
+use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 
 class FoldersController extends Controller
@@ -26,11 +29,6 @@ class FoldersController extends Controller
      */
     public function __construct(FolderService $folderService)
     {
-        $this->middleware('permission:folders.create')->only(['store']);
-        $this->middleware('permission:folders.read')->only(['index', 'paginated', 'show']);
-        $this->middleware('permission:folders.update')->only(['update']);
-        $this->middleware('permission:folders.delete')->only(['destroy', 'bulkDestroy']);
-
         $this->folderService = $folderService;
     }
 
@@ -38,10 +36,13 @@ class FoldersController extends Controller
      *
      * @param Request $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
+     * @throws Exception
      */
     public function index(Request $request)
     {
+        $this->authorize('viewAny', Folder::class);
+
         $folders = Folder::query()
             ->withRelations($request)
             ->filter($request)
@@ -53,10 +54,13 @@ class FoldersController extends Controller
     /**
      * @param Request $request
      *
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     * @return AnonymousResourceCollection
+     * @throws Exception
      */
     public function paginated(Request $request)
     {
+        $this->authorize('viewAny', Folder::class);
+
         $buildings = Folder::query()
             ->withRelations($request)
             ->filter($request)
@@ -68,7 +72,8 @@ class FoldersController extends Controller
     /**
      * @param FolderRequest $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
+     * @throws Exception
      */
     public function store(FolderRequest $request)
     {
@@ -82,10 +87,13 @@ class FoldersController extends Controller
     /**
      * @param Folder $folder
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
+     * @throws Exception
      */
     public function show(Folder $folder)
     {
+        $this->authorize('view', Folder::class);
+
         $folder->load($folder->relationships);
 
         return $this->json(new FolderResource($folder), Response::HTTP_OK);
@@ -95,7 +103,8 @@ class FoldersController extends Controller
      * @param FolderRequest $request
      * @param Folder $folder
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
+     * @throws Exception
      */
     public function update(FolderRequest $request, Folder $folder)
     {
@@ -109,11 +118,13 @@ class FoldersController extends Controller
     /**
      * @param Folder $folder
      *
-     * @return \Illuminate\Http\JsonResponse
-     * @throws \Exception
+     * @return JsonResponse
+     * @throws Exception
      */
     public function destroy(Folder $folder)
     {
+        $this->authorize('delete', Folder::class);
+
         if ($folder->primary) {
             return $this->json(null, Response::HTTP_UNAUTHORIZED);
         }
@@ -126,10 +137,13 @@ class FoldersController extends Controller
     /**
      * @param BulkDeleteRequest $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
+     * @throws Exception
      */
     public function bulkDestroy(BulkDeleteRequest $request)
     {
+        $this->authorize('delete', Folder::class);
+
         collect($request->get('items'))->each(function ($folder) {
             $folderToDelete = Folder::query()
                 ->whereId($folder['id'])

@@ -8,6 +8,7 @@ use App\Http\Requests\PoiRequest;
 use App\Http\Resources\PoiResource;
 use App\Models\Poi;
 use App\Services\Models\PoiService;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -28,11 +29,6 @@ class PoisController extends Controller
      */
     public function __construct(PoiService $poiService)
     {
-        $this->middleware('permission:pois.create')->only(['store']);
-        $this->middleware('permission:pois.read')->only(['index', 'show', 'paginated']);
-        $this->middleware('permission:pois.update')->only(['update']);
-        $this->middleware('permission:pois.delete')->only(['destroy', 'bulkDestroy']);
-
         $this->poiService = $poiService;
     }
 
@@ -40,9 +36,12 @@ class PoisController extends Controller
      * @param Request $request
      *
      * @return JsonResponse
+     * @throws Exception
      */
     public function index(Request $request)
     {
+        $this->authorize('viewAny', Poi::class);
+
         $pois = Poi::query()
             ->withRelations($request)
             ->filter($request)
@@ -55,9 +54,12 @@ class PoisController extends Controller
      * @param Request $request
      *
      * @return AnonymousResourceCollection
+     * @throws Exception
      */
     public function paginated(Request $request)
     {
+        $this->authorize('viewAny', Poi::class);
+
         $pois = Poi::query()
             ->withRelations($request)
             ->filter($request)
@@ -70,6 +72,7 @@ class PoisController extends Controller
      * @param PoiRequest $request
      *
      * @return JsonResponse
+     * @throws Exception
      */
     public function store(PoiRequest $request)
     {
@@ -84,9 +87,12 @@ class PoisController extends Controller
      * @param Poi $poi
      *
      * @return JsonResponse
+     * @throws Exception
      */
     public function show(Poi $poi)
     {
+        $this->authorize('view', Poi::class);
+
         $poi->load($poi->relationships);
 
         return $this->json(new PoiResource($poi), Response::HTTP_OK);
@@ -97,6 +103,7 @@ class PoisController extends Controller
      * @param Poi $poi
      *
      * @return JsonResponse
+     * @throws Exception
      */
     public function update(PoiRequest $request, Poi $poi)
     {
@@ -111,10 +118,12 @@ class PoisController extends Controller
      * @param Poi $poi
      *
      * @return JsonResponse
-     * @throws \Exception
+     * @throws Exception
      */
     public function destroy(Poi $poi)
     {
+        $this->authorize('delete', Poi::class);
+
         $poi->delete();
 
         return $this->json(null, Response::HTTP_OK);
@@ -124,9 +133,12 @@ class PoisController extends Controller
      * @param BulkDeleteRequest $request
      *
      * @return JsonResponse
+     * @throws Exception
      */
     public function bulkDestroy(BulkDeleteRequest $request)
     {
+        $this->authorize('delete', Poi::class);
+
         collect($request->get('items'))->each(function ($poi) {
             if ($poiToDelete = Poi::find($poi['id'])) {
                 $poiToDelete->delete();

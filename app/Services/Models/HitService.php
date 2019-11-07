@@ -2,21 +2,19 @@
 
 namespace App\Services\Models;
 
-use App\Contracts\ModelServiceContract;
-use App\Models\Beacon;
 use App\Models\Hit;
 use App\Pivots\BeaconContainer;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 
-class HitService implements ModelServiceContract
+class HitService
 {
     /**
      * @param Request $request
      *
-     * @return Model
+     * @return Hit
      */
-    public function create(Request $request)
+    public function create(Request $request): Hit
     {
         $hit = new Hit();
 
@@ -30,12 +28,12 @@ class HitService implements ModelServiceContract
     }
 
     /**
-     * @param Model $hit
+     * @param Hit $hit
      * @param Request $request
      *
-     * @return Model
+     * @return Hit
      */
-    public function update(Model $hit, Request $request)
+    public function update(Hit $hit, Request $request): Hit
     {
         $hit->fill($request->only($hit->getFillable()))->save();
         return $hit->refresh();

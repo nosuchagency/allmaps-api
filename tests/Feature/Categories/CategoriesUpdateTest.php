@@ -21,7 +21,7 @@ class CategoriesUpdateTest extends TestCase
     }
 
     /** @test */
-    public function an_authenticated_user_without_create_permission_cannot_update_categories()
+    public function an_authenticated_user_without_update_permission_cannot_update_categories()
     {
         $this->signIn();
 
@@ -50,9 +50,9 @@ class CategoriesUpdateTest extends TestCase
      */
     protected function update($category, $attributes = [])
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['categories.update'])
-        );
+        $role = $this->createRoleWithPermissions(['category:update']);
+
+        $this->signIn(null, $role);
 
         return $this->putJson(route('categories.update', ['category' => $category]), $this->validFields($attributes));
     }

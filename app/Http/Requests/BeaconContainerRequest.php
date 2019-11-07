@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Pivots\BeaconContainer;
 use Illuminate\Foundation\Http\FormRequest;
 
 class BeaconContainerRequest extends FormRequest
@@ -13,7 +14,11 @@ class BeaconContainerRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        if ($this->method() === 'POST') {
+            return $this->user()->can('create', BeaconContainer::class);
+        }
+
+        return $this->user()->can('update', BeaconContainer::class);
     }
 
     /**
@@ -24,8 +29,8 @@ class BeaconContainerRequest extends FormRequest
     public function rules()
     {
         return [
-            'container' => 'required',
-            'container.id' => 'required|exists:containers,id,deleted_at,NULL'
+            'container' => ['required'],
+            'container.id' => ['required', 'exists:containers,id,deleted_at,NULL']
         ];
     }
 }

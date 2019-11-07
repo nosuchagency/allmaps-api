@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Poi;
 use App\PoiType;
 use App\Rules\RequiredIdRule;
 use App\StrokeType;
@@ -17,7 +18,11 @@ class PoiRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        if ($this->method() === 'POST') {
+            return $this->user()->can('create', Poi::class);
+        }
+
+        return $this->user()->can('update', Poi::class);
     }
 
     /**
@@ -28,7 +33,7 @@ class PoiRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required',
+            'name' => ['required', 'max:255'],
             'type' => [
                 'required',
                 Rule::in(PoiType::TYPES),
@@ -46,9 +51,9 @@ class PoiRequest extends FormRequest
             'fill_opacity' => 'nullable|numeric|between:0,1',
             'image' => '',
             'category' => ['nullable', new RequiredIdRule],
-            'category.id' => 'exists:categories,id',
-            'tags' => 'array',
-            'tags.*.id' => 'required|exists:tags,id'
+            'category.id' => ['exists:categories,id'],
+            'tags' => ['array'],
+            'tags.*.id' => ['required', 'exists:tags,id']
         ];
     }
 }

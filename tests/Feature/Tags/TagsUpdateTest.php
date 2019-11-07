@@ -3,6 +3,7 @@
 namespace Tests\Feature\Tags;
 
 use App\Models\Tag;
+use Illuminate\Foundation\Testing\TestResponse;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -45,13 +46,13 @@ class TagsUpdateTest extends TestCase
      * @param $tag
      * @param array $attributes
      *
-     * @return \Illuminate\Foundation\Testing\TestResponse
+     * @return TestResponse
      */
     protected function update($tag, $attributes = [])
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['tags.update'])
-        );
+        $role = $this->createRoleWithPermissions(['tag:update']);
+
+        $this->signIn(null, $role);
 
         return $this->putJson(route('tags.update', ['tag' => $tag]), $this->validFields($attributes));
     }

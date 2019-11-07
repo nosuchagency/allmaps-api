@@ -31,9 +31,9 @@ class SkinsReadTest extends TestCase
     /** @test */
     public function an_authenticated_user_with_read_permission_can_view_skins()
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['skins.read'])
-        );
+        $role = $this->createRoleWithPermissions(['skin:read']);
+
+        $this->signIn(null, $role);
 
         $this->getJson(route('skins.index'))->assertOk();
     }
@@ -41,9 +41,9 @@ class SkinsReadTest extends TestCase
     /** @test */
     public function an_authenticated_user_with_read_permission_can_view_skins_paginated()
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['skins.read'])
-        );
+        $role = $this->createRoleWithPermissions(['skin:read']);
+
+        $this->signIn(null, $role);
 
         $this->getJson(route('skins.paginated'))->assertOk();
     }
@@ -51,9 +51,9 @@ class SkinsReadTest extends TestCase
     /** @test */
     public function an_authenticated_user_with_read_permission_can_view_a_specific_skin()
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['skins.read'])
-        );
+        $role = $this->createRoleWithPermissions(['skin:read']);
+
+        $this->signIn(null, $role);
 
         $skin = factory(Skin::class)->create();
 

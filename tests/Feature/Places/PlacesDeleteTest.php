@@ -24,15 +24,15 @@ class PlacesDeleteTest extends TestCase
         $place = factory(Place::class)->create();
         $this->deleteJson(route('places.destroy', ['place' => $place]))->assertStatus(403);
 
-        $this->postJson(route('places.bulk-destroy', ['items' => []]))->assertStatus(403);
+        $this->postJson(route('places.bulk-destroy'), ['items' => []])->assertStatus(403);
     }
 
     /** @test */
     public function an_authenticated_user_with_delete_permission_can_delete_specific_place()
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['places.delete'])
-        );
+        $role = $this->createRoleWithPermissions(['place:delete']);
+
+        $this->signIn(null, $role);
 
         $place = factory(Place::class)->create();
         $this->deleteJson(route('places.destroy', ['place' => $place]))->assertOk();
@@ -42,9 +42,9 @@ class PlacesDeleteTest extends TestCase
     /** @test */
     public function an_authenticated_user_with_delete_permission_can_delete_places_in_bulk()
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['places.delete'])
-        );
+        $role = $this->createRoleWithPermissions(['place:delete']);
+
+        $this->signIn(null, $role);
 
         $places = factory(Place::class, 5)->create();
         $this->assertCount(5, Place::all());

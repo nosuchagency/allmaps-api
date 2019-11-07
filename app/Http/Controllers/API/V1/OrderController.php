@@ -7,28 +7,23 @@ use App\Http\Requests\OrderRequest;
 use App\Models\Content\Content;
 use App\Models\Folder;
 use App\Models\MenuItem;
+use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 
 class OrderController extends Controller
 {
 
     /**
-     * FloorsController constructor.
-     */
-    public function __construct()
-    {
-        $this->middleware('permission:folders.update')->only(['folders']);
-        $this->middleware('permission:contents.update')->only(['contents']);
-        $this->middleware('permission:menus.update')->only(['menuItems']);
-    }
-
-    /**
      * @param OrderRequest $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
+     * @throws Exception
      */
     public function folders(OrderRequest $request)
     {
+        $this->authorize('update', Folder::class);
+
         collect($request->get('items'))->each(function ($value, $key) {
             Folder::find($value)->update(['order' => $key]);
         });
@@ -39,10 +34,13 @@ class OrderController extends Controller
     /**
      * @param OrderRequest $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
+     * @throws Exception
      */
     public function contents(OrderRequest $request)
     {
+        $this->authorize('update', Content::class);
+
         collect($request->get('items'))->each(function ($value, $key) {
             Content::find($value)->update(['order' => $key]);
         });
@@ -53,10 +51,13 @@ class OrderController extends Controller
     /**
      * @param OrderRequest $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
+     * @throws Exception
      */
     public function menuItems(OrderRequest $request)
     {
+        $this->authorize('update', MenuItem::class);
+
         collect($request->get('items'))->each(function ($value, $key) {
             MenuItem::find($value)->update(['order' => $key]);
         });

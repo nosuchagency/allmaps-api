@@ -2,9 +2,12 @@
 
 namespace Tests\Feature\Contents;
 
+use App\ContentType;
 use App\Models\Category;
-use App\Models\Container;
+use App\Models\Content\Content;
+use App\Models\Folder;
 use App\Models\Tag;
+use Illuminate\Foundation\Testing\TestResponse;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -14,48 +17,48 @@ class ContentsUpdateTest extends TestCase
     use RefreshDatabase, WithFaker;
 
     /** @test */
-    public function a_guest_cannot_update_containers()
+    public function a_guest_cannot_update_contents()
     {
-        $container = factory(Container::class)->create();
+        $content = factory(Content::class)->create();
 
-        $this->putJson(route('containers.update', ['container' => $container]))->assertStatus(401);
+        $this->putJson(route('contents.update', ['content' => $content]))->assertStatus(401);
     }
 
     /** @test */
-    public function an_authenticated_user_without_create_permission_cannot_update_containers()
+    public function an_authenticated_user_without_update_permission_cannot_update_contents()
     {
         $this->signIn();
 
-        $container = factory(Container::class)->create();
+        $content = factory(Content::class)->create();
 
-        $this->putJson(route('containers.update', ['container' => $container]))->assertStatus(403);
+        $this->putJson(route('contents.update', ['content' => $content]))->assertStatus(403);
     }
 
     /** @test */
-    public function an_authenticated_user_with_update_permission_can_update_containers()
+    public function an_authenticated_user_with_update_permission_can_update_contents()
     {
-        $container = factory(Container::class)->create();
+        $content = factory(Content::class)->create();
 
-        $attributes = ['id' => $container->id, 'name' => $this->faker->name];
+        $attributes = ['id' => $content->id, 'name' => $this->faker->name];
 
-        $this->update($container, $attributes)->assertOk();
+        $this->update($content, $attributes)->assertOk();
 
-        $this->assertDatabaseHas('containers', $attributes);
+        $this->assertDatabaseHas('contents', $attributes);
     }
 
     /**
-     * @param $container
+     * @param $content
      * @param array $attributes
      *
-     * @return \Illuminate\Foundation\Testing\TestResponse
+     * @return TestResponse
      */
-    protected function update($container, $attributes = [])
+    protected function update($content, $attributes = [])
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['containers.update'])
-        );
+        $role = $this->createRoleWithPermissions(['content:update']);
 
-        return $this->putJson(route('containers.update', ['container' => $container]), $this->validFields($attributes));
+        $this->signIn(null, $role);
+
+        return $this->putJson(route('contents.update', ['content' => $content]), $this->validFields($attributes));
     }
 
     /**
@@ -67,8 +70,12 @@ class ContentsUpdateTest extends TestCase
     {
         return array_merge([
             'name' => $this->faker->name,
-            'description' => $this->faker->paragraph,
-            'folders_enabled' => $this->faker->boolean,
+            'text' => $this->faker->paragraph,
+            'image' => null,
+            'url' => $this->faker->url,
+            'yt_url' => $this->faker->url,
+            'type' => $this->faker->randomElement(ContentType::TYPES),
+            'folder' => factory(Folder::class)->create(),
             'category' => factory(Category::class)->create(),
             'tags' => factory(Tag::class, 2)->create()
         ], $overrides);

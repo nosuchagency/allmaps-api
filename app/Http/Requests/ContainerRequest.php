@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Container;
 use App\Rules\RequiredIdRule;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -14,7 +15,11 @@ class ContainerRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        if ($this->method() === 'POST') {
+            return $this->user()->can('create', Container::class);
+        }
+
+        return $this->user()->can('update', Container::class);
     }
 
     /**
@@ -25,8 +30,8 @@ class ContainerRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required',
-            'description' => '',
+            'name' => ['required', 'max:255'],
+            'description' => ['max:65535'],
             'folders_enabled' => 'boolean',
             'mobile_skin' => ['nullable', new RequiredIdRule],
             'mobile_skin.id' => 'exists:skins,id',
@@ -35,9 +40,9 @@ class ContainerRequest extends FormRequest
             'desktop_skin' => ['nullable', new RequiredIdRule],
             'desktop_skin.id' => 'exists:skins,id',
             'category' => ['nullable', new RequiredIdRule],
-            'category.id' => 'exists:categories,id',
-            'tags' => 'array',
-            'tags.*.id' => 'required|exists:tags,id'
+            'category.id' => ['exists:categories,id'],
+            'tags' => ['array'],
+            'tags.*.id' => ['required', 'exists:tags,id']
         ];
     }
 }

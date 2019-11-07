@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\Container;
 use App\Models\Skin;
 use App\Models\Tag;
+use Illuminate\Foundation\Testing\TestResponse;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -92,13 +93,13 @@ class ContainersCreateTest extends TestCase
     /**
      * @param array $attributes
      *
-     * @return \Illuminate\Foundation\Testing\TestResponse
+     * @return TestResponse
      */
     protected function create($attributes = [])
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['containers.create'])
-        );
+        $role = $this->createRoleWithPermissions(['container:create']);
+
+        $this->signIn(null, $role);
 
         return $this->postJson(route('containers.store'), $this->validFields($attributes));
     }

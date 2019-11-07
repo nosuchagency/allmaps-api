@@ -8,7 +8,10 @@ use App\Http\Requests\FixtureRequest;
 use App\Http\Resources\FixtureResource;
 use App\Models\Fixture;
 use App\Services\Models\FixtureService;
+use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 
 class FixturesController extends Controller
@@ -26,21 +29,19 @@ class FixturesController extends Controller
      */
     public function __construct(FixtureService $fixtureService)
     {
-        $this->middleware('permission:fixtures.create')->only(['store']);
-        $this->middleware('permission:fixtures.read')->only(['index', 'paginated', 'show']);
-        $this->middleware('permission:fixtures.update')->only(['update']);
-        $this->middleware('permission:fixtures.delete')->only(['destroy', 'bulkDestroy']);
-
         $this->fixtureService = $fixtureService;
     }
 
     /**
      * @param Request $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
+     * @throws Exception
      */
     public function index(Request $request)
     {
+        $this->authorize('viewAny', Fixture::class);
+
         $fixtures = Fixture::query()
             ->withRelations($request)
             ->filter($request)
@@ -52,10 +53,13 @@ class FixturesController extends Controller
     /**
      * @param Request $request
      *
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     * @return AnonymousResourceCollection
+     * @throws Exception
      */
     public function paginated(Request $request)
     {
+        $this->authorize('viewAny', Fixture::class);
+
         $fixtures = Fixture::query()
             ->withRelations($request)
             ->filter($request)
@@ -67,11 +71,12 @@ class FixturesController extends Controller
     /**
      * @param FixtureRequest $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
+     * @throws Exception
      */
     public function store(FixtureRequest $request)
     {
-        $fixture = $this->fixtureService->create($request);
+        $fixture = $this->fixtureService->create($request->validated());
 
         $fixture->load($fixture->relationships);
 
@@ -81,10 +86,13 @@ class FixturesController extends Controller
     /**
      * @param Fixture $fixture
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
+     * @throws Exception
      */
     public function show(Fixture $fixture)
     {
+        $this->authorize('view', Fixture::class);
+
         $fixture->load($fixture->relationships);
 
         return $this->json(new FixtureResource($fixture), Response::HTTP_OK);
@@ -94,11 +102,12 @@ class FixturesController extends Controller
      * @param FixtureRequest $request
      * @param Fixture $fixture
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
+     * @throws Exception
      */
     public function update(FixtureRequest $request, Fixture $fixture)
     {
-        $fixture = $this->fixtureService->update($fixture, $request);
+        $fixture = $this->fixtureService->update($fixture, $request->validated());
 
         $fixture->load($fixture->relationships);
 
@@ -108,11 +117,13 @@ class FixturesController extends Controller
     /**
      * @param Fixture $fixture
      *
-     * @return \Illuminate\Http\JsonResponse
-     * @throws \Exception
+     * @return JsonResponse
+     * @throws Exception
      */
     public function destroy(Fixture $fixture)
     {
+        $this->authorize('delete', Fixture::class);
+
         $fixture->delete();
 
         return $this->json(null, Response::HTTP_OK);
@@ -121,10 +132,13 @@ class FixturesController extends Controller
     /**
      * @param BulkDeleteRequest $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
+     * @throws Exception
      */
     public function bulkDestroy(BulkDeleteRequest $request)
     {
+        $this->authorize('delete', Fixture::class);
+
         collect($request->get('items'))->each(function ($fixture) {
             if ($fixtureToDelete = Fixture::find($fixture['id'])) {
                 $fixtureToDelete->delete();

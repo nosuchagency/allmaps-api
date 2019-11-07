@@ -21,13 +21,14 @@ class UserResource extends JsonResource
             'name' => $this->name,
             'email' => $this->email,
             'locale' => $this->locale,
-            'role' => new RoleResource($this->roles()->first()),
-            'permissions' => $this->getAllPermissions()->pluck('name'),
+            'description' => $this->description,
+            'role' => new RoleResource($this->role),
             'created_at' => $this->created_at->toDateTimeString(),
             'updated_at' => $this->updated_at->toDateTimeString(),
             'category' => new CategoryResource($this->whenLoaded('category')),
             'tags' => TagResource::collection($this->whenLoaded('tags')),
             'contents' => ContentResource::collection($this->whenLoaded('contents')),
+            'locations' => LocationResource::collection($this->whenLoaded('locations')),
             'activities' => ActivityResource::collection($this->recentActivities())
         ];
     }

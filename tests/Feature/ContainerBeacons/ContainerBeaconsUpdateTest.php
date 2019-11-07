@@ -35,13 +35,14 @@ class ContainerBeaconsUpdateTest extends TestCase
     /** @test */
     public function a_guest_can_change_a_beacon_on_a_container()
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['containers.update', 'beacons.update'])
-        );
+        $role = $this->createRoleWithPermissions(['container:update', 'beacon:update']);
+
+        $this->signIn(null, $role);
 
         $beacon = factory(Beacon::class)->create();
 
         $container = factory(Container::class)->create();
+
         $container->beacons()->attach(
             $beacon
         );

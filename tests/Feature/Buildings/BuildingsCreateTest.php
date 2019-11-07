@@ -73,9 +73,9 @@ class BuildingsCreateTest extends TestCase
      */
     protected function create($attributes = [])
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['buildings.create'])
-        );
+        $role = $this->createRoleWithPermissions(['building:create']);
+
+        $this->signIn(null, $role);
 
         return $this->postJson(route('buildings.store'), $this->validFields($attributes));
     }

@@ -29,11 +29,6 @@ class LocationsController extends Controller
      */
     public function __construct(LocationService $locationService)
     {
-        $this->middleware('permission:floors.create')->only(['store']);
-        $this->middleware('permission:floors.read')->only(['index', 'paginated', 'show']);
-        $this->middleware('permission:floors.update')->only(['update']);
-        $this->middleware('permission:floors.delete')->only(['destroy', 'bulkDestroy']);
-
         $this->locationService = $locationService;
     }
 
@@ -41,9 +36,12 @@ class LocationsController extends Controller
      * @param Request $request
      *
      * @return JsonResponse
+     * @throws Exception
      */
     public function index(Request $request)
     {
+        $this->authorize('viewAny', Location::class);
+
         $locations = Location::query()
             ->filter($request)
             ->get();
@@ -55,9 +53,12 @@ class LocationsController extends Controller
      * @param Request $request
      *
      * @return AnonymousResourceCollection
+     * @throws Exception
      */
     public function paginated(Request $request)
     {
+        $this->authorize('viewAny', Location::class);
+
         $locations = Location::query()
             ->filter($request)
             ->jsonPaginate($this->paginationNumber());
@@ -69,6 +70,7 @@ class LocationsController extends Controller
      * @param LocationRequest $request
      *
      * @return JsonResponse
+     * @throws Exception
      */
     public function store(LocationRequest $request)
     {
@@ -81,9 +83,12 @@ class LocationsController extends Controller
      * @param Location $location
      *
      * @return JsonResponse
+     * @throws Exception
      */
     public function show(Location $location)
     {
+        $this->authorize('view', Location::class);
+
         return $this->json(new LocationResource($location), Response::HTTP_OK);
     }
 
@@ -92,6 +97,7 @@ class LocationsController extends Controller
      * @param Location $location
      *
      * @return JsonResponse
+     * @throws Exception
      */
     public function update(LocationRequest $request, Location $location)
     {
@@ -108,6 +114,8 @@ class LocationsController extends Controller
      */
     public function destroy(Location $location)
     {
+        $this->authorize('delete', Location::class);
+
         $location->delete();
 
         return $this->json(null, Response::HTTP_OK);
@@ -117,9 +125,12 @@ class LocationsController extends Controller
      * @param BulkDeleteRequest $request
      *
      * @return JsonResponse
+     * @throws Exception
      */
     public function bulkDestroy(BulkDeleteRequest $request)
     {
+        $this->authorize('delete', Location::class);
+
         collect($request->get('items'))->each(function ($location) {
             if ($locationToDelete = Location::find($location['id'])) {
                 $locationToDelete->delete();

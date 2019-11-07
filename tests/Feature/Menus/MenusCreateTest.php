@@ -3,6 +3,7 @@
 namespace Tests\Feature\Menus;
 
 use App\Models\Menu;
+use Illuminate\Foundation\Testing\TestResponse;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -41,13 +42,13 @@ class MenusCreateTest extends TestCase
     /**
      * @param array $attributes
      *
-     * @return \Illuminate\Foundation\Testing\TestResponse
+     * @return TestResponse
      */
     protected function create($attributes = [])
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['menus.create'])
-        );
+        $role = $this->createRoleWithPermissions(['menu:create']);
+
+        $this->signIn(null, $role);
 
         return $this->postJson(route('menus.store'), $this->validFields($attributes));
     }

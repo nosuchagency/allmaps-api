@@ -31,9 +31,9 @@ class BeaconsReadTest extends TestCase
     /** @test */
     public function an_authenticated_user_with_read_permission_can_view_beacons()
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['beacons.read'])
-        );
+        $role = $this->createRoleWithPermissions(['beacon:read']);
+
+        $this->signIn(null, $role);
 
         $this->getJson(route('beacons.index'))->assertOk();
     }
@@ -41,9 +41,9 @@ class BeaconsReadTest extends TestCase
     /** @test */
     public function an_authenticated_user_with_read_permission_can_view_beacons_paginated()
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['beacons.read'])
-        );
+        $role = $this->createRoleWithPermissions(['beacon:read']);
+
+        $this->signIn(null, $role);
 
         $this->getJson(route('beacons.paginated'))->assertOk();
     }
@@ -51,9 +51,9 @@ class BeaconsReadTest extends TestCase
     /** @test */
     public function an_authenticated_user_with_read_permission_can_view_a_specific_beacon()
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['beacons.read'])
-        );
+        $role = $this->createRoleWithPermissions(['beacon:read']);
+
+        $this->signIn(null, $role);
 
         $beacon = factory(Beacon::class)->create();
 

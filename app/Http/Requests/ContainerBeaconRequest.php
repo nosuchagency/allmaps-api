@@ -2,6 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Beacon;
+use App\Models\Container;
+use App\Pivots\BeaconContainer;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ContainerBeaconRequest extends FormRequest
@@ -13,7 +16,7 @@ class ContainerBeaconRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return $this->user()->can('update', BeaconContainer::class);
     }
 
     /**

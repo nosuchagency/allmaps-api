@@ -2,43 +2,42 @@
 
 namespace App\Services\Models;
 
-use App\Contracts\ModelServiceContract;
 use App\Models\Role;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 
-class RoleService implements ModelServiceContract
+class RoleService
 {
     /**
-     * @param Request $request
+     * @param array $attributes
      *
-     * @return Model
+     * @return Role
      */
-    public function create(Request $request)
+    public function create(array $attributes): Role
     {
         $role = new Role();
-        $role->fill($request->only('name'))->save();
 
-        if ($request->filled('permissions')) {
-            $role->setPermissions($request->get('permissions'));
-        }
+        $fields = Arr::only($attributes, [
+            'name',
+        ]);
+
+        $role->fill($fields)->save();
 
         return $role->refresh();
     }
 
     /**
-     * @param Model $role
-     * @param Request $request
+     * @param Role $role
+     * @param array $attributes
      *
-     * @return Model
+     * @return Role
      */
-    public function update(Model $role, Request $request)
+    public function update(Role $role, array $attributes): Role
     {
-        $role->fill($request->only('name'))->save();
+        $fields = Arr::only($attributes, [
+            'name',
+        ]);
 
-        if ($request->filled('permissions')) {
-            $role->setPermissions($request->get('permissions'));
-        }
+        $role->fill($fields)->save();
 
         return $role->refresh();
     }

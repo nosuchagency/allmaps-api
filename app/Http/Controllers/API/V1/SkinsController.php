@@ -28,11 +28,6 @@ class SkinsController extends Controller
      */
     public function __construct(SkinService $skinService)
     {
-        $this->middleware('permission:skins.create')->only(['store']);
-        $this->middleware('permission:skins.read')->only(['index', 'paginated', 'show']);
-        $this->middleware('permission:skins.update')->only(['update']);
-        $this->middleware('permission:skins.delete')->only(['destroy', 'bulkDestroy']);
-
         $this->skinService = $skinService;
     }
 
@@ -40,9 +35,12 @@ class SkinsController extends Controller
      * @param Request $request
      *
      * @return JsonResponse
+     * @throws Exception
      */
     public function index(Request $request)
     {
+        $this->authorize('viewAny', Skin::class);
+
         $skins = Skin::query()
             ->filter($request)
             ->get();
@@ -54,9 +52,12 @@ class SkinsController extends Controller
      * @param Request $request
      *
      * @return AnonymousResourceCollection
+     * @throws Exception
      */
     public function paginated(Request $request)
     {
+        $this->authorize('viewAny', Skin::class);
+
         $skins = Skin::query()
             ->filter($request)
             ->jsonPaginate($this->paginationNumber());
@@ -82,9 +83,12 @@ class SkinsController extends Controller
      * @param Skin $skin
      *
      * @return JsonResponse
+     * @throws Exception
      */
     public function show(Skin $skin)
     {
+        $this->authorize('view', Skin::class);
+
         return $this->json(new SkinResource($skin), Response::HTTP_OK);
     }
 
@@ -111,6 +115,8 @@ class SkinsController extends Controller
      */
     public function destroy(Skin $skin)
     {
+        $this->authorize('delete', Skin::class);
+
         $skin->delete();
 
         return $this->json(null, Response::HTTP_OK);
@@ -120,9 +126,12 @@ class SkinsController extends Controller
      * @param BulkDeleteRequest $request
      *
      * @return JsonResponse
+     * @throws Exception
      */
     public function bulkDestroy(BulkDeleteRequest $request)
     {
+        $this->authorize('delete', Skin::class);
+
         collect($request->get('items'))->each(function ($skin) {
             if ($skinToDelete = Skin::find($skin['id'])) {
                 $skinToDelete->delete();

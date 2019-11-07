@@ -27,20 +27,11 @@ class Fixture extends Model
     ];
 
     /**
-     * The attributes that are mass assignable.
+     * The attributes that aren't mass assignable.
      *
      * @var array
      */
-    protected $fillable = [
-        'name',
-        'description',
-        'image',
-        'image_width',
-        'image_height',
-        'category_id',
-        'created_by',
-        'category'
-    ];
+    protected $guarded = [];
 
     /**
      * The attributes that should be mutated to dates.

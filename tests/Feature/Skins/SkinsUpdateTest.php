@@ -3,6 +3,7 @@
 namespace Tests\Feature\Skins;
 
 use App\Models\Skin;
+use Illuminate\Foundation\Testing\TestResponse;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -45,13 +46,13 @@ class SkinsUpdateTest extends TestCase
      * @param $skin
      * @param array $attributes
      *
-     * @return \Illuminate\Foundation\Testing\TestResponse
+     * @return TestResponse
      */
     protected function update($skin, $attributes = [])
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['skins.update'])
-        );
+        $role = $this->createRoleWithPermissions(['skin:update']);
+
+        $this->signIn(null, $role);
 
         return $this->putJson(route('skins.update', ['skin' => $skin]), $this->validFields($attributes));
     }

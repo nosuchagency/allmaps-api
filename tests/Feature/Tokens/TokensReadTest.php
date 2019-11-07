@@ -31,9 +31,9 @@ class TokensReadTest extends TestCase
     /** @test */
     public function an_authenticated_user_with_read_permission_can_view_tokens()
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['tokens.read'])
-        );
+        $role = $this->createRoleWithPermissions(['token:read']);
+
+        $this->signIn(null, $role);
 
         $this->getJson(route('tokens.index'))->assertOk();
     }
@@ -41,9 +41,9 @@ class TokensReadTest extends TestCase
     /** @test */
     public function an_authenticated_user_with_read_permission_can_view_tokens_paginated()
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['tokens.read'])
-        );
+        $role = $this->createRoleWithPermissions(['token:read']);
+
+        $this->signIn(null, $role);
 
         $this->getJson(route('tokens.paginated'))->assertOk();
     }
@@ -51,9 +51,9 @@ class TokensReadTest extends TestCase
     /** @test */
     public function an_authenticated_user_with_read_permission_can_view_a_specific_token()
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['tokens.read'])
-        );
+        $role = $this->createRoleWithPermissions(['token:read']);
+
+        $this->signIn(null, $role);
 
         $token = factory(Token::class)->create();
 

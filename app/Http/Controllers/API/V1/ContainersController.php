@@ -8,6 +8,7 @@ use App\Http\Requests\ContainerRequest;
 use App\Http\Resources\ContainerResource;
 use App\Models\Container;
 use App\Services\Models\ContainerService;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -28,11 +29,6 @@ class ContainersController extends Controller
      */
     public function __construct(ContainerService $containerService)
     {
-        $this->middleware('permission:containers.create')->only(['store']);
-        $this->middleware('permission:containers.read')->only(['index', 'paginated', 'show']);
-        $this->middleware('permission:containers.update')->only(['update']);
-        $this->middleware('permission:containers.delete')->only(['destroy', 'bulkDestroy']);
-
         $this->containerService = $containerService;
     }
 
@@ -42,9 +38,12 @@ class ContainersController extends Controller
      * @param Request $request
      *
      * @return JsonResponse
+     * @throws Exception
      */
     public function index(Request $request)
     {
+        $this->authorize('viewAny', Container::class);
+
         $containers = Container::query()
             ->withRelations($request)
             ->filter($request)
@@ -59,9 +58,12 @@ class ContainersController extends Controller
      * @param Request $request
      *
      * @return AnonymousResourceCollection;
+     * @throws Exception
      */
     public function paginated(Request $request)
     {
+        $this->authorize('viewAny', Container::class);
+
         $containers = Container::query()
             ->withRelations($request)
             ->filter($request)
@@ -74,6 +76,7 @@ class ContainersController extends Controller
      * @param ContainerRequest $request
      *
      * @return JsonResponse
+     * @throws Exception
      */
     public function store(ContainerRequest $request)
     {
@@ -88,9 +91,12 @@ class ContainersController extends Controller
      * @param Container $container
      *
      * @return JsonResponse
+     * @throws Exception
      */
     public function show(Container $container)
     {
+        $this->authorize('view', Container::class);
+
         $container->load($container->relationships);
 
         return $this->json(new ContainerResource($container), Response::HTTP_OK);
@@ -101,6 +107,7 @@ class ContainersController extends Controller
      * @param Container $container
      *
      * @return JsonResponse
+     * @throws Exception
      */
     public function update(ContainerRequest $request, Container $container)
     {
@@ -115,10 +122,12 @@ class ContainersController extends Controller
      * @param Container $container
      *
      * @return JsonResponse
-     * @throws \Exception
+     * @throws Exception
      */
     public function destroy(Container $container)
     {
+        $this->authorize('delete', Container::class);
+
         $container->delete();
 
         return $this->json(null, Response::HTTP_OK);
@@ -128,9 +137,12 @@ class ContainersController extends Controller
      * @param BulkDeleteRequest $request
      *
      * @return JsonResponse
+     * @throws Exception
      */
     public function bulkDestroy(BulkDeleteRequest $request)
     {
+        $this->authorize('delete', Container::class);
+
         collect($request->get('items'))->each(function ($container) {
             if ($containerToDelete = Container::find($container['id'])) {
                 $containerToDelete->delete();

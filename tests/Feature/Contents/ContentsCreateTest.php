@@ -31,7 +31,7 @@ class ContentsCreateTest extends TestCase
     }
 
     /** @test */
-    public function an_authenticated_user_with_create_permission_can_create_containers()
+    public function an_authenticated_user_with_create_permission_can_create_contents()
     {
         $this->create()->assertStatus(201);
         $this->assertCount(1, Content::all());
@@ -89,9 +89,9 @@ class ContentsCreateTest extends TestCase
      */
     protected function create($attributes = [])
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['contents.create'])
-        );
+        $role = $this->createRoleWithPermissions(['content:create']);
+
+        $this->signIn(null, $role);
 
         return $this->postJson(route('contents.store'), $this->validFields($attributes));
     }

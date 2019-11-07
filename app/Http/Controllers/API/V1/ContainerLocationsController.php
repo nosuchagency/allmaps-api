@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ContainerLocationDeleteRequest;
 use App\Models\Container;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 
@@ -12,18 +13,11 @@ class ContainerLocationsController extends Controller
 {
 
     /**
-     * ContainersController constructor.
-     */
-    public function __construct()
-    {
-        $this->middleware('permission:containers.delete')->only(['destroy']);
-    }
-
-    /**
      * @param ContainerLocationDeleteRequest $request
      * @param Container $container
      *
      * @return JsonResponse
+     * @throws Exception
      */
     public function destroy(ContainerLocationDeleteRequest $request, Container $container)
     {

@@ -24,15 +24,15 @@ class BeaconsDeleteTest extends TestCase
         $beacon = factory(Beacon::class)->create();
         $this->deleteJson(route('beacons.destroy', ['beacon' => $beacon]))->assertStatus(403);
 
-        $this->postJson(route('beacons.bulk-destroy', ['items' => []]))->assertStatus(403);
+        $this->postJson(route('beacons.bulk-destroy'), ['items' => []])->assertStatus(403);
     }
 
     /** @test */
     public function an_authenticated_user_with_delete_permission_can_delete_specific_beacon()
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['beacons.delete'])
-        );
+        $role = $this->createRoleWithPermissions(['beacon:delete']);
+
+        $this->signIn(null, $role);
 
         $beacon = factory(Beacon::class)->create();
         $this->deleteJson(route('beacons.destroy', ['beacon' => $beacon]))->assertOk();
@@ -42,9 +42,9 @@ class BeaconsDeleteTest extends TestCase
     /** @test */
     public function an_authenticated_user_with_delete_permission_can_delete_beacons_in_bulk()
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['beacons.delete'])
-        );
+        $role = $this->createRoleWithPermissions(['beacon:delete']);
+
+        $this->signIn(null, $role);
 
         $beacons = factory(Beacon::class, 5)->create();
         $this->assertCount(5, Beacon::all());

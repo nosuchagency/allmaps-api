@@ -8,6 +8,7 @@ use App\Models\Component;
 use App\Models\Tag;
 use App\Shape;
 use App\StrokeType;
+use Illuminate\Foundation\Testing\TestResponse;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -25,7 +26,7 @@ class ComponentsUpdateTest extends TestCase
     }
 
     /** @test */
-    public function an_authenticated_user_without_create_permission_cannot_update_components()
+    public function an_authenticated_user_without_update_permission_cannot_update_components()
     {
         $this->signIn();
 
@@ -50,13 +51,13 @@ class ComponentsUpdateTest extends TestCase
      * @param $component
      * @param array $attributes
      *
-     * @return \Illuminate\Foundation\Testing\TestResponse
+     * @return TestResponse
      */
     protected function update($component, $attributes = [])
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['components.update'])
-        );
+        $role = $this->createRoleWithPermissions(['component:update']);
+
+        $this->signIn(null, $role);
 
         return $this->putJson(route('components.update', ['component' => $component]), $this->validFields($attributes));
     }

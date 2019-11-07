@@ -2,20 +2,18 @@
 
 namespace App\Services\Models;
 
-use App\Contracts\ModelServiceContract;
 use App\Models\Container;
 use App\Models\Tag;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 
-class ContainerService implements ModelServiceContract
+class ContainerService
 {
     /**
      * @param Request $request
      *
-     * @return Model
+     * @return Container
      */
-    public function create(Request $request)
+    public function create(Request $request): Container
     {
         $container = new Container();
 
@@ -33,12 +31,12 @@ class ContainerService implements ModelServiceContract
     }
 
     /**
-     * @param Model $container
+     * @param Container $container
      * @param Request $request
      *
-     * @return Model
+     * @return Container
      */
-    public function update(Model $container, Request $request)
+    public function update(Container $container, Request $request): Container
     {
         $container->fill($request->only($container->getFillable()));
         $this->setSkins($container, $request);

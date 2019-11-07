@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\Container;
 use App\Models\Skin;
 use App\Models\Tag;
+use Illuminate\Foundation\Testing\TestResponse;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -23,7 +24,7 @@ class ContainersUpdateTest extends TestCase
     }
 
     /** @test */
-    public function an_authenticated_user_without_create_permission_cannot_update_containers()
+    public function an_authenticated_user_without_update_permission_cannot_update_containers()
     {
         $this->signIn();
 
@@ -48,13 +49,13 @@ class ContainersUpdateTest extends TestCase
      * @param $container
      * @param array $attributes
      *
-     * @return \Illuminate\Foundation\Testing\TestResponse
+     * @return TestResponse
      */
     protected function update($container, $attributes = [])
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['containers.update'])
-        );
+        $role = $this->createRoleWithPermissions(['container:update']);
+
+        $this->signIn(null, $role);
 
         return $this->putJson(route('containers.update', ['container' => $container]), $this->validFields($attributes));
     }

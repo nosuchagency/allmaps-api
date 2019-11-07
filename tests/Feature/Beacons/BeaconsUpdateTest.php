@@ -23,7 +23,7 @@ class BeaconsUpdateTest extends TestCase
     }
 
     /** @test */
-    public function an_authenticated_user_without_create_permission_cannot_update_beacons()
+    public function an_authenticated_user_without_update_permission_cannot_update_beacons()
     {
         $this->signIn();
 
@@ -52,9 +52,9 @@ class BeaconsUpdateTest extends TestCase
      */
     protected function update($beacon, $attributes = [])
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['beacons.update'])
-        );
+        $role = $this->createRoleWithPermissions(['beacon:update']);
+
+        $this->signIn(null, $role);
 
         return $this->putJson(route('beacons.update', ['beacon' => $beacon]), $this->validFields($attributes));
     }

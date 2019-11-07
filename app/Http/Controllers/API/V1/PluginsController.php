@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\V1;
 use App\Http\Controllers\Controller;
 use App\Models\Searchable;
 use App\Plugins\Search\SearchableResolver;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 
 class PluginsController extends Controller
@@ -22,14 +23,12 @@ class PluginsController extends Controller
      */
     public function __construct(SearchableResolver $searchableResolver)
     {
-        $this->middleware('permission:plugins.read');
-
         $this->searchableResolver = $searchableResolver;
     }
 
     /**
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function __invoke()
     {

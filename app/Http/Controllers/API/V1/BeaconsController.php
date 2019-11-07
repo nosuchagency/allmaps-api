@@ -31,11 +31,6 @@ class BeaconsController extends Controller
      */
     public function __construct(BeaconService $beaconService)
     {
-        $this->middleware('permission:beacons.create')->only(['store', 'import']);
-        $this->middleware('permission:beacons.read')->only(['index', 'paginated', 'show']);
-        $this->middleware('permission:beacons.update')->only(['update']);
-        $this->middleware('permission:beacons.delete')->only(['destroy', 'bulkDestroy']);
-
         $this->beaconService = $beaconService;
     }
 
@@ -44,9 +39,12 @@ class BeaconsController extends Controller
      * @param Request $request
      *
      * @return JsonResponse
+     * @throws Exception
      */
     public function index(Request $request)
     {
+        $this->authorize('viewAny', Beacon::class);
+
         $beacons = Beacon::query()
             ->withRelations($request)
             ->filter($request)
@@ -59,9 +57,12 @@ class BeaconsController extends Controller
      * @param Request $request
      *
      * @return AnonymousResourceCollection
+     * @throws Exception
      */
     public function paginated(Request $request)
     {
+        $this->authorize('viewAny', Beacon::class);
+
         $beacons = Beacon::query()
             ->withRelations($request)
             ->filter($request)
@@ -74,10 +75,11 @@ class BeaconsController extends Controller
      * @param BeaconRequest $request
      *
      * @return JsonResponse
+     * @throws Exception
      */
     public function store(BeaconRequest $request)
     {
-        $beacon = $this->beaconService->create($request);
+        $beacon = $this->beaconService->create($request->validated());
 
         $beacon->load($beacon->relationships);
 
@@ -88,9 +90,12 @@ class BeaconsController extends Controller
      * @param Beacon $beacon
      *
      * @return JsonResponse
+     * @throws Exception
      */
     public function show(Beacon $beacon)
     {
+        $this->authorize('view', Beacon::class);
+
         $beacon->load($beacon->relationships);
 
         return $this->json(new BeaconResource($beacon), Response::HTTP_OK);
@@ -101,10 +106,11 @@ class BeaconsController extends Controller
      * @param Beacon $beacon
      *
      * @return JsonResponse
+     * @throws Exception
      */
     public function update(BeaconRequest $request, Beacon $beacon)
     {
-        $beacon = $this->beaconService->update($beacon, $request);
+        $beacon = $this->beaconService->update($beacon, $request->validated());
 
         $beacon->load($beacon->relationships);
 
@@ -119,6 +125,8 @@ class BeaconsController extends Controller
      */
     public function destroy(Beacon $beacon)
     {
+        $this->authorize('delete', Beacon::class);
+
         $beacon->delete();
 
         return $this->json(null, Response::HTTP_OK);
@@ -128,9 +136,12 @@ class BeaconsController extends Controller
      * @param BulkDeleteRequest $request
      *
      * @return JsonResponse
+     * @throws Exception
      */
     public function bulkDestroy(BulkDeleteRequest $request)
     {
+        $this->authorize('delete', Beacon::class);
+
         collect($request->get('items'))->each(function ($beacon) {
             if ($beaconToDelete = Beacon::find($beacon['id'])) {
                 $beaconToDelete->delete();
@@ -145,9 +156,12 @@ class BeaconsController extends Controller
      * @param BeaconsImportRequest $request
      *
      * @return JsonResponse
+     * @throws Exception
      */
     public function import(BeaconsImportRequest $request)
     {
+        $this->authorize('create', Beacon::class);
+
         $provider = BeaconProvider::find($request->input('provider.id'));
 
         $provider->importer()->import(

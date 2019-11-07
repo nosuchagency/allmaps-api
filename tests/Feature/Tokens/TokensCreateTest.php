@@ -4,6 +4,7 @@ namespace Tests\Feature\Tokens;
 
 use App\Models\Role;
 use App\Models\Token;
+use Illuminate\Foundation\Testing\TestResponse;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -56,13 +57,13 @@ class TokensCreateTest extends TestCase
     /**
      * @param array $attributes
      *
-     * @return \Illuminate\Foundation\Testing\TestResponse
+     * @return TestResponse
      */
     protected function create($attributes = [])
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['tokens.create'])
-        );
+        $role = $this->createRoleWithPermissions(['token:create']);
+
+        $this->signIn(null, $role);
 
         return $this->postJson(route('tokens.store'), $this->validFields($attributes));
     }
@@ -76,7 +77,7 @@ class TokensCreateTest extends TestCase
     {
         return array_merge([
             'name' => $this->faker->name,
-            'role' => factory(Role::class)->create()
+            'role' => factory(Role::class)->create(),
         ], $overrides);
     }
 }

@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\Menu;
 use App\Models\Place;
 use App\Models\Tag;
+use Illuminate\Foundation\Testing\TestResponse;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -48,13 +49,13 @@ class PlacesUpdateTest extends TestCase
      * @param $place
      * @param array $attributes
      *
-     * @return \Illuminate\Foundation\Testing\TestResponse
+     * @return TestResponse
      */
     protected function update($place, $attributes = [])
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['places.update'])
-        );
+        $role = $this->createRoleWithPermissions(['place:update']);
+
+        $this->signIn(null, $role);
 
         return $this->putJson(route('places.update', ['place' => $place]), $this->validFields($attributes));
     }

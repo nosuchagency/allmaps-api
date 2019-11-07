@@ -8,30 +8,25 @@ use App\Http\Requests\LayoutRequest;
 use App\Http\Resources\LayoutResource;
 use App\Models\Layout;
 use App\Models\Tag;
+use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 
 class LayoutsController extends Controller
 {
 
     /**
-     * LayoutsController constructor.
-     */
-    public function __construct()
-    {
-        $this->middleware('permission:layouts.create')->only(['store']);
-        $this->middleware('permission:layouts.read')->only(['index', 'paginated', 'show']);
-        $this->middleware('permission:layouts.update')->only(['update']);
-        $this->middleware('permission:layouts.delete')->only(['destroy', 'bulkDestroy']);
-    }
-
-    /**
      * @param Request $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
+     * @throws Exception
      */
     public function index(Request $request)
     {
+        $this->authorize('viewAny', Layout::class);
+
         $layouts = Layout::query()
             ->withRelations($request)
             ->filter($request)
@@ -43,10 +38,13 @@ class LayoutsController extends Controller
     /**
      * @param Request $request
      *
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     * @return AnonymousResourceCollection
+     * @throws Exception
      */
     public function paginated(Request $request)
     {
+        $this->authorize('viewAny', Layout::class);
+
         $layouts = Layout::query()
             ->withRelations($request)
             ->filter($request)
@@ -58,7 +56,8 @@ class LayoutsController extends Controller
     /**
      * @param LayoutRequest $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
+     * @throws Exception
      */
     public function store(LayoutRequest $request)
     {
@@ -76,10 +75,13 @@ class LayoutsController extends Controller
     /**
      * @param Layout $layout
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
+     * @throws Exception
      */
     public function show(Layout $layout)
     {
+        $this->authorize('view', Layout::class);
+
         $layout->load($layout->relationships);
 
         return $this->json(new LayoutResource($layout), Response::HTTP_OK);
@@ -89,7 +91,8 @@ class LayoutsController extends Controller
      * @param LayoutRequest $request
      * @param Layout $layout
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
+     * @throws Exception
      */
     public function update(LayoutRequest $request, Layout $layout)
     {
@@ -109,11 +112,13 @@ class LayoutsController extends Controller
     /**
      * @param Layout $layout
      *
-     * @return \Illuminate\Http\JsonResponse
-     * @throws \Exception
+     * @return JsonResponse
+     * @throws Exception
      */
     public function destroy(Layout $layout)
     {
+        $this->authorize('delete', Layout::class);
+
         $layout->delete();
 
         return $this->json(null, Response::HTTP_OK);
@@ -122,10 +127,13 @@ class LayoutsController extends Controller
     /**
      * @param BulkDeleteRequest $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
+     * @throws Exception
      */
     public function bulkDestroy(BulkDeleteRequest $request)
     {
+        $this->authorize('delete', Layout::class);
+
         collect($request->get('items'))->each(function ($layout) {
             if ($layoutToDelete = Layout::find($layout['id'])) {
                 $layoutToDelete->delete();

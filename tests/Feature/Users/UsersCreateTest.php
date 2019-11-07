@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\Role;
 use App\Models\Tag;
 use App\Models\User;
+use Illuminate\Foundation\Testing\TestResponse;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
@@ -112,13 +113,13 @@ class UsersCreateTest extends TestCase
     /**
      * @param array $attributes
      *
-     * @return \Illuminate\Foundation\Testing\TestResponse
+     * @return TestResponse
      */
     protected function create($attributes = [])
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['users.create'])
-        );
+        $role = $this->createRoleWithPermissions(['user:create']);
+
+        $this->signIn(null, $role);
 
         return $this->postJson(route('users.store'), $this->validFields($attributes));
     }
@@ -133,6 +134,7 @@ class UsersCreateTest extends TestCase
         return array_merge([
             'name' => $this->faker->name,
             'password' => $this->password,
+            'password_confirmation' => $this->password,
             'locale' => $this->faker->randomElement(Locale::LOCALES),
             'email' => $this->faker->email,
             'role' => factory(Role::class)->create(),

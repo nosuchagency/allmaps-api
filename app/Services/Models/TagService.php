@@ -2,35 +2,45 @@
 
 namespace App\Services\Models;
 
-use App\Contracts\ModelServiceContract;
 use App\Models\Tag;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 
-class TagService implements ModelServiceContract
+class TagService
 {
     /**
-     * @param Request $request
+     * @param array $attributes
      *
-     * @return Model
+     * @return Tag
      */
-    public function create(Request $request)
+    public function create(array $attributes): Tag
     {
         $tag = new Tag();
-        $tag->fill($request->only($tag->getFillable()))->save();
-        return $tag->refresh();
+
+        $fields = Arr::only($attributes, [
+            'name',
+            'description'
+        ]);
+
+        $tag->fill($fields)->save();
+
+        return $tag;
     }
 
     /**
-     * @param Model $tag
-     * @param Request $request
+     * @param Tag $tag
+     * @param array $attributes
      *
-     * @return Model
+     * @return Tag
      */
-    public function update(Model $tag, Request $request)
+    public function update(Tag $tag, array $attributes): Tag
     {
-        $tag->fill($request->only($tag->getFillable()))->save();
+        $fields = Arr::only($attributes, [
+            'name',
+            'description'
+        ]);
 
-        return $tag->refresh();
+        $tag->fill($fields)->save();
+
+        return $tag;
     }
 }

@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\Container;
 use App\Models\Folder;
 use App\Models\Tag;
+use Illuminate\Foundation\Testing\TestResponse;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -59,13 +60,13 @@ class FoldersCreateTest extends TestCase
     /**
      * @param array $attributes
      *
-     * @return \Illuminate\Foundation\Testing\TestResponse
+     * @return TestResponse
      */
     protected function create($attributes = [])
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['folders.create'])
-        );
+        $role = $this->createRoleWithPermissions(['folder:create']);
+
+        $this->signIn(null, $role);
 
         return $this->postJson(route('folders.store'), $this->validFields($attributes));
     }

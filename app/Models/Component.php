@@ -27,30 +27,11 @@ class Component extends Model
     ];
 
     /**
-     * The attributes that are mass assignable.
+     * The attributes that aren't mass assignable.
      *
      * @var array
      */
-    protected $fillable = [
-        'name',
-        'type',
-        'shape',
-        'description',
-        'stroke',
-        'stroke_type',
-        'stroke_color',
-        'stroke_width',
-        'stroke_opacity',
-        'fill',
-        'fill_color',
-        'fill_opacity',
-        'image',
-        'image_width',
-        'image_height',
-        'category_id',
-        'created_by',
-        'category'
-    ];
+    protected $guarded = [];
 
     /**
      * The attributes that should be cast to native types.

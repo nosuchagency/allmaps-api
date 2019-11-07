@@ -10,7 +10,10 @@ use App\Http\Resources\LocationResource;
 use App\Http\Resources\PlaceResource;
 use App\Models\Place;
 use App\Services\Models\PlaceService;
+use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 
 class PlacesController extends Controller
@@ -28,21 +31,19 @@ class PlacesController extends Controller
      */
     public function __construct(PlaceService $placeService)
     {
-        $this->middleware('permission:places.create')->only(['store']);
-        $this->middleware('permission:places.read')->only(['index', 'show', 'paginated']);
-        $this->middleware('permission:places.update')->only(['update']);
-        $this->middleware('permission:places.delete')->only(['destroy', 'bulkDestroy']);
-
         $this->placeService = $placeService;
     }
 
     /**
      * @param Request $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
+     * @throws Exception
      */
     public function index(Request $request)
     {
+        $this->authorize('viewAny', Place::class);
+
         $places = Place::query()
             ->withRelations($request)
             ->filter($request)
@@ -54,10 +55,13 @@ class PlacesController extends Controller
     /**
      * @param Request $request
      *
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     * @return AnonymousResourceCollection
+     * @throws Exception
      */
     public function paginated(Request $request)
     {
+        $this->authorize('viewAny', Place::class);
+
         $places = Place::query()
             ->withRelations($request)
             ->filter($request)
@@ -69,7 +73,8 @@ class PlacesController extends Controller
     /**
      * @param PlaceRequest $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
+     * @throws Exception
      */
     public function store(PlaceRequest $request)
     {
@@ -83,10 +88,13 @@ class PlacesController extends Controller
     /**
      * @param Place $place
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
+     * @throws Exception
      */
     public function show(Place $place)
     {
+        $this->authorize('view', Place::class);
+
         $place->load($place->relationships);
 
         return $this->json(new PlaceResource($place), Response::HTTP_OK);
@@ -96,7 +104,8 @@ class PlacesController extends Controller
      * @param Place $place
      * @param PlaceRequest $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
+     * @throws Exception
      */
     public function update(Place $place, PlaceRequest $request)
     {
@@ -110,11 +119,13 @@ class PlacesController extends Controller
     /**
      * @param Place $place
      *
-     * @return \Illuminate\Http\JsonResponse
-     * @throws \Exception
+     * @return JsonResponse
+     * @throws Exception
      */
     public function destroy(Place $place)
     {
+        $this->authorize('delete', Place::class);
+
         $place->delete();
 
         return $this->json(null, Response::HTTP_OK);
@@ -123,10 +134,13 @@ class PlacesController extends Controller
     /**
      * @param BulkDeleteRequest $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
+     * @throws Exception
      */
     public function bulkDestroy(BulkDeleteRequest $request)
     {
+        $this->authorize('delete', Place::class);
+
         collect($request->get('items'))->each(function ($place) {
             if ($placeToDelete = Place::find($place['id'])) {
                 $placeToDelete->delete();
@@ -140,7 +154,7 @@ class PlacesController extends Controller
      * @param SearchRequest $request
      * @param Place $place
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function search(SearchRequest $request, Place $place)
     {

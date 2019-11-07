@@ -8,7 +8,10 @@ use App\Http\Requests\MenuRequest;
 use App\Http\Resources\MenuResource;
 use App\Models\Menu;
 use App\Services\Models\MenuService;
+use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 
 class MenusController extends Controller
@@ -26,21 +29,19 @@ class MenusController extends Controller
      */
     public function __construct(MenuService $menuService)
     {
-        $this->middleware('permission:menus.create')->only(['store']);
-        $this->middleware('permission:menus.read')->only(['index', 'show', 'paginated']);
-        $this->middleware('permission:menus.update')->only(['update']);
-        $this->middleware('permission:menus.delete')->only(['destroy', 'bulkDestroy']);
-
         $this->menuService = $menuService;
     }
 
     /**
      * @param Request $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
+     * @throws Exception
      */
     public function index(Request $request)
     {
+        $this->authorize('viewAny', Menu::class);
+
         $menus = Menu::query()
             ->filter($request)
             ->withRelations($request)
@@ -52,10 +53,13 @@ class MenusController extends Controller
     /**
      * @param Request $request
      *
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     * @return AnonymousResourceCollection
+     * @throws Exception
      */
     public function paginated(Request $request)
     {
+        $this->authorize('viewAny', Menu::class);
+
         $menus = Menu::query()
             ->filter($request)
             ->withRelations($request)
@@ -67,11 +71,12 @@ class MenusController extends Controller
     /**
      * @param MenuRequest $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
+     * @throws Exception
      */
     public function store(MenuRequest $request)
     {
-        $menu = $this->menuService->create($request);
+        $menu = $this->menuService->create($request->validated());
 
         $menu->load($menu->relationships);
 
@@ -81,10 +86,13 @@ class MenusController extends Controller
     /**
      * @param Menu $menu
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
+     * @throws Exception
      */
     public function show(Menu $menu)
     {
+        $this->authorize('view', Menu::class);
+
         $menu->load($menu->relationships);
 
         return $this->json(new MenuResource($menu), Response::HTTP_OK);
@@ -94,11 +102,12 @@ class MenusController extends Controller
      * @param MenuRequest $request
      * @param Menu $menu
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
+     * @throws Exception
      */
     public function update(MenuRequest $request, Menu $menu)
     {
-        $menu = $this->menuService->update($menu, $request);
+        $menu = $this->menuService->update($menu, $request->validated());
 
         $menu->load($menu->relationships);
 
@@ -108,11 +117,13 @@ class MenusController extends Controller
     /**
      * @param Menu $menu
      *
-     * @return \Illuminate\Http\JsonResponse
-     * @throws \Exception
+     * @return JsonResponse
+     * @throws Exception
      */
     public function destroy(Menu $menu)
     {
+        $this->authorize('delete', Menu::class);
+
         $menu->delete();
 
         return $this->json(null, Response::HTTP_OK);
@@ -121,10 +132,13 @@ class MenusController extends Controller
     /**
      * @param BulkDeleteRequest $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
+     * @throws Exception
      */
     public function bulkDestroy(BulkDeleteRequest $request)
     {
+        $this->authorize('delete', Menu::class);
+
         collect($request->get('items'))->each(function ($menu) {
             if ($menuToDelete = Menu::find($menu['id'])) {
                 $menuToDelete->delete();

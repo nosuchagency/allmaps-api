@@ -24,15 +24,11 @@ class Floor extends Model
     ];
 
     /**
-     * The attributes that are mass assignable.
+     * The attributes that aren't mass assignable.
      *
      * @var array
      */
-    protected $fillable = [
-        'name',
-        'level',
-        'created_by'
-    ];
+    protected $guarded = [];
 
     /**
      * The attributes that should be mutated to dates.

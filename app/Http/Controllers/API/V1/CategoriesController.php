@@ -8,7 +8,10 @@ use App\Http\Requests\CategoryRequest;
 use App\Http\Resources\CategoryResource;
 use App\Models\Category;
 use App\Services\Models\CategoryService;
+use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 
 class CategoriesController extends Controller
@@ -26,21 +29,19 @@ class CategoriesController extends Controller
      */
     public function __construct(CategoryService $categoryService)
     {
-        $this->middleware('permission:categories.create')->only(['store']);
-        $this->middleware('permission:categories.read')->only(['index', 'paginated', 'show']);
-        $this->middleware('permission:categories.update')->only(['update']);
-        $this->middleware('permission:categories.delete')->only(['destroy', 'bulkDestroy']);
-
         $this->categoryService = $categoryService;
     }
 
     /**
      * @param Request $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
+     * @throws Exception
      */
     public function index(Request $request)
     {
+        $this->authorize('viewAny', Category::class);
+
         $categories = Category::query()
             ->filter($request)
             ->get();
@@ -51,10 +52,13 @@ class CategoriesController extends Controller
     /**
      * @param Request $request
      *
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     * @return AnonymousResourceCollection
+     * @throws Exception
      */
     public function paginated(Request $request)
     {
+        $this->authorize('viewAny', Category::class);
+
         $categories = Category::query()
             ->filter($request)
             ->jsonPaginate($this->paginationNumber());
@@ -65,11 +69,12 @@ class CategoriesController extends Controller
     /**
      * @param CategoryRequest $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
+     * @throws Exception
      */
     public function store(CategoryRequest $request)
     {
-        $category = $this->categoryService->create($request);
+        $category = $this->categoryService->create($request->validated());
 
         return $this->json(new CategoryResource($category), Response::HTTP_CREATED);
     }
@@ -77,10 +82,13 @@ class CategoriesController extends Controller
     /**
      * @param Category $category
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
+     * @throws Exception
      */
     public function show(Category $category)
     {
+        $this->authorize('view', Category::class);
+
         return $this->json(new CategoryResource($category), Response::HTTP_OK);
     }
 
@@ -88,11 +96,12 @@ class CategoriesController extends Controller
      * @param CategoryRequest $request
      * @param Category $category
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
+     * @throws Exception
      */
     public function update(CategoryRequest $request, Category $category)
     {
-        $category = $this->categoryService->update($category, $request);
+        $category = $this->categoryService->update($category, $request->validated());
 
         return $this->json(new CategoryResource($category), Response::HTTP_OK);
     }
@@ -100,11 +109,13 @@ class CategoriesController extends Controller
     /**
      * @param Category $category
      *
-     * @return \Illuminate\Http\JsonResponse
-     * @throws \Exception
+     * @return JsonResponse
+     * @throws Exception
      */
     public function destroy(Category $category)
     {
+        $this->authorize('delete', Category::class);
+
         $category->delete();
 
         return $this->json(null, Response::HTTP_OK);
@@ -113,10 +124,13 @@ class CategoriesController extends Controller
     /**
      * @param BulkDeleteRequest $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
+     * @throws Exception
      */
     public function bulkDestroy(BulkDeleteRequest $request)
     {
+        $this->authorize('delete', Category::class);
+
         collect($request->get('items'))->each(function ($category) {
             if ($categoryToDelete = Category::find($category['id'])) {
                 $categoryToDelete->delete();

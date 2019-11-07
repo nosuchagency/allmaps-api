@@ -31,9 +31,9 @@ class UsersReadTest extends TestCase
     /** @test */
     public function an_authenticated_user_with_read_permission_can_view_users()
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['users.read'])
-        );
+        $role = $this->createRoleWithPermissions(['user:read']);
+
+        $this->signIn(null, $role);
 
         $this->getJson(route('users.index'))->assertOk();
     }
@@ -41,9 +41,9 @@ class UsersReadTest extends TestCase
     /** @test */
     public function an_authenticated_user_with_read_permission_can_view_users_paginated()
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['users.read'])
-        );
+        $role = $this->createRoleWithPermissions(['user:read']);
+
+        $this->signIn(null, $role);
 
         $this->getJson(route('users.paginated'))->assertOk();
     }
@@ -51,9 +51,9 @@ class UsersReadTest extends TestCase
     /** @test */
     public function an_authenticated_user_with_read_permission_can_view_a_specific_user()
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['users.read'])
-        );
+        $role = $this->createRoleWithPermissions(['user:read']);
+
+        $this->signIn(null, $role);
 
         $user = factory(User::class)->create();
 

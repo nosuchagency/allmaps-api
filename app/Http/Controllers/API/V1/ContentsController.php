@@ -29,11 +29,6 @@ class ContentsController extends Controller
      */
     public function __construct(ContentService $contentService)
     {
-        $this->middleware('permission:contents.create')->only(['store']);
-        $this->middleware('permission:contents.read')->only(['index', 'paginated', 'show']);
-        $this->middleware('permission:contents.update')->only(['update']);
-        $this->middleware('permission:contents.delete')->only(['destroy', 'bulkDestroy']);
-
         $this->contentService = $contentService;
     }
 
@@ -41,9 +36,12 @@ class ContentsController extends Controller
      * @param Request $request
      *
      * @return JsonResponse
+     * @throws Exception
      */
     public function index(Request $request)
     {
+        $this->authorize('viewAny', Content::class);
+
         $contents = Content::query()
             ->filter($request)
             ->get();
@@ -55,9 +53,12 @@ class ContentsController extends Controller
      * @param Request $request
      *
      * @return AnonymousResourceCollection
+     * @throws Exception
      */
     public function paginated(Request $request)
     {
+        $this->authorize('viewAny', Content::class);
+
         $contents = Content::query()
             ->filter($request)
             ->jsonPaginate($this->paginationNumber());
@@ -69,6 +70,7 @@ class ContentsController extends Controller
      * @param ContentRequest $request
      *
      * @return JsonResponse
+     * @throws Exception
      */
     public function store(ContentRequest $request)
     {
@@ -81,9 +83,12 @@ class ContentsController extends Controller
      * @param Content $content
      *
      * @return JsonResponse
+     * @throws Exception
      */
     public function show(Content $content)
     {
+        $this->authorize('view', Content::class);
+
         return $this->json(new ContentResource($content), Response::HTTP_OK);
     }
 
@@ -92,6 +97,7 @@ class ContentsController extends Controller
      * @param Content $content
      *
      * @return JsonResponse
+     * @throws Exception
      */
     public function update(ContentRequest $request, Content $content)
     {
@@ -108,6 +114,8 @@ class ContentsController extends Controller
      */
     public function destroy(Content $content)
     {
+        $this->authorize('delete', Content::class);
+
         $content->delete();
 
         return $this->json(null, Response::HTTP_OK);
@@ -117,9 +125,12 @@ class ContentsController extends Controller
      * @param BulkDeleteRequest $request
      *
      * @return JsonResponse
+     * @throws Exception
      */
     public function bulkDestroy(BulkDeleteRequest $request)
     {
+        $this->authorize('delete', Content::class);
+
         collect($request->get('items'))->each(function ($content) {
             if ($contentToDelete = Content::find($content['id'])) {
                 $contentToDelete->delete();

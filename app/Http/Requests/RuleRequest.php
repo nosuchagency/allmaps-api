@@ -3,9 +3,10 @@
 namespace App\Http\Requests;
 
 use App\Distance;
+use App\Models\Rule;
 use App\Weekday;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rule as ValidationRule;
 
 class RuleRequest extends FormRequest
 {
@@ -16,7 +17,11 @@ class RuleRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        if ($this->method() === 'POST') {
+            return $this->user()->can('create', Rule::class);
+        }
+
+        return $this->user()->can('update', Rule::class);
     }
 
     /**
@@ -29,11 +34,11 @@ class RuleRequest extends FormRequest
         return [
             'distance' => [
                 'required',
-                Rule::in(Distance::DISTANCES),
+                ValidationRule::in(Distance::DISTANCES),
             ],
             'weekday' => [
                 'required',
-                Rule::in(Weekday::WEEKDAYS),
+                ValidationRule::in(Weekday::WEEKDAYS),
             ],
             'time_restricted' => 'boolean',
             'date_restricted' => 'boolean',

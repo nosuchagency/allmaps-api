@@ -7,6 +7,7 @@ use App\Models\Beacon;
 use App\Models\Container;
 use App\Models\Rule;
 use App\Weekday;
+use Illuminate\Foundation\Testing\TestResponse;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -74,13 +75,13 @@ class RulesUpdateTest extends TestCase
      * @param $rule
      * @param array $attributes
      *
-     * @return \Illuminate\Foundation\Testing\TestResponse
+     * @return TestResponse
      */
     protected function update($rule, $attributes = [])
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['beacons.update', 'containers.update'])
-        );
+        $role = $this->createRoleWithPermissions(['rule:update']);
+
+        $this->signIn(null, $role);
 
         return $this->putJson(route('rules.update', [
                 'container' => $this->container,

@@ -61,9 +61,9 @@ class MenuItemsCreateTest extends TestCase
      */
     protected function create($attributes = [])
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['menus.create'])
-        );
+        $role = $this->createRoleWithPermissions(['menu-item:create']);
+
+        $this->signIn(null, $role);
 
         return $this->postJson(route('menu-items.store'), $this->validFields($attributes));
     }

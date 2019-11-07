@@ -2,14 +2,13 @@
 
 namespace App\Services\Models;
 
-use App\Contracts\ModelServiceContract;
 use App\Models\Skin;
 use Chumper\Zipper\Zipper;
-use Illuminate\Database\Eloquent\Model;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
-class SkinService implements ModelServiceContract
+class SkinService
 {
 
     /**
@@ -29,10 +28,10 @@ class SkinService implements ModelServiceContract
     /**
      * @param Request $request
      *
-     * @return Skin|mixed
-     * @throws \Exception
+     * @return Skin
+     * @throws Exception
      */
-    public function create(Request $request)
+    public function create(Request $request): Skin
     {
         $skin = new Skin();
         $skin->fill($request->only($skin->getFillable()));
@@ -44,13 +43,13 @@ class SkinService implements ModelServiceContract
     }
 
     /**
-     * @param Model $skin
+     * @param Skin $skin
      * @param Request $request
      *
-     * @return Model|mixed
-     * @throws \Exception
+     * @return Skin
+     * @throws Exception
      */
-    public function update(Model $skin, Request $request)
+    public function update(Skin $skin, Request $request): Skin
     {
         $skin->fill($request->only($skin->getFillable()))->save();
 
@@ -65,7 +64,7 @@ class SkinService implements ModelServiceContract
      * @param $file
      * @param $directory
      *
-     * @throws \Exception
+     * @throws Exception
      */
     private function handleZipFile($file, $directory)
     {

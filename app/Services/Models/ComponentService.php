@@ -2,50 +2,105 @@
 
 namespace App\Services\Models;
 
-use App\Contracts\ModelServiceContract;
+use App\Models\Category;
 use App\Models\Component;
 use App\Models\Tag;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 
-class ComponentService implements ModelServiceContract
+class ComponentService
 {
     /**
-     * @param Request $request
+     * @param array $attributes
      *
-     * @return Model
+     * @return Component
      */
-    public function create(Request $request)
+    public function create(array $attributes): Component
     {
         $component = new Component();
-        $component->fill($request->only($component->getFillable()));
-        $component->setImage($request->get('image'));
+
+        $fields = Arr::only($attributes, [
+            'name',
+            'type',
+            'shape',
+            'description',
+            'stroke',
+            'stroke_type',
+            'stroke_color',
+            'stroke_width',
+            'stroke_opacity',
+            'fill',
+            'fill_color',
+            'fill_opacity',
+            'image_width',
+            'image_height',
+        ]);
+
+        $component->fill($fields);
+
+        if (Arr::has($attributes, 'image')) {
+            $component->setImage(Arr::get($attributes, 'image'));
+        }
+
+        $component->category()->associate(
+            Category::find(Arr::get($attributes, 'category.id'))
+        );
 
         $component->save();
 
-        foreach ($request->get('tags', []) as $tag) {
-            $component->tags()->attach(Tag::find($tag['id']));
+        if (Arr::has($attributes, 'tags')) {
+            foreach ($attributes['tags'] as $tag) {
+                $component->tags()->attach(Tag::find($tag['id']));
+            }
         }
 
         return $component->refresh();
     }
 
     /**
-     * @param Model $component
-     * @param Request $request
+     * @param Component $component
+     * @param array $attributes
      *
-     * @return Model
+     * @return Component
      */
-    public function update(Model $component, Request $request)
+    public function update(Component $component, array $attributes): Component
     {
-        $component->fill($request->only($component->getFillable()));
-        $component->setImage($request->get('image'));
+        $fields = Arr::only($attributes, [
+            'name',
+            'type',
+            'shape',
+            'description',
+            'stroke',
+            'stroke_type',
+            'stroke_color',
+            'stroke_width',
+            'stroke_opacity',
+            'fill',
+            'fill_color',
+            'fill_opacity',
+            'image_width',
+            'image_height',
+        ]);
+
+        $component->fill($fields);
+
+        if (Arr::has($attributes, 'image')) {
+            $component->setImage(Arr::get($attributes, 'image'));
+        }
+
+        if (Arr::has($attributes, 'category.id')) {
+            $component->category()->associate(
+                Category::find(Arr::get($attributes, 'category.id'))
+            );
+        }
+
         $component->save();
 
-        $component->tags()->sync([]);
+        if (Arr::has($attributes, 'tags')) {
+            $component->tags()->sync([]);
 
-        foreach ($request->get('tags', []) as $tag) {
-            $component->tags()->attach(Tag::find($tag['id']));
+            foreach ($attributes['tags'] as $tag) {
+                $component->tags()->attach(Tag::find($tag['id']));
+            }
         }
 
         return $component->refresh();

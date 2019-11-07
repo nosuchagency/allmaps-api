@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Beacon;
 use App\Rules\RequiredIdRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -15,7 +16,11 @@ class BeaconRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        if ($this->method() === 'POST') {
+            return $this->user()->can('create', Beacon::class);
+        }
+
+        return $this->user()->can('update', Beacon::class);
     }
 
     /**
@@ -25,23 +30,54 @@ class BeaconRequest extends FormRequest
      */
     public function rules()
     {
+        if ($this->method() === 'POST') {
+            return $this->rulesForCreating();
+        }
+
+        return $this->rulesForUpdating();
+    }
+
+    /**
+     * @return array
+     */
+    public function rulesForCreating()
+    {
         return [
-            'name' => 'required',
-            'identifier' => [
-                'required',
-                Rule::unique('beacons')->ignore($this->route('beacon')),
-            ],
-            'description' => '',
-            'proximity_uuid' => 'nullable|uuid',
-            'major' => 'nullable|integer|between:0,65535',
-            'minor' => 'nullable|integer|between:0,65535',
-            'namespace' => '',
-            'instance_id' => '',
-            'url' => 'nullable|url',
+            'name' => ['required', 'max:255'],
+            'identifier' => ['required', 'unique:beacons'],
+            'description' => ['max:65535'],
+            'proximity_uuid' => ['nullable', 'uuid'],
+            'major' => ['nullable', 'integer', 'between:0,65535'],
+            'minor' => ['nullable', 'integer', 'between:0,65535'],
+            'namespace' => [],
+            'instance_id' => [],
+            'url' => ['nullable', 'url'],
             'category' => ['nullable', new RequiredIdRule],
-            'category.id' => 'exists:categories,id',
-            'tags' => 'array',
-            'tags.*.id' => 'required|exists:tags,id'
+            'category.id' => ['exists:categories,id'],
+            'tags' => ['array'],
+            'tags.*.id' => ['required', 'exists:tags,id']
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function rulesForUpdating()
+    {
+        return [
+            'name' => ['filled', 'max:255'],
+            'identifier' => ['filled', Rule::unique('beacons')->ignore($this->route('beacon'))],
+            'description' => ['max:65535'],
+            'proximity_uuid' => ['nullable', 'uuid'],
+            'major' => ['nullable', 'integer', 'between:0,65535'],
+            'minor' => ['nullable', 'integer', 'between:0,65535'],
+            'namespace' => [],
+            'instance_id' => [],
+            'url' => ['nullable', 'url'],
+            'category' => ['nullable', new RequiredIdRule],
+            'category.id' => ['exists:categories,id'],
+            'tags' => ['array'],
+            'tags.*.id' => ['required', 'exists:tags,id']
         ];
     }
 }

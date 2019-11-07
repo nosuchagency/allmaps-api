@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\ContentType;
+use App\Models\Content\Content;
 use App\Rules\FileExists;
 use App\Rules\RequiredIdRule;
 use Illuminate\Foundation\Http\FormRequest;
@@ -17,7 +18,11 @@ class ContentRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        if ($this->method() === 'POST') {
+            return $this->user()->can('create', Content::class);
+        }
+
+        return $this->user()->can('update', Content::class);
     }
 
     /**
@@ -28,7 +33,7 @@ class ContentRequest extends FormRequest
     public function rules()
     {
         $rules = [
-            'name' => 'required',
+            'name' => ['required', 'max:255'],
             'order' => 'nullable|integer',
             'text' => '',
             'image' => '',
@@ -40,9 +45,9 @@ class ContentRequest extends FormRequest
                 Rule::in(ContentType::TYPES),
             ],
             'category' => ['nullable', new RequiredIdRule],
-            'category.id' => 'exists:categories,id',
-            'tags' => 'array',
-            'tags.*.id' => 'required|exists:tags,id'
+            'category.id' => ['exists:categories,id'],
+            'tags' => ['array'],
+            'tags.*.id' => ['required', 'exists:tags,id']
         ];
 
         if ($this->method() === 'POST') {

@@ -2,12 +2,12 @@
 
 namespace Tests;
 
+use App\Models\Permission;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Contracts\Auth\Authenticatable as UserContract;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Illuminate\Support\Facades\File;
-use Spatie\Permission\Models\Permission;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 abstract class TestCase extends BaseTestCase
@@ -18,12 +18,13 @@ abstract class TestCase extends BaseTestCase
 
     /**
      * @param User $user
+     * @param Role $role
      *
      * @return User
      */
-    protected function signIn($user = null): User
+    protected function signIn($user = null, $role = null): User
     {
-        $user = $user ?? factory(User::class)->create();
+        $user = $user ?? factory(User::class)->create($role ? ['role_id' => $role->id] : []);
         $this->actingAs($user);
         return $user;
     }
@@ -31,8 +32,8 @@ abstract class TestCase extends BaseTestCase
     /**
      * Set the currently logged in user for the application.
      *
-     * @param  \Illuminate\Contracts\Auth\Authenticatable $user
-     * @param  string|null $driver
+     * @param UserContract $user
+     * @param string|null $driver
      *
      * @return $this
      */
@@ -55,7 +56,6 @@ abstract class TestCase extends BaseTestCase
     {
         return Permission::firstOrCreate([
             'name' => $name,
-            'guard_name' => 'api'
         ]);
     }
 
@@ -69,8 +69,8 @@ abstract class TestCase extends BaseTestCase
         $role = factory(Role::class)->create();
 
         foreach ($permissions as $permission) {
-            $role->givePermissionTo(
-                $this->createPermission($permission)->name
+            $role->permissions()->attach(
+                $this->createPermission($permission)->id
             );
         }
 

@@ -21,9 +21,9 @@ class ContainerLocationsDeleteTest extends TestCase
 
         $this->assertCount(1, $container->locations()->get());
 
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['containers.delete'])
-        );
+        $role = $this->createRoleWithPermissions(['container:delete']);
+
+        $this->signIn(null, $role);
 
         $this->deleteJson(route('containers.locations.destroy', ['container' => $container]), [
             'data' => [

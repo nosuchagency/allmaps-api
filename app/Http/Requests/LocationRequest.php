@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Location;
 use App\Rules\RequiredIdRule;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -14,7 +15,11 @@ class LocationRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        if ($this->method() === 'POST') {
+            return $this->user()->can('create', Location::class);
+        }
+
+        return $this->user()->can('update', Location::class);
     }
 
     /**
@@ -31,7 +36,7 @@ class LocationRequest extends FormRequest
             'title' => '',
             'subtitle' => '',
             'image' => '',
-            'description' => '',
+            'description' => ['max:65535'],
             'contact_name' => '',
             'company' => '',
             'address' => '',
@@ -68,9 +73,9 @@ class LocationRequest extends FormRequest
             'searchables.*.fields.*.type' => 'required|in:text,boolean',
             'searchables.*.fields.*.value' => 'present',
             'category' => ['nullable', new RequiredIdRule],
-            'category.id' => 'exists:categories,id',
-            'tags' => 'array',
-            'tags.*.id' => 'required|exists:tags,id'
+            'category.id' => ['exists:categories,id'],
+            'tags' => ['array'],
+            'tags.*.id' => ['required', 'exists:tags,id']
         ];
 
         if ($this->method() === 'POST') {

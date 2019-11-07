@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Tag;
 use Illuminate\Foundation\Http\FormRequest;
 
 class TagRequest extends FormRequest
@@ -13,7 +14,11 @@ class TagRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        if ($this->method() === 'POST') {
+            return $this->user()->can('create', Tag::class);
+        }
+
+        return $this->user()->can('update', Tag::class);
     }
 
     /**
@@ -24,8 +29,8 @@ class TagRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required',
-            'description' => ''
+            'name' => ['required', 'max:255'],
+            'description' => ['max:65535'],
         ];
     }
 }

@@ -60,9 +60,9 @@ class RulesReadTest extends TestCase
     /** @test */
     public function an_authenticated_user_with_read_permission_can_read_rules()
     {
-        $this->signIn()->assignRole(
-            $this->createRoleWithPermissions(['beacons.read', 'containers.read'])
-        );
+        $role = $this->createRoleWithPermissions(['rule:read']);
+
+        $this->signIn(null, $role);
 
         $this->getJson(route('rules.show', [
             'beacon' => $this->beacon,

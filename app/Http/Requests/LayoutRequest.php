@@ -25,13 +25,13 @@ class LayoutRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required',
-            'description' => '',
+            'name' => ['required', 'max:255'],
+            'description' => ['max:65535'],
             'content' => '',
             'category' => ['nullable', new RequiredIdRule],
-            'category.id' => 'exists:categories,id',
-            'tags' => 'array',
-            'tags.*.id' => 'required|exists:tags,id'
+            'category.id' => ['exists:categories,id'],
+            'tags' => ['array'],
+            'tags.*.id' => ['required', 'exists:tags,id']
         ];
     }
 }

@@ -6,8 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\BulkDeleteRequest;
 use App\Http\Requests\MenuItemRequest;
 use App\Http\Resources\MenuItemResource;
+use App\Models\Menu;
 use App\Models\MenuItem;
 use App\Services\Models\MenuItemService;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
@@ -27,19 +29,17 @@ class MenuItemsController extends Controller
      */
     public function __construct(MenuItemService $menuItemService)
     {
-        $this->middleware('permission:menus.create')->only(['store']);
-        $this->middleware('permission:menus.read')->only(['index', 'show', 'paginated']);
-        $this->middleware('permission:menus.update')->only(['update']);
-        $this->middleware('permission:menus.delete')->only(['destroy', 'bulkDestroy']);
-
         $this->menuItemService = $menuItemService;
     }
 
     /**
      * @return JsonResponse
+     * @throws Exception
      */
     public function index()
     {
+        $this->authorize('viewAny', MenuItem::class);
+
         $menuItems = MenuItem::all();
 
         return $this->json(MenuItemResource::collection($menuItems), Response::HTTP_OK);
@@ -47,9 +47,12 @@ class MenuItemsController extends Controller
 
     /**
      * @return AnonymousResourceCollection
+     * @throws Exception
      */
     public function paginated()
     {
+        $this->authorize('viewAny', MenuItem::class);
+
         $menuItems = MenuItem::query()
             ->jsonPaginate($this->paginationNumber());
 
@@ -60,6 +63,7 @@ class MenuItemsController extends Controller
      * @param MenuItemRequest $request
      *
      * @return JsonResponse
+     * @throws Exception
      */
     public function store(MenuItemRequest $request)
     {
@@ -72,9 +76,12 @@ class MenuItemsController extends Controller
      * @param MenuItem $menuItem
      *
      * @return JsonResponse
+     * @throws Exception
      */
     public function show(MenuItem $menuItem)
     {
+        $this->authorize('view', MenuItem::class);
+
         return $this->json(new MenuItemResource($menuItem), Response::HTTP_OK);
     }
 
@@ -83,6 +90,7 @@ class MenuItemsController extends Controller
      * @param MenuItem $menuItem
      *
      * @return JsonResponse
+     * @throws Exception
      */
     public function update(MenuItemRequest $request, MenuItem $menuItem)
     {
@@ -95,10 +103,12 @@ class MenuItemsController extends Controller
      * @param MenuItem $menuItem
      *
      * @return JsonResponse
-     * @throws \Exception
+     * @throws Exception
      */
     public function destroy(MenuItem $menuItem)
     {
+        $this->authorize('delete', MenuItem::class);
+
         $menuItem->delete();
 
         return $this->json(null, Response::HTTP_OK);
@@ -108,9 +118,12 @@ class MenuItemsController extends Controller
      * @param BulkDeleteRequest $request
      *
      * @return JsonResponse
+     * @throws Exception
      */
     public function bulkDestroy(BulkDeleteRequest $request)
     {
+        $this->authorize('delete', MenuItem::class);
+
         collect($request->get('items'))->each(function ($menuItem) {
             if ($menuItemToDelete = MenuItem::find($menuItem['id'])) {
                 $menuItemToDelete->delete();

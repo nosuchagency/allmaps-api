@@ -8,6 +8,7 @@ use App\Http\Requests\StructureRequest;
 use App\Http\Resources\StructureResource;
 use App\Models\Structure;
 use App\Services\Models\StructureService;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -28,11 +29,6 @@ class StructuresController extends Controller
      */
     public function __construct(StructureService $structureService)
     {
-        $this->middleware('permission:floors.create')->only(['store']);
-        $this->middleware('permission:floors.read')->only(['index', 'paginated', 'show']);
-        $this->middleware('permission:floors.update')->only(['update']);
-        $this->middleware('permission:floors.delete')->only(['destroy', 'bulkDestroy']);
-
         $this->structureService = $structureService;
     }
 
@@ -40,9 +36,12 @@ class StructuresController extends Controller
      * @param Request $request
      *
      * @return JsonResponse
+     * @throws Exception
      */
     public function index(Request $request)
     {
+        $this->authorize('viewAny', Structure::class);
+
         $structures = Structure::query()
             ->filter($request)
             ->get();
@@ -54,9 +53,12 @@ class StructuresController extends Controller
      * @param Request $request
      *
      * @return AnonymousResourceCollection
+     * @throws Exception
      */
     public function paginated(Request $request)
     {
+        $this->authorize('viewAny', Structure::class);
+
         $structures = Structure::query()
             ->filter($request)
             ->jsonPaginate($this->paginationNumber());
@@ -68,6 +70,7 @@ class StructuresController extends Controller
      * @param StructureRequest $request
      *
      * @return JsonResponse
+     * @throws Exception
      */
     public function store(StructureRequest $request)
     {
@@ -80,9 +83,12 @@ class StructuresController extends Controller
      * @param Structure $structure
      *
      * @return JsonResponse
+     * @throws Exception
      */
     public function show(Structure $structure)
     {
+        $this->authorize('view', Structure::class);
+
         return $this->json(new StructureResource($structure), Response::HTTP_OK);
     }
 
@@ -91,6 +97,7 @@ class StructuresController extends Controller
      * @param Structure $structure
      *
      * @return JsonResponse
+     * @throws Exception
      */
     public function update(StructureRequest $request, Structure $structure)
     {
@@ -103,10 +110,12 @@ class StructuresController extends Controller
      * @param Structure $structure
      *
      * @return JsonResponse
-     * @throws \Exception
+     * @throws Exception
      */
     public function destroy(Structure $structure)
     {
+        $this->authorize('delete', Structure::class);
+
         $structure->delete();
 
         return $this->json(null, Response::HTTP_OK);
@@ -116,9 +125,12 @@ class StructuresController extends Controller
      * @param BulkDeleteRequest $request
      *
      * @return JsonResponse
+     * @throws Exception
      */
     public function bulkDestroy(BulkDeleteRequest $request)
     {
+        $this->authorize('delete', Structure::class);
+
         collect($request->get('items'))->each(function ($structure) {
             if ($structureToDelete = Structure::find($structure['id'])) {
                 $structureToDelete->delete();
