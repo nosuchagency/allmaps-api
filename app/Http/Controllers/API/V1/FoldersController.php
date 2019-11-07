@@ -77,7 +77,7 @@ class FoldersController extends Controller
      */
     public function store(FolderRequest $request)
     {
-        $folder = $this->folderService->create($request);
+        $folder = $this->folderService->create($request->validated());
 
         $folder->load($folder->relationships);
 
@@ -108,7 +108,7 @@ class FoldersController extends Controller
      */
     public function update(FolderRequest $request, Folder $folder)
     {
-        $folder = $this->folderService->update($folder, $request);
+        $folder = $this->folderService->update($folder, $request->validated());
 
         $folder->load($folder->relationships);
 

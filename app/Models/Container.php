@@ -27,18 +27,11 @@ class Container extends Model
     ];
 
     /**
-     * The attributes that are mass assignable.
+     * The attributes that aren't mass assignable.
      *
      * @var array
      */
-    protected $fillable = [
-        'name',
-        'description',
-        'folders_enabled',
-        'created_by',
-        'category_id',
-        'category'
-    ];
+    protected $guarded = [];
 
     /**
      * The attributes that should be cast to native types.

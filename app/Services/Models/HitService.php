@@ -24,7 +24,7 @@ class HitService
 
         $hit->save();
 
-        return $hit;
+        return $hit->refresh();
     }
 
     /**

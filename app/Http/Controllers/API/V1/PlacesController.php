@@ -78,7 +78,7 @@ class PlacesController extends Controller
      */
     public function store(PlaceRequest $request)
     {
-        $place = $this->placeService->create($request);
+        $place = $this->placeService->create($request->validated());
 
         $place->load($place->relationships);
 
@@ -109,7 +109,7 @@ class PlacesController extends Controller
      */
     public function update(Place $place, PlaceRequest $request)
     {
-        $place = $this->placeService->update($place, $request);
+        $place = $this->placeService->update($place, $request->validated());
 
         $place->load($place->relationships);
 

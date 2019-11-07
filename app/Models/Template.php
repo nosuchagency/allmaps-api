@@ -16,20 +16,11 @@ class Template extends Model
     use HasRelations, HasCategory, SoftDeletes, HasCreatedBy, LogsActivity;
 
     /**
-     * The attributes that are mass assignable.
+     * The attributes that aren't mass assignable.
      *
      * @var array
      */
-    protected $fillable = [
-        'name',
-        'description',
-        'content',
-        'activated',
-        'hook',
-        'category_id',
-        'category',
-        'created_by'
-    ];
+    protected $guarded = [];
 
     /**
      * The attributes that should be cast to native types.

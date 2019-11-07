@@ -2,28 +2,46 @@
 
 namespace App\Services\Models;
 
+use App\Models\Category;
+use App\Models\Container;
 use App\Models\Folder;
 use App\Models\Tag;
-use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 
 class FolderService
 {
     /**
-     * @param Request $request
+     * @param array $attributes
      *
      * @return Folder
      */
-    public function create(Request $request): Folder
+    public function create(array $attributes): Folder
     {
         $folder = new Folder();
+
+        $fields = Arr::only($attributes, [
+            'name',
+            'order',
+        ]);
+
+        $folder->fill($fields);
+
         $folder->container()->associate(
-            $request->input('container.id')
+            Container::find(Arr::get($attributes, 'container.id'))
         );
-        $folder->fill($request->only($folder->getFillable()));
+
+        if (Arr::has($attributes, 'category')) {
+            $folder->category()->associate(
+                Category::find(Arr::get($attributes, 'category.id'))
+            );
+        }
+
         $folder->save();
 
-        foreach ($request->get('tags', []) as $tag) {
-            $folder->tags()->attach(Tag::find($tag['id']));
+        if (Arr::has($attributes, 'tags')) {
+            foreach ($attributes['tags'] as $tag) {
+                $folder->tags()->attach(Tag::find($tag['id']));
+            }
         }
 
         return $folder->refresh();
@@ -31,26 +49,39 @@ class FolderService
 
     /**
      * @param Folder $folder
-     * @param Request $request
+     * @param array $attributes
      *
      * @return Folder
      */
-    public function update(Folder $folder, Request $request): Folder
+    public function update(Folder $folder, array $attributes): Folder
     {
-        $folder->fill($request->only($folder->getFillable()));
+        $fields = Arr::only($attributes, [
+            'name',
+            'order',
+        ]);
 
-        if ($request->has('container')) {
+        $folder->fill($fields);
+
+        if (Arr::has($attributes, 'container')) {
             $folder->container()->associate(
-                $request->input('container.id')
+                Container::find(Arr::get($attributes, 'container.id'))
+            );
+        }
+
+        if (Arr::has($attributes, 'category')) {
+            $folder->category()->associate(
+                Category::find(Arr::get($attributes, 'category.id'))
             );
         }
 
         $folder->save();
 
-        $folder->tags()->sync([]);
+        if (Arr::has($attributes, 'tags')) {
+            $folder->tags()->sync([]);
 
-        foreach ($request->get('tags', []) as $tag) {
-            $folder->tags()->attach(Tag::find($tag['id']));
+            foreach ($attributes['tags'] as $tag) {
+                $folder->tags()->attach(Tag::find($tag['id']));
+            }
         }
 
         return $folder->refresh();

@@ -49,7 +49,7 @@ class TokenService
 
         $token->fill($fields);
 
-        if (Arr::has($attributes, 'role.id')) {
+        if (Arr::has($attributes, 'role')) {
             $token->role()->associate(
                 Role::find(Arr::get($attributes, 'role.id'))
             );

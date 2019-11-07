@@ -2,61 +2,106 @@
 
 namespace App\Services\Models;
 
+use App\Models\Category;
+use App\Models\Menu;
 use App\Models\Place;
 use App\Models\Tag;
-use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 
 class PlaceService
 {
     /**
-     * @param Request $request
+     * @param array $attributes
      *
      * @return Place
      */
-    public function create(Request $request): Place
+    public function create(array $attributes): Place
     {
         $place = new Place();
-        $place->fill($request->only($place->getFillable()));
-        $place->setImage($request->get('image'));
 
-        if ($request->filled('menu')) {
+        $fields = Arr::only($attributes, [
+            'name',
+            'address',
+            'postcode',
+            'city',
+            'latitude',
+            'longitude',
+            'activated'
+        ]);
+
+        $place->fill($fields);
+
+        if (Arr::has($attributes, 'image')) {
+            $place->setImage(Arr::get($attributes, 'image'));
+        }
+
+        if (Arr::has($attributes, 'menu')) {
             $place->menu()->associate(
-                $request->input('menu.id')
+                Menu::find(Arr::get($attributes, 'menu.id'))
+            );
+        }
+
+        if (Arr::has($attributes, 'category')) {
+            $place->category()->associate(
+                Category::find(Arr::get($attributes, 'category.id'))
             );
         }
 
         $place->save();
 
-        foreach ($request->get('tags', []) as $tag) {
-            $place->tags()->attach(Tag::find($tag['id']));
+        if (Arr::has($attributes, 'tags')) {
+            foreach ($attributes['tags'] as $tag) {
+                $place->tags()->attach(Tag::find($tag['id']));
+            }
         }
 
         return $place->refresh();
     }
 
     /**
-     * @param Request $request
+     * @param array $attributes
      * @param Place $place
      *
      * @return Place
      */
-    public function update(Place $place, Request $request): Place
+    public function update(Place $place, array $attributes): Place
     {
-        $place->fill($request->only($place->getFillable()));
-        $place->setImage($request->get('image'));
+        $fields = Arr::only($attributes, [
+            'name',
+            'address',
+            'postcode',
+            'city',
+            'latitude',
+            'longitude',
+            'activated'
+        ]);
 
-        if ($request->has('menu')) {
+        $place->fill($fields);
+
+        if (Arr::has($attributes, 'image')) {
+            $place->setImage(Arr::get($attributes, 'image'));
+        }
+
+        if (Arr::has($attributes, 'menu')) {
             $place->menu()->associate(
-                $request->input('menu.id')
+                Menu::find(Arr::get($attributes, 'menu.id'))
+            );
+        }
+
+        if (Arr::has($attributes, 'category')) {
+            $place->category()->associate(
+                Category::find(Arr::get($attributes, 'category.id'))
             );
         }
 
         $place->save();
 
-        $place->tags()->sync([]);
+        if (Arr::has($attributes, 'tags')) {
+            $place->tags()->sync([]);
 
-        foreach ($request->get('tags', []) as $tag) {
-            $place->tags()->attach(Tag::find($tag['id']));
+            foreach ($attributes['tags'] as $tag) {
+                $place->tags()->attach(Tag::find($tag['id']));
+            }
         }
 
         return $place->refresh();

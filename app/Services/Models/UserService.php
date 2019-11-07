@@ -13,7 +13,7 @@ class UserService
     /**
      * @param array $attributes
      *
-     * @return user
+     * @return User
      */
     public function create(array $attributes): User
     {
@@ -33,9 +33,11 @@ class UserService
             Role::find(Arr::get($attributes, 'role.id'))
         );
 
-        $user->category()->associate(
-            Category::find(Arr::get($attributes, 'category.id'))
-        );
+        if (Arr::has($attributes, 'category')) {
+            $user->category()->associate(
+                Category::find(Arr::get($attributes, 'category.id'))
+            );
+        }
 
         $user->save();
 
@@ -66,13 +68,13 @@ class UserService
 
         $user->fill($fields);
 
-        if (Arr::has($attributes, 'role.id')) {
+        if (Arr::has($attributes, 'role')) {
             $user->role()->associate(
                 Role::find(Arr::get($attributes, 'role.id'))
             );
         }
 
-        if (Arr::has($attributes, 'category.id')) {
+        if (Arr::has($attributes, 'category')) {
             $user->category()->associate(
                 Category::find(Arr::get($attributes, 'category.id'))
             );

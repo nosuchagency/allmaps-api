@@ -41,9 +41,11 @@ class ComponentService
             $component->setImage(Arr::get($attributes, 'image'));
         }
 
-        $component->category()->associate(
-            Category::find(Arr::get($attributes, 'category.id'))
-        );
+        if (Arr::has($attributes, 'category')) {
+            $component->category()->associate(
+                Category::find(Arr::get($attributes, 'category.id'))
+            );
+        }
 
         $component->save();
 
@@ -87,7 +89,7 @@ class ComponentService
             $component->setImage(Arr::get($attributes, 'image'));
         }
 
-        if (Arr::has($attributes, 'category.id')) {
+        if (Arr::has($attributes, 'category')) {
             $component->category()->associate(
                 Category::find(Arr::get($attributes, 'category.id'))
             );

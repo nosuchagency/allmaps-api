@@ -32,9 +32,11 @@ class BeaconService
 
         $beacon->fill($fields);
 
-        $beacon->category()->associate(
-            Category::find(Arr::get($attributes, 'category.id'))
-        );
+        if (Arr::has($attributes, 'category')) {
+            $beacon->category()->associate(
+                Category::find(Arr::get($attributes, 'category.id'))
+            );
+        }
 
         $beacon->save();
 
@@ -69,7 +71,7 @@ class BeaconService
 
         $beacon->fill($fields);
 
-        if (Arr::has($attributes, 'category.id')) {
+        if (Arr::has($attributes, 'category')) {
             $beacon->category()->associate(
                 Category::find(Arr::get($attributes, 'category.id'))
             );

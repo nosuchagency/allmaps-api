@@ -2,29 +2,45 @@
 
 namespace App\Services\Models;
 
+use App\Models\Category;
 use App\Models\Container;
+use App\Models\Skin;
 use App\Models\Tag;
-use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 
 class ContainerService
 {
     /**
-     * @param Request $request
+     * @param array $attributes
      *
      * @return Container
      */
-    public function create(Request $request): Container
+    public function create(array $attributes): Container
     {
         $container = new Container();
 
-        $container->fill($request->only($container->getFillable()));
+        $fields = Arr::only($attributes, [
+            'name',
+            'description',
+            'folders_enabled',
+        ]);
 
-        $this->setSkins($container, $request);
+        $container->fill($fields);
+
+        $this->setSkins($container, $attributes);
+
+        if (Arr::has($attributes, 'category')) {
+            $container->category()->associate(
+                Category::find(Arr::get($attributes, 'category.id'))
+            );
+        }
 
         $container->save();
 
-        foreach ($request->get('tags', []) as $tag) {
-            $container->tags()->attach(Tag::find($tag['id']));
+        if (Arr::has($attributes, 'tags')) {
+            foreach ($attributes['tags'] as $tag) {
+                $container->tags()->attach(Tag::find($tag['id']));
+            }
         }
 
         return $container->refresh();
@@ -32,20 +48,36 @@ class ContainerService
 
     /**
      * @param Container $container
-     * @param Request $request
+     * @param array $attributes
      *
      * @return Container
      */
-    public function update(Container $container, Request $request): Container
+    public function update(Container $container, array $attributes): Container
     {
-        $container->fill($request->only($container->getFillable()));
-        $this->setSkins($container, $request);
+        $fields = Arr::only($attributes, [
+            'name',
+            'description',
+            'folders_enabled',
+        ]);
+
+        $container->fill($fields);
+
+        $this->setSkins($container, $attributes);
+
+        if (Arr::has($attributes, 'category')) {
+            $container->category()->associate(
+                Category::find(Arr::get($attributes, 'category.id'))
+            );
+        }
+
         $container->save();
 
-        $container->tags()->sync([]);
+        if (Arr::has($attributes, 'tags')) {
+            $container->tags()->sync([]);
 
-        foreach ($request->get('tags', []) as $tag) {
-            $container->tags()->attach(Tag::find($tag['id']));
+            foreach ($attributes['tags'] as $tag) {
+                $container->tags()->attach(Tag::find($tag['id']));
+            }
         }
 
         return $container->refresh();
@@ -53,25 +85,25 @@ class ContainerService
 
     /**
      * @param $container
-     * @param Request $request
+     * @param array $attributes
      */
-    private function setSkins($container, Request $request)
+    private function setSkins(Container $container, array $attributes)
     {
-        if ($request->has('mobile_skin')) {
+        if (Arr::has($attributes, 'mobile_skin')) {
             $container->mobileSkin()->associate(
-                $request->input('mobile_skin.id')
+                Skin::find(Arr::get($attributes, 'mobile_skin.id'))
             );
         }
 
-        if ($request->has('tablet_skin')) {
+        if (Arr::has($attributes, 'tablet_skin')) {
             $container->tabletSkin()->associate(
-                $request->input('tablet_skin.id')
+                Skin::find(Arr::get($attributes, 'tablet_skin.id'))
             );
         }
 
-        if ($request->has('desktop_skin')) {
+        if (Arr::has($attributes, 'desktop_skin')) {
             $container->desktopSkin()->associate(
-                $request->input('desktop_skin.id')
+                Skin::find(Arr::get($attributes, 'desktop_skin.id'))
             );
         }
     }

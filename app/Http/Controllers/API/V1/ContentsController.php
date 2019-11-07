@@ -74,7 +74,7 @@ class ContentsController extends Controller
      */
     public function store(ContentRequest $request)
     {
-        $content = $this->contentService->create($request);
+        $content = $this->contentService->create($request->validated());
 
         return $this->json(new ContentResource($content), Response::HTTP_CREATED);
     }
@@ -101,7 +101,7 @@ class ContentsController extends Controller
      */
     public function update(ContentRequest $request, Content $content)
     {
-        $content = $this->contentService->update($content, $request);
+        $content = $this->contentService->update($content, $request->validated());
 
         return $this->json(new ContentResource($content), Response::HTTP_OK);
     }

@@ -76,7 +76,7 @@ class TemplatesController extends Controller
      */
     public function store(TemplateRequest $request)
     {
-        $template = $this->templateService->create($request);
+        $template = $this->templateService->create($request->validated());
 
         $template->load($template->relationships);
 
@@ -107,7 +107,7 @@ class TemplatesController extends Controller
      */
     public function update(TemplateRequest $request, Template $template)
     {
-        $template = $this->templateService->update($template, $request);
+        $template = $this->templateService->update($template, $request->validated());
 
         $template->load($template->relationships);
 

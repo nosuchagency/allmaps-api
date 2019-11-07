@@ -76,7 +76,7 @@ class PoisController extends Controller
      */
     public function store(PoiRequest $request)
     {
-        $poi = $this->poiService->create($request);
+        $poi = $this->poiService->create($request->validated());
 
         $poi->load($poi->relationships);
 
@@ -107,7 +107,7 @@ class PoisController extends Controller
      */
     public function update(PoiRequest $request, Poi $poi)
     {
-        $poi = $this->poiService->update($poi, $request);
+        $poi = $this->poiService->update($poi, $request->validated());
 
         $poi->load($poi->relationships);
 
