@@ -66,7 +66,7 @@ class BeaconService
             'minor',
             'namespace',
             'instance_id',
-            'url',
+            'url'
         ]);
 
         $beacon->fill($fields);
