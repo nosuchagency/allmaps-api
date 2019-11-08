@@ -19,6 +19,7 @@ class Rule extends Model
     protected $fillable = [
         'distance',
         'weekday',
+        'discovery_time',
         'time_from',
         'time_to',
         'date_from',
@@ -40,7 +41,7 @@ class Rule extends Model
     /**
      * Get time from
      *
-     * @param  string $value
+     * @param string $value
      *
      * @return string
      */
@@ -56,7 +57,7 @@ class Rule extends Model
     /**
      * Set the date from
      *
-     * @param  string $value
+     * @param string $value
      *
      * @return void
      */
@@ -72,7 +73,7 @@ class Rule extends Model
     /**
      * Get time to
      *
-     * @param  string $value
+     * @param string $value
      *
      * @return string
      */
@@ -88,7 +89,7 @@ class Rule extends Model
     /**
      * Set the date from
      *
-     * @param  string $value
+     * @param string $value
      *
      * @return void
      */
@@ -104,7 +105,7 @@ class Rule extends Model
     /**
      * Set the date from
      *
-     * @param  string $value
+     * @param string $value
      *
      * @return void
      */
@@ -120,7 +121,7 @@ class Rule extends Model
     /**
      * Set the date to
      *
-     * @param  string $value
+     * @param string $value
      *
      * @return void
      */

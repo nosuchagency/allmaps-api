@@ -5,7 +5,7 @@ namespace App\Services\Models;
 use App\Models\Skin;
 use Chumper\Zipper\Zipper;
 use Exception;
-use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
 class SkinService
@@ -26,17 +26,25 @@ class SkinService
 
 
     /**
-     * @param Request $request
+     * @param array $attributes
      *
      * @return Skin
      * @throws Exception
      */
-    public function create(Request $request): Skin
+    public function create(array $attributes): Skin
     {
         $skin = new Skin();
-        $skin->fill($request->only($skin->getFillable()));
+
+        $fields = Arr::only($attributes, [
+            'name',
+            'mobile',
+            'tablet',
+            'desktop'
+        ]);
+
+        $skin->fill($fields);
         $skin->identifier = Str::slug($skin->name);
-        $this->handleZipFile($request->file('file'), $skin->identifier);
+        $this->handleZipFile(Arr::get($attributes, 'file'), $skin->identifier);
         $skin->save();
 
         return $skin->refresh();
@@ -44,17 +52,24 @@ class SkinService
 
     /**
      * @param Skin $skin
-     * @param Request $request
+     * @param array $attributes
      *
      * @return Skin
      * @throws Exception
      */
-    public function update(Skin $skin, Request $request): Skin
+    public function update(Skin $skin, array $attributes): Skin
     {
-        $skin->fill($request->only($skin->getFillable()))->save();
+        $fields = Arr::only($attributes, [
+            'name',
+            'mobile',
+            'tablet',
+            'desktop'
+        ]);
 
-        if ($request->hasFile('file')) {
-            $this->handleZipFile($request->file('file'), $skin->identifier);
+        $skin->fill($fields)->save();
+
+        if (Arr::has($attributes, 'file')) {
+            $this->handleZipFile(Arr::get($attributes, 'file'), $skin->identifier);
         }
 
         return $skin->refresh();

@@ -31,16 +31,11 @@ class Skin extends Model
     }
 
     /**
-     * The attributes that are mass assignable.
+     * The attributes that aren't mass assignable.
      *
      * @var array
      */
-    protected $fillable = [
-        'name',
-        'mobile',
-        'tablet',
-        'desktop'
-    ];
+    protected $guarded = [];
 
     /**
      * The attributes that should be cast to native types.

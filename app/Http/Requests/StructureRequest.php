@@ -29,7 +29,7 @@ class StructureRequest extends FormRequest
     public function rules()
     {
         $rules = [
-            'name' => '',
+            'name' => 'max:255',
             'coordinates' => 'array',
             'markers' => 'array',
             'radius' => 'nullable|numeric|min:0',

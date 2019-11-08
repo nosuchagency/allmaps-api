@@ -74,7 +74,7 @@ class SkinsController extends Controller
      */
     public function store(SkinRequest $request)
     {
-        $skin = $this->skinService->create($request);
+        $skin = $this->skinService->create($request->validated());
 
         return $this->json(new SkinResource($skin), Response::HTTP_CREATED);
     }
@@ -102,7 +102,7 @@ class SkinsController extends Controller
      */
     public function update(SkinRequest $request, Skin $skin)
     {
-        $skin = $this->skinService->update($skin, $request);
+        $skin = $this->skinService->update($skin, $request->validated());
 
         return $this->json(new SkinResource($skin), Response::HTTP_OK);
     }

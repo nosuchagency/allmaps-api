@@ -2,32 +2,42 @@
 
 namespace App\Services\Models;
 
+use App\Models\Component;
+use App\Models\Floor;
 use App\Models\Structure;
-use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 
 class StructureService
 {
     /**
-     * @param Request $request
+     * @param array $attributes
      *
      * @return Structure
      */
-    public function create(Request $request): Structure
+    public function create(array $attributes): Structure
     {
         $structure = new Structure();
-        $structure->floor()->associate(
-            $request->input('floor.id')
-        );
 
-        $structure->component()->associate(
-            $request->input('component.id')
-        );
+        $fields = Arr::only($attributes, [
+            'name',
+            'coordinates',
+            'markers',
+            'radius',
+        ]);
 
-        $structure->fill($request->only($structure->getFillable()));
+        $structure->fill($fields);
 
         if (!$structure->name) {
             $structure->name = $structure->component->name;
         }
+
+        $structure->floor()->associate(
+            Floor::find(Arr::get($attributes, 'floor.id'))
+        );
+
+        $structure->component()->associate(
+            Component::find(Arr::get($attributes, 'component.id'))
+        );
 
         $structure->save();
 
@@ -36,13 +46,33 @@ class StructureService
 
     /**
      * @param Structure $structure
-     * @param Request $request
+     * @param array $attributes
      *
      * @return Structure
      */
-    public function update(Structure $structure, Request $request): Structure
+    public function update(Structure $structure, array $attributes): Structure
     {
-        $structure->fill($request->only($structure->getFillable()));
+        $fields = Arr::only($attributes, [
+            'name',
+            'coordinates',
+            'markers',
+            'radius',
+        ]);
+
+        $structure->fill($fields);
+
+        if (Arr::has($attributes, 'floor')) {
+            $structure->floor()->associate(
+                Floor::find(Arr::get($attributes, 'floor.id'))
+            );
+        }
+
+        if (Arr::has($attributes, 'component')) {
+            $structure->component()->associate(
+                Component::find(Arr::get($attributes, 'component.id'))
+            );
+        }
+
         $structure->save();
 
         return $structure->refresh();

@@ -74,7 +74,7 @@ class StructuresController extends Controller
      */
     public function store(StructureRequest $request)
     {
-        $structure = $this->structureService->create($request);
+        $structure = $this->structureService->create($request->validated());
 
         return $this->json(new StructureResource($structure), Response::HTTP_CREATED);
     }
@@ -101,7 +101,7 @@ class StructuresController extends Controller
      */
     public function update(StructureRequest $request, Structure $structure)
     {
-        $structure = $this->structureService->update($structure, $request);
+        $structure = $this->structureService->update($structure, $request->validated());
 
         return $this->json(new StructureResource($structure), Response::HTTP_OK);
     }

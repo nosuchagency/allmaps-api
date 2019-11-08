@@ -19,6 +19,7 @@ class CreateRulesTable extends Migration
 
             $table->string('distance')->default('close');
             $table->string('weekday')->default('all');
+            $table->integer('discovery_time')->nullable();
 
             $table->boolean('time_restricted')->default(false);
             $table->time('time_from')->nullable();

@@ -10,7 +10,7 @@ class RuleResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  Request $request
+     * @param Request $request
      *
      * @return array
      */
@@ -20,6 +20,7 @@ class RuleResource extends JsonResource
             'id' => $this->id,
             'distance' => $this->distance,
             'weekday' => $this->weekday,
+            'discovery_time' => $this->discovery_time,
             'date_from' => $this->date_from,
             'date_to' => $this->date_to,
             'time_from' => $this->time_from,
