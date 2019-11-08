@@ -31,6 +31,18 @@ class RuleRequest extends FormRequest
      */
     public function rules()
     {
+        if ($this->method() === 'POST') {
+            return $this->rulesForCreating();
+        }
+
+        return $this->rulesForUpdating();
+    }
+
+    /**
+     * @return array
+     */
+    public function rulesForCreating()
+    {
         return [
             'distance' => [
                 'required',
@@ -40,15 +52,41 @@ class RuleRequest extends FormRequest
                 'required',
                 ValidationRule::in(Weekday::WEEKDAYS),
             ],
-            'discovery_time' => 'nullable|integer|max:4294967295',
-            'time_restricted' => 'boolean',
-            'date_restricted' => 'boolean',
-            'time_from' => 'nullable|date_format:H:i',
-            'time_to' => 'nullable|date_format:H:i',
-            'date_from' => 'nullable|date',
-            'date_to' => 'nullable|date',
-            'push_title' => 'nullable|max:255',
-            'push_body' => 'nullable|max:255',
+            'discovery_time' => ['nullable', 'integer', 'max:4294967295'],
+            'time_restricted' => ['boolean'],
+            'date_restricted' => ['boolean'],
+            'time_from' => ['nullable', 'date_format:H:i'],
+            'time_to' => ['nullable', 'date_format:H:i'],
+            'date_from' => ['nullable', 'date'],
+            'date_to' => ['nullable', 'date'],
+            'push_title' => ['nullable', 'max:255'],
+            'push_body' => ['nullable', 'max:255'],
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function rulesForUpdating()
+    {
+        return [
+            'distance' => [
+                'filled',
+                ValidationRule::in(Distance::DISTANCES),
+            ],
+            'weekday' => [
+                'filled',
+                ValidationRule::in(Weekday::WEEKDAYS),
+            ],
+            'discovery_time' => ['nullable', 'integer', 'max:4294967295'],
+            'time_restricted' => ['boolean'],
+            'date_restricted' => ['boolean'],
+            'time_from' => ['nullable', 'date_format:H:i'],
+            'time_to' => ['nullable', 'date_format:H:i'],
+            'date_from' => ['nullable', 'date'],
+            'date_to' => ['nullable', 'date'],
+            'push_title' => ['nullable', 'max:255'],
+            'push_body' => ['nullable', 'max:255'],
         ];
     }
 }

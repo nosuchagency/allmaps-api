@@ -28,8 +28,31 @@ class CategoryRequest extends FormRequest
      */
     public function rules()
     {
+        if ($this->method() === 'POST') {
+            return $this->rulesForCreating();
+        }
+
+        return $this->rulesForUpdating();
+    }
+
+    /**
+     * @return array
+     */
+    public function rulesForCreating()
+    {
         return [
             'name' => ['required', 'max:255'],
+            'description' => ['max:65535'],
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function rulesForUpdating()
+    {
+        return [
+            'name' => ['filled', 'max:255'],
             'description' => ['max:65535'],
         ];
     }

@@ -29,15 +29,50 @@ class PlaceRequest extends FormRequest
      */
     public function rules()
     {
+        if ($this->method() === 'POST') {
+            return $this->rulesForCreating();
+        }
+
+        return $this->rulesForUpdating();
+    }
+
+    /**
+     * @return array
+     */
+    public function rulesForCreating()
+    {
         return [
             'name' => ['required', 'max:255'],
-            'address' => '',
-            'postcode' => '',
-            'city' => '',
-            'image' => '',
-            'latitude' => 'required|numeric',
-            'longitude' => 'required|numeric',
-            'activated' => 'boolean',
+            'address' => ['max:255'],
+            'postcode' => ['max:255'],
+            'city' => ['max:255'],
+            'image' => [],
+            'latitude' => ['required', 'numeric'],
+            'longitude' => ['required', 'numeric'],
+            'activated' => ['boolean'],
+            'menu' => ['nullable', new RequiredIdRule],
+            'menu.id' => 'exists:menus,id',
+            'category' => ['nullable', new RequiredIdRule],
+            'category.id' => ['exists:categories,id'],
+            'tags' => ['array'],
+            'tags.*.id' => ['required', 'exists:tags,id']
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function rulesForUpdating()
+    {
+        return [
+            'name' => ['filled', 'max:255'],
+            'address' => ['max:255'],
+            'postcode' => ['max:255'],
+            'city' => ['max:255'],
+            'image' => [],
+            'latitude' => ['filled', 'numeric'],
+            'longitude' => ['filled', 'numeric'],
+            'activated' => ['boolean'],
             'menu' => ['nullable', new RequiredIdRule],
             'menu.id' => 'exists:menus,id',
             'category' => ['nullable', new RequiredIdRule],

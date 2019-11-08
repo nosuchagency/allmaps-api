@@ -8,9 +8,13 @@ class RolesAndPermissionsSeeder extends Seeder
 {
     public function run()
     {
+        activity()->disableLogging();
+
         $adminRole = Role::firstOrCreate(['name' => 'admin']);
 
         $userRole = Role::firstOrCreate(['name' => 'user']);
+
+        activity()->enableLogging();
 
         $adminRole->permissions()->sync([
             Permission::firstOrCreate(['name' => 'activity:create'])->id,

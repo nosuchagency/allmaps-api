@@ -25,8 +25,8 @@ class ContainerLocationDeleteRequest extends FormRequest
     public function rules()
     {
         return [
-            'data' => 'required|array',
-            'data.*.id' => 'required|exists:locations,id,deleted_at,NULL',
+            'data' => ['required', 'array'],
+            'data.*.id' => ['required', 'exists:locations,id,deleted_at,NULL'],
         ];
     }
 }

@@ -32,32 +32,62 @@ class ContentRequest extends FormRequest
      */
     public function rules()
     {
-        $rules = [
+        if ($this->method() === 'POST') {
+            return $this->rulesForCreating();
+        }
+
+        return $this->rulesForUpdating();
+    }
+
+    /**
+     * @return array
+     */
+    public function rulesForCreating()
+    {
+        return [
             'name' => ['required', 'max:255'],
-            'order' => 'nullable|integer|max:4294967295',
-            'text' => '',
-            'image' => '',
+            'order' => ['nullable', 'integer', 'max:4294967295'],
+            'text' => [],
+            'image' => [],
             'file' => ['nullable', new FileExists()],
-            'yt_url' => 'nullable|url',
-            'url' => 'nullable|url',
+            'yt_url' => ['nullable', 'url'],
+            'url' => ['nullable', 'url'],
             'type' => [
                 'required',
                 Rule::in(ContentType::TYPES),
             ],
+            'folder' => ['required'],
+            'folder.id' => ['required', 'exists:folders,id'],
             'category' => ['nullable', new RequiredIdRule],
             'category.id' => ['exists:categories,id'],
             'tags' => ['array'],
             'tags.*.id' => ['required', 'exists:tags,id']
         ];
+    }
 
-        if ($this->method() === 'POST') {
-            $rules['folder'] = 'required';
-            $rules['folder.id'] = 'required|exists:folders,id,deleted_at,NULL';
-        } else {
-            $rules['folder'] = ['nullable', new RequiredIdRule];
-            $rules['folder.id'] = 'exists:folders,id,deleted_at,NULL';
-        }
-
-        return $rules;
+    /**
+     * @return array
+     */
+    public function rulesForUpdating()
+    {
+        return [
+            'name' => ['filled', 'max:255'],
+            'order' => ['nullable', 'integer', 'max:4294967295'],
+            'text' => [],
+            'image' => [],
+            'file' => ['nullable', new FileExists()],
+            'yt_url' => ['nullable', 'url'],
+            'url' => ['nullable', 'url'],
+            'type' => [
+                'filled',
+                Rule::in(ContentType::TYPES),
+            ],
+            'folder' => ['filled'],
+            'folder.id' => ['required_with:folder', 'exists:folders,id'],
+            'category' => ['nullable', new RequiredIdRule],
+            'category.id' => ['exists:categories,id'],
+            'tags' => ['array'],
+            'tags.*.id' => ['required', 'exists:tags,id']
+        ];
     }
 }

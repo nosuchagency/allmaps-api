@@ -28,20 +28,44 @@ class StructureRequest extends FormRequest
      */
     public function rules()
     {
-        $rules = [
-            'name' => 'max:255',
-            'coordinates' => 'array',
-            'markers' => 'array',
-            'radius' => 'nullable|numeric|min:0',
-        ];
-
         if ($this->method() === 'POST') {
-            $rules['component'] = 'required';
-            $rules['component.id'] = 'required|exists:components,id,deleted_at,NULL';
-            $rules['floor'] = 'required';
-            $rules['floor.id'] = 'required|exists:floors,id,deleted_at,NULL';
+            return $this->rulesForCreating();
         }
 
-        return $rules;
+        return $this->rulesForUpdating();
+    }
+
+    /**
+     * @return array
+     */
+    public function rulesForCreating()
+    {
+        return [
+            'name' => ['max:255'],
+            'coordinates' => ['array'],
+            'markers' => ['array'],
+            'radius' => ['nullable', 'numeric', 'min:0'],
+            'component' => ['required'],
+            'component.id' => ['required', 'exists:components,id,deleted_at,NULL'],
+            'floor' => ['required'],
+            'floor.id' => ['required', 'exists:floors,id,deleted_at,NULL'],
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function rulesForUpdating()
+    {
+        return [
+            'name' => ['max:255'],
+            'coordinates' => ['array'],
+            'markers' => ['array'],
+            'radius' => ['nullable', 'numeric', 'min:0'],
+            'component' => ['filled'],
+            'component.id' => ['required_with:component', 'exists:components,id,deleted_at,NULL'],
+            'floor' => ['filled'],
+            'floor.id' => ['required_with:floor', 'exists:floors,id,deleted_at,NULL'],
+        ];
     }
 }
