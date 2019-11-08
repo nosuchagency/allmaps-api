@@ -46,7 +46,9 @@ class RuleRequest extends FormRequest
             'time_from' => 'nullable|date_format:H:i',
             'time_to' => 'nullable|date_format:H:i',
             'date_from' => 'nullable|date',
-            'date_to' => 'nullable|date'
+            'date_to' => 'nullable|date',
+            'push_title' => 'nullable|max:255',
+            'push_body' => 'nullable|max:255',
         ];
     }
 }
