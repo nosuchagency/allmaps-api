@@ -40,7 +40,7 @@ class RuleRequest extends FormRequest
                 'required',
                 ValidationRule::in(Weekday::WEEKDAYS),
             ],
-            'discovery_time' => 'nullable|integer',
+            'discovery_time' => 'nullable|integer|max:4294967295',
             'time_restricted' => 'boolean',
             'date_restricted' => 'boolean',
             'time_from' => 'nullable|date_format:H:i',

@@ -34,7 +34,7 @@ class ContentRequest extends FormRequest
     {
         $rules = [
             'name' => ['required', 'max:255'],
-            'order' => 'nullable|integer',
+            'order' => 'nullable|integer|max:4294967295',
             'text' => '',
             'image' => '',
             'file' => ['nullable', new FileExists()],

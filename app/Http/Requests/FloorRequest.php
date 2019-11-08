@@ -31,7 +31,7 @@ class FloorRequest extends FormRequest
     {
         $rules = [
             'name' => ['required', 'max:255'],
-            'level' => 'nullable|integer'
+            'level' => 'nullable|integer|max:4294967295'
         ];
 
         if ($this->method() === 'POST') {

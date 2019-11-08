@@ -9,7 +9,7 @@ use App\StrokeType;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class PoiRequest extends FormRequest
+class  PoiRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -44,7 +44,7 @@ class PoiRequest extends FormRequest
                 Rule::in(StrokeType::TYPES),
             ],
             'stroke_color' => ['required', 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
-            'stroke_width' => 'integer|min:1',
+            'stroke_width' => 'integer|min:1|max:4294967295',
             'stroke_opacity' => 'nullable|numeric|between:0,1',
             'fill' => 'boolean',
             'fill_color' => ['required', 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],

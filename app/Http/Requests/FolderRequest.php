@@ -31,7 +31,7 @@ class FolderRequest extends FormRequest
     {
         $rules = [
             'name' => ['required', 'max:255'],
-            'order' => 'nullable|integer',
+            'order' => 'nullable|integer|max:4294967295',
             'category' => ['nullable', new RequiredIdRule],
             'category.id' => ['exists:categories,id'],
             'tags' => ['array'],
