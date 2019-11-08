@@ -29,23 +29,44 @@ class FolderRequest extends FormRequest
      */
     public function rules()
     {
-        $rules = [
+        if ($this->method() === 'POST') {
+            return $this->rulesForCreating();
+        }
+
+        return $this->rulesForUpdating();
+    }
+
+    /**
+     * @return array
+     */
+    public function rulesForCreating()
+    {
+        return [
             'name' => ['required', 'max:255'],
-            'order' => 'nullable|integer',
+            'order' => 'nullable|integer|max:4294967295',
+            'container' => ['required'],
+            'container.id' => ['required', 'exists:containers,id,deleted_at,NULL'],
             'category' => ['nullable', new RequiredIdRule],
             'category.id' => ['exists:categories,id'],
             'tags' => ['array'],
             'tags.*.id' => ['required', 'exists:tags,id']
         ];
+    }
 
-        if ($this->method() === 'POST') {
-            $rules['container'] = 'required';
-            $rules['container.id'] = 'required|exists:containers,id,deleted_at,NULL';
-        } else {
-            $rules['container'] = ['nullable', new RequiredIdRule];
-            $rules['container.id'] = 'exists:containers,id,deleted_at,NULL';
-        }
-
-        return $rules;
+    /**
+     * @return array
+     */
+    public function rulesForUpdating()
+    {
+        return [
+            'name' => ['filled', 'max:255'],
+            'order' => 'nullable|integer|max:4294967295',
+            'container' => ['filled'],
+            'container.id' => ['required_with:container', 'exists:containers,id,deleted_at,NULL'],
+            'category' => ['nullable', new RequiredIdRule],
+            'category.id' => ['exists:categories,id'],
+            'tags' => ['array'],
+            'tags.*.id' => ['required', 'exists:tags,id']
+        ];
     }
 }

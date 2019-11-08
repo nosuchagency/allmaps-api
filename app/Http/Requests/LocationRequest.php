@@ -31,12 +31,12 @@ class LocationRequest extends FormRequest
     {
         $rules = [
             'name' => '',
-            'zoom_from' => 'nullable|integer|min:0',
-            'zoom_to' => 'nullable|integer|min:0',
+            'zoom_from' => 'nullable|integer|min:0|max:4294967295',
+            'zoom_to' => 'nullable|integer|min:0|max:4294967295',
             'title' => '',
             'subtitle' => '',
             'image' => '',
-            'description' => ['max:65535'],
+            'description' => [],
             'contact_name' => '',
             'company' => '',
             'address' => '',

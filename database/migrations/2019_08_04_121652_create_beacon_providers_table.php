@@ -14,7 +14,7 @@ class CreateBeaconProvidersTable extends Migration
     public function up()
     {
         Schema::create('beacon_providers', function (Blueprint $table) {
-            $table->increments('id');
+            $table->bigIncrements('id');
             $table->string('name');
             $table->string('type', 25);
             $table->text('meta');

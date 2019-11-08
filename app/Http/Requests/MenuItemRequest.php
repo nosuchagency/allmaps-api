@@ -34,7 +34,7 @@ class MenuItemRequest extends FormRequest
     {
         $rules = [
             'name' => ['required', 'max:255'],
-            'order' => 'nullable|integer',
+            'order' => 'nullable|integer|min:0|max:4294967295',
             'shown' => 'boolean',
             'type' => [
                 'required',

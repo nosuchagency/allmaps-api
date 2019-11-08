@@ -31,10 +31,10 @@ class FixtureRequest extends FormRequest
     {
         return [
             'name' => ['required', 'max:255'],
-            'description' => ['max:65535'],
+            'description' => [],
             'image' => '',
-            'image_width' => 'nullable|integer|min:0',
-            'image_height' => 'nullable|integer|min:0',
+            'image_width' => 'nullable|integer|min:0|max:4294967295',
+            'image_height' => 'nullable|integer|min:0|max:4294967295',
             'category' => ['nullable', new RequiredIdRule],
             'category.id' => ['exists:categories,id'],
             'tags' => ['array'],
