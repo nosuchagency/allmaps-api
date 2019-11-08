@@ -67,7 +67,7 @@ class HitsController extends Controller
      */
     public function store(HitRequest $request)
     {
-        $hit = $this->hitService->create($request);
+        $hit = $this->hitService->create($request->validated());
 
         return $this->json(new HitResource($hit), Response::HTTP_CREATED);
     }

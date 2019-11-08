@@ -28,16 +28,35 @@ class RoleRequest extends FormRequest
      */
     public function rules()
     {
-        $rules = [
-            'name' => ['sometimes', 'required', 'max:255'],
+        if ($this->method() === 'POST') {
+            return $this->rulesForCreating();
+        }
+
+        return $this->rulesForUpdating();
+    }
+
+
+    /**
+     * @return array
+     */
+    public function rulesForCreating()
+    {
+        return [
+            'name' => ['required', 'max:255'],
             'permissions' => 'array',
             'permissions.*.id' => 'required|exists:permissions,id'
         ];
+    }
 
-        if ($this->method() === 'POST') {
-            $rules['name'] = ['required', 'max:255'];
-        }
-
-        return $rules;
+    /**
+     * @return array
+     */
+    public function rulesForUpdating()
+    {
+        return [
+            'name' => ['filled', 'max:255'],
+            'permissions' => 'array',
+            'permissions.*.id' => 'required|exists:permissions,id'
+        ];
     }
 }

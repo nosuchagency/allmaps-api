@@ -5,21 +5,21 @@ namespace App\Services\Models;
 use App\Models\Hit;
 use App\Pivots\BeaconContainer;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 
 class HitService
 {
     /**
-     * @param Request $request
+     * @param array $attributes
      *
      * @return Hit
      */
-    public function create(Request $request): Hit
+    public function create(array $attributes): Hit
     {
         $hit = new Hit();
 
         $hit->hittable()->associate(
-            $this->getModel($request->get('type'), $request->input('model.id'))
+            $this->getModel(Arr::get($attributes, 'type'), Arr::get($attributes, 'model.id'))
         );
 
         $hit->save();
@@ -29,13 +29,24 @@ class HitService
 
     /**
      * @param Hit $hit
-     * @param Request $request
+     * @param array $attributes
      *
      * @return Hit
      */
-    public function update(Hit $hit, Request $request): Hit
+    public function update(Hit $hit, array $attributes): Hit
     {
-        $hit->fill($request->only($hit->getFillable()))->save();
+        $fields = Arr::only($attributes, [
+
+        ]);
+
+        $hit->fill($fields)->save();
+
+        if (Arr::has($attributes, 'model')) {
+            $hit->hittable()->associate(
+                $this->getModel(Arr::get($attributes, 'type'), Arr::get($attributes, 'model.id'))
+            );
+        }
+
         return $hit->refresh();
     }
 

@@ -2,6 +2,7 @@
 
 namespace App\Services\Models;
 
+use App\Models\Permission;
 use App\Models\Role;
 use Illuminate\Support\Arr;
 
@@ -22,6 +23,12 @@ class RoleService
 
         $role->fill($fields)->save();
 
+        if (Arr::has($attributes, 'permissions')) {
+            foreach (Arr::get($attributes, 'permissions') as $permission) {
+                $role->permissions()->attach(Permission::find($permission['id']));
+            }
+        }
+
         return $role->refresh();
     }
 
@@ -38,6 +45,14 @@ class RoleService
         ]);
 
         $role->fill($fields)->save();
+
+        if (Arr::has($attributes, 'permissions')) {
+            $role->permissions()->sync([]);
+
+            foreach (Arr::get($attributes, 'permissions') as $permission) {
+                $role->permissions()->attach(Permission::find($permission['id']));
+            }
+        }
 
         return $role->refresh();
     }
