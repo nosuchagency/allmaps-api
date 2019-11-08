@@ -25,7 +25,9 @@ class Rule extends Model
         'date_from',
         'date_to',
         'time_restricted',
-        'date_restricted'
+        'date_restricted',
+        'push_title',
+        'push_body'
     ];
 
     /**

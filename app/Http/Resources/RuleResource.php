@@ -27,6 +27,8 @@ class RuleResource extends JsonResource
             'time_to' => $this->time_to,
             'time_restricted' => $this->time_restricted,
             'date_restricted' => $this->date_restricted,
+            'push_title' => $this->push_title,
+            'push_body' => $this->push_body,
             'created_at' => $this->created_at->toDateTimeString(),
             'updated_at' => $this->updated_at->toDateTimeString(),
         ];

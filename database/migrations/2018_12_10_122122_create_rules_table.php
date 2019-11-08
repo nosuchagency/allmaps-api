@@ -29,6 +29,9 @@ class CreateRulesTable extends Migration
             $table->date('date_from')->nullable();
             $table->date('date_to')->nullable();
 
+            $table->string('push_title')->nullable();
+            $table->string('push_body')->nullable();
+
             $table->unsignedBigInteger('beacon_container_id');
             $table->foreign('beacon_container_id')
                 ->references('id')
