@@ -29,19 +29,36 @@ class FloorRequest extends FormRequest
      */
     public function rules()
     {
-        $rules = [
-            'name' => ['required', 'max:255'],
-            'level' => 'nullable|integer|max:4294967295'
-        ];
-
         if ($this->method() === 'POST') {
-            $rules['building'] = 'required';
-            $rules['building.id'] = 'required|exists:buildings,id,deleted_at,NULL';
-        } else {
-            $rules['building'] = ['nullable', new RequiredIdRule];
-            $rules['building.id'] = 'exists:buildings,id,deleted_at,NULL';
+            return $this->rulesForCreating();
         }
 
-        return $rules;
+        return $this->rulesForUpdating();
+    }
+
+    /**
+     * @return array
+     */
+    public function rulesForCreating()
+    {
+        return [
+            'name' => ['required', 'max:255'],
+            'level' => ['nullable', 'integer', 'max:4294967295'],
+            'building' => ['required'],
+            'building.id' => ['required', 'exists:buildings,id,deleted_at,NULL'],
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function rulesForUpdating()
+    {
+        return [
+            'name' => ['filled', 'max:255'],
+            'level' => ['nullable', 'integer', 'max:4294967295'],
+            'building' => ['filled'],
+            'building.id' => ['required_with:building', 'exists:buildings,id,deleted_at,NULL'],
+        ];
     }
 }

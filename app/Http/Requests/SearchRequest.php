@@ -24,9 +24,9 @@ class SearchRequest extends FormRequest
     public function rules()
     {
         return [
-            'internal' => 'sometimes|required',
-            'internal.query' => 'required_with:internal',
-            'internal.fields' => 'required_with:internal|array',
+            'internal' => ['sometimes', 'required'],
+            'internal.query' => ['required_with:internal'],
+            'internal.fields' => ['required_with:internal', 'array'],
         ];
     }
 }

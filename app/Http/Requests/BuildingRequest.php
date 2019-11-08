@@ -29,23 +29,44 @@ class BuildingRequest extends FormRequest
      */
     public function rules()
     {
-        $rules = [
+        if ($this->method() === 'POST') {
+            return $this->rulesForCreating();
+        }
+
+        return $this->rulesForUpdating();
+    }
+
+    /**
+     * @return array
+     */
+    public function rulesForCreating()
+    {
+        return [
             'name' => ['required', 'max:255'],
             'image' => [],
             'latitude' => ['nullable', 'numeric'],
             'longitude' => ['nullable', 'numeric'],
             'menu' => ['nullable', new RequiredIdRule],
-            'menu.id' => 'exists:menus,id',
+            'menu.id' => ['exists:menus,id'],
+            'place' => ['required'],
+            'place.id' => ['required', 'exists:places,id,deleted_at,NULL'],
         ];
+    }
 
-        if ($this->method() === 'POST') {
-            $rules['place'] = 'required';
-            $rules['place.id'] = 'required|exists:places,id,deleted_at,NULL';
-        } else {
-            $rules['place'] = ['nullable', new RequiredIdRule];
-            $rules['place.id'] = 'exists:places,id,deleted_at,NULL';
-        }
-
-        return $rules;
+    /**
+     * @return array
+     */
+    public function rulesForUpdating()
+    {
+        return [
+            'name' => ['filled', 'max:255'],
+            'image' => [],
+            'latitude' => ['nullable', 'numeric'],
+            'longitude' => ['nullable', 'numeric'],
+            'menu' => ['nullable', new RequiredIdRule],
+            'menu.id' => ['exists:menus,id'],
+            'place' => ['filled'],
+            'place.id' => ['required_with:place', 'exists:places,id,deleted_at,NULL'],
+        ];
     }
 }

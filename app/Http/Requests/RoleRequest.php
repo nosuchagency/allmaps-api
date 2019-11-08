@@ -43,8 +43,8 @@ class RoleRequest extends FormRequest
     {
         return [
             'name' => ['required', 'max:255'],
-            'permissions' => 'array',
-            'permissions.*.id' => 'required|exists:permissions,id'
+            'permissions' => ['array'],
+            'permissions.*.id' => ['required', 'exists:permissions,id']
         ];
     }
 
@@ -55,8 +55,8 @@ class RoleRequest extends FormRequest
     {
         return [
             'name' => ['filled', 'max:255'],
-            'permissions' => 'array',
-            'permissions.*.id' => 'required|exists:permissions,id'
+            'permissions' => ['array'],
+            'permissions.*.id' => ['required', 'exists:permissions,id']
         ];
     }
 }

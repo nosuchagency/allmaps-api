@@ -43,7 +43,7 @@ class FolderRequest extends FormRequest
     {
         return [
             'name' => ['required', 'max:255'],
-            'order' => 'nullable|integer|max:4294967295',
+            'order' => ['nullable', 'integer', 'max:4294967295'],
             'container' => ['required'],
             'container.id' => ['required', 'exists:containers,id,deleted_at,NULL'],
             'category' => ['nullable', new RequiredIdRule],
@@ -60,7 +60,7 @@ class FolderRequest extends FormRequest
     {
         return [
             'name' => ['filled', 'max:255'],
-            'order' => 'nullable|integer|max:4294967295',
+            'order' => ['nullable', 'integer', 'max:4294967295'],
             'container' => ['filled'],
             'container.id' => ['required_with:container', 'exists:containers,id,deleted_at,NULL'],
             'category' => ['nullable', new RequiredIdRule],

@@ -33,6 +33,18 @@ class ComponentRequest extends FormRequest
      */
     public function rules()
     {
+        if ($this->method() === 'POST') {
+            return $this->rulesForCreating();
+        }
+
+        return $this->rulesForUpdating();
+    }
+
+    /**
+     * @return array
+     */
+    public function rulesForCreating()
+    {
         return [
             'name' => ['required', 'max:255'],
             'description' => ['max:65535'],
@@ -44,20 +56,57 @@ class ComponentRequest extends FormRequest
                 'required',
                 Rule::in(Shape::SHAPES),
             ],
-            'stroke' => 'boolean',
+            'stroke' => ['boolean'],
             'stroke_type' => [
                 'required',
                 Rule::in(StrokeType::TYPES),
             ],
             'stroke_color' => ['required', 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
-            'stroke_width' => 'integer|min:1|max:4294967295',
-            'stroke_opacity' => 'nullable|numeric|between:0,1',
-            'fill' => 'boolean',
+            'stroke_width' => ['integer', 'min:1', 'max:4294967295'],
+            'stroke_opacity' => ['nullable', 'numeric', 'between:0,1'],
+            'fill' => ['boolean'],
             'fill_color' => ['required', 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
-            'fill_opacity' => 'nullable|numeric|between:0,1',
-            'image' => '',
-            'image_width' => 'nullable|integer|min:0|max:4294967295',
-            'image_height' => 'nullable|integer|min:0|max:4294967295',
+            'fill_opacity' => ['nullable', 'numeric', 'between:0,1'],
+            'image' => [],
+            'image_width' => ['nullable', 'integer', 'min:0', 'max:4294967295'],
+            'image_height' => ['nullable', 'integer', 'min:0', 'max:4294967295'],
+            'category' => ['nullable', new RequiredIdRule],
+            'category.id' => ['exists:categories,id'],
+            'tags' => ['array'],
+            'tags.*.id' => ['required', 'exists:tags,id']
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function rulesForUpdating()
+    {
+        return [
+            'name' => ['filled', 'max:255'],
+            'description' => ['max:65535'],
+            'type' => [
+                'filled',
+                Rule::in(ComponentType::TYPES),
+            ],
+            'shape' => [
+                'filled',
+                Rule::in(Shape::SHAPES),
+            ],
+            'stroke' => ['boolean'],
+            'stroke_type' => [
+                'filled',
+                Rule::in(StrokeType::TYPES),
+            ],
+            'stroke_color' => ['filled', 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
+            'stroke_width' => ['integer', 'min:1', 'max:4294967295'],
+            'stroke_opacity' => ['nullable', 'numeric', 'between:0,1'],
+            'fill' => ['boolean'],
+            'fill_color' => ['filled', 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
+            'fill_opacity' => ['nullable', 'numeric', 'between:0,1'],
+            'image' => [],
+            'image_width' => ['nullable', 'integer', 'min:0', 'max:4294967295'],
+            'image_height' => ['nullable', 'integer', 'min:0', 'max:4294967295'],
             'category' => ['nullable', new RequiredIdRule],
             'category.id' => ['exists:categories,id'],
             'tags' => ['array'],

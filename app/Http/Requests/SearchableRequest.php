@@ -29,11 +29,11 @@ class SearchableRequest extends FormRequest
                 'unique:searchables',
                 new PluginExists
             ],
-            'activated' => 'boolean'
+            'activated' => ['boolean']
         ];
 
         if ($this->method() === 'POST') {
-            $rules['identifier'][] = 'required';
+            $rules['identifier'][] = ['required'];
             $rules['name'] = ['required', 'max:255'];
         }
 

@@ -37,9 +37,9 @@ class SkinRequest extends FormRequest
                 Rule::unique('skins')->ignore($this->route('skin')),
             ],
             'file' => ['file', 'mimes:zip', new SkinZipFileRule],
-            'mobile' => 'boolean',
-            'tablet' => 'boolean',
-            'desktop' => 'boolean',
+            'mobile' => ['boolean'],
+            'tablet' => ['boolean'],
+            'desktop' => ['boolean'],
         ];
 
         if ($this->method() === 'POST') {
