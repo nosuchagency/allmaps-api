@@ -2,7 +2,6 @@
 
 namespace Tests\Feature\Users;
 
-use App\Locale;
 use App\Models\Category;
 use App\Models\Role;
 use App\Models\Tag;
@@ -48,7 +47,7 @@ class UsersCreateTest extends TestCase
         $attributes = [
             'name' => $this->faker->name,
             'email' => $this->faker->email,
-            'locale' => $this->faker->randomElement(Locale::LOCALES)
+            'locale' => 'en'
         ];
 
         $userResponse = $this->create($attributes)->assertStatus(201)->decodeResponseJson();
@@ -135,7 +134,7 @@ class UsersCreateTest extends TestCase
             'name' => $this->faker->name,
             'password' => $this->password,
             'password_confirmation' => $this->password,
-            'locale' => $this->faker->randomElement(Locale::LOCALES),
+            'locale' => 'en',
             'email' => $this->faker->email,
             'role' => factory(Role::class)->create(),
             'category' => factory(Category::class)->create(),

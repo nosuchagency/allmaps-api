@@ -2,12 +2,8 @@
 
 namespace Tests\Feature\Tokens;
 
-use App\Locale;
-use App\Models\Category;
 use App\Models\Role;
-use App\Models\Tag;
 use App\Models\Token;
-use App\Models\User;
 use Illuminate\Foundation\Testing\TestResponse;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;

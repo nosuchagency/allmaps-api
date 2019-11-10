@@ -2,14 +2,12 @@
 
 namespace Tests\Feature\Users;
 
-use App\Locale;
 use App\Models\Category;
 use App\Models\Role;
 use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Foundation\Testing\TestResponse;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -55,7 +53,7 @@ class UsersUpdateTest extends TestCase
             'id' => $user->id,
             'name' => $this->faker->name,
             'email' => $this->faker->email,
-            'locale' => $this->faker->randomElement(Locale::LOCALES)
+            'locale' => 'en'
         ];
 
         $this->update($user, $attributes)->assertOk();
@@ -113,7 +111,7 @@ class UsersUpdateTest extends TestCase
             'name' => $this->faker->name,
             'password' => $this->password,
             'password_confirmation' => $this->password,
-            'locale' => $this->faker->randomElement(Locale::LOCALES),
+            'locale' => 'en',
             'email' => $this->faker->email,
             'role' => factory(Role::class)->create(),
             'category' => factory(Category::class)->create(),
