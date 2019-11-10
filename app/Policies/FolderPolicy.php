@@ -2,70 +2,70 @@
 
 namespace App\Policies;
 
-use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use Illuminate\Contracts\Auth\Access\Authorizable;
 
 class FolderPolicy
 {
     use HandlesAuthorization;
 
     /**
-     * Determine whether the user can view any folders.
+     * Determine whether the authorizable can view any folders.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function viewAny(User $user)
+    public function viewAny(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'folder:read')->exists();
+        return $authorizable->role->permissions()->where('name', 'folder:read')->exists();
     }
 
     /**
-     * Determine whether the user can view the folder.
+     * Determine whether the authorizable can view the folder.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function view(User $user)
+    public function view(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'folder:read')->exists();
+        return $authorizable->role->permissions()->where('name', 'folder:read')->exists();
     }
 
     /**
-     * Determine whether the user can create folders.
+     * Determine whether the authorizable can create folders.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function create(User $user)
+    public function create(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'folder:create')->exists();
+        return $authorizable->role->permissions()->where('name', 'folder:create')->exists();
     }
 
     /**
-     * Determine whether the user can update the folder.
+     * Determine whether the authorizable can update the folder.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function update(User $user)
+    public function update(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'folder:update')->exists();
+        return $authorizable->role->permissions()->where('name', 'folder:update')->exists();
     }
 
     /**
-     * Determine whether the user can delete the folder.
+     * Determine whether the authorizable can delete the folder.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function delete(User $user)
+    public function delete(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'folder:delete')->exists();
+        return $authorizable->role->permissions()->where('name', 'folder:delete')->exists();
     }
 }

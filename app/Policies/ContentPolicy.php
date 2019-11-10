@@ -2,70 +2,70 @@
 
 namespace App\Policies;
 
-use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use Illuminate\Contracts\Auth\Access\Authorizable;
 
 class ContentPolicy
 {
     use HandlesAuthorization;
 
     /**
-     * Determine whether the user can view any contents.
+     * Determine whether the authorizable can view any contents.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function viewAny(User $user)
+    public function viewAny(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'content:read')->exists();
+        return $authorizable->role->permissions()->where('name', 'content:read')->exists();
     }
 
     /**
-     * Determine whether the user can view the content.
+     * Determine whether the authorizable can view the content.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function view(User $user)
+    public function view(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'content:read')->exists();
+        return $authorizable->role->permissions()->where('name', 'content:read')->exists();
     }
 
     /**
-     * Determine whether the user can create contents.
+     * Determine whether the authorizable can create contents.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function create(User $user)
+    public function create(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'content:create')->exists();
+        return $authorizable->role->permissions()->where('name', 'content:create')->exists();
     }
 
     /**
-     * Determine whether the user can update the content.
+     * Determine whether the authorizable can update the content.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function update(User $user)
+    public function update(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'content:update')->exists();
+        return $authorizable->role->permissions()->where('name', 'content:update')->exists();
     }
 
     /**
-     * Determine whether the user can delete the content.
+     * Determine whether the authorizable can delete the content.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function delete(User $user)
+    public function delete(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'content:delete')->exists();
+        return $authorizable->role->permissions()->where('name', 'content:delete')->exists();
     }
 }

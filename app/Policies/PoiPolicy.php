@@ -2,70 +2,70 @@
 
 namespace App\Policies;
 
-use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use Illuminate\Contracts\Auth\Access\Authorizable;
 
 class PoiPolicy
 {
     use HandlesAuthorization;
 
     /**
-     * Determine whether the user can view any pois.
+     * Determine whether the authorizable can view any pois.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function viewAny(User $user)
+    public function viewAny(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'poi:read')->exists();
+        return $authorizable->role->permissions()->where('name', 'poi:read')->exists();
     }
 
     /**
-     * Determine whether the user can view the poi.
+     * Determine whether the authorizable can view the poi.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function view(User $user)
+    public function view(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'poi:read')->exists();
+        return $authorizable->role->permissions()->where('name', 'poi:read')->exists();
     }
 
     /**
-     * Determine whether the user can create pois.
+     * Determine whether the authorizable can create pois.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function create(User $user)
+    public function create(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'poi:create')->exists();
+        return $authorizable->role->permissions()->where('name', 'poi:create')->exists();
     }
 
     /**
-     * Determine whether the user can update the poi.
+     * Determine whether the authorizable can update the poi.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function update(User $user)
+    public function update(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'poi:update')->exists();
+        return $authorizable->role->permissions()->where('name', 'poi:update')->exists();
     }
 
     /**
-     * Determine whether the user can delete the poi.
+     * Determine whether the authorizable can delete the poi.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function delete(User $user)
+    public function delete(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'poi:delete')->exists();
+        return $authorizable->role->permissions()->where('name', 'poi:delete')->exists();
     }
 }

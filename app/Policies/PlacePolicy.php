@@ -2,70 +2,70 @@
 
 namespace App\Policies;
 
-use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use Illuminate\Contracts\Auth\Access\Authorizable;
 
 class PlacePolicy
 {
     use HandlesAuthorization;
 
     /**
-     * Determine whether the user can view any places.
+     * Determine whether the authorizable can view any places.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function viewAny(User $user)
+    public function viewAny(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'place:read')->exists();
+        return $authorizable->role->permissions()->where('name', 'place:read')->exists();
     }
 
     /**
-     * Determine whether the user can view the place.
+     * Determine whether the authorizable can view the place.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function view(User $user)
+    public function view(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'place:read')->exists();
+        return $authorizable->role->permissions()->where('name', 'place:read')->exists();
     }
 
     /**
-     * Determine whether the user can create places.
+     * Determine whether the authorizable can create places.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function create(User $user)
+    public function create(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'place:create')->exists();
+        return $authorizable->role->permissions()->where('name', 'place:create')->exists();
     }
 
     /**
-     * Determine whether the user can update the place.
+     * Determine whether the authorizable can update the place.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function update(User $user)
+    public function update(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'place:update')->exists();
+        return $authorizable->role->permissions()->where('name', 'place:update')->exists();
     }
 
     /**
-     * Determine whether the user can delete the place.
+     * Determine whether the authorizable can delete the place.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function delete(User $user)
+    public function delete(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'place:delete')->exists();
+        return $authorizable->role->permissions()->where('name', 'place:delete')->exists();
     }
 }

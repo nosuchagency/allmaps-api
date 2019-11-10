@@ -2,70 +2,70 @@
 
 namespace App\Policies;
 
-use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use Illuminate\Contracts\Auth\Access\Authorizable;
 
 class LocationPolicy
 {
     use HandlesAuthorization;
 
     /**
-     * Determine whether the user can view any locations.
+     * Determine whether the authorizable can view any locations.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function viewAny(User $user)
+    public function viewAny(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'location:read')->exists();
+        return $authorizable->role->permissions()->where('name', 'location:read')->exists();
     }
 
     /**
-     * Determine whether the user can view the location.
+     * Determine whether the authorizable can view the location.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function view(User $user)
+    public function view(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'location:read')->exists();
+        return $authorizable->role->permissions()->where('name', 'location:read')->exists();
     }
 
     /**
-     * Determine whether the user can create locations.
+     * Determine whether the authorizable can create locations.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function create(User $user)
+    public function create(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'location:create')->exists();
+        return $authorizable->role->permissions()->where('name', 'location:create')->exists();
     }
 
     /**
-     * Determine whether the user can update the location.
+     * Determine whether the authorizable can update the location.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function update(User $user)
+    public function update(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'location:update')->exists();
+        return $authorizable->role->permissions()->where('name', 'location:update')->exists();
     }
 
     /**
-     * Determine whether the user can delete the location.
+     * Determine whether the authorizable can delete the location.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function delete(User $user)
+    public function delete(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'location:delete')->exists();
+        return $authorizable->role->permissions()->where('name', 'location:delete')->exists();
     }
 }

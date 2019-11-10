@@ -2,70 +2,70 @@
 
 namespace App\Policies;
 
-use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use Illuminate\Contracts\Auth\Access\Authorizable;
 
 class TemplatePolicy
 {
     use HandlesAuthorization;
 
     /**
-     * Determine whether the user can view any templates.
+     * Determine whether the authorizable can view any templates.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function viewAny(User $user)
+    public function viewAny(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'template:read')->exists();
+        return $authorizable->role->permissions()->where('name', 'template:read')->exists();
     }
 
     /**
-     * Determine whether the user can view the template.
+     * Determine whether the authorizable can view the template.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function view(User $user)
+    public function view(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'template:read')->exists();
+        return $authorizable->role->permissions()->where('name', 'template:read')->exists();
     }
 
     /**
-     * Determine whether the user can create templates.
+     * Determine whether the authorizable can create templates.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function create(User $user)
+    public function create(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'template:create')->exists();
+        return $authorizable->role->permissions()->where('name', 'template:create')->exists();
     }
 
     /**
-     * Determine whether the user can update the template.
+     * Determine whether the authorizable can update the template.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function update(User $user)
+    public function update(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'template:update')->exists();
+        return $authorizable->role->permissions()->where('name', 'template:update')->exists();
     }
 
     /**
-     * Determine whether the user can delete the template.
+     * Determine whether the authorizable can delete the template.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function delete(User $user)
+    public function delete(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'template:delete')->exists();
+        return $authorizable->role->permissions()->where('name', 'template:delete')->exists();
     }
 }

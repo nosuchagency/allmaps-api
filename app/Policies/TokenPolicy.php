@@ -2,70 +2,70 @@
 
 namespace App\Policies;
 
-use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use Illuminate\Contracts\Auth\Access\Authorizable;
 
 class TokenPolicy
 {
     use HandlesAuthorization;
 
     /**
-     * Determine whether the user can view any tokens.
+     * Determine whether the authorizable can view any tokens.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function viewAny(User $user)
+    public function viewAny(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'token:read')->exists();
+        return $authorizable->role->permissions()->where('name', 'token:read')->exists();
     }
 
     /**
-     * Determine whether the user can view the token.
+     * Determine whether the authorizable can view the token.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function view(User $user)
+    public function view(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'token:read')->exists();
+        return $authorizable->role->permissions()->where('name', 'token:read')->exists();
     }
 
     /**
-     * Determine whether the user can create tokens.
+     * Determine whether the authorizable can create tokens.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function create(User $user)
+    public function create(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'token:create')->exists();
+        return $authorizable->role->permissions()->where('name', 'token:create')->exists();
     }
 
     /**
-     * Determine whether the user can update the token.
+     * Determine whether the authorizable can update the token.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function update(User $user)
+    public function update(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'token:update')->exists();
+        return $authorizable->role->permissions()->where('name', 'token:update')->exists();
     }
 
     /**
-     * Determine whether the user can delete the token.
+     * Determine whether the authorizable can delete the token.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function delete(User $user)
+    public function delete(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'token:delete')->exists();
+        return $authorizable->role->permissions()->where('name', 'token:delete')->exists();
     }
 }

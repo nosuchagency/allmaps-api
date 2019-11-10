@@ -2,70 +2,70 @@
 
 namespace App\Policies;
 
-use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use Illuminate\Contracts\Auth\Access\Authorizable;
 
 class StructurePolicy
 {
     use HandlesAuthorization;
 
     /**
-     * Determine whether the user can view any structures.
+     * Determine whether the authorizable can view any structures.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function viewAny(User $user)
+    public function viewAny(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'structure:read')->exists();
+        return $authorizable->role->permissions()->where('name', 'structure:read')->exists();
     }
 
     /**
-     * Determine whether the user can view the structure.
+     * Determine whether the authorizable can view the structure.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function view(User $user)
+    public function view(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'structure:read')->exists();
+        return $authorizable->role->permissions()->where('name', 'structure:read')->exists();
     }
 
     /**
-     * Determine whether the user can create structures.
+     * Determine whether the authorizable can create structures.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function create(User $user)
+    public function create(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'structure:create')->exists();
+        return $authorizable->role->permissions()->where('name', 'structure:create')->exists();
     }
 
     /**
-     * Determine whether the user can update the structure.
+     * Determine whether the authorizable can update the structure.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function update(User $user)
+    public function update(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'structure:update')->exists();
+        return $authorizable->role->permissions()->where('name', 'structure:update')->exists();
     }
 
     /**
-     * Determine whether the user can delete the structure.
+     * Determine whether the authorizable can delete the structure.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function delete(User $user)
+    public function delete(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'structure:delete')->exists();
+        return $authorizable->role->permissions()->where('name', 'structure:delete')->exists();
     }
 }

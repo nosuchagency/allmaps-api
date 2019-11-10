@@ -2,70 +2,70 @@
 
 namespace App\Policies;
 
-use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use Illuminate\Contracts\Auth\Access\Authorizable;
 
 class MenuPolicy
 {
     use HandlesAuthorization;
 
     /**
-     * Determine whether the user can view any menus.
+     * Determine whether the authorizable can view any menus.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function viewAny(User $user)
+    public function viewAny(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'menu:read')->exists();
+        return $authorizable->role->permissions()->where('name', 'menu:read')->exists();
     }
 
     /**
-     * Determine whether the user can view the menu.
+     * Determine whether the authorizable can view the menu.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function view(User $user)
+    public function view(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'menu:read')->exists();
+        return $authorizable->role->permissions()->where('name', 'menu:read')->exists();
     }
 
     /**
-     * Determine whether the user can create menus.
+     * Determine whether the authorizable can create menus.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function create(User $user)
+    public function create(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'menu:create')->exists();
+        return $authorizable->role->permissions()->where('name', 'menu:create')->exists();
     }
 
     /**
-     * Determine whether the user can update the menu.
+     * Determine whether the authorizable can update the menu.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function update(User $user)
+    public function update(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'menu:update')->exists();
+        return $authorizable->role->permissions()->where('name', 'menu:update')->exists();
     }
 
     /**
-     * Determine whether the user can delete the menu.
+     * Determine whether the authorizable can delete the menu.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function delete(User $user)
+    public function delete(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'menu:delete')->exists();
+        return $authorizable->role->permissions()->where('name', 'menu:delete')->exists();
     }
 }

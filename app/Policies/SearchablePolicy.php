@@ -2,70 +2,70 @@
 
 namespace App\Policies;
 
-use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use Illuminate\Contracts\Auth\Access\Authorizable;
 
 class SearchablePolicy
 {
     use HandlesAuthorization;
 
     /**
-     * Determine whether the user can view any searchables.
+     * Determine whether the authorizable can view any searchables.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function viewAny(User $user)
+    public function viewAny(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'searchable:read')->exists();
+        return $authorizable->role->permissions()->where('name', 'searchable:read')->exists();
     }
 
     /**
-     * Determine whether the user can view the searchable.
+     * Determine whether the authorizable can view the searchable.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function view(User $user)
+    public function view(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'searchable:read')->exists();
+        return $authorizable->role->permissions()->where('name', 'searchable:read')->exists();
     }
 
     /**
-     * Determine whether the user can create searchables.
+     * Determine whether the authorizable can create searchables.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function create(User $user)
+    public function create(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'searchable:create')->exists();
+        return $authorizable->role->permissions()->where('name', 'searchable:create')->exists();
     }
 
     /**
-     * Determine whether the user can update the searchable.
+     * Determine whether the authorizable can update the searchable.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function update(User $user)
+    public function update(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'searchable:update')->exists();
+        return $authorizable->role->permissions()->where('name', 'searchable:update')->exists();
     }
 
     /**
-     * Determine whether the user can delete the searchable.
+     * Determine whether the authorizable can delete the searchable.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function delete(User $user)
+    public function delete(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'searchable:delete')->exists();
+        return $authorizable->role->permissions()->where('name', 'searchable:delete')->exists();
     }
 }

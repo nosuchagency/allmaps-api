@@ -2,70 +2,70 @@
 
 namespace App\Policies;
 
-use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use Illuminate\Contracts\Auth\Access\Authorizable;
 
 class ComponentPolicy
 {
     use HandlesAuthorization;
 
     /**
-     * Determine whether the user can view any components.
+     * Determine whether the authorizable can view any components.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function viewAny(User $user)
+    public function viewAny(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'component:read')->exists();
+        return $authorizable->role->permissions()->where('name', 'component:read')->exists();
     }
 
     /**
-     * Determine whether the user can view the component.
+     * Determine whether the authorizable can view the component.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function view(User $user)
+    public function view(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'component:read')->exists();
+        return $authorizable->role->permissions()->where('name', 'component:read')->exists();
     }
 
     /**
-     * Determine whether the user can create components.
+     * Determine whether the authorizable can create components.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function create(User $user)
+    public function create(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'component:create')->exists();
+        return $authorizable->role->permissions()->where('name', 'component:create')->exists();
     }
 
     /**
-     * Determine whether the user can update the component.
+     * Determine whether the authorizable can update the component.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function update(User $user)
+    public function update(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'component:update')->exists();
+        return $authorizable->role->permissions()->where('name', 'component:update')->exists();
     }
 
     /**
-     * Determine whether the user can delete the component.
+     * Determine whether the authorizable can delete the component.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function delete(User $user)
+    public function delete(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'component:delete')->exists();
+        return $authorizable->role->permissions()->where('name', 'component:delete')->exists();
     }
 }

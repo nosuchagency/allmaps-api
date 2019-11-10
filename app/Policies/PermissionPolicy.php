@@ -2,70 +2,70 @@
 
 namespace App\Policies;
 
-use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use Illuminate\Contracts\Auth\Access\Authorizable;
 
 class PermissionPolicy
 {
     use HandlesAuthorization;
 
     /**
-     * Determine whether the user can view any permissions.
+     * Determine whether the authorizable can view any permissions.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function viewAny(User $user)
+    public function viewAny(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'permission:read')->exists();
+        return $authorizable->role->permissions()->where('name', 'permission:read')->exists();
     }
 
     /**
-     * Determine whether the user can view the permission.
+     * Determine whether the authorizable can view the permission.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function view(User $user)
+    public function view(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'permission:read')->exists();
+        return $authorizable->role->permissions()->where('name', 'permission:read')->exists();
     }
 
     /**
-     * Determine whether the user can create permissions.
+     * Determine whether the authorizable can create permissions.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function create(User $user)
+    public function create(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'permission:create')->exists();
+        return $authorizable->role->permissions()->where('name', 'permission:create')->exists();
     }
 
     /**
-     * Determine whether the user can update the permission.
+     * Determine whether the authorizable can update the permission.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function update(User $user)
+    public function update(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'permission:update')->exists();
+        return $authorizable->role->permissions()->where('name', 'permission:update')->exists();
     }
 
     /**
-     * Determine whether the user can delete the permission.
+     * Determine whether the authorizable can delete the permission.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function delete(User $user)
+    public function delete(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'permission:delete')->exists();
+        return $authorizable->role->permissions()->where('name', 'permission:delete')->exists();
     }
 }

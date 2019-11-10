@@ -2,70 +2,70 @@
 
 namespace App\Policies;
 
-use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use Illuminate\Contracts\Auth\Access\Authorizable;
 
 class FloorPolicy
 {
     use HandlesAuthorization;
 
     /**
-     * Determine whether the user can view any floors.
+     * Determine whether the authorizable can view any floors.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function viewAny(User $user)
+    public function viewAny(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'floor:read')->exists();
+        return $authorizable->role->permissions()->where('name', 'floor:read')->exists();
     }
 
     /**
-     * Determine whether the user can view the floor.
+     * Determine whether the authorizable can view the floor.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function view(User $user)
+    public function view(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'floor:read')->exists();
+        return $authorizable->role->permissions()->where('name', 'floor:read')->exists();
     }
 
     /**
-     * Determine whether the user can create floors.
+     * Determine whether the authorizable can create floors.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function create(User $user)
+    public function create(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'floor:create')->exists();
+        return $authorizable->role->permissions()->where('name', 'floor:create')->exists();
     }
 
     /**
-     * Determine whether the user can update the floor.
+     * Determine whether the authorizable can update the floor.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function update(User $user)
+    public function update(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'floor:update')->exists();
+        return $authorizable->role->permissions()->where('name', 'floor:update')->exists();
     }
 
     /**
-     * Determine whether the user can delete the floor.
+     * Determine whether the authorizable can delete the floor.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function delete(User $user)
+    public function delete(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'floor:delete')->exists();
+        return $authorizable->role->permissions()->where('name', 'floor:delete')->exists();
     }
 }
