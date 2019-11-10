@@ -2,70 +2,70 @@
 
 namespace App\Policies;
 
-use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use Illuminate\Contracts\Auth\Access\Authorizable;
 
 class RulePolicy
 {
     use HandlesAuthorization;
 
     /**
-     * Determine whether the user can view any rules.
+     * Determine whether the authorizable can view any rules.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function viewAny(User $user)
+    public function viewAny(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'rule:read')->exists();
+        return $authorizable->role->permissions()->where('name', 'rule:read')->exists();
     }
 
     /**
-     * Determine whether the user can view the rule.
+     * Determine whether the authorizable can view the rule.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function view(User $user)
+    public function view(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'rule:read')->exists();
+        return $authorizable->role->permissions()->where('name', 'rule:read')->exists();
     }
 
     /**
-     * Determine whether the user can create rules.
+     * Determine whether the authorizable can create rules.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function create(User $user)
+    public function create(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'rule:create')->exists();
+        return $authorizable->role->permissions()->where('name', 'rule:create')->exists();
     }
 
     /**
-     * Determine whether the user can update the rule.
+     * Determine whether the authorizable can update the rule.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function update(User $user)
+    public function update(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'rule:update')->exists();
+        return $authorizable->role->permissions()->where('name', 'rule:update')->exists();
     }
 
     /**
-     * Determine whether the user can delete the rule.
+     * Determine whether the authorizable can delete the rule.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function delete(User $user)
+    public function delete(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'rule:delete')->exists();
+        return $authorizable->role->permissions()->where('name', 'rule:delete')->exists();
     }
 }

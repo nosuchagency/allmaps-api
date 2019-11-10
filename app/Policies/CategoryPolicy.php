@@ -2,70 +2,70 @@
 
 namespace App\Policies;
 
-use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use Illuminate\Contracts\Auth\Access\Authorizable;
 
 class CategoryPolicy
 {
     use HandlesAuthorization;
 
     /**
-     * Determine whether the user can view any categories.
+     * Determine whether the authorizable can view any categories.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function viewAny(User $user)
+    public function viewAny(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'category:read')->exists();
+        return $authorizable->role->permissions()->where('name', 'category:read')->exists();
     }
 
     /**
-     * Determine whether the user can view the category.
+     * Determine whether the authorizable can view the category.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function view(User $user)
+    public function view(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'category:read')->exists();
+        return $authorizable->role->permissions()->where('name', 'category:read')->exists();
     }
 
     /**
-     * Determine whether the user can create categories.
+     * Determine whether the authorizable can create categories.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function create(User $user)
+    public function create(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'category:create')->exists();
+        return $authorizable->role->permissions()->where('name', 'category:create')->exists();
     }
 
     /**
-     * Determine whether the user can update the category.
+     * Determine whether the authorizable can update the category.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function update(User $user)
+    public function update(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'category:update')->exists();
+        return $authorizable->role->permissions()->where('name', 'category:update')->exists();
     }
 
     /**
-     * Determine whether the user can delete the category.
+     * Determine whether the authorizable can delete the category.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function delete(User $user)
+    public function delete(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'category:delete')->exists();
+        return $authorizable->role->permissions()->where('name', 'category:delete')->exists();
     }
 }

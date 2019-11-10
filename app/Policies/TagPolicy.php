@@ -2,70 +2,70 @@
 
 namespace App\Policies;
 
-use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use Illuminate\Contracts\Auth\Access\Authorizable;
 
 class TagPolicy
 {
     use HandlesAuthorization;
 
     /**
-     * Determine whether the user can view any tags.
+     * Determine whether the authorizable can view any tags.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function viewAny(User $user)
+    public function viewAny(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'tag:read')->exists();
+        return $authorizable->role->permissions()->where('name', 'tag:read')->exists();
     }
 
     /**
-     * Determine whether the user can view the tag.
+     * Determine whether the authorizable can view the tag.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function view(User $user)
+    public function view(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'tag:read')->exists();
+        return $authorizable->role->permissions()->where('name', 'tag:read')->exists();
     }
 
     /**
-     * Determine whether the user can create tags.
+     * Determine whether the authorizable can create tags.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function create(User $user)
+    public function create(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'tag:create')->exists();
+        return $authorizable->role->permissions()->where('name', 'tag:create')->exists();
     }
 
     /**
-     * Determine whether the user can update the tag.
+     * Determine whether the authorizable can update the tag.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function update(User $user)
+    public function update(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'tag:update')->exists();
+        return $authorizable->role->permissions()->where('name', 'tag:update')->exists();
     }
 
     /**
-     * Determine whether the user can delete the tag.
+     * Determine whether the authorizable can delete the tag.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function delete(User $user)
+    public function delete(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'tag:delete')->exists();
+        return $authorizable->role->permissions()->where('name', 'tag:delete')->exists();
     }
 }

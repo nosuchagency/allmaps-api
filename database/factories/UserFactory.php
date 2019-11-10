@@ -20,7 +20,7 @@ $factory->define(App\Models\User::class, function (Faker $faker) {
     return [
         'name' => $faker->name,
         'email' => $faker->unique()->safeEmail,
-        'locale' => $faker->randomElement(Locale::LOCALES),
+        'locale' => config('app.locale'),
         'password' => 'secret',
         'role_id' => factory(Role::class),
         'remember_token' => Str::random(10),

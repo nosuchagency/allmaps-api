@@ -2,70 +2,70 @@
 
 namespace App\Policies;
 
-use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use Illuminate\Contracts\Auth\Access\Authorizable;
 
 class BeaconPolicy
 {
     use HandlesAuthorization;
 
     /**
-     * Determine whether the user can view any beacons.
+     * Determine whether the authorizable can view any beacons.
      *
-     * @param User $user
+     * @param Authorizable $authorizable
      *
      * @return mixed
      */
-    public function viewAny(User $user)
+    public function viewAny(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'beacon:read')->exists();
+        return $authorizable->role->permissions()->where('name', 'beacon:read')->exists();
     }
 
     /**
-     * Determine whether the user can view the beacon.
+     * Determine whether the authorizable can view the beacon.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function view(User $user)
+    public function view(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'beacon:read')->exists();
+        return $authorizable->role->permissions()->where('name', 'beacon:read')->exists();
     }
 
     /**
-     * Determine whether the user can create beacons.
+     * Determine whether the authorizable can create beacons.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function create(User $user)
+    public function create(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'beacon:create')->exists();
+        return $authorizable->role->permissions()->where('name', 'beacon:create')->exists();
     }
 
     /**
-     * Determine whether the user can update the beacon.
+     * Determine whether the authorizable can update the beacon.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function update(User $user)
+    public function update(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'beacon:update')->exists();
+        return $authorizable->role->permissions()->where('name', 'beacon:update')->exists();
     }
 
     /**
-     * Determine whether the user can delete the beacon.
+     * Determine whether the authorizable can delete the beacon.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function delete(User $user)
+    public function delete(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'beacon:delete')->exists();
+        return $authorizable->role->permissions()->where('name', 'beacon:delete')->exists();
     }
 }

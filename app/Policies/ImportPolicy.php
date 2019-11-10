@@ -2,70 +2,70 @@
 
 namespace App\Policies;
 
-use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use Illuminate\Contracts\Auth\Access\Authorizable;
 
 class ImportPolicy
 {
     use HandlesAuthorization;
 
     /**
-     * Determine whether the user can view any imports.
+     * Determine whether the authorizable can view any imports.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function viewAny(User $user)
+    public function viewAny(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'import:read')->exists();
+        return $authorizable->role->permissions()->where('name', 'import:read')->exists();
     }
 
     /**
-     * Determine whether the user can view the import.
+     * Determine whether the authorizable can view the import.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function view(User $user)
+    public function view(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'import:read')->exists();
+        return $authorizable->role->permissions()->where('name', 'import:read')->exists();
     }
 
     /**
-     * Determine whether the user can create imports.
+     * Determine whether the authorizable can create imports.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function create(User $user)
+    public function create(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'import:create')->exists();
+        return $authorizable->role->permissions()->where('name', 'import:create')->exists();
     }
 
     /**
-     * Determine whether the user can update the import.
+     * Determine whether the authorizable can update the import.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function update(User $user)
+    public function update(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'import:update')->exists();
+        return $authorizable->role->permissions()->where('name', 'import:update')->exists();
     }
 
     /**
-     * Determine whether the user can delete the import.
+     * Determine whether the authorizable can delete the import.
      *
-     * @param User $user
+     * @param $authorizable
      *
      * @return mixed
      */
-    public function delete(User $user)
+    public function delete(Authorizable $authorizable)
     {
-        return $user->role->permissions()->where('name', 'import:delete')->exists();
+        return $authorizable->role->permissions()->where('name', 'import:delete')->exists();
     }
 }
