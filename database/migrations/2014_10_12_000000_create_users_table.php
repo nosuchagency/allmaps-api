@@ -18,7 +18,7 @@ class CreateUsersTable extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('password');
-            $table->string('locale')->nullable();
+            $table->string('locale')->default(config('app.locale'));
 
             $table->text('description')->nullable();
 
