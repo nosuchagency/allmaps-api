@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\View\View;
+
 class WelcomeController extends Controller
 {
 
     /**
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return View
      */
     public function index()
     {

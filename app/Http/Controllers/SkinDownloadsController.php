@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Skin;
 use Chumper\Zipper\Zipper;
 use Exception;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class SkinDownloadsController extends Controller
 {
@@ -27,8 +28,8 @@ class SkinDownloadsController extends Controller
     /**
      * @param Skin $skin
      *
-     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
-     * @throws \Exception
+     * @return BinaryFileResponse
+     * @throws Exception
      */
     public function download(Skin $skin)
     {
