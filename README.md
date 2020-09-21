@@ -38,8 +38,6 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-![AllMaps Screenshot][product-screenshot-one]
-
 AllMaps is an open-source indoor map solution.
 
 ### Built With
