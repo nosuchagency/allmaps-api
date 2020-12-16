@@ -27,17 +27,17 @@ class StructureService
 
         $structure->fill($fields);
 
-        if (!$structure->name) {
-            $structure->name = $structure->component->name;
-        }
-
         $structure->floor()->associate(
             Floor::find(Arr::get($attributes, 'floor.id'))
         );
 
         $structure->component()->associate(
-            Component::find(Arr::get($attributes, 'component.id'))
+            $component = Component::find(Arr::get($attributes, 'component.id'))
         );
+
+        if (!$structure->name) {
+            $structure->name = $component->name;
+        }
 
         $structure->save();
 
